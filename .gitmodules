@@ -1,0 +1,9 @@
+[submodule "firesim"]
+	path = firesim
+	url = https://github.com/firesim/firesim.git
+[submodule "chipyard"]
+	path = chipyard
+	url = https://github.com/HobbitQia/cgra-chipyard.git
+[submodule "VectorCGRA"]
+	path = VectorCGRA
+	url = https://github.com/tancheng/VectorCGRA.git
