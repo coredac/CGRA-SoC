@@ -1,0 +1,509 @@
+#!/usr/bin/env python3
+"""
+Sync PyMTL3-generated CGRA RTL into the Chipyard Chisel BlackBox wrapper.
+
+The PyMTL3 Verilog is the source of truth. This script parses its top-level
+module, extracts packet/data widths and boundary array sizes, then emits:
+
+  1. a flat SystemVerilog wrapper for Chisel BlackBox compatibility
+  2. a generated Scala object containing the matching CGRAParams
+  3. a copy of the PyMTL3 RTL under Chipyard's vsrc directory
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import shutil
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional, Tuple
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_RTL = ROOT / "VectorCGRA" / "CgraRTL_2x2__pickled.v"
+DEFAULT_VSRC = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
+DEFAULT_SCALA = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example" / "CGRAGenerated.scala"
+SIDES = ("south", "north", "east", "west")
+
+
+@dataclass(frozen=True)
+class Port:
+    direction: str
+    name: str
+    width: int
+    sv_type: Optional[str] = None
+    array_len: Optional[int] = None
+
+
+@dataclass(frozen=True)
+class CgraMetadata:
+    top_module: str
+    wrapper_module: str
+    intra_type: str
+    inter_type: str
+    data_type: str
+    intra_width: int
+    inter_width: int
+    data_width: int
+    data_payload_width: int
+    payload_width: int
+    cmd_width: int
+    id_width: int
+    addr_width: int
+    x_tiles: int
+    y_tiles: int
+    num_tiles: int
+    address_lower: int
+    address_upper: int
+    rtl_resource: str
+    wrapper_resource: str
+
+
+def range_width(msb: int, lsb: int) -> int:
+    return abs(msb - lsb) + 1
+
+
+def packed_dims_width(text: str) -> int:
+    width = 1
+    for msb, lsb in re.findall(r"\[(\d+)\s*:\s*(\d+)\]", text):
+        width *= range_width(int(msb), int(lsb))
+    return width
+
+
+def array_len(lo: int, hi: int) -> int:
+    return abs(hi - lo) + 1
+
+
+def extract_typedefs(text: str) -> Dict[str, str]:
+    typedefs: Dict[str, str] = {}
+    pattern = re.compile(
+        r"typedef\s+struct\s+packed\s*\{(?P<body>.*?)\}\s*(?P<name>\w+)\s*;",
+        re.S,
+    )
+    for match in pattern.finditer(text):
+        typedefs[match.group("name")] = match.group("body")
+    return typedefs
+
+
+def strip_line(line: str) -> str:
+    return line.split("//", 1)[0].strip().rstrip(",;").strip()
+
+
+def parse_struct_fields(body: str) -> List[Tuple[str, str, int]]:
+    fields: List[Tuple[str, str, int]] = []
+    for raw_line in body.splitlines():
+        line = strip_line(raw_line)
+        if not line:
+            continue
+        logic_match = re.match(r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line)
+        if logic_match:
+            dims = logic_match.group("dims")
+            width = packed_dims_width(dims) if dims else 1
+            fields.append(("logic", logic_match.group("name"), width))
+            continue
+        type_match = re.match(r"(?P<type>\w+)\s+(?P<name>\w+)$", line)
+        if type_match:
+            fields.append((type_match.group("type"), type_match.group("name"), 0))
+            continue
+        raise ValueError(f"cannot parse typedef field: {raw_line}")
+    return fields
+
+
+def struct_width(type_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> int:
+    if type_name in memo:
+        return memo[type_name]
+    if type_name not in typedefs:
+        raise ValueError(f"unknown struct typedef: {type_name}")
+    total = 0
+    for field_type, _field_name, field_width in parse_struct_fields(typedefs[type_name]):
+        if field_type == "logic":
+            total += field_width
+        else:
+            total += struct_width(field_type, typedefs, memo)
+    memo[type_name] = total
+    return total
+
+
+def field_type(type_name: str, field_name: str, typedefs: Dict[str, str]) -> str:
+    for field_type, name, _width in parse_struct_fields(typedefs[type_name]):
+        if name == field_name:
+            return field_type
+    raise ValueError(f"{type_name} has no field named {field_name}")
+
+
+def field_width(type_name: str, field_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> int:
+    for field_type, name, width in parse_struct_fields(typedefs[type_name]):
+        if name != field_name:
+            continue
+        if field_type == "logic":
+            return width
+        return struct_width(field_type, typedefs, memo)
+    raise ValueError(f"{type_name} has no field named {field_name}")
+
+
+def find_top_module(text: str, requested: Optional[str]) -> str:
+    if requested:
+        if not re.search(rf"^module\s+{re.escape(requested)}\s*\(", text, re.M):
+            raise ValueError(f"requested top module not found: {requested}")
+        return requested
+
+    modules = re.findall(r"^module\s+(\w+)\s*\(", text, re.M)
+    candidates = [name for name in modules if name.startswith("CgraRTL") and not name.endswith("_wrapper")]
+    if not candidates:
+        raise ValueError("could not infer top module; pass --top-module")
+    return candidates[-1]
+
+
+def module_port_block(text: str, module_name: str) -> str:
+    match = re.search(rf"^module\s+{re.escape(module_name)}\s*\((?P<body>.*?)^\);", text, re.M | re.S)
+    if not match:
+        raise ValueError(f"could not parse module port block for {module_name}")
+    return match.group("body")
+
+
+def parse_port_line(line: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Optional[Port]:
+    line = strip_line(line)
+    if not line:
+        return None
+    match = re.match(r"(?P<dir>input|output)\s+(?P<rest>.+)$", line)
+    if not match:
+        return None
+    direction = match.group("dir")
+    rest = match.group("rest").strip()
+    port_match = re.match(
+        r"(?P<prefix>.+?)\s+(?P<name>\w+)(?:\s+\[(?P<alo>\d+)\s*:\s*(?P<ahi>\d+)\])?$",
+        rest,
+    )
+    if not port_match:
+        raise ValueError(f"cannot parse module port: {line}")
+    prefix = port_match.group("prefix").strip()
+    name = port_match.group("name")
+    alo = port_match.group("alo")
+    ahi = port_match.group("ahi")
+    arr_len = array_len(int(alo), int(ahi)) if alo is not None and ahi is not None else None
+
+    if prefix.startswith("logic"):
+        dims = prefix[len("logic"):].strip()
+        width = packed_dims_width(dims) if dims else 1
+        return Port(direction, name, width, None, arr_len)
+
+    sv_type = prefix
+    return Port(direction, name, struct_width(sv_type, typedefs, memo), sv_type, arr_len)
+
+
+def parse_ports(text: str, module_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Dict[str, Port]:
+    ports: Dict[str, Port] = {}
+    for line in module_port_block(text, module_name).splitlines():
+        port = parse_port_line(line, typedefs, memo)
+        if port:
+            ports[port.name] = port
+    return ports
+
+
+def require_port(ports: Dict[str, Port], name: str) -> Port:
+    if name not in ports:
+        raise ValueError(f"top module is missing required port {name}")
+    return ports[name]
+
+
+def infer_address_bounds(text: str, addr_width: int) -> Tuple[int, int]:
+    match = re.search(r"controller2addr_map_\{0:\s*\[(\d+),\s*(\d+)\]", text)
+    if match:
+        return int(match.group(1)), int(match.group(2))
+    return 0, (1 << addr_width) - 1
+
+
+def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraMetadata:
+    typedefs = extract_typedefs(text)
+    memo: Dict[str, int] = {}
+    top = find_top_module(text, top_module)
+    ports = parse_ports(text, top, typedefs, memo)
+
+    intra = require_port(ports, "recv_from_cpu_pkt__msg")
+    inter = require_port(ports, "recv_from_inter_cgra_noc__msg")
+    cgra_id = require_port(ports, "cgra_id")
+    address_lower = require_port(ports, "address_lower")
+
+    boundary_msg = require_port(ports, "recv_data_on_boundary_south__msg")
+    data_type = boundary_msg.sv_type
+    if data_type is None:
+        raise ValueError("boundary data msg port is not a struct type")
+
+    side_counts = {}
+    for side in SIDES:
+        msg_port = require_port(ports, f"recv_data_on_boundary_{side}__msg")
+        if msg_port.array_len is None:
+            raise ValueError(f"boundary port for {side} is not an unpacked array")
+        side_counts[side] = msg_port.array_len
+
+    if side_counts["south"] != side_counts["north"]:
+        raise ValueError("south/north boundary counts differ")
+    if side_counts["east"] != side_counts["west"]:
+        raise ValueError("east/west boundary counts differ")
+
+    if intra.sv_type is None or inter.sv_type is None:
+        raise ValueError("packet ports must use generated struct typedefs")
+
+    payload_type = field_type(intra.sv_type, "payload", typedefs)
+    data_payload_width = field_width(data_type, "payload", typedefs, memo)
+    payload_width = struct_width(payload_type, typedefs, memo)
+    cmd_width = field_width(payload_type, "cmd", typedefs, memo)
+    address_lo, address_hi = infer_address_bounds(text, address_lower.width)
+
+    x_tiles = side_counts["south"]
+    y_tiles = side_counts["east"]
+    wrapper_name = f"{top}_wrapper"
+    return CgraMetadata(
+        top_module=top,
+        wrapper_module=wrapper_name,
+        intra_type=intra.sv_type,
+        inter_type=inter.sv_type,
+        data_type=data_type,
+        intra_width=intra.width,
+        inter_width=inter.width,
+        data_width=boundary_msg.width,
+        data_payload_width=data_payload_width,
+        payload_width=payload_width,
+        cmd_width=cmd_width,
+        id_width=cgra_id.width,
+        addr_width=address_lower.width,
+        x_tiles=x_tiles,
+        y_tiles=y_tiles,
+        num_tiles=x_tiles * y_tiles,
+        address_lower=address_lo,
+        address_upper=address_hi,
+        rtl_resource=f"/vsrc/{rtl_name}",
+        wrapper_resource=f"/vsrc/{wrapper_name}.v",
+    )
+
+
+def flat_range(width: int) -> str:
+    return "" if width == 1 else f" [{width - 1}:0]"
+
+
+def wrapper_ports(meta: CgraMetadata) -> List[str]:
+    ports = [
+        "input  logic        clk",
+        "input  logic        reset",
+        "input  logic        recv_from_cpu_pkt_val",
+        f"input  logic{flat_range(meta.intra_width)} recv_from_cpu_pkt_msg",
+        "output logic        recv_from_cpu_pkt_rdy",
+        "output logic        send_to_cpu_pkt_val",
+        f"output logic{flat_range(meta.intra_width)} send_to_cpu_pkt_msg",
+        "input  logic        send_to_cpu_pkt_rdy",
+        "input  logic        recv_from_inter_cgra_noc_val",
+        f"input  logic{flat_range(meta.inter_width)} recv_from_inter_cgra_noc_msg",
+        "output logic        recv_from_inter_cgra_noc_rdy",
+        "output logic        send_to_inter_cgra_noc_val",
+        f"output logic{flat_range(meta.inter_width)} send_to_inter_cgra_noc_msg",
+        "input  logic        send_to_inter_cgra_noc_rdy",
+    ]
+
+    side_sizes = {
+        "south": meta.x_tiles,
+        "north": meta.x_tiles,
+        "east": meta.y_tiles,
+        "west": meta.y_tiles,
+    }
+    for side in SIDES:
+        for idx in range(side_sizes[side]):
+            ports.extend([
+                f"input  logic        recv_data_on_boundary_{side}_{idx}_val",
+                f"input  logic{flat_range(meta.data_width)} recv_data_on_boundary_{side}_{idx}_msg",
+                f"output logic        recv_data_on_boundary_{side}_{idx}_rdy",
+            ])
+        for idx in range(side_sizes[side]):
+            ports.extend([
+                f"output logic        send_data_on_boundary_{side}_{idx}_val",
+                f"output logic{flat_range(meta.data_width)} send_data_on_boundary_{side}_{idx}_msg",
+                f"input  logic        send_data_on_boundary_{side}_{idx}_rdy",
+            ])
+
+    ports.extend([
+        f"input  logic{flat_range(meta.id_width)} cgra_id",
+        f"input  logic{flat_range(meta.addr_width)} address_lower",
+        f"input  logic{flat_range(meta.addr_width)} address_upper",
+    ])
+    return ports
+
+
+def comma_join(lines: Iterable[str], indent: str = "  ") -> str:
+    items = list(lines)
+    return "\n".join(f"{indent}{line}{',' if idx != len(items) - 1 else ''}" for idx, line in enumerate(items))
+
+
+def gen_boundary_wires(meta: CgraMetadata, side: str, count: int) -> str:
+    return f"""
+  {meta.data_type} w_recv_{side}_msg [0:{count - 1}];
+  logic [0:0] w_recv_{side}_rdy [0:{count - 1}];
+  logic [0:0] w_recv_{side}_val [0:{count - 1}];
+  {meta.data_type} w_send_{side}_msg [0:{count - 1}];
+  logic [0:0] w_send_{side}_rdy [0:{count - 1}];
+  logic [0:0] w_send_{side}_val [0:{count - 1}];
+"""
+
+
+def gen_boundary_assigns(side: str, count: int) -> str:
+    lines: List[str] = []
+    for idx in range(count):
+        lines.extend([
+            f"  assign w_recv_{side}_val[{idx}] = recv_data_on_boundary_{side}_{idx}_val;",
+            f"  assign w_recv_{side}_msg[{idx}] = recv_data_on_boundary_{side}_{idx}_msg;",
+            f"  assign recv_data_on_boundary_{side}_{idx}_rdy = w_recv_{side}_rdy[{idx}];",
+        ])
+    for idx in range(count):
+        lines.extend([
+            f"  assign send_data_on_boundary_{side}_{idx}_val = w_send_{side}_val[{idx}];",
+            f"  assign send_data_on_boundary_{side}_{idx}_msg = w_send_{side}_msg[{idx}];",
+            f"  assign w_send_{side}_rdy[{idx}] = send_data_on_boundary_{side}_{idx}_rdy;",
+        ])
+    return "\n".join(lines)
+
+
+def gen_wrapper(meta: CgraMetadata) -> str:
+    side_sizes = {
+        "south": meta.x_tiles,
+        "north": meta.x_tiles,
+        "east": meta.y_tiles,
+        "west": meta.y_tiles,
+    }
+    boundary_wires = "".join(gen_boundary_wires(meta, side, side_sizes[side]) for side in SIDES)
+    boundary_assigns = "\n\n".join(gen_boundary_assigns(side, side_sizes[side]) for side in SIDES)
+
+    inst_ports = [
+        ".clk                                ( clk )",
+        ".reset                              ( reset )",
+        ".recv_from_cpu_pkt__val             ( recv_from_cpu_pkt_val )",
+        ".recv_from_cpu_pkt__msg             ( w_recv_from_cpu_pkt_msg )",
+        ".recv_from_cpu_pkt__rdy             ( recv_from_cpu_pkt_rdy )",
+        ".send_to_cpu_pkt__val               ( send_to_cpu_pkt_val )",
+        ".send_to_cpu_pkt__msg               ( w_send_to_cpu_pkt_msg )",
+        ".send_to_cpu_pkt__rdy               ( send_to_cpu_pkt_rdy )",
+        ".recv_from_inter_cgra_noc__val      ( recv_from_inter_cgra_noc_val )",
+        ".recv_from_inter_cgra_noc__msg      ( w_recv_from_inter_cgra_noc_msg )",
+        ".recv_from_inter_cgra_noc__rdy      ( recv_from_inter_cgra_noc_rdy )",
+        ".send_to_inter_cgra_noc__val        ( send_to_inter_cgra_noc_val )",
+        ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
+        ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
+    ]
+    for side in SIDES:
+        inst_ports.extend([
+            f".recv_data_on_boundary_{side}__val   ( w_recv_{side}_val )",
+            f".recv_data_on_boundary_{side}__msg   ( w_recv_{side}_msg )",
+            f".recv_data_on_boundary_{side}__rdy   ( w_recv_{side}_rdy )",
+            f".send_data_on_boundary_{side}__val   ( w_send_{side}_val )",
+            f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
+            f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
+        ])
+    inst_ports.extend([
+        ".cgra_id                            ( cgra_id )",
+        ".address_lower                      ( address_lower )",
+        ".address_upper                      ( address_upper )",
+    ])
+
+    return f"""//-------------------------------------------------------------------------
+// {meta.wrapper_module}.v
+//-------------------------------------------------------------------------
+// Auto-generated by scripts/sync_cgra_blackbox.py.
+// Wraps PyMTL3-generated {meta.top_module} and flattens struct/array ports
+// for Chisel BlackBox compatibility.
+//-------------------------------------------------------------------------
+
+module {meta.wrapper_module} (
+{comma_join(wrapper_ports(meta))}
+);
+
+  {meta.intra_type} w_recv_from_cpu_pkt_msg;
+  {meta.intra_type} w_send_to_cpu_pkt_msg;
+  {meta.inter_type} w_recv_from_inter_cgra_noc_msg;
+  {meta.inter_type} w_send_to_inter_cgra_noc_msg;
+{boundary_wires}
+  assign w_recv_from_cpu_pkt_msg = recv_from_cpu_pkt_msg;
+  assign send_to_cpu_pkt_msg = w_send_to_cpu_pkt_msg;
+  assign w_recv_from_inter_cgra_noc_msg = recv_from_inter_cgra_noc_msg;
+  assign send_to_inter_cgra_noc_msg = w_send_to_inter_cgra_noc_msg;
+
+{boundary_assigns}
+
+  {meta.top_module} cgra_inst (
+{comma_join(inst_ports, indent="    ")}
+  );
+
+endmodule
+"""
+
+
+def gen_scala(meta: CgraMetadata) -> str:
+    return f"""package chipyard.example
+
+// Auto-generated by scripts/sync_cgra_blackbox.py from {meta.top_module}.
+// Do not edit by hand; regenerate after PyMTL3 RTL changes.
+object CGRAGenerated {{
+  val params = CGRAParams(
+    intraPktWidth = {meta.intra_width},
+    interPktWidth = {meta.inter_width},
+    dataPayloadWidth = {meta.data_payload_width},
+    dataWidth = {meta.data_width},
+    payloadWidth = {meta.payload_width},
+    idWidth = {meta.id_width},
+    addrWidth = {meta.addr_width},
+    xTiles = {meta.x_tiles},
+    yTiles = {meta.y_tiles},
+    cmdWidth = {meta.cmd_width},
+    numTiles = {meta.num_tiles},
+    addressLower = {meta.address_lower},
+    addressUpper = {meta.address_upper},
+    topModuleName = "{meta.top_module}",
+    wrapperModuleName = "{meta.wrapper_module}",
+    rtlResource = "{meta.rtl_resource}",
+    wrapperResource = "{meta.wrapper_resource}"
+  )
+}}
+"""
+
+
+def write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--rtl", type=Path, default=DEFAULT_RTL, help="PyMTL3-generated CGRA Verilog")
+    parser.add_argument("--top-module", help="Top module name to wrap; inferred if omitted")
+    parser.add_argument("--chipyard-vsrc", type=Path, default=DEFAULT_VSRC, help="Chipyard vsrc output directory")
+    parser.add_argument("--scala-out", type=Path, default=DEFAULT_SCALA, help="Generated Scala params output")
+    parser.add_argument("--dry-run", action="store_true", help="Parse and print metadata without writing files")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    rtl_path = args.rtl.resolve()
+    text = rtl_path.read_text(encoding="utf-8")
+    meta = infer_metadata(text, rtl_path.name, args.top_module)
+
+    wrapper_path = args.chipyard_vsrc / f"{meta.wrapper_module}.v"
+    rtl_dst = args.chipyard_vsrc / rtl_path.name
+
+    print(f"top_module={meta.top_module}")
+    print(f"wrapper_module={meta.wrapper_module}")
+    print(f"intra_width={meta.intra_width} inter_width={meta.inter_width} data_width={meta.data_width}")
+    print(f"x_tiles={meta.x_tiles} y_tiles={meta.y_tiles} num_tiles={meta.num_tiles}")
+    print(f"scala_out={args.scala_out}")
+    print(f"wrapper_out={wrapper_path}")
+    print(f"rtl_out={rtl_dst}")
+
+    if args.dry_run:
+        return 0
+
+    args.chipyard_vsrc.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(rtl_path, rtl_dst)
+    write_text(wrapper_path, gen_wrapper(meta))
+    write_text(args.scala_out, gen_scala(meta))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
