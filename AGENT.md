@@ -5,6 +5,8 @@ generation and Chipyard SoC simulation.
 
 It currently contains:
 
+- `configs/`: top-level CGRA architecture and SoC/interface YAML files.
+- `tests/`: top-level baremetal C tests for the Chipyard CGRA RoCC wrapper.
 - `VectorCGRA/`: CGRA architecture parser, PyMTL3 generator, reference tests,
   and generated RTL output.
 - `chipyard/`: active SoC integration point. It consumes generated CGRA RTL
@@ -23,11 +25,9 @@ test it.
 Typical flow:
 
 ```bash
-cd /mnt/public/sichuan_a/qjj/CGRA-SoC
-python scripts/generate_single_cgra.py \
-  --arch-yaml VectorCGRA/cgra/test/arch_fir_2x2.yaml \
-  --soc-yaml VectorCGRA/cgra/test/cgra_soc_fir_2x2.yaml
-./run-chipyard-cgra-test.sh --rebuild cgra-test
+cd /mnt/public/qjj/CGRA-SoC
+python scripts/generate_single_cgra.py
+./run-chipyard-cgra-test.sh --rebuild
 ```
 
 `scripts/generate_single_cgra.py` does two steps:
@@ -55,8 +55,7 @@ python scripts/generate_single_cgra.py \
   [run-chipyard-cgra-test.sh](/mnt/public/sichuan_a/qjj/CGRA-SoC/run-chipyard-cgra-test.sh:1)
 
 - Current baremetal tests:
-  [chipyard/tests/cgra-test.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/chipyard/tests/cgra-test.c:1)
-  [chipyard/tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/chipyard/tests/cgra-fir-2x2.c:1)
+  [tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-2x2.c:1)
 
 ## Chipyard Integration State
 
@@ -107,18 +106,16 @@ still match the generated packet type.
 Use the top-level runner with an explicit Chipyard test name:
 
 ```bash
-./run-chipyard-cgra-test.sh --rebuild cgra-test
 ./run-chipyard-cgra-test.sh --rebuild cgra-fir-2x2
 ```
 
-The script compiles `chipyard/tests/<test-name>.c` and runs it on
+The script compiles `tests/<test-name>.c` and runs it on
 `CGRARocketConfig`. Use `--rebuild` after changing any generated RTL, wrapper
 Verilog, `CGRAGenerated.scala`, `CGRA.scala`, or Chipyard config fragments.
 
 Expected success strings include:
 
 ```text
-CGRA RoCC homogeneous_2x2: PASS
 CGRA RoCC FIR 2x2: PASS
 ```
 
@@ -137,6 +134,8 @@ is selected by `CGRAGenerated.scala`, which currently points at
 
 - The top-level repo may contain local workspace files such as `.venv/`,
   `.vscode/`, `.metals/`, generated RTL, and Python caches.
+- `configs/` and `tests/` are the canonical places for CGRA SoC input YAML and
+  Chipyard baremetal CGRA tests.
 - `VectorCGRA/` may be dirty when generator changes, YAML files, or generated
   RTL are being developed.
 - `chipyard/` may contain generated Scala/Verilog resources. Regenerate them
@@ -144,7 +143,7 @@ is selected by `CGRAGenerated.scala`, which currently points at
 
 ## Practical Guidance
 
-- For architecture changes, start with VectorCGRA YAML and
+- For architecture changes, start with top-level `configs/` and
   `VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py`.
 - For SoC-facing metadata and BlackBox stitching, start with
   `scripts/sync_cgra_blackbox.py` and `CGRA.scala`.

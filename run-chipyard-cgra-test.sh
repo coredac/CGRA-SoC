@@ -5,11 +5,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 REBUILD=0
-TEST_NAME="cgra-template-test"
+TEST_NAME="cgra-fir-2x2"
 SEEN_TEST_NAME=0
 
 usage() {
-  echo "usage: $0 [--rebuild] [cgra-template-test]" >&2
+  echo "usage: $0 [--rebuild] [cgra-fir-2x2]" >&2
 }
 
 while (($# > 0)); do
@@ -39,7 +39,7 @@ while (($# > 0)); do
   shift
 done
 
-TEST_SRC="$CHIPYARD_DIR/tests/${TEST_NAME}.c"
+TEST_SRC="$ROOT_DIR/tests/${TEST_NAME}.c"
 OUT_DIR="${TMPDIR:-/tmp}/chipyard-cgra"
 BIN_PATH="$OUT_DIR/${TEST_NAME}.riscv"
 
@@ -73,6 +73,7 @@ echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 riscv64-unknown-elf-gcc \
   -std=gnu99 -O2 -Wall -Wextra -fno-common -fno-builtin-printf \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
+  -I "$CHIPYARD_DIR/tests" \
   -specs="$CHIPYARD_DIR/toolchains/libgloss/util/htif_nano.specs" \
   -static -T "$CHIPYARD_DIR/tests/htif.ld" \
   "$TEST_SRC" \

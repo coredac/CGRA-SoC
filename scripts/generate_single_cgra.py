@@ -16,6 +16,8 @@ VECTOR_RTL = ROOT / "VectorCGRA" / "CgraTemplateRTL_single__pickled.v"
 TOP_MODULE = "CgraTemplateRTL_single"
 PYTHON = ROOT / ".venv" / "bin" / "python"
 PYTHON_EXE = str(PYTHON if PYTHON.exists() else Path(sys.executable))
+DEFAULT_ARCH_YAML = ROOT / "configs" / "arch_fir_2x2.yaml"
+DEFAULT_SOC_YAML = ROOT / "configs" / "cgra_soc_fir_2x2.yaml"
 
 
 def resolve_input_path(path: str) -> Path:
@@ -36,8 +38,16 @@ def run(cmd: list[str]) -> None:
 
 def parse_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(description=__doc__)
-  parser.add_argument("--arch-yaml", required=True, help="CGRA architecture YAML")
-  parser.add_argument("--soc-yaml", required=True, help="SoC/interface YAML")
+  parser.add_argument(
+    "--arch-yaml",
+    default=str(DEFAULT_ARCH_YAML),
+    help=f"CGRA architecture YAML (default: {DEFAULT_ARCH_YAML.relative_to(ROOT)})",
+  )
+  parser.add_argument(
+    "--soc-yaml",
+    default=str(DEFAULT_SOC_YAML),
+    help=f"SoC/interface YAML (default: {DEFAULT_SOC_YAML.relative_to(ROOT)})",
+  )
   return parser.parse_args()
 
 
