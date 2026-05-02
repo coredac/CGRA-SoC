@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RTL = ROOT / "VectorCGRA" / "CgraRTL_2x2__pickled.v"
 DEFAULT_VSRC = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
 DEFAULT_SCALA = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example" / "CGRAGenerated.scala"
+DEFAULT_C_LAYOUT = ROOT / "tests" / "include" / "cgra_layout.h"
 DEFAULT_TEMPLATE_DIR = ROOT / "scripts" / "templates"
 SIDES = ("south", "north", "east", "west")
 
@@ -45,12 +46,18 @@ class CgraMetadata:
     intra_type: str
     inter_type: str
     data_type: str
+    payload_type: str
+    ctrl_type: str
     intra_width: int
     inter_width: int
     data_width: int
     data_payload_width: int
     payload_width: int
+    ctrl_width: int
+    ctrl_hi_width: int
     cmd_width: int
+    data_addr_width: int
+    ctrl_addr_width: int
     id_width: int
     addr_width: int
     x_tiles: int
@@ -67,10 +74,14 @@ def range_width(msb: int, lsb: int) -> int:
     return abs(msb - lsb) + 1
 
 
+def packed_dims(text: str) -> List[int]:
+    return [range_width(int(msb), int(lsb)) for msb, lsb in re.findall(r"\[(\d+)\s*:\s*(\d+)\]", text)]
+
+
 def packed_dims_width(text: str) -> int:
     width = 1
-    for msb, lsb in re.findall(r"\[(\d+)\s*:\s*(\d+)\]", text):
-        width *= range_width(int(msb), int(lsb))
+    for dim_width in packed_dims(text):
+        width *= dim_width
     return width
 
 
@@ -113,6 +124,18 @@ def parse_struct_fields(body: str) -> List[Tuple[str, str, int]]:
     return fields
 
 
+def logic_field_dims(type_name: str, typedefs: Dict[str, str]) -> Dict[str, List[int]]:
+    dims_by_name: Dict[str, List[int]] = {}
+    for raw_line in typedefs[type_name].splitlines():
+        line = strip_line(raw_line)
+        if not line:
+            continue
+        logic_match = re.match(r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line)
+        if logic_match:
+            dims_by_name[logic_match.group("name")] = packed_dims(logic_match.group("dims"))
+    return dims_by_name
+
+
 def struct_width(type_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> int:
     if type_name in memo:
         return memo[type_name]
@@ -143,6 +166,17 @@ def field_width(type_name: str, field_name: str, typedefs: Dict[str, str], memo:
             return width
         return struct_width(field_type, typedefs, memo)
     raise ValueError(f"{type_name} has no field named {field_name}")
+
+
+def field_offsets(type_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Dict[str, Tuple[int, int]]:
+    fields = parse_struct_fields(typedefs[type_name])
+    cursor = struct_width(type_name, typedefs, memo)
+    offsets: Dict[str, Tuple[int, int]] = {}
+    for field_type, name, width in fields:
+        field_nbits = width if field_type == "logic" else struct_width(field_type, typedefs, memo)
+        cursor -= field_nbits
+        offsets[name] = (cursor, field_nbits)
+    return offsets
 
 
 def find_top_module(text: str, requested: Optional[str]) -> str:
@@ -254,10 +288,14 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
 
     payload_type = field_type(intra.sv_type, "payload", typedefs)
     data_type = field_type(payload_type, "data", typedefs)
+    ctrl_type = field_type(payload_type, "ctrl", typedefs)
     data_width = struct_width(data_type, typedefs, memo)
     data_payload_width = field_width(data_type, "payload", typedefs, memo)
     payload_width = struct_width(payload_type, typedefs, memo)
+    ctrl_width = struct_width(ctrl_type, typedefs, memo)
     cmd_width = field_width(payload_type, "cmd", typedefs, memo)
+    data_addr_width = field_width(payload_type, "data_addr", typedefs, memo)
+    ctrl_addr_width = field_width(payload_type, "ctrl_addr", typedefs, memo)
     address_lo, address_hi = infer_address_bounds(text, address_lower.width)
 
     has_boundary_ports = "recv_data_on_boundary_south__msg" in ports
@@ -287,12 +325,18 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         intra_type=intra.sv_type,
         inter_type=inter.sv_type,
         data_type=data_type,
+        payload_type=payload_type,
+        ctrl_type=ctrl_type,
         intra_width=intra.width,
         inter_width=inter.width,
         data_width=data_width,
         data_payload_width=data_payload_width,
         payload_width=payload_width,
+        ctrl_width=ctrl_width,
+        ctrl_hi_width=max(ctrl_width - 128, 0),
         cmd_width=cmd_width,
+        data_addr_width=data_addr_width,
+        ctrl_addr_width=ctrl_addr_width,
         id_width=cgra_id.width,
         addr_width=address_lower.width,
         x_tiles=x_tiles,
@@ -478,6 +522,127 @@ def gen_scala(meta: CgraMetadata) -> str:
     )
 
 
+def c_define(name: str, value: int) -> str:
+    return f"#define {name} {value}"
+
+
+def require_offset(offsets: Dict[str, Tuple[int, int]], field: str) -> Tuple[int, int]:
+    if field not in offsets:
+        raise ValueError(f"missing generated layout field: {field}")
+    return offsets[field]
+
+
+def gen_c_layout(meta: CgraMetadata, typedefs: Dict[str, str]) -> str:
+    memo: Dict[str, int] = {}
+    data_offsets = field_offsets(meta.data_type, typedefs, memo)
+    ctrl_offsets = field_offsets(meta.ctrl_type, typedefs, memo)
+    ctrl_dims = logic_field_dims(meta.ctrl_type, typedefs)
+    payload_offsets = field_offsets(meta.payload_type, typedefs, memo)
+    pkt_offsets = field_offsets(meta.intra_type, typedefs, memo)
+
+    def append_lsb_nbits(lines: List[str], define_base: str, offsets: Dict[str, Tuple[int, int]], field: str) -> None:
+        lsb, nbits = require_offset(offsets, field)
+        lines.append(c_define(f"{define_base}_LSB", lsb))
+        lines.append(c_define(f"{define_base}_NBITS", nbits))
+
+    def append_packed_array_shape(lines: List[str], define_base: str, field: str) -> None:
+        dims = ctrl_dims.get(field, [])
+        if len(dims) > 1:
+            elem_width = 1
+            for dim in dims[1:]:
+                elem_width *= dim
+            lines.append(c_define(f"{define_base}_COUNT", dims[0]))
+            lines.append(c_define(f"{define_base}_ELEM_NBITS", elem_width))
+        elif len(dims) == 1:
+            lines.append(c_define(f"{define_base}_COUNT", 1))
+            lines.append(c_define(f"{define_base}_ELEM_NBITS", dims[0]))
+
+    lines = [
+        "/*",
+        " * Auto-generated by scripts/sync_cgra_blackbox.py.",
+        f" * Source top module: {meta.top_module}",
+        f" * Source packet type: {meta.intra_type}",
+        " * Do not edit by hand; regenerate after CGRA RTL/YAML changes.",
+        " */",
+        "#ifndef CGRA_LAYOUT_H",
+        "#define CGRA_LAYOUT_H",
+        "",
+        c_define("CGRA_INTRA_PKT_NBITS", meta.intra_width),
+        c_define("CGRA_INTER_PKT_NBITS", meta.inter_width),
+        c_define("CGRA_PAYLOAD_NBITS", meta.payload_width),
+        c_define("CGRA_CMD_NBITS", meta.cmd_width),
+        c_define("CGRA_DATA_NBITS", meta.data_width),
+        c_define("CGRA_DATA_PAYLOAD_NBITS", meta.data_payload_width),
+        c_define("CGRA_CTRL_NBITS", meta.ctrl_width),
+        c_define("DATA_ADDR_NBITS", meta.data_addr_width),
+        c_define("CTRL_ADDR_NBITS", meta.ctrl_addr_width),
+        c_define("CTRL_LO_NBITS", min(meta.ctrl_width, 64)),
+        c_define("CTRL_MID_NBITS", max(min(meta.ctrl_width - 64, 64), 0)),
+        c_define("CTRL_HI_NBITS", meta.ctrl_hi_width),
+        "",
+    ]
+
+    data_names = {
+        "payload": "DATA_PAYLOAD",
+        "predicate": "DATA_PREDICATE",
+        "bypass": "DATA_BYPASS",
+        "delay": "DATA_DELAY",
+    }
+    for field, define_base in data_names.items():
+        append_lsb_nbits(lines, define_base, data_offsets, field)
+
+    lines.append("")
+
+    ctrl_names = {
+        "operation": "CTRL_OPERATION",
+        "fu_in": "CTRL_FU_IN",
+        "routing_xbar_outport": "CTRL_ROUTING_XBAR_OUTPORT",
+        "fu_xbar_outport": "CTRL_FU_XBAR_OUTPORT",
+        "vector_factor_power": "CTRL_VECTOR_FACTOR_POWER",
+        "is_last_ctrl": "CTRL_IS_LAST_CTRL",
+        "write_reg_from": "CTRL_WRITE_REG_FROM",
+        "write_reg_idx": "CTRL_WRITE_REG_IDX",
+        "read_reg_from": "CTRL_READ_REG_FROM",
+        "read_reg_idx": "CTRL_READ_REG_IDX",
+    }
+    for field, define_base in ctrl_names.items():
+        append_lsb_nbits(lines, define_base, ctrl_offsets, field)
+        append_packed_array_shape(lines, define_base, field)
+
+    lines.append("")
+
+    payload_lsb, _payload_width = require_offset(pkt_offsets, "payload")
+    pkt_names = {
+        "ctrl_addr": "PKT_CTRL_ADDR",
+        "ctrl": "PKT_CTRL",
+        "data_addr": "PKT_DATA_ADDR",
+        "data": "PKT_DATA",
+        "cmd": "PKT_CMD",
+    }
+    for field, define_base in pkt_names.items():
+        lsb, nbits = require_offset(payload_offsets, field)
+        lines.append(c_define(f"{define_base}_LSB", payload_lsb + lsb))
+        lines.append(c_define(f"{define_base}_NBITS", nbits))
+
+    top_pkt_names = {
+        "vc_id": "PKT_VC_ID",
+        "opaque": "PKT_OPAQUE",
+        "dst_cgra_y": "PKT_DST_CGRA_Y",
+        "dst_cgra_x": "PKT_DST_CGRA_X",
+        "src_cgra_y": "PKT_SRC_CGRA_Y",
+        "src_cgra_x": "PKT_SRC_CGRA_X",
+        "dst_cgra_id": "PKT_DST_CGRA_ID",
+        "src_cgra_id": "PKT_SRC_CGRA_ID",
+        "dst": "PKT_DST_TILE",
+        "src": "PKT_SRC_TILE",
+    }
+    for field, define_base in top_pkt_names.items():
+        append_lsb_nbits(lines, define_base, pkt_offsets, field)
+
+    lines.extend(["", "#endif", ""])
+    return "\n".join(lines)
+
+
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
@@ -489,6 +654,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--top-module", help="Top module name to wrap; inferred if omitted")
     parser.add_argument("--chipyard-vsrc", type=Path, default=DEFAULT_VSRC, help="Chipyard vsrc output directory")
     parser.add_argument("--scala-out", type=Path, default=DEFAULT_SCALA, help="Generated Scala params output")
+    parser.add_argument("--c-layout-out", type=Path, default=DEFAULT_C_LAYOUT, help="Generated C layout header output")
     parser.add_argument("--dry-run", action="store_true", help="Parse and print metadata without writing files")
     return parser.parse_args()
 
@@ -497,6 +663,7 @@ def main() -> int:
     args = parse_args()
     rtl_path = args.rtl.resolve()
     text = rtl_path.read_text(encoding="utf-8")
+    typedefs = extract_typedefs(text)
     meta = infer_metadata(text, rtl_path.name, args.top_module)
 
     wrapper_path = args.chipyard_vsrc / f"{meta.wrapper_module}.v"
@@ -508,6 +675,7 @@ def main() -> int:
     print(f"x_tiles={meta.x_tiles} y_tiles={meta.y_tiles} num_tiles={meta.num_tiles}")
     print(f"has_boundary_ports={meta.has_boundary_ports}")
     print(f"scala_out={args.scala_out}")
+    print(f"c_layout_out={args.c_layout_out}")
     print(f"wrapper_out={wrapper_path}")
     print(f"rtl_out={rtl_dst}")
 
@@ -518,6 +686,7 @@ def main() -> int:
     shutil.copyfile(rtl_path, rtl_dst)
     write_text(wrapper_path, gen_wrapper(meta))
     write_text(args.scala_out, gen_scala(meta))
+    write_text(args.c_layout_out, gen_c_layout(meta, typedefs))
     return 0
 
 

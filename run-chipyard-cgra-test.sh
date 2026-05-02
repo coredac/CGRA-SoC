@@ -73,6 +73,7 @@ echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 riscv64-unknown-elf-gcc \
   -std=gnu99 -O2 -Wall -Wextra -fno-common -fno-builtin-printf \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
+  -I "$ROOT_DIR/tests/include" \
   -I "$CHIPYARD_DIR/tests" \
   -specs="$CHIPYARD_DIR/toolchains/libgloss/util/htif_nano.specs" \
   -static -T "$CHIPYARD_DIR/tests/htif.ld" \

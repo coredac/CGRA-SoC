@@ -36,7 +36,8 @@ python scripts/generate_single_cgra.py \
 ```
 
 The script runs the VectorCGRA PyMTL3 translator, then syncs the generated RTL,
-BlackBox wrapper, and generated Scala parameters into Chipyard.
+BlackBox wrapper, generated Scala parameters, and C packet layout header into
+Chipyard/top-level tests.
 
 ## Run Tests
 
@@ -66,3 +67,7 @@ for faster reruns:
 ```bash
 ./run-chipyard-cgra-test.sh cgra-fir-2x2
 ```
+
+The C tests include `tests/include/cgra_protocol.h` for stable RoCC/CGRA
+protocol constants and the generated `tests/include/cgra_layout.h` for packet
+bit offsets that depend on the current generated RTL.

@@ -35,7 +35,8 @@ python scripts/generate_single_cgra.py
 1. Runs `VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py` to elaborate a
    YAML-configured single-CGRA `CgraTemplateRTL_single` and emit PyMTL3 Verilog.
 2. Runs `scripts/sync_cgra_blackbox.py` to copy that RTL into Chipyard, generate
-   a flat SystemVerilog wrapper, and update Chipyard's generated Scala params.
+   a flat SystemVerilog wrapper, update Chipyard's generated Scala params, and
+   refresh the C packet layout header used by top-level tests.
 
 ## Main Entry Points
 
@@ -56,6 +57,12 @@ python scripts/generate_single_cgra.py
 
 - Current baremetal tests:
   [tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-2x2.c:1)
+
+- C host-side headers:
+  [tests/include/cgra_protocol.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_protocol.h:1)
+  contains stable RoCC/VectorCGRA protocol constants, while
+  [tests/include/cgra_layout.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_layout.h:1)
+  is generated from the active RTL packet typedefs.
 
 ## Chipyard Integration State
 
@@ -98,8 +105,8 @@ Current funct encodings:
 
 `RAW_PKT_TOP` exists because generated `CgraTemplateRTL_single` packets can be
 wider than 192 bits. After changing YAML or regenerating RTL, check
-`CGRAGenerated.scala` and make sure any hand-written C packet layout constants
-still match the generated packet type.
+`CGRAGenerated.scala` and `tests/include/cgra_layout.h`; both are generated from
+the current packet typedefs.
 
 ## Test Guidance
 
@@ -147,7 +154,8 @@ is selected by `CGRAGenerated.scala`, which currently points at
   `VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py`.
 - For SoC-facing metadata and BlackBox stitching, start with
   `scripts/sync_cgra_blackbox.py` and `CGRA.scala`.
-- For host packet programming, inspect the generated packet typedefs in the
-  emitted PyMTL3 Verilog and keep the C packet builder constants in sync.
+- For host packet programming, use `tests/include/cgra_protocol.h` for stable
+  protocol constants and `tests/include/cgra_layout.h` for generated bit
+  offsets. Do not duplicate generated layout constants in C tests.
 - Avoid hard-coding old packet widths such as `182` unless you are deliberately
   targeting the old `CgraRTL_2x2` wrapper.
