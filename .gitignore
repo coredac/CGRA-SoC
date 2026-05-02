@@ -1,0 +1,8 @@
+build
+__pycache__
+.hypothesis
+.vscode
+.venv
+*.pyc
+.metals
+.claude

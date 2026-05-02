@@ -17,6 +17,7 @@ import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
+from string import Template
 from typing import Dict, Iterable, List, Optional, Tuple
 
 
@@ -24,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RTL = ROOT / "VectorCGRA" / "CgraRTL_2x2__pickled.v"
 DEFAULT_VSRC = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
 DEFAULT_SCALA = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example" / "CGRAGenerated.scala"
+DEFAULT_TEMPLATE_DIR = ROOT / "scripts" / "templates"
 SIDES = ("south", "north", "east", "west")
 
 
@@ -58,6 +60,7 @@ class CgraMetadata:
     address_upper: int
     rtl_resource: str
     wrapper_resource: str
+    has_boundary_ports: bool
 
 
 def range_width(msb: int, lsb: int) -> int:
@@ -149,7 +152,10 @@ def find_top_module(text: str, requested: Optional[str]) -> str:
         return requested
 
     modules = re.findall(r"^module\s+(\w+)\s*\(", text, re.M)
-    candidates = [name for name in modules if name.startswith("CgraRTL") and not name.endswith("_wrapper")]
+    candidates = [
+        name for name in modules
+        if name.startswith(("CgraRTL", "CgraTemplateRTL")) and not name.endswith("_wrapper")
+    ]
     if not candidates:
         raise ValueError("could not infer top module; pass --top-module")
     return candidates[-1]
@@ -208,10 +214,28 @@ def require_port(ports: Dict[str, Port], name: str) -> Port:
 
 
 def infer_address_bounds(text: str, addr_width: int) -> Tuple[int, int]:
-    match = re.search(r"controller2addr_map_\{0:\s*\[(\d+),\s*(\d+)\]", text)
+    match = re.search(r"controller2addr_map_\{0:\s*[\[\(](\d+),\s*(\d+)[\]\)]", text)
     if match:
         return int(match.group(1)), int(match.group(2))
     return 0, (1 << addr_width) - 1
+
+
+def infer_tile_shape(text: str, intra_type: str) -> Tuple[int, int, int]:
+    shape_patterns = [
+        r"// Full name: .*?__per_cgra_rows_(\d+)__per_cgra_columns_(\d+)",
+        r"// Full name: .*?__width_(\d+)__height_(\d+)",
+    ]
+    for pattern in shape_patterns:
+        matches = re.findall(pattern, text)
+        if matches:
+            rows, columns = matches[-1]
+            break
+    else:
+        rows, columns = "1", "1"
+
+    packet_match = re.match(r"IntraCgraPacket_\d+_\d+x\d+_(\d+)_", intra_type)
+    num_tiles = int(packet_match.group(1)) if packet_match else int(rows) * int(columns)
+    return int(rows), int(columns), num_tiles
 
 
 def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraMetadata:
@@ -225,34 +249,37 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
     cgra_id = require_port(ports, "cgra_id")
     address_lower = require_port(ports, "address_lower")
 
-    boundary_msg = require_port(ports, "recv_data_on_boundary_south__msg")
-    data_type = boundary_msg.sv_type
-    if data_type is None:
-        raise ValueError("boundary data msg port is not a struct type")
-
-    side_counts = {}
-    for side in SIDES:
-        msg_port = require_port(ports, f"recv_data_on_boundary_{side}__msg")
-        if msg_port.array_len is None:
-            raise ValueError(f"boundary port for {side} is not an unpacked array")
-        side_counts[side] = msg_port.array_len
-
-    if side_counts["south"] != side_counts["north"]:
-        raise ValueError("south/north boundary counts differ")
-    if side_counts["east"] != side_counts["west"]:
-        raise ValueError("east/west boundary counts differ")
-
     if intra.sv_type is None or inter.sv_type is None:
         raise ValueError("packet ports must use generated struct typedefs")
 
     payload_type = field_type(intra.sv_type, "payload", typedefs)
+    data_type = field_type(payload_type, "data", typedefs)
+    data_width = struct_width(data_type, typedefs, memo)
     data_payload_width = field_width(data_type, "payload", typedefs, memo)
     payload_width = struct_width(payload_type, typedefs, memo)
     cmd_width = field_width(payload_type, "cmd", typedefs, memo)
     address_lo, address_hi = infer_address_bounds(text, address_lower.width)
 
-    x_tiles = side_counts["south"]
-    y_tiles = side_counts["east"]
+    has_boundary_ports = "recv_data_on_boundary_south__msg" in ports
+    if has_boundary_ports:
+        side_counts = {}
+        for side in SIDES:
+            msg_port = require_port(ports, f"recv_data_on_boundary_{side}__msg")
+            if msg_port.array_len is None:
+                raise ValueError(f"boundary port for {side} is not an unpacked array")
+            side_counts[side] = msg_port.array_len
+
+        if side_counts["south"] != side_counts["north"]:
+            raise ValueError("south/north boundary counts differ")
+        if side_counts["east"] != side_counts["west"]:
+            raise ValueError("east/west boundary counts differ")
+
+        x_tiles = side_counts["south"]
+        y_tiles = side_counts["east"]
+        num_tiles = x_tiles * y_tiles
+    else:
+        x_tiles, y_tiles, num_tiles = infer_tile_shape(text, intra.sv_type)
+
     wrapper_name = f"{top}_wrapper"
     return CgraMetadata(
         top_module=top,
@@ -262,7 +289,7 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         data_type=data_type,
         intra_width=intra.width,
         inter_width=inter.width,
-        data_width=boundary_msg.width,
+        data_width=data_width,
         data_payload_width=data_payload_width,
         payload_width=payload_width,
         cmd_width=cmd_width,
@@ -270,11 +297,12 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         addr_width=address_lower.width,
         x_tiles=x_tiles,
         y_tiles=y_tiles,
-        num_tiles=x_tiles * y_tiles,
+        num_tiles=num_tiles,
         address_lower=address_lo,
         address_upper=address_hi,
         rtl_resource=f"/vsrc/{rtl_name}",
         wrapper_resource=f"/vsrc/{wrapper_name}.v",
+        has_boundary_ports=has_boundary_ports,
     )
 
 
@@ -300,25 +328,26 @@ def wrapper_ports(meta: CgraMetadata) -> List[str]:
         "input  logic        send_to_inter_cgra_noc_rdy",
     ]
 
-    side_sizes = {
-        "south": meta.x_tiles,
-        "north": meta.x_tiles,
-        "east": meta.y_tiles,
-        "west": meta.y_tiles,
-    }
-    for side in SIDES:
-        for idx in range(side_sizes[side]):
-            ports.extend([
-                f"input  logic        recv_data_on_boundary_{side}_{idx}_val",
-                f"input  logic{flat_range(meta.data_width)} recv_data_on_boundary_{side}_{idx}_msg",
-                f"output logic        recv_data_on_boundary_{side}_{idx}_rdy",
-            ])
-        for idx in range(side_sizes[side]):
-            ports.extend([
-                f"output logic        send_data_on_boundary_{side}_{idx}_val",
-                f"output logic{flat_range(meta.data_width)} send_data_on_boundary_{side}_{idx}_msg",
-                f"input  logic        send_data_on_boundary_{side}_{idx}_rdy",
-            ])
+    if meta.has_boundary_ports:
+        side_sizes = {
+            "south": meta.x_tiles,
+            "north": meta.x_tiles,
+            "east": meta.y_tiles,
+            "west": meta.y_tiles,
+        }
+        for side in SIDES:
+            for idx in range(side_sizes[side]):
+                ports.extend([
+                    f"input  logic        recv_data_on_boundary_{side}_{idx}_val",
+                    f"input  logic{flat_range(meta.data_width)} recv_data_on_boundary_{side}_{idx}_msg",
+                    f"output logic        recv_data_on_boundary_{side}_{idx}_rdy",
+                ])
+            for idx in range(side_sizes[side]):
+                ports.extend([
+                    f"output logic        send_data_on_boundary_{side}_{idx}_val",
+                    f"output logic{flat_range(meta.data_width)} send_data_on_boundary_{side}_{idx}_msg",
+                    f"input  logic        send_data_on_boundary_{side}_{idx}_rdy",
+                ])
 
     ports.extend([
         f"input  logic{flat_range(meta.id_width)} cgra_id",
@@ -361,6 +390,12 @@ def gen_boundary_assigns(side: str, count: int) -> str:
     return "\n".join(lines)
 
 
+def render_template(template_name: str, **values: object) -> str:
+    template_path = DEFAULT_TEMPLATE_DIR / template_name
+    template = Template(template_path.read_text(encoding="utf-8"))
+    return template.substitute({key: str(value) for key, value in values.items()})
+
+
 def gen_wrapper(meta: CgraMetadata) -> str:
     side_sizes = {
         "south": meta.x_tiles,
@@ -368,8 +403,11 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         "east": meta.y_tiles,
         "west": meta.y_tiles,
     }
-    boundary_wires = "".join(gen_boundary_wires(meta, side, side_sizes[side]) for side in SIDES)
-    boundary_assigns = "\n\n".join(gen_boundary_assigns(side, side_sizes[side]) for side in SIDES)
+    boundary_wires = ""
+    boundary_assigns = ""
+    if meta.has_boundary_ports:
+        boundary_wires = "".join(gen_boundary_wires(meta, side, side_sizes[side]) for side in SIDES).rstrip()
+        boundary_assigns = "\n\n".join(gen_boundary_assigns(side, side_sizes[side]) for side in SIDES).rstrip()
 
     inst_ports = [
         ".clk                                ( clk )",
@@ -387,80 +425,57 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
         ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
     ]
-    for side in SIDES:
-        inst_ports.extend([
-            f".recv_data_on_boundary_{side}__val   ( w_recv_{side}_val )",
-            f".recv_data_on_boundary_{side}__msg   ( w_recv_{side}_msg )",
-            f".recv_data_on_boundary_{side}__rdy   ( w_recv_{side}_rdy )",
-            f".send_data_on_boundary_{side}__val   ( w_send_{side}_val )",
-            f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
-            f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
-        ])
+    if meta.has_boundary_ports:
+        for side in SIDES:
+            inst_ports.extend([
+                f".recv_data_on_boundary_{side}__val   ( w_recv_{side}_val )",
+                f".recv_data_on_boundary_{side}__msg   ( w_recv_{side}_msg )",
+                f".recv_data_on_boundary_{side}__rdy   ( w_recv_{side}_rdy )",
+                f".send_data_on_boundary_{side}__val   ( w_send_{side}_val )",
+                f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
+                f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
+            ])
     inst_ports.extend([
         ".cgra_id                            ( cgra_id )",
         ".address_lower                      ( address_lower )",
         ".address_upper                      ( address_upper )",
     ])
 
-    return f"""//-------------------------------------------------------------------------
-// {meta.wrapper_module}.v
-//-------------------------------------------------------------------------
-// Auto-generated by scripts/sync_cgra_blackbox.py.
-// Wraps PyMTL3-generated {meta.top_module} and flattens struct/array ports
-// for Chisel BlackBox compatibility.
-//-------------------------------------------------------------------------
-
-module {meta.wrapper_module} (
-{comma_join(wrapper_ports(meta))}
-);
-
-  {meta.intra_type} w_recv_from_cpu_pkt_msg;
-  {meta.intra_type} w_send_to_cpu_pkt_msg;
-  {meta.inter_type} w_recv_from_inter_cgra_noc_msg;
-  {meta.inter_type} w_send_to_inter_cgra_noc_msg;
-{boundary_wires}
-  assign w_recv_from_cpu_pkt_msg = recv_from_cpu_pkt_msg;
-  assign send_to_cpu_pkt_msg = w_send_to_cpu_pkt_msg;
-  assign w_recv_from_inter_cgra_noc_msg = recv_from_inter_cgra_noc_msg;
-  assign send_to_inter_cgra_noc_msg = w_send_to_inter_cgra_noc_msg;
-
-{boundary_assigns}
-
-  {meta.top_module} cgra_inst (
-{comma_join(inst_ports, indent="    ")}
-  );
-
-endmodule
-"""
+    return render_template(
+        "cgra_wrapper.v.tpl",
+        wrapper_module=meta.wrapper_module,
+        top_module=meta.top_module,
+        port_list=comma_join(wrapper_ports(meta)),
+        intra_type=meta.intra_type,
+        inter_type=meta.inter_type,
+        boundary_wires=boundary_wires,
+        boundary_assigns=boundary_assigns,
+        inst_port_list=comma_join(inst_ports, indent="    "),
+    )
 
 
 def gen_scala(meta: CgraMetadata) -> str:
-    return f"""package chipyard.example
-
-// Auto-generated by scripts/sync_cgra_blackbox.py from {meta.top_module}.
-// Do not edit by hand; regenerate after PyMTL3 RTL changes.
-object CGRAGenerated {{
-  val params = CGRAParams(
-    intraPktWidth = {meta.intra_width},
-    interPktWidth = {meta.inter_width},
-    dataPayloadWidth = {meta.data_payload_width},
-    dataWidth = {meta.data_width},
-    payloadWidth = {meta.payload_width},
-    idWidth = {meta.id_width},
-    addrWidth = {meta.addr_width},
-    xTiles = {meta.x_tiles},
-    yTiles = {meta.y_tiles},
-    cmdWidth = {meta.cmd_width},
-    numTiles = {meta.num_tiles},
-    addressLower = {meta.address_lower},
-    addressUpper = {meta.address_upper},
-    topModuleName = "{meta.top_module}",
-    wrapperModuleName = "{meta.wrapper_module}",
-    rtlResource = "{meta.rtl_resource}",
-    wrapperResource = "{meta.wrapper_resource}"
-  )
-}}
-"""
+    return render_template(
+        "cgra_generated.scala.tpl",
+        top_module=meta.top_module,
+        intra_width=meta.intra_width,
+        inter_width=meta.inter_width,
+        data_payload_width=meta.data_payload_width,
+        data_width=meta.data_width,
+        payload_width=meta.payload_width,
+        id_width=meta.id_width,
+        addr_width=meta.addr_width,
+        x_tiles=meta.x_tiles,
+        y_tiles=meta.y_tiles,
+        cmd_width=meta.cmd_width,
+        num_tiles=meta.num_tiles,
+        address_lower=meta.address_lower,
+        address_upper=meta.address_upper,
+        has_boundary_ports=str(meta.has_boundary_ports).lower(),
+        wrapper_module=meta.wrapper_module,
+        rtl_resource=meta.rtl_resource,
+        wrapper_resource=meta.wrapper_resource,
+    )
 
 
 def write_text(path: Path, text: str) -> None:
@@ -491,6 +506,7 @@ def main() -> int:
     print(f"wrapper_module={meta.wrapper_module}")
     print(f"intra_width={meta.intra_width} inter_width={meta.inter_width} data_width={meta.data_width}")
     print(f"x_tiles={meta.x_tiles} y_tiles={meta.y_tiles} num_tiles={meta.num_tiles}")
+    print(f"has_boundary_ports={meta.has_boundary_ports}")
     print(f"scala_out={args.scala_out}")
     print(f"wrapper_out={wrapper_path}")
     print(f"rtl_out={rtl_dst}")
