@@ -57,12 +57,16 @@ python scripts/generate_single_cgra.py
 
 - Current baremetal tests:
   [tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-2x2.c:1)
+  and
+  [tests/cgra-fir-yaml-4x4.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-yaml-4x4.c:1)
 
 - C host-side headers:
   [tests/include/cgra_protocol.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_protocol.h:1)
   contains stable RoCC/VectorCGRA protocol constants, while
   [tests/include/cgra_layout.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_layout.h:1)
   is generated from the active RTL packet typedefs.
+  [tests/include/cgra_runtime.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_runtime.h:1)
+  contains reusable C packet builders and RoCC send helpers.
 
 ## Chipyard Integration State
 
@@ -108,6 +112,20 @@ wider than 192 bits. After changing YAML or regenerating RTL, check
 `CGRAGenerated.scala` and `tests/include/cgra_layout.h`; both are generated from
 the current packet typedefs.
 
+## Control-Signal Generation
+
+The top-level 4x4 FIR YAML path uses
+[scripts/generate_cgra_control_signals.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_control_signals.py:1)
+to call `VectorCGRA.validation.script_generator.ScriptFactory` and emit
+[tests/generated/cgra_fir_yaml_4x4_packets.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/generated/cgra_fir_yaml_4x4_packets.h:1).
+That header contains raw `cgra_packet_t` values for the preload and kernel
+control sequence. Do not hand-edit the generated packet header; regenerate it
+after changing the FIR control YAML, arch YAML, SoC YAML, or packet type.
+
+`ScriptFactory` now accepts tile/FU port-count parameters so it can generate
+the correct control vector length for both the original 4-port Mesh tests and
+the top-level 8-port `CgraTemplateRTL_single` KingMesh-style integration.
+
 ## Test Guidance
 
 Use the top-level runner with an explicit Chipyard test name:
@@ -124,6 +142,22 @@ Expected success strings include:
 
 ```text
 CGRA RoCC FIR 2x2: PASS
+```
+
+For the YAML-generated 4x4 FIR path:
+
+```bash
+python scripts/generate_single_cgra.py \
+  --arch-yaml configs/arch_fir_yaml_4x4.yaml \
+  --soc-yaml configs/cgra_soc_fir_yaml_4x4.yaml
+python scripts/generate_cgra_control_signals.py
+./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
+```
+
+Expected success strings include:
+
+```text
+CGRA RoCC FIR YAML 4x4: PASS
 ```
 
 ## Compatibility Notes
@@ -155,7 +189,11 @@ is selected by `CGRAGenerated.scala`, which currently points at
 - For SoC-facing metadata and BlackBox stitching, start with
   `scripts/sync_cgra_blackbox.py` and `CGRA.scala`.
 - For host packet programming, use `tests/include/cgra_protocol.h` for stable
-  protocol constants and `tests/include/cgra_layout.h` for generated bit
+  protocol constants, `tests/include/cgra_runtime.h` for reusable packet
+  builders/senders, and `tests/include/cgra_layout.h` for generated bit
   offsets. Do not duplicate generated layout constants in C tests.
+- For YAML-generated kernels, keep handwritten C focused on test flow and
+  result checking; generate raw control packets with
+  `scripts/generate_cgra_control_signals.py`.
 - Avoid hard-coding old packet widths such as `182` unless you are deliberately
   targeting the old `CgraRTL_2x2` wrapper.
