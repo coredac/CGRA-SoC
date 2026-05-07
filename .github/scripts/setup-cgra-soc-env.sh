@@ -11,6 +11,48 @@ have_cmd() {
   command -v "$1" >/dev/null 2>&1
 }
 
+ensure_root_submodules() {
+  (
+    cd "$ROOT_DIR"
+    echo "Initializing root submodules: chipyard, VectorCGRA."
+    git submodule sync -- chipyard VectorCGRA
+    git submodule update --init chipyard VectorCGRA
+  )
+}
+
+ensure_chipyard_submodules() {
+  (
+    cd "$CHIPYARD_DIR"
+    echo "Initializing Chipyard submodules needed for CGRA SoC."
+    # Keep this aligned with the base Chipyard project deps used by CGRARocketConfig.
+    local -a recursive_submodules=(
+      generators/hardfloat
+      generators/constellation
+    )
+    local -a leaf_submodules=(
+      generators/rocket-chip
+      generators/diplomacy
+      generators/testchipip
+      generators/boom
+      generators/rocket-chip-blocks
+      generators/rocket-chip-inclusive-cache
+      generators/icenet
+      generators/bar-fetchers
+      generators/shuttle
+      generators/rerocc
+      tools/cde
+      tools/fixedpoint
+      tools/dsptools
+      tools/rocket-dsp-utils
+      tools/firrtl2
+      sims/firesim
+    )
+    git submodule sync -- "${recursive_submodules[@]}" "${leaf_submodules[@]}"
+    git submodule update --init --recursive -- "${recursive_submodules[@]}"
+    git submodule update --init -- "${leaf_submodules[@]}"
+  )
+}
+
 ensure_conda() {
   if have_cmd conda; then
     if [[ -z "${CONDA_EXE:-}" ]]; then
@@ -56,6 +98,7 @@ ensure_chipyard_env() {
     cd "$CHIPYARD_DIR"
     ./scripts/build-setup.sh \
       --use-lean-conda \
+      --skip-submodules \
       --skip-ctags \
       --skip-precompile \
       --skip-circt \
@@ -111,6 +154,8 @@ print(f"yaml={yaml.__version__}")
 PY
 }
 
+ensure_root_submodules
+ensure_chipyard_submodules
 ensure_chipyard_env
 ensure_vectorcgra_venv
 check_environment

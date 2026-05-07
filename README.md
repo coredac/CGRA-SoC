@@ -16,20 +16,20 @@ keeping VectorCGRA and Chipyard as backend projects.
 
 From the repository root:
 
-```bash
+```sh
 python scripts/generate_single_cgra.py
 ```
 
 By default this uses the current validated Neura 4x4 flow:
 
-```text
+```sh
 configs/architectures/neura_architecture.yaml
 configs/cgra_soc_neura_4x4.yaml
 ```
 
 To use another configuration:
 
-```bash
+```sh
 python scripts/generate_single_cgra.py \
   --arch-yaml configs/architectures/neura_architecture.yaml \
   --soc-yaml configs/cgra_soc_neura_4x4.yaml
@@ -44,13 +44,13 @@ Chipyard/top-level tests.
 The current compiler-format FIR and AXPY tests use VectorCGRA's
 `ScriptFactory` to generate raw control packets for the C tests:
 
-```bash
+```sh
 python scripts/generate_cgra_control_signals.py
 ```
 
 By default this consumes:
 
-```text
+```sh
 configs/architectures/neura_architecture.yaml
 configs/cgra_soc_neura_4x4.yaml
 configs/kernels/fir.yaml
@@ -58,7 +58,7 @@ configs/kernels/fir.yaml
 
 and writes:
 
-```text
+```sh
 tests/generated/cgra_fir_packets.h
 ```
 
@@ -72,26 +72,26 @@ Rebuild the Chipyard simulator after regenerating RTL or changing the Chipyard
 CGRA integration. The current validated top-level flow runs `cgra-fir` and
 `cgra-axpy` on the Neura 4x4 RTL:
 
-```bash
+```sh
 ./run-chipyard-cgra-test.sh --rebuild
 ```
 
 Expected output includes:
 
-```text
+```sh
 CGRA RoCC FIR: PASS
 ```
 
 You can pass the test name explicitly:
 
-```bash
+```sh
 ./run-chipyard-cgra-test.sh --rebuild cgra-fir
 ./run-chipyard-cgra-test.sh --rebuild cgra-axpy
 ```
 
 To regenerate the current Neura 4x4 RTL and packet header, use:
 
-```bash
+```sh
 python scripts/generate_single_cgra.py \
   --arch-yaml configs/architectures/neura_architecture.yaml \
   --soc-yaml configs/cgra_soc_neura_4x4.yaml
@@ -107,14 +107,14 @@ python scripts/generate_cgra_control_signals.py \
 
 Expected output includes:
 
-```text
+```sh
 CGRA RoCC AXPY: PASS
 ```
 
 After the simulator is already rebuilt for the current RTL, omit `--rebuild`
 for faster reruns:
 
-```bash
+```sh
 ./run-chipyard-cgra-test.sh cgra-fir
 ```
 
