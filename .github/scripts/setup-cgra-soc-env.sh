@@ -94,7 +94,7 @@ chipyard_env_ready() {
     set +u
     source "$CHIPYARD_DIR/env.sh" >/dev/null 2>&1
     set -u
-    have_cmd riscv64-unknown-elf-gcc && have_cmd verilator
+    have_cmd riscv64-unknown-elf-gcc && have_cmd verilator && have_cmd firtool
   )
 }
 
@@ -115,7 +115,6 @@ ensure_chipyard_env() {
       --skip-submodules \
       --skip-ctags \
       --skip-precompile \
-      --skip-circt \
       --skip-firesim \
       --skip-marshal \
       --skip-clean \
@@ -157,6 +156,7 @@ check_environment() {
     set -u
     riscv64-unknown-elf-gcc --version >/dev/null
     verilator --version
+    firtool --version
   )
 
   "$VENV_DIR/bin/python" - <<'PY'
