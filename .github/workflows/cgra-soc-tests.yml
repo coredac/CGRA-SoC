@@ -1,0 +1,95 @@
+name: CGRA SoC tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: cgra-soc-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  fir-axpy:
+    name: FIR and AXPY on Ubuntu
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure Chipyard and VectorCGRA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate Neura 4x4 RTL
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --arch-yaml configs/architectures/neura_architecture.yaml \
+            --soc-yaml configs/cgra_soc_neura_4x4.yaml
+
+      - name: Generate FIR control packets
+        run: |
+          .venv/bin/python scripts/generate_cgra_control_signals.py \
+            --arch-yaml configs/architectures/neura_architecture.yaml \
+            --soc-yaml configs/cgra_soc_neura_4x4.yaml \
+            --control-yaml configs/kernels/fir.yaml \
+            --output tests/generated/cgra_fir_packets.h \
+            --expected-completes 1 \
+            --expected-result 528
+
+      - name: Generate AXPY control packets
+        run: |
+          .venv/bin/python scripts/generate_cgra_control_signals.py \
+            --arch-yaml configs/architectures/neura_architecture.yaml \
+            --soc-yaml configs/cgra_soc_neura_4x4.yaml \
+            --control-yaml configs/kernels/axpy.yaml \
+            --output tests/generated/cgra_axpy_packets.h \
+            --expected-completes 1 \
+            --expected-result 2215
+
+      - name: Check generated artifacts are committed
+        run: |
+          git diff --exit-code -- \
+            tests/include/cgra_layout.h \
+            tests/generated/cgra_fir_packets.h \
+            tests/generated/cgra_axpy_packets.h
+          git -C VectorCGRA diff --exit-code -- \
+            CgraTemplateRTL_single__pickled.v
+          git -C chipyard diff --exit-code -- \
+            generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single__pickled.v \
+            generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single_wrapper.v \
+            generators/chipyard/src/main/scala/example/CGRAGenerated.scala
+
+      - name: Run FIR SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh --rebuild cgra-fir 2>&1 | tee cgra-fir.log
+          grep -q "CGRA RoCC FIR: PASS" cgra-fir.log
+
+      - name: Run AXPY SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-axpy 2>&1 | tee cgra-axpy.log
+          grep -q "CGRA RoCC AXPY: PASS" cgra-axpy.log
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cgra-soc-test-logs
+          path: |
+            cgra-fir.log
+            cgra-axpy.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore

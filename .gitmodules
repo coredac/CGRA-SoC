@@ -6,4 +6,4 @@
 	url = https://github.com/HobbitQia/cgra-chipyard.git
 [submodule "VectorCGRA"]
 	path = VectorCGRA
-	url = https://github.com/tancheng/VectorCGRA.git
+	url = https://github.com/HobbitQia/VectorCGRA.git
