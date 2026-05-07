@@ -11,6 +11,7 @@
 #define CGRA_SET_EXPECTED_COMPLETES(count) ROCC_INSTRUCTION_S(0, count, 8)
 #define CGRA_RESULT(result) ROCC_INSTRUCTION_D(0, result, 9)
 #define CGRA_RAW_PKT_TOP(top) ROCC_INSTRUCTION_S(0, top, 10)
+#define CGRA_LOAD_MEM(result, addr) ROCC_INSTRUCTION_DS(0, result, addr, 11)
 
 enum {
   CGRA_CMD_LAUNCH = 0,

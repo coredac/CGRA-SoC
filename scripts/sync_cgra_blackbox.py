@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RTL = ROOT / "VectorCGRA" / "CgraRTL_2x2__pickled.v"
 DEFAULT_VSRC = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
 DEFAULT_SCALA = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example" / "CGRAGenerated.scala"
-DEFAULT_C_LAYOUT = ROOT / "tests" / "include" / "cgra_layout.h"
+DEFAULT_C_LAYOUT = ROOT / "tests" / "incslude" / "cgra_layout.h"
 DEFAULT_TEMPLATE_DIR = ROOT / "scripts" / "templates"
 SIDES = ("south", "north", "east", "west")
 

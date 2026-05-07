@@ -16,8 +16,8 @@ VECTOR_RTL = ROOT / "VectorCGRA" / "CgraTemplateRTL_single__pickled.v"
 TOP_MODULE = "CgraTemplateRTL_single"
 PYTHON = ROOT / ".venv" / "bin" / "python"
 PYTHON_EXE = str(PYTHON if PYTHON.exists() else Path(sys.executable))
-DEFAULT_ARCH_YAML = ROOT / "configs" / "arch_fir_2x2.yaml"
-DEFAULT_SOC_YAML = ROOT / "configs" / "cgra_soc_fir_2x2.yaml"
+DEFAULT_ARCH_YAML = ROOT / "configs" / "architectures" / "neura_architecture.yaml"
+DEFAULT_SOC_YAML = ROOT / "configs" / "cgra_soc_neura_4x4.yaml"
 
 
 def resolve_input_path(path: str) -> Path:

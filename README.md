@@ -20,19 +20,19 @@ From the repository root:
 python scripts/generate_single_cgra.py
 ```
 
-By default this uses:
+By default this uses the current validated Neura 4x4 flow:
 
 ```text
-configs/arch_fir_2x2.yaml
-configs/cgra_soc_fir_2x2.yaml
+configs/architectures/neura_architecture.yaml
+configs/cgra_soc_neura_4x4.yaml
 ```
 
 To use another configuration:
 
 ```bash
 python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_2x2.yaml \
-  --soc-yaml configs/cgra_soc_fir_2x2.yaml
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml
 ```
 
 The script runs the VectorCGRA PyMTL3 translator, then syncs the generated RTL,
@@ -41,8 +41,8 @@ Chipyard/top-level tests.
 
 ## Generate YAML Control Packets
 
-The 4x4 FIR YAML test uses VectorCGRA's `ScriptFactory` to generate raw control
-packets for the C test:
+The current compiler-format FIR and AXPY tests use VectorCGRA's
+`ScriptFactory` to generate raw control packets for the C tests:
 
 ```bash
 python scripts/generate_cgra_control_signals.py
@@ -51,15 +51,15 @@ python scripts/generate_cgra_control_signals.py
 By default this consumes:
 
 ```text
-configs/arch_fir_yaml_4x4.yaml
-configs/cgra_soc_fir_yaml_4x4.yaml
-VectorCGRA/validation/test/fir_acceptance_test.yaml
+configs/architectures/neura_architecture.yaml
+configs/cgra_soc_neura_4x4.yaml
+configs/kernels/fir.yaml
 ```
 
 and writes:
 
 ```text
-tests/generated/cgra_fir_yaml_4x4_packets.h
+tests/generated/cgra_fir_packets.h
 ```
 
 The generated header includes preload packets and control packets. User C tests
@@ -69,8 +69,8 @@ with `cgra_send_packets`.
 ## Run Tests
 
 Rebuild the Chipyard simulator after regenerating RTL or changing the Chipyard
-CGRA integration. The default top-level YAML generates the FIR 2x2 RTL, so the
-default test is `cgra-fir-2x2`:
+CGRA integration. The current validated top-level flow runs `cgra-fir` and
+`cgra-axpy` on the Neura 4x4 RTL:
 
 ```bash
 ./run-chipyard-cgra-test.sh --rebuild
@@ -79,37 +79,43 @@ default test is `cgra-fir-2x2`:
 Expected output includes:
 
 ```text
-CGRA RoCC FIR 2x2: PASS
+CGRA RoCC FIR: PASS
 ```
 
 You can pass the test name explicitly:
 
 ```bash
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-2x2
+./run-chipyard-cgra-test.sh --rebuild cgra-fir
+./run-chipyard-cgra-test.sh --rebuild cgra-axpy
 ```
 
-To run the YAML-generated 4x4 FIR test, first generate matching 4x4 RTL and
-refresh the generated packet header:
+To regenerate the current Neura 4x4 RTL and packet header, use:
 
 ```bash
 python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_yaml_4x4.yaml \
-  --soc-yaml configs/cgra_soc_fir_yaml_4x4.yaml
-python scripts/generate_cgra_control_signals.py
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml
+python scripts/generate_cgra_control_signals.py \
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml \
+  --control-yaml configs/kernels/fir.yaml \
+  --output tests/generated/cgra_fir_packets.h \
+  --expected-completes 1 \
+  --expected-result 528
+./run-chipyard-cgra-test.sh --rebuild cgra-fir
 ```
 
 Expected output includes:
 
 ```text
-CGRA RoCC FIR YAML 4x4: PASS
+CGRA RoCC AXPY: PASS
 ```
 
 After the simulator is already rebuilt for the current RTL, omit `--rebuild`
 for faster reruns:
 
 ```bash
-./run-chipyard-cgra-test.sh cgra-fir-2x2
+./run-chipyard-cgra-test.sh cgra-fir
 ```
 
 The C tests include `tests/include/cgra_protocol.h` for stable RoCC/CGRA

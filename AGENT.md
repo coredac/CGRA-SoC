@@ -26,7 +26,9 @@ Typical flow:
 
 ```bash
 cd /mnt/public/qjj/CGRA-SoC
-python scripts/generate_single_cgra.py
+python scripts/generate_single_cgra.py \
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml
 ./run-chipyard-cgra-test.sh --rebuild
 ```
 
@@ -56,9 +58,9 @@ python scripts/generate_single_cgra.py
   [run-chipyard-cgra-test.sh](/mnt/public/sichuan_a/qjj/CGRA-SoC/run-chipyard-cgra-test.sh:1)
 
 - Current baremetal tests:
-  [tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-2x2.c:1)
+  [tests/cgra-fir.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir.c:1)
   and
-  [tests/cgra-fir-yaml-4x4.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-yaml-4x4.c:1)
+  [tests/cgra-axpy.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-axpy.c:1)
 
 - C host-side headers:
   [tests/include/cgra_protocol.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_protocol.h:1)
@@ -117,10 +119,12 @@ the current packet typedefs.
 The top-level 4x4 FIR YAML path uses
 [scripts/generate_cgra_control_signals.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_control_signals.py:1)
 to call `VectorCGRA.validation.script_generator.ScriptFactory` and emit
-[tests/generated/cgra_fir_yaml_4x4_packets.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/generated/cgra_fir_yaml_4x4_packets.h:1).
+[tests/generated/cgra_fir_packets.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/generated/cgra_fir_packets.h:1).
 That header contains raw `cgra_packet_t` values for the preload and kernel
-control sequence. Do not hand-edit the generated packet header; regenerate it
-after changing the FIR control YAML, arch YAML, SoC YAML, or packet type.
+control sequence. The default kernel control YAML is
+[configs/kernels/fir_acceptance_test.yaml](/mnt/public/sichuan_a/qjj/CGRA-SoC/configs/kernels/fir_acceptance_test.yaml:1).
+Do not hand-edit the generated packet header; regenerate it after changing the
+FIR control YAML, arch YAML, SoC YAML, or packet type.
 
 `ScriptFactory` now accepts tile/FU port-count parameters so it can generate
 the correct control vector length for both the original 4-port Mesh tests and
@@ -131,7 +135,7 @@ the top-level 8-port `CgraTemplateRTL_single` KingMesh-style integration.
 Use the top-level runner with an explicit Chipyard test name:
 
 ```bash
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-2x2
+./run-chipyard-cgra-test.sh --rebuild cgra-fir
 ```
 
 The script compiles `tests/<test-name>.c` and runs it on
@@ -141,23 +145,30 @@ Verilog, `CGRAGenerated.scala`, `CGRA.scala`, or Chipyard config fragments.
 Expected success strings include:
 
 ```text
-CGRA RoCC FIR 2x2: PASS
+CGRA RoCC FIR: PASS
 ```
 
-For the YAML-generated 4x4 FIR path:
+For the current Neura 4x4 flow:
 
 ```bash
 python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_yaml_4x4.yaml \
-  --soc-yaml configs/cgra_soc_fir_yaml_4x4.yaml
-python scripts/generate_cgra_control_signals.py
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml
+python scripts/generate_cgra_control_signals.py \
+  --arch-yaml configs/architectures/neura_architecture.yaml \
+  --soc-yaml configs/cgra_soc_neura_4x4.yaml \
+  --control-yaml configs/kernels/fir.yaml \
+  --output tests/generated/cgra_fir_packets.h \
+  --expected-completes 1 \
+  --expected-result 528
+./run-chipyard-cgra-test.sh --rebuild cgra-fir
+./run-chipyard-cgra-test.sh cgra-axpy
 ```
 
 Expected success strings include:
 
 ```text
-CGRA RoCC FIR YAML 4x4: PASS
+CGRA RoCC AXPY: PASS
 ```
 
 ## Compatibility Notes

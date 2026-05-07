@@ -5,11 +5,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 REBUILD=0
-TEST_NAME="cgra-fir-2x2"
+TEST_NAME="cgra-fir"
 SEEN_TEST_NAME=0
 
 usage() {
-  echo "usage: $0 [--rebuild] [cgra-fir-2x2]" >&2
+  echo "usage: $0 [--rebuild] [cgra-fir|cgra-axpy]" >&2
 }
 
 while (($# > 0)); do
