@@ -20,6 +20,19 @@ ensure_root_submodules() {
   )
 }
 
+ensure_vectorcgra_submodules() {
+  (
+    cd "$ROOT_DIR/VectorCGRA"
+    echo "Initializing VectorCGRA submodules needed for Neura CGRA RTL."
+    local -a vectorcgra_submodules=(
+      noc/PyOCN
+      fu/pymtl3_hardfloat
+    )
+    git submodule sync -- "${vectorcgra_submodules[@]}"
+    git submodule update --init -- "${vectorcgra_submodules[@]}"
+  )
+}
+
 ensure_chipyard_submodules() {
   (
     cd "$CHIPYARD_DIR"
@@ -155,6 +168,7 @@ PY
 }
 
 ensure_root_submodules
+ensure_vectorcgra_submodules
 ensure_chipyard_submodules
 ensure_chipyard_env
 ensure_vectorcgra_venv
