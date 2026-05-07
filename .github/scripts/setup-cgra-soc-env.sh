@@ -53,6 +53,7 @@ ensure_chipyard_submodules() {
       generators/bar-fetchers
       generators/shuttle
       generators/rerocc
+      generators/rocc-acc-utils
       tools/cde
       tools/fixedpoint
       tools/dsptools
