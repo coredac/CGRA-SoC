@@ -602,7 +602,7 @@ def gen_c_layout(meta: CgraMetadata, typedefs: Dict[str, str]) -> str:
         "is_last_ctrl": "CTRL_IS_LAST_CTRL",
         "write_reg_from": "CTRL_WRITE_REG_FROM",
         "write_reg_idx": "CTRL_WRITE_REG_IDX",
-        "read_reg_from": "CTRL_READ_REG_FROM",
+        "read_reg_towards": "CTRL_READ_REG_FROM",
         "read_reg_idx": "CTRL_READ_REG_IDX",
     }
     for field, define_base in ctrl_names.items():

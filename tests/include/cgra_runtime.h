@@ -164,6 +164,13 @@ static inline void cgra_send_prologue(uint8_t tile, uint8_t cmd,
                                         0, ctrl, ctrl_addr));
 }
 
+static inline uint32_t cgra_read_mem(uint8_t data_addr) {
+  uint64_t result = 0;
+  cgra_send_basic(0, CGRA_CMD_LOAD_REQUEST, 0, 0, data_addr);
+  CGRA_LOAD_RESULT(result);
+  return (uint32_t)result;
+}
+
 static inline uint64_t data_raw(uint32_t payload, uint8_t predicate) {
   return cgra_data_raw(payload, predicate);
 }
@@ -202,6 +209,10 @@ static inline void send_config(uint8_t tile, uint8_t ctrl_addr,
 static inline void send_prologue(uint8_t tile, uint8_t cmd, uint8_t ctrl_addr,
                                  uint32_t count, cgra_ctrl_t ctrl) {
   cgra_send_prologue(tile, cmd, ctrl_addr, count, ctrl);
+}
+
+static inline uint32_t read_mem(uint8_t data_addr) {
+  return cgra_read_mem(data_addr);
 }
 
 #endif

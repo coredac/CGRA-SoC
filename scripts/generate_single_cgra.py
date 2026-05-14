@@ -39,6 +39,10 @@ def run(cmd: list[str]) -> None:
 def parse_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument(
+    "--kernel-yaml",
+    help="Unified per-kernel YAML. When supplied, this is the source of truth.",
+  )
+  parser.add_argument(
     "--arch-yaml",
     default=str(DEFAULT_ARCH_YAML),
     help=f"CGRA architecture YAML (default: {DEFAULT_ARCH_YAML.relative_to(ROOT)})",
@@ -53,21 +57,30 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
   args = parse_args()
-  arch_yaml = resolve_input_path(args.arch_yaml)
-  soc_yaml = resolve_input_path(args.soc_yaml)
-  if not arch_yaml.exists():
-    raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
-  if not soc_yaml.exists():
-    raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
+  translate_cmd = [
+      PYTHON_EXE,
+      str(ROOT / "VectorCGRA" / "cgra" / "test" / "CgraTemplateRTL_single_test.py"),
+  ]
+  if args.kernel_yaml:
+    kernel_yaml = resolve_input_path(args.kernel_yaml)
+    if not kernel_yaml.exists():
+      raise FileNotFoundError(f"kernel yaml not found: {kernel_yaml}")
+    translate_cmd.extend(["--kernel-yaml", str(kernel_yaml)])
+  else:
+    arch_yaml = resolve_input_path(args.arch_yaml)
+    soc_yaml = resolve_input_path(args.soc_yaml)
+    if not arch_yaml.exists():
+      raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
+    if not soc_yaml.exists():
+      raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
+    translate_cmd.extend([
+        "--arch-yaml",
+        str(arch_yaml),
+        "--soc-yaml",
+        str(soc_yaml),
+    ])
 
-  run([
-    PYTHON_EXE,
-    str(ROOT / "VectorCGRA" / "cgra" / "test" / "CgraTemplateRTL_single_test.py"),
-    "--arch-yaml",
-    str(arch_yaml),
-    "--soc-yaml",
-    str(soc_yaml),
-  ])
+  run(translate_cmd)
 
   run([
     PYTHON_EXE,
