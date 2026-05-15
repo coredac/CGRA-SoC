@@ -1,118 +1,102 @@
 # CGRA-SoC
 
-This workspace exposes the CGRA integration flow from the top level while
-keeping VectorCGRA and Chipyard as backend projects.
+This workspace drives the CPU+CGRA integration flow from unified per-kernel
+YAML files. VectorCGRA generates the CGRA RTL and semantic control packets;
+Chipyard hosts the generated RTL behind the RoCC wrapper and runs baremetal C
+tests.
 
 ## Layout
 
-- `configs/`: user-facing CGRA architecture and SoC interface YAML files.
-- `tests/`: user-facing baremetal C tests for the Chipyard RoCC CGRA wrapper.
-- `scripts/`: glue scripts that generate VectorCGRA RTL and sync it into
-  Chipyard.
-- `VectorCGRA/`: backend CGRA generator and PyMTL3 translation code.
-- `chipyard/`: backend SoC integration, Verilator simulator, and toolchain.
+- `configs/kernel_*_4x4.yaml`: unified per-kernel hardware and execution
+  configs.
+- `scripts/generate_single_cgra.py`: generates kernel-specific
+  `CgraTemplateRTL_single` RTL and syncs it into Chipyard.
+- `scripts/generate_cgra_c_api.py`: generates semantic C configuration APIs in
+  `tests/generated/cgra_<kernel>_api.h`.
+- `tests/`: baremetal CPU+CGRA tests.
+- `tests/include/`: CGRA protocol constants, packet layout, and runtime helpers.
+- `VectorCGRA/`: backend CGRA generator and reference from-yaml tests.
+- `chipyard/`: SoC integration and Verilator simulator.
 
-## Generate RTL and Sync Chipyard
+The older `cgra-fir-2x2` flow is deprecated and is not the main validation path.
+Use the unified 4x4 kernel YAML flow below.
 
-From the repository root:
+## Supported Kernels
 
-```bash
-python scripts/generate_single_cgra.py
-```
+| Kernel | Config | C test | Notes |
+| --- | --- | --- | --- |
+| FIR | `configs/kernel_fir4x4_4x4.yaml` | `cgra-fir-yaml-4x4` | Checks completion/result. |
+| ReLU | `configs/kernel_relu4x4_4x4.yaml` | `cgra-relu4x4` | Checks all output addresses. |
+| GEMV | `configs/kernel_gemv_4x4.yaml` | `cgra-gemv-4x4` | Checks output rows 1..3; skips known row 0 issue. |
+| Histogram | `configs/kernel_histogram_4x4.yaml` | `cgra-histogram-4x4` | Checks bins 1..3; skips known bin 0 issue. |
+| AXPY | `configs/kernel_axpy_4x4.yaml` | `cgra-axpy-4x4` | Checks addr 1..15; skips known addr 0 issue. |
 
-By default this uses:
+GEMM and SAD are not part of the current supported CPU+CGRA set.
 
-```text
-configs/arch_fir_2x2.yaml
-configs/cgra_soc_fir_2x2.yaml
-```
+## Run A Kernel
 
-To use another configuration:
+Switching kernels requires regenerating RTL and rebuilding the simulator because
+different kernels can use different RTL parameters, control memories, and FU
+lists. Running a new test on a simulator built for a previous kernel gives
+invalid results.
 
-```bash
-python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_2x2.yaml \
-  --soc-yaml configs/cgra_soc_fir_2x2.yaml
-```
-
-The script runs the VectorCGRA PyMTL3 translator, then syncs the generated RTL,
-BlackBox wrapper, generated Scala parameters, and C packet layout header into
-Chipyard/top-level tests.
-
-## Generate YAML Control Packets
-
-The 4x4 FIR YAML test uses VectorCGRA's `ScriptFactory` to generate raw control
-packets for the C test:
+Use this flow from the repository root:
 
 ```bash
-python scripts/generate_cgra_control_signals.py
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_<kernel>_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_<kernel>_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild <c-test-name>
 ```
 
-By default this consumes:
-
-```text
-configs/arch_fir_yaml_4x4.yaml
-configs/cgra_soc_fir_yaml_4x4.yaml
-VectorCGRA/validation/test/fir_acceptance_test.yaml
-```
-
-and writes:
-
-```text
-tests/generated/cgra_fir_yaml_4x4_packets.h
-```
-
-The generated header includes preload packets and control packets. User C tests
-can include `tests/include/cgra_runtime.h` and send the generated packet array
-with `cgra_send_packets`.
-
-## Run Tests
-
-Rebuild the Chipyard simulator after regenerating RTL or changing the Chipyard
-CGRA integration. The default top-level YAML generates the FIR 2x2 RTL, so the
-default test is `cgra-fir-2x2`:
+Examples:
 
 ```bash
-./run-chipyard-cgra-test.sh --rebuild
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_histogram_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_histogram_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild cgra-histogram-4x4
 ```
-
-Expected output includes:
-
-```text
-CGRA RoCC FIR 2x2: PASS
-```
-
-You can pass the test name explicitly:
 
 ```bash
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-2x2
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_relu4x4_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_relu4x4_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild cgra-relu4x4
 ```
 
-To run the YAML-generated 4x4 FIR test, first generate matching 4x4 RTL and
-refresh the generated packet header:
+After rebuilding for the same generated RTL, rerun the same C test without
+`--rebuild`:
 
 ```bash
-python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_yaml_4x4.yaml \
-  --soc-yaml configs/cgra_soc_fir_yaml_4x4.yaml
-python scripts/generate_cgra_control_signals.py
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
+./run-chipyard-cgra-test.sh cgra-relu4x4
 ```
 
-Expected output includes:
+## Reference First
 
-```text
-CGRA RoCC FIR YAML 4x4: PASS
-```
-
-After the simulator is already rebuilt for the current RTL, omit `--rebuild`
-for faster reruns:
+When bringing up a kernel, first check the matching VectorCGRA from-yaml test.
+For FIR, use `CgraRTL_fir4x4_test_from_yaml.py`; the older
+`CgraRTL_fir_test_from_yaml.py` is not the reference for this flow.
 
 ```bash
-./run-chipyard-cgra-test.sh cgra-fir-2x2
+cd VectorCGRA
+python -m pytest cgra/test/CgraRTL_fir4x4_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_relu4x4_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_gemv_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_histogram_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_axpy_test_from_yaml.py -q
 ```
 
-The C tests include `tests/include/cgra_protocol.h` for stable RoCC/CGRA
-protocol constants, `tests/include/cgra_runtime.h` for packet builders and
-send helpers, and the generated `tests/include/cgra_layout.h` for packet bit
-offsets that depend on the current generated RTL.
+Then return to the top level and run the CPU+CGRA flow.
+
+## Runtime Notes
+
+The C tests use `tests/include/cgra_protocol.h` for protocol constants,
+`tests/include/cgra_runtime.h` for packet send/readback helpers, and the
+generated `tests/include/cgra_layout.h` for packet field offsets.
+
+`read_mem(addr)` sends a CGRA load request and reads back CGRA-side data memory
+through the RoCC wrapper. This is used by ReLU, GEMV, Histogram, and AXPY
+result checks.
+
+Known first-output issues are preserved in the C tests with comments:
+GEMV leaves logical row 0 (`addr20`) incorrect, Histogram leaves logical bin 0
+(`addr20`) incorrect, and AXPY leaves physical `addr0` incorrect. Those tests
+still require the remaining checked addresses to match.

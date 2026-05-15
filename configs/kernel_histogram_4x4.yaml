@@ -1,0 +1,44 @@
+kernel:
+  name: histogram
+  kernel_yaml: VectorCGRA/validation/test/histogram.yaml
+  dfg_yaml: VectorCGRA/validation/test/histogram.yaml
+
+cgra:
+  x_tiles: 4
+  y_tiles: 4
+  num_cgra_columns: 4
+  num_cgra_rows: 1
+  config_mem_size: 6
+
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 128
+  data_mem_size_per_bank: 16
+  num_banks_per_cgra: 2
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+
+execution:
+  compiled_ii: 6
+  loop_times: 130
+
+hardware:
+  fu_list:
+    - AdderRTL
+    - MulRTL
+    - DivRTL
+    - LogicRTL
+    - ShifterRTL
+    - PhiRTL
+    - CompRTL
+    - GrantRTL
+    - MemUnitRTL
+    - SelRTL
+    - RetRTL

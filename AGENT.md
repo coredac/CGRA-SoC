@@ -1,100 +1,119 @@
 # CGRA-SoC Agent Notes
 
 This repository is the top-level integration workspace for VectorCGRA RTL
-generation and Chipyard SoC simulation.
+generation and Chipyard CPU+CGRA simulation.
 
-It currently contains:
+## Current State
 
-- `configs/`: top-level CGRA architecture and SoC/interface YAML files.
-- `tests/`: top-level baremetal C tests for the Chipyard CGRA RoCC wrapper.
-- `VectorCGRA/`: CGRA architecture parser, PyMTL3 generator, reference tests,
-  and generated RTL output.
-- `chipyard/`: active SoC integration point. It consumes generated CGRA RTL
-  through a Chisel BlackBox wrapper and runs RoCC baremetal tests.
-- `firesim/`: existing submodule from the upstream layout.
-- `scripts/`: glue scripts that translate VectorCGRA output into Chipyard
-  resources.
+The active flow is the unified per-kernel 4x4 YAML flow. The old
+`cgra-fir-2x2` path is deprecated and should not be used as the main reference
+or default bring-up path.
 
-## Current Flow
+Currently supported CPU+CGRA kernels:
 
-The important change is that Chipyard is no longer tied to a hand-maintained
-`CgraRTL_2x2` blackbox. The current flow supports generating RTL from
-VectorCGRA and then letting Chipyard stitch the generated RTL into the SoC and
-test it.
+| Kernel | Unified config | C test | Generated API | Validation status |
+| --- | --- | --- | --- | --- |
+| FIR | `configs/kernel_fir4x4_4x4.yaml` | `cgra-fir-yaml-4x4` | `tests/generated/cgra_fir4x4_api.h` | PASS, checks completion/result. |
+| ReLU | `configs/kernel_relu4x4_4x4.yaml` | `cgra-relu4x4` | `tests/generated/cgra_relu4x4_api.h` | PASS, checks all output addresses. |
+| GEMV | `configs/kernel_gemv_4x4.yaml` | `cgra-gemv-4x4` | `tests/generated/cgra_gemv_api.h` | PASS with known row-0 skip. |
+| Histogram | `configs/kernel_histogram_4x4.yaml` | `cgra-histogram-4x4` | `tests/generated/cgra_histogram_api.h` | PASS with known bin-0 skip. |
+| AXPY | `configs/kernel_axpy_4x4.yaml` | `cgra-axpy-4x4` | `tests/generated/cgra_axpy_api.h` | PASS with known addr0 skip. |
 
-Typical flow:
+Do not treat GEMM or SAD as supported just because local configs/tests may
+exist. They are not in the current supported CPU+CGRA set.
+
+## Kernel Bring-Up Rule
+
+For every kernel, use this order:
+
+1. Run the VectorCGRA from-yaml reference test.
+2. Generate matching single-CGRA RTL from the unified kernel YAML.
+3. Generate the semantic C API header from the same YAML.
+4. Rebuild the Chipyard simulator and run the matching C test.
+
+Changing kernels requires a new RTL generation and simulator rebuild. This is
+not just a stale build-system issue: different kernels can change generated RTL
+parameters, control memory size, data memory size, and `FuList`. Running a C
+test on a simulator built for a different kernel gives invalid results.
+
+## Main Commands
+
+From the top-level repository:
 
 ```bash
-cd /mnt/public/qjj/CGRA-SoC
-python scripts/generate_single_cgra.py
-./run-chipyard-cgra-test.sh --rebuild
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_<kernel>_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_<kernel>_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild <c-test-name>
 ```
 
-`scripts/generate_single_cgra.py` does two steps:
+Concrete examples:
 
-1. Runs `VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py` to elaborate a
-   YAML-configured single-CGRA `CgraTemplateRTL_single` and emit PyMTL3 Verilog.
-2. Runs `scripts/sync_cgra_blackbox.py` to copy that RTL into Chipyard, generate
-   a flat SystemVerilog wrapper, update Chipyard's generated Scala params, and
-   refresh the C packet layout header used by top-level tests.
+```bash
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_fir4x4_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_fir4x4_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
+```
 
-## Main Entry Points
+```bash
+python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_histogram_4x4.yaml
+python scripts/generate_cgra_c_api.py configs/kernel_histogram_4x4.yaml
+./run-chipyard-cgra-test.sh --rebuild cgra-histogram-4x4
+```
 
-- VectorCGRA-to-Chipyard generation:
+After rebuilding for the same generated RTL, rerun that same test without
+`--rebuild`.
+
+## VectorCGRA Reference Tests
+
+Run these before debugging the CPU+CGRA integration:
+
+```bash
+cd VectorCGRA
+python -m pytest cgra/test/CgraRTL_fir4x4_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_relu4x4_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_gemv_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_histogram_test_from_yaml.py -q
+python -m pytest cgra/test/CgraRTL_axpy_test_from_yaml.py -q
+```
+
+Important FIR note: use `CgraRTL_fir4x4_test_from_yaml.py`. The older
+`CgraRTL_fir_test_from_yaml.py` is known not to be the reference for this flow.
+
+## First-Output Known Issues
+
+Some VectorCGRA from-yaml kernels complete but leave the first logical output
+incorrect. The CPU+CGRA C tests intentionally skip only that known first output
+and still verify the remaining outputs:
+
+- GEMV: skips logical `y[0]` at `addr20`, checks `addr21..23`.
+- Histogram: skips logical bin 0 at `addr20`, checks `addr21..23`.
+- AXPY: skips physical `addr0`, checks `addr1..15`.
+
+ReLU verifies every address. FIR currently checks completion count and scalar
+result rather than memory readback.
+
+If one of these skipped addresses is fixed upstream, update the C test to check
+it and remove the explanatory comment in the test.
+
+## Key Entry Points
+
+- RTL generation:
   [scripts/generate_single_cgra.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_single_cgra.py:1)
-
-- Generic RTL sync/wrapper generator:
-  [scripts/sync_cgra_blackbox.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/sync_cgra_blackbox.py:1)
-
+- Semantic C API generation:
+  [scripts/generate_cgra_c_api.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_c_api.py:1)
+- VectorCGRA unified YAML loader / translator:
+  [VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py:1)
 - Chipyard CGRA RoCC wrapper:
   [chipyard/generators/chipyard/src/main/scala/example/CGRA.scala](/mnt/public/sichuan_a/qjj/CGRA-SoC/chipyard/generators/chipyard/src/main/scala/example/CGRA.scala:1)
-
-- Generated Chipyard CGRA parameters:
+- Generated Chipyard parameters:
   [chipyard/generators/chipyard/src/main/scala/example/CGRAGenerated.scala](/mnt/public/sichuan_a/qjj/CGRA-SoC/chipyard/generators/chipyard/src/main/scala/example/CGRAGenerated.scala:1)
-
-- Top-level Chipyard test runner:
+- Top-level runner:
   [run-chipyard-cgra-test.sh](/mnt/public/sichuan_a/qjj/CGRA-SoC/run-chipyard-cgra-test.sh:1)
-
-- Current baremetal tests:
-  [tests/cgra-fir-2x2.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-2x2.c:1)
-  and
-  [tests/cgra-fir-yaml-4x4.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-fir-yaml-4x4.c:1)
-
-- C host-side headers:
-  [tests/include/cgra_protocol.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_protocol.h:1)
-  contains stable RoCC/VectorCGRA protocol constants, while
-  [tests/include/cgra_layout.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_layout.h:1)
-  is generated from the active RTL packet typedefs.
-  [tests/include/cgra_runtime.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/include/cgra_runtime.h:1)
-  contains reusable C packet builders and RoCC send helpers.
-
-## Chipyard Integration State
-
-Chipyard now takes CGRA shape and packet metadata from `CGRAGenerated.params`.
-`CGRA.scala` should stay generic over:
-
-- `intraPktWidth`
-- `interPktWidth`
-- `payloadWidth`
-- `dataWidth` / `dataPayloadWidth`
-- `cmdWidth`
-- `idWidth`
-- `addrWidth`
-- `xTiles`, `yTiles`, and `numTiles`
-- `addressLower` / `addressUpper`
-- optional boundary data ports via `hasBoundaryPorts`
-- generated RTL and wrapper resource names
-
-The generated wrapper flattens PyMTL3 struct and array ports into Chisel
-BlackBox-compatible scalar/vector ports. For single-CGRA `CgraTemplateRTL`
-builds, boundary data ports can be absent; `CGRA.scala` handles that with
-optional Chisel IO.
 
 ## RoCC Host Interface
 
-The CGRA is attached as a RoCC accelerator via `custom0`. The current wrapper is
-a raw packet injector plus completion tracker. It does not try to understand the
-full CGRA programming model.
+The CGRA is attached as a RoCC accelerator via `custom0`. The wrapper is a raw
+packet injector plus completion/readback tracker.
 
 Current funct encodings:
 
@@ -107,93 +126,43 @@ Current funct encodings:
 - `9`: `RESULT`
 - `10`: `RAW_PKT_TOP`
 
-`RAW_PKT_TOP` exists because generated `CgraTemplateRTL_single` packets can be
-wider than 192 bits. After changing YAML or regenerating RTL, check
-`CGRAGenerated.scala` and `tests/include/cgra_layout.h`; both are generated from
-the current packet typedefs.
+`tests/include/cgra_runtime.h` provides `send_basic`, `send_config`,
+`send_prologue`, and `read_mem`. `read_mem(addr)` sends a CGRA
+`CMD_LOAD_REQUEST`; `CGRA.scala` captures the matching CPU-destined
+`CMD_LOAD_RESPONSE`.
 
-## Control-Signal Generation
+## Generated Files
 
-The top-level 4x4 FIR YAML path uses
-[scripts/generate_cgra_control_signals.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_control_signals.py:1)
-to call `VectorCGRA.validation.script_generator.ScriptFactory` and emit
-[tests/generated/cgra_fir_yaml_4x4_packets.h](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/generated/cgra_fir_yaml_4x4_packets.h:1).
-That header contains raw `cgra_packet_t` values for the preload and kernel
-control sequence. Do not hand-edit the generated packet header; regenerate it
-after changing the FIR control YAML, arch YAML, SoC YAML, or packet type.
+`scripts/generate_single_cgra.py` updates:
 
-`ScriptFactory` now accepts tile/FU port-count parameters so it can generate
-the correct control vector length for both the original 4-port Mesh tests and
-the top-level 8-port `CgraTemplateRTL_single` KingMesh-style integration.
+- `VectorCGRA/CgraTemplateRTL_single__pickled.v`
+- `chipyard/generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single__pickled.v`
+- `chipyard/generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single_wrapper.v`
+- `chipyard/generators/chipyard/src/main/scala/example/CGRAGenerated.scala`
+- `tests/include/cgra_layout.h`
 
-## Test Guidance
+`scripts/generate_cgra_c_api.py` updates:
 
-Use the top-level runner with an explicit Chipyard test name:
+- `tests/generated/cgra_<kernel>_api.h`
 
-```bash
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-2x2
-```
+Do not hand-edit generated headers or generated RTL/Scala resources unless you
+are deliberately debugging generator output. Regenerate from the YAML instead.
 
-The script compiles `tests/<test-name>.c` and runs it on
-`CGRARocketConfig`. Use `--rebuild` after changing any generated RTL, wrapper
-Verilog, `CGRAGenerated.scala`, `CGRA.scala`, or Chipyard config fragments.
+## Divider Notes
 
-Expected success strings include:
-
-```text
-CGRA RoCC FIR 2x2: PASS
-```
-
-For the YAML-generated 4x4 FIR path:
-
-```bash
-python scripts/generate_single_cgra.py \
-  --arch-yaml configs/arch_fir_yaml_4x4.yaml \
-  --soc-yaml configs/cgra_soc_fir_yaml_4x4.yaml
-python scripts/generate_cgra_control_signals.py
-./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
-```
-
-Expected success strings include:
-
-```text
-CGRA RoCC FIR YAML 4x4: PASS
-```
-
-## Compatibility Notes
-
-The older fixed `CgraRTL_2x2` path still exists as generated/vendored resources:
-
-- `chipyard/generators/chipyard/src/main/resources/vsrc/CgraRTL_2x2__pickled.v`
-- `chipyard/generators/chipyard/src/main/resources/vsrc/CgraRTL_2x2_wrapper.v`
-
-Do not assume the active integration is using those files. The active hardware
-is selected by `CGRAGenerated.scala`, which currently points at
-`CgraTemplateRTL_single`.
-
-## Repository Status Expectations
-
-- The top-level repo may contain local workspace files such as `.venv/`,
-  `.vscode/`, `.metals/`, generated RTL, and Python caches.
-- `configs/` and `tests/` are the canonical places for CGRA SoC input YAML and
-  Chipyard baremetal CGRA tests.
-- `VectorCGRA/` may be dirty when generator changes, YAML files, or generated
-  RTL are being developed.
-- `chipyard/` may contain generated Scala/Verilog resources. Regenerate them
-  rather than editing generated files by hand.
+Histogram uses `OPT_DIV_CONST`. The translatable divider path maps YAML
+`DivRTL` to `ExclusiveDivRTL`, and `ExclusiveDivRTL` must support
+`OPT_DIV_CONST`. Keep its default latency at 4 cycles; do not force a global
+latency-1 override.
 
 ## Practical Guidance
 
-- For architecture changes, start with top-level `configs/` and
-  `VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py`.
-- For SoC-facing metadata and BlackBox stitching, start with
-  `scripts/sync_cgra_blackbox.py` and `CGRA.scala`.
-- For host packet programming, use `tests/include/cgra_protocol.h` for stable
-  protocol constants, `tests/include/cgra_runtime.h` for reusable packet
-  builders/senders, and `tests/include/cgra_layout.h` for generated bit
-  offsets. Do not duplicate generated layout constants in C tests.
-- For YAML-generated kernels, keep handwritten C focused on test flow and
-  result checking; generate raw control packets with
-  `scripts/generate_cgra_control_signals.py`.
-- Avoid hard-coding old packet widths such as `182` unless you are deliberately
-  targeting the old `CgraRTL_2x2` wrapper.
+- Keep `configs/kernel_*_4x4.yaml` as the source of truth for supported kernel
+  hardware parameters, execution counts, and `fu_list`.
+- When a CPU+CGRA test fails, first confirm the matching VectorCGRA from-yaml
+  test behavior and whether the first-output skip applies.
+- If generated RTL or Chipyard `CGRA.scala` changes, use `--rebuild`.
+- If only C test code changes and the active RTL is unchanged, rerun without
+  `--rebuild`.
+- Avoid old fixed packet-width assumptions. Use `tests/include/cgra_layout.h`
+  and `tests/include/cgra_runtime.h`.
