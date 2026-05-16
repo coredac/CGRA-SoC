@@ -1,6 +1,6 @@
 interface:
-  num_tile_inports: 8
-  num_tile_outports: 8
+  num_tile_inports: 4
+  num_tile_outports: 4
   num_fu_inports: 4
   num_fu_outports: 2
   data_nbits: 32
@@ -12,7 +12,3 @@ memory:
   num_banks_per_cgra: 2
   num_registers_per_reg_bank: 8
   mem_access_is_combinational: true
-
-execution:
-  ctrl_count_per_iter: 4
-  total_ctrl_steps: 42

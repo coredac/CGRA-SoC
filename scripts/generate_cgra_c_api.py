@@ -18,8 +18,10 @@ from typing import Mapping, Sequence
 ROOT = Path(__file__).resolve().parents[1]
 VECTOR_ROOT = ROOT / "VectorCGRA"
 DEFAULT_CONFIGS = (
-    ROOT / "configs" / "kernel_fir4x4_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_fir4x4_4x4.yaml",
 )
+DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
+DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 DEFAULT_OUTPUT_DIR = ROOT / "tests" / "generated"
 
 for path in (ROOT, VECTOR_ROOT):
@@ -56,6 +58,8 @@ from VectorCGRA.lib.messages import (  # noqa: E402
     mk_data,
     mk_intra_cgra_pkt,
 )
+from VectorCGRA.cgra.test.CgraTemplateRTL_single_test import load_soc_config  # noqa: E402
+from VectorCGRA.multi_cgra.arch_parser.ArchParser import ArchParser  # noqa: E402
 from VectorCGRA.validation.script_generator import ScriptFactory  # noqa: E402
 
 
@@ -136,6 +140,7 @@ class KernelConfig:
   kernel_yaml: Path
   x_tiles: int
   y_tiles: int
+  num_tiles: int
   num_tile_inports: int
   num_tile_outports: int
   num_fu_inports: int
@@ -194,12 +199,9 @@ def require_str(data: Mapping[str, object], key: str, path: Path) -> str:
   return value
 
 
-def load_kernel_config(path: Path) -> KernelConfig:
+def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelConfig:
   data = load_yaml_mapping(path)
   kernel = require_mapping(data, "kernel", path)
-  cgra = require_mapping(data, "cgra", path)
-  interface = require_mapping(data, "interface", path)
-  memory = require_mapping(data, "memory", path)
   execution = require_mapping(data, "execution", path)
 
   name = require_str(kernel, "name", path)
@@ -208,26 +210,30 @@ def load_kernel_config(path: Path) -> KernelConfig:
   if not kernel_yaml.exists():
     raise FileNotFoundError(f"{path}: kernel_yaml does not exist: {kernel_yaml}")
 
+  arch_parser = ArchParser(str(arch_yaml))
+  param_cgra = arch_parser.get_simplest_cgra_param()
+  soc_cfg = load_soc_config(soc_yaml)
+
   return KernelConfig(
       name=name,
       source_path=path,
       kernel_yaml=kernel_yaml,
-      x_tiles=require_int(cgra, "x_tiles", path),
-      y_tiles=require_int(cgra, "y_tiles", path),
-      num_cgra_columns=require_int(cgra, "num_cgra_columns", path),
-      num_cgra_rows=require_int(cgra, "num_cgra_rows", path),
-      config_mem_size=require_int(cgra, "config_mem_size", path),
-      num_tile_inports=require_int(interface, "num_tile_inports", path),
-      num_tile_outports=require_int(interface, "num_tile_outports", path),
-      num_fu_inports=require_int(interface, "num_fu_inports", path),
-      num_fu_outports=require_int(interface, "num_fu_outports", path),
-      data_nbits=require_int(interface, "data_nbits", path),
-      predicate_nbits=require_int(interface, "predicate_nbits", path),
-      data_mem_size_global=require_int(memory, "data_mem_size_global", path),
-      data_mem_size_per_bank=require_int(memory, "data_mem_size_per_bank", path),
-      num_banks_per_cgra=require_int(memory, "num_banks_per_cgra", path),
-      num_registers_per_reg_bank=require_int(
-          memory, "num_registers_per_reg_bank", path),
+      x_tiles=param_cgra.columns,
+      y_tiles=param_cgra.rows,
+      num_tiles=len(param_cgra.getValidTiles()),
+      num_cgra_columns=arch_parser.cgra_columns,
+      num_cgra_rows=arch_parser.cgra_rows,
+      config_mem_size=param_cgra.configMemSize,
+      num_tile_inports=soc_cfg.num_tile_inports,
+      num_tile_outports=soc_cfg.num_tile_outports,
+      num_fu_inports=soc_cfg.num_fu_inports,
+      num_fu_outports=soc_cfg.num_fu_outports,
+      data_nbits=soc_cfg.data_nbits,
+      predicate_nbits=soc_cfg.predicate_nbits,
+      data_mem_size_global=soc_cfg.data_mem_size_global,
+      data_mem_size_per_bank=soc_cfg.data_mem_size_per_bank,
+      num_banks_per_cgra=soc_cfg.num_banks_per_cgra,
+      num_registers_per_reg_bank=soc_cfg.num_registers_per_reg_bank,
       compiled_ii=require_int(execution, "compiled_ii", path),
       loop_times=require_int(execution, "loop_times", path),
   )
@@ -246,9 +252,8 @@ def build_packet_types(cfg: KernelConfig) -> Mapping[str, object]:
   CtrlAddrType = mk_bits(clog2(cfg.config_mem_size))
   CgraPayloadType = mk_cgra_payload(DataType, DataAddrType, CtrlType,
                                     CtrlAddrType)
-  num_tiles = cfg.x_tiles * cfg.y_tiles
   IntraCgraPktType = mk_intra_cgra_pkt(
-      cfg.num_cgra_columns, cfg.num_cgra_rows, num_tiles, CgraPayloadType)
+      cfg.num_cgra_columns, cfg.num_cgra_rows, cfg.num_tiles, CgraPayloadType)
   TileInType = mk_bits(clog2(cfg.num_tile_inports + cfg.num_fu_inports + 1))
   FuInType = mk_bits(clog2(cfg.num_fu_inports + 1))
   FuOutType = mk_bits(clog2(cfg.num_fu_outports + 1))
@@ -477,6 +482,16 @@ def parse_args() -> argparse.Namespace:
       help="Per-kernel config YAMLs to process.",
   )
   parser.add_argument(
+      "--arch-yaml",
+      default=str(DEFAULT_ARCH_YAML),
+      help="CGRA architecture YAML.",
+  )
+  parser.add_argument(
+      "--soc-yaml",
+      default=str(DEFAULT_SOC_YAML),
+      help="SoC/interface/memory YAML.",
+  )
+  parser.add_argument(
       "--output-dir",
       default=str(DEFAULT_OUTPUT_DIR),
       help="Directory for generated cgra_<kernel>_api.h headers.",
@@ -486,12 +501,18 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
   args = parse_args()
+  arch_yaml = resolve_input_path(args.arch_yaml)
+  soc_yaml = resolve_input_path(args.soc_yaml)
+  if not arch_yaml.exists():
+    raise FileNotFoundError(arch_yaml)
+  if not soc_yaml.exists():
+    raise FileNotFoundError(soc_yaml)
   output_dir = resolve_input_path(args.output_dir)
   for config_arg in args.configs:
     config_path = resolve_input_path(config_arg)
     if not config_path.exists():
       raise FileNotFoundError(config_path)
-    cfg = load_kernel_config(config_path)
+    cfg = load_kernel_config(config_path, arch_yaml, soc_yaml)
     types = build_packet_types(cfg)
     pkts_by_coord = make_vector_cgra_packets(cfg, types)
     packets = ordered_packets(cfg, pkts_by_coord)

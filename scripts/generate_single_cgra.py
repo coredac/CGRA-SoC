@@ -16,8 +16,8 @@ VECTOR_RTL = ROOT / "VectorCGRA" / "CgraTemplateRTL_single__pickled.v"
 TOP_MODULE = "CgraTemplateRTL_single"
 PYTHON = ROOT / ".venv" / "bin" / "python"
 PYTHON_EXE = str(PYTHON if PYTHON.exists() else Path(sys.executable))
-DEFAULT_ARCH_YAML = ROOT / "configs" / "arch_fir_2x2.yaml"
-DEFAULT_SOC_YAML = ROOT / "configs" / "cgra_soc_fir_2x2.yaml"
+DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
+DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 
 
 def resolve_input_path(path: str) -> Path:
@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument(
     "--kernel-yaml",
-    help="Unified per-kernel YAML. When supplied, this is the source of truth.",
+    help="Per-kernel metadata YAML. Does not override arch/soc RTL parameters.",
   )
   parser.add_argument(
     "--arch-yaml",
@@ -61,24 +61,24 @@ def main() -> int:
       PYTHON_EXE,
       str(ROOT / "VectorCGRA" / "cgra" / "test" / "CgraTemplateRTL_single_test.py"),
   ]
+  arch_yaml = resolve_input_path(args.arch_yaml)
+  soc_yaml = resolve_input_path(args.soc_yaml)
+  if not arch_yaml.exists():
+    raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
+  if not soc_yaml.exists():
+    raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
+  translate_cmd.extend([
+      "--arch-yaml",
+      str(arch_yaml),
+      "--soc-yaml",
+      str(soc_yaml),
+  ])
+
   if args.kernel_yaml:
     kernel_yaml = resolve_input_path(args.kernel_yaml)
     if not kernel_yaml.exists():
       raise FileNotFoundError(f"kernel yaml not found: {kernel_yaml}")
     translate_cmd.extend(["--kernel-yaml", str(kernel_yaml)])
-  else:
-    arch_yaml = resolve_input_path(args.arch_yaml)
-    soc_yaml = resolve_input_path(args.soc_yaml)
-    if not arch_yaml.exists():
-      raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
-    if not soc_yaml.exists():
-      raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
-    translate_cmd.extend([
-        "--arch-yaml",
-        str(arch_yaml),
-        "--soc-yaml",
-        str(soc_yaml),
-    ])
 
   run(translate_cmd)
 

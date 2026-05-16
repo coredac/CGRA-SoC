@@ -1,0 +1,7 @@
+kernel:
+  name: histogram
+  kernel_yaml: VectorCGRA/validation/test/histogram.yaml
+
+execution:
+  compiled_ii: 6
+  loop_times: 130

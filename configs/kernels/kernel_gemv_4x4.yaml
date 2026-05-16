@@ -1,0 +1,7 @@
+kernel:
+  name: gemv
+  kernel_yaml: VectorCGRA/validation/test/gemv/gemv.yaml
+
+execution:
+  compiled_ii: 11
+  loop_times: 196

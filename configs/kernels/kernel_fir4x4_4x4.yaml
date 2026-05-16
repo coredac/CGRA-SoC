@@ -1,0 +1,7 @@
+kernel:
+  name: fir4x4
+  kernel_yaml: VectorCGRA/validation/test/fir4x4.yaml
+
+execution:
+  compiled_ii: 5
+  loop_times: 170

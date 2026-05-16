@@ -1,0 +1,7 @@
+kernel:
+  name: axpy
+  kernel_yaml: VectorCGRA/validation/test/axpy.yaml
+
+execution:
+  compiled_ii: 5
+  loop_times: 90

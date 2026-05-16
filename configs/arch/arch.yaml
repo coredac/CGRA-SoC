@@ -1,0 +1,12 @@
+multi_cgra_defaults:
+  rows: 1
+  columns: 1
+
+cgra_defaults:
+  rows: 4
+  columns: 4
+  configMemSize: 17
+
+tile_defaults:
+  num_registers: 8
+  fu_types: ["add", "mul", "div", "logic", "shift", "cmp", "sel", "grant", "phi", "mem", "return", "gep"]

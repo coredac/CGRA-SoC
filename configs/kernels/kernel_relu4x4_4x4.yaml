@@ -1,0 +1,7 @@
+kernel:
+  name: relu4x4
+  kernel_yaml: VectorCGRA/validation/test/relu.yaml
+
+execution:
+  compiled_ii: 5
+  loop_times: 170

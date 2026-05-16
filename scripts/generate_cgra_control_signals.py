@@ -18,9 +18,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 VECTOR_ROOT = ROOT / "VectorCGRA"
-DEFAULT_ARCH_YAML = ROOT / "configs" / "arch_fir_yaml_4x4.yaml"
-DEFAULT_SOC_YAML = ROOT / "configs" / "cgra_soc_fir_yaml_4x4.yaml"
-DEFAULT_CONTROL_YAML = VECTOR_ROOT / "validation" / "test" / "fir_acceptance_test.yaml"
+DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
+DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
+DEFAULT_KERNEL_YAML = ROOT / "configs" / "kernels" / "kernel_fir4x4_4x4.yaml"
 DEFAULT_OUTPUT = ROOT / "tests" / "generated" / "cgra_fir_yaml_4x4_packets.h"
 
 for path in (ROOT, VECTOR_ROOT):
@@ -80,6 +80,39 @@ def load_yaml(path: Path) -> Mapping[str, object]:
   return data
 
 
+def require_mapping(data: Mapping[str, object], key: str, path: Path) -> Mapping[str, object]:
+  value = data.get(key)
+  if not isinstance(value, Mapping):
+    raise ValueError(f"{path}: missing mapping '{key}'")
+  return value
+
+
+def require_int(data: Mapping[str, object], key: str, path: Path) -> int:
+  value = data.get(key)
+  if not isinstance(value, int) or isinstance(value, bool):
+    raise ValueError(f"{path}: '{key}' must be an integer")
+  return value
+
+
+def require_str(data: Mapping[str, object], key: str, path: Path) -> str:
+  value = data.get(key)
+  if not isinstance(value, str) or not value:
+    raise ValueError(f"{path}: '{key}' must be a non-empty string")
+  return value
+
+
+def load_kernel_config(path: Path) -> tuple[Path, int, int]:
+  data = load_yaml(path)
+  kernel = require_mapping(data, "kernel", path)
+  execution = require_mapping(data, "execution", path)
+  control_yaml = resolve_input_path(require_str(kernel, "kernel_yaml", path))
+  return (
+      control_yaml,
+      require_int(execution, "compiled_ii", path),
+      require_int(execution, "loop_times", path),
+  )
+
+
 def build_packet_types(arch_yaml: Path, soc_yaml: Path):
   soc_cfg = load_soc_config(soc_yaml)
   arch_parser = ArchParser(str(arch_yaml))
@@ -98,7 +131,9 @@ def build_packet_types(arch_yaml: Path, soc_yaml: Path):
   CtrlAddrType = mk_bits(clog2(param_cgra.configMemSize))
   CgraPayloadType = mk_cgra_payload(DataType, DataAddrType, CtrlType,
                                     CtrlAddrType)
-  IntraCgraPktType = mk_intra_cgra_pkt(1, 1, num_tiles, CgraPayloadType)
+  IntraCgraPktType = mk_intra_cgra_pkt(
+      arch_parser.cgra_columns, arch_parser.cgra_rows, num_tiles,
+      CgraPayloadType)
 
   return {
       "soc_cfg": soc_cfg,
@@ -109,7 +144,7 @@ def build_packet_types(arch_yaml: Path, soc_yaml: Path):
       "CtrlAddrType": CtrlAddrType,
       "CgraPayloadType": CgraPayloadType,
       "IntraCgraPktType": IntraCgraPktType,
-      "TileInType": mk_bits(clog2(soc_cfg.num_tile_inports + 1)),
+      "TileInType": mk_bits(clog2(soc_cfg.num_tile_inports + soc_cfg.num_fu_inports + 1)),
       "FuInType": mk_bits(clog2(soc_cfg.num_fu_inports + 1)),
       "FuOutType": mk_bits(clog2(soc_cfg.num_fu_outports + 1)),
       "RegIdxType": mk_bits(clog2(soc_cfg.num_registers_per_reg_bank)),
@@ -256,7 +291,8 @@ def parse_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument("--arch-yaml", default=str(DEFAULT_ARCH_YAML))
   parser.add_argument("--soc-yaml", default=str(DEFAULT_SOC_YAML))
-  parser.add_argument("--control-yaml", default=str(DEFAULT_CONTROL_YAML))
+  parser.add_argument("--kernel-yaml", default=str(DEFAULT_KERNEL_YAML))
+  parser.add_argument("--control-yaml")
   parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
   parser.add_argument("--preload-start", type=int, default=10)
   parser.add_argument("--preload-count", type=int, default=16)
@@ -270,21 +306,21 @@ def main() -> int:
   args = parse_args()
   arch_yaml = resolve_input_path(args.arch_yaml)
   soc_yaml = resolve_input_path(args.soc_yaml)
-  control_yaml = resolve_input_path(args.control_yaml)
+  kernel_yaml = resolve_input_path(args.kernel_yaml)
   output = Path(args.output)
   if not output.is_absolute():
     output = ROOT / output
 
-  for path in (arch_yaml, soc_yaml, control_yaml):
+  for path in (arch_yaml, soc_yaml, kernel_yaml):
     if not path.exists():
       raise FileNotFoundError(path)
 
+  kernel_control_yaml, ii, total_steps = load_kernel_config(kernel_yaml)
+  control_yaml = resolve_input_path(args.control_yaml) if args.control_yaml else kernel_control_yaml
+  if not control_yaml.exists():
+    raise FileNotFoundError(control_yaml)
+
   types = build_packet_types(arch_yaml, soc_yaml)
-  soc_cfg = types["soc_cfg"]
-  ii = soc_cfg.ctrl_count_per_iter
-  total_steps = soc_cfg.total_ctrl_steps
-  if ii is None or total_steps is None:
-    raise ValueError("soc yaml execution.ctrl_count_per_iter and total_ctrl_steps are required")
 
   packets = make_preload_packets(types, args.preload_start, args.preload_count,
                                  args.preload_tile)

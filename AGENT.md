@@ -5,62 +5,97 @@ generation and Chipyard CPU+CGRA simulation.
 
 ## Current State
 
-The active flow is the unified per-kernel 4x4 YAML flow. The old
-`cgra-fir-2x2` path is deprecated and should not be used as the main reference
-or default bring-up path.
+The active flow uses layered configuration files, not mixed per-kernel hardware
+YAMLs:
+
+- `configs/arch/arch.yaml`: CGRA architecture source of truth.
+- `configs/soc/cgra_soc.yaml`: SoC interface and memory source of truth.
+- `configs/kernels/kernel_*_4x4.yaml`: kernel metadata plus execution counts only.
+
+The old `cgra-fir-2x2` path and the old mixed/unified kernel YAML schema are
+deprecated and should not be used as defaults or fallback paths.
 
 Currently supported CPU+CGRA kernels:
 
-| Kernel | Unified config | C test | Generated API | Validation status |
+| Kernel | Kernel config | C test | Generated API | Validation status |
 | --- | --- | --- | --- | --- |
-| FIR | `configs/kernel_fir4x4_4x4.yaml` | `cgra-fir-yaml-4x4` | `tests/generated/cgra_fir4x4_api.h` | PASS, checks completion/result. |
-| ReLU | `configs/kernel_relu4x4_4x4.yaml` | `cgra-relu4x4` | `tests/generated/cgra_relu4x4_api.h` | PASS, checks all output addresses. |
-| GEMV | `configs/kernel_gemv_4x4.yaml` | `cgra-gemv-4x4` | `tests/generated/cgra_gemv_api.h` | PASS with known row-0 skip. |
-| Histogram | `configs/kernel_histogram_4x4.yaml` | `cgra-histogram-4x4` | `tests/generated/cgra_histogram_api.h` | PASS with known bin-0 skip. |
-| AXPY | `configs/kernel_axpy_4x4.yaml` | `cgra-axpy-4x4` | `tests/generated/cgra_axpy_api.h` | PASS with known addr0 skip. |
+| FIR | `configs/kernels/kernel_fir4x4_4x4.yaml` | `cgra-fir-yaml-4x4` | `tests/generated/cgra_fir4x4_api.h` | PASS, checks completion/result. |
+| ReLU | `configs/kernels/kernel_relu4x4_4x4.yaml` | `cgra-relu4x4` | `tests/generated/cgra_relu4x4_api.h` | PASS, checks all output addresses by readback. |
+| GEMV | `configs/kernels/kernel_gemv_4x4.yaml` | `cgra-gemv-4x4` | `tests/generated/cgra_gemv_api.h` | PASS with known row-0 skip. |
+| Histogram | `configs/kernels/kernel_histogram_4x4.yaml` | `cgra-histogram-4x4` | `tests/generated/cgra_histogram_api.h` | PASS with known bin-0 skip. |
+| AXPY | `configs/kernels/kernel_axpy_4x4.yaml` | `cgra-axpy-4x4` | `tests/generated/cgra_axpy_api.h` | PASS with known addr0 skip. |
 
 Do not treat GEMM or SAD as supported just because local configs/tests may
-exist. They are not in the current supported CPU+CGRA set.
+exist. They are not in the current supported CPU+CGRA set unless explicitly
+promoted.
+
+## Configuration Rules
+
+`configs/arch/arch.yaml` owns CGRA hardware structure:
+
+- `multi_cgra_defaults.rows/columns`
+- `cgra_defaults.rows/columns/configMemSize`
+- `tile_defaults.num_registers/fu_types`
+
+`configs/soc/cgra_soc.yaml` owns SoC/interface/memory:
+
+- `interface.*`
+- `memory.*`
+
+Kernel YAMLs own only:
+
+- `kernel.name`
+- `kernel.kernel_yaml`
+- `execution.compiled_ii`
+- `execution.loop_times`
+
+Do not reintroduce `cgra`, `interface`, `memory`, `hardware`, `fu_list`, or
+`dfg_yaml` into cleaned kernel YAMLs. Do not add hidden fallback logic that
+reads old mixed schema fields. FU availability comes from
+`arch.yaml.tile_defaults.fu_types`.
+
+`execution.compiled_ii` and `execution.loop_times` remain in the kernel YAML
+because the generated C API sends them through:
+
+- `CGRA_CMD_CONFIG_COUNT_PER_ITER`
+- `CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`
 
 ## Kernel Bring-Up Rule
 
 For every kernel, use this order:
 
 1. Run the VectorCGRA from-yaml reference test.
-2. Generate matching single-CGRA RTL from the unified kernel YAML.
-3. Generate the semantic C API header from the same YAML.
+2. Generate single-CGRA RTL from `configs/arch/arch.yaml` and `configs/soc/cgra_soc.yaml`.
+3. Generate the semantic C API header from arch/soc plus the kernel YAML.
 4. Rebuild the Chipyard simulator and run the matching C test.
 
-Changing kernels requires a new RTL generation and simulator rebuild. This is
-not just a stale build-system issue: different kernels can change generated RTL
-parameters, control memory size, data memory size, and `FuList`. Running a C
-test on a simulator built for a different kernel gives invalid results.
+Changing only the kernel YAML execution counts or generated C test headers does
+not change the CGRA RTL. Changing generated RTL, the RoCC wrapper, or generated
+Chipyard Scala resources requires `--rebuild`.
 
 ## Main Commands
 
 From the top-level repository:
 
 ```bash
-python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_<kernel>_4x4.yaml
-python scripts/generate_cgra_c_api.py configs/kernel_<kernel>_4x4.yaml
+python scripts/generate_single_cgra.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml
+python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild <c-test-name>
 ```
 
 Concrete examples:
 
 ```bash
-python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_fir4x4_4x4.yaml
-python scripts/generate_cgra_c_api.py configs/kernel_fir4x4_4x4.yaml
+python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_fir4x4_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
 ```
 
 ```bash
-python scripts/generate_single_cgra.py --kernel-yaml configs/kernel_histogram_4x4.yaml
-python scripts/generate_cgra_c_api.py configs/kernel_histogram_4x4.yaml
-./run-chipyard-cgra-test.sh --rebuild cgra-histogram-4x4
+python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_relu4x4_4x4.yaml --output-dir tests/generated
+./run-chipyard-cgra-test.sh --rebuild cgra-relu4x4
 ```
 
-After rebuilding for the same generated RTL, rerun that same test without
+After rebuilding for the same generated RTL, rerun compatible C tests without
 `--rebuild`.
 
 ## VectorCGRA Reference Tests
@@ -89,8 +124,9 @@ and still verify the remaining outputs:
 - Histogram: skips logical bin 0 at `addr20`, checks `addr21..23`.
 - AXPY: skips physical `addr0`, checks `addr1..15`.
 
-ReLU verifies every address. FIR currently checks completion count and scalar
-result rather than memory readback.
+ReLU verifies every address `0..31` by `read_mem(addr)` and expects
+`max(addr - 16, 0)`. FIR currently checks completion count and scalar result
+rather than memory readback.
 
 If one of these skipped addresses is fixed upstream, update the C test to check
 it and remove the explanatory comment in the test.
@@ -101,7 +137,9 @@ it and remove the explanatory comment in the test.
   [scripts/generate_single_cgra.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_single_cgra.py:1)
 - Semantic C API generation:
   [scripts/generate_cgra_c_api.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_c_api.py:1)
-- VectorCGRA unified YAML loader / translator:
+- Control packet header generation:
+  [scripts/generate_cgra_control_signals.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_control_signals.py:1)
+- VectorCGRA arch/soc RTL loader:
   [VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py:1)
 - Chipyard CGRA RoCC wrapper:
   [chipyard/generators/chipyard/src/main/scala/example/CGRA.scala](/mnt/public/sichuan_a/qjj/CGRA-SoC/chipyard/generators/chipyard/src/main/scala/example/CGRA.scala:1)
@@ -148,21 +186,16 @@ Current funct encodings:
 Do not hand-edit generated headers or generated RTL/Scala resources unless you
 are deliberately debugging generator output. Regenerate from the YAML instead.
 
-## Divider Notes
-
-Histogram uses `OPT_DIV_CONST`. The translatable divider path maps YAML
-`DivRTL` to `ExclusiveDivRTL`, and `ExclusiveDivRTL` must support
-`OPT_DIV_CONST`. Keep its default latency at 4 cycles; do not force a global
-latency-1 override.
-
 ## Practical Guidance
 
-- Keep `configs/kernel_*_4x4.yaml` as the source of truth for supported kernel
-  hardware parameters, execution counts, and `fu_list`.
+- Keep `configs/arch/arch.yaml` and `configs/soc/cgra_soc.yaml` as the hardware/SoC
+  source of truth.
+- Keep `configs/kernels/kernel_*_4x4.yaml` limited to kernel metadata and execution
+  counts.
 - When a CPU+CGRA test fails, first confirm the matching VectorCGRA from-yaml
   test behavior and whether the first-output skip applies.
 - If generated RTL or Chipyard `CGRA.scala` changes, use `--rebuild`.
-- If only C test code changes and the active RTL is unchanged, rerun without
-  `--rebuild`.
-- Avoid old fixed packet-width assumptions. Use `tests/include/cgra_layout.h`
-  and `tests/include/cgra_runtime.h`.
+- If only C test code or generated C API headers change and the active RTL is
+  unchanged, rerun without `--rebuild`.
+- Avoid fixed packet-width assumptions. Use `tests/include/cgra_layout.h` and
+  `tests/include/cgra_runtime.h`.
