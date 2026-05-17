@@ -1,0 +1,119 @@
+name: CGRA SoC tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: cgra-soc-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  cpu-cgra:
+    name: CPU and CGRA Verilator tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard and VectorCGRA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Syntax check generators
+        run: |
+          python -m py_compile \
+            scripts/generate_single_cgra.py \
+            scripts/generate_cgra_c_api.py \
+            VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py
+
+      - name: Generate canonical 4x4 CGRA RTL
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml
+
+      - name: Generate semantic C API headers
+        run: |
+          kernel_yamls=(
+            configs/kernels/kernel_fir4x4_4x4.yaml
+            configs/kernels/kernel_relu4x4_4x4.yaml
+            configs/kernels/kernel_axpy_4x4.yaml
+            configs/kernels/kernel_gemv_4x4.yaml
+            configs/kernels/kernel_histogram_4x4.yaml
+          )
+
+          if [[ -f tests/cgra-gemm-4x4.c ]]; then
+            kernel_yamls+=(configs/kernels/kernel_gemm_4x4.yaml)
+          fi
+          if [[ -f tests/cgra-sad-4x4.c ]]; then
+            kernel_yamls+=(configs/kernels/kernel_sad_4x4.yaml)
+          fi
+
+          .venv/bin/python scripts/generate_cgra_c_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml \
+            "${kernel_yamls[@]}" \
+            --output-dir tests/generated
+
+      - name: Run FIR YAML SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4 2>&1 | tee cgra-fir-yaml-4x4.log
+          grep -q "CGRA RoCC FIR YAML 4x4: PASS" cgra-fir-yaml-4x4.log
+
+      - name: Run ReLU SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-relu4x4 2>&1 | tee cgra-relu4x4.log
+          grep -q "CGRA RoCC ReLU4x4: PASS" cgra-relu4x4.log
+
+      - name: Run AXPY SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-axpy-4x4 2>&1 | tee cgra-axpy-4x4.log
+          grep -q "CGRA RoCC AXPY 4x4: PASS" cgra-axpy-4x4.log
+
+      - name: Run GEMV SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-gemv-4x4 2>&1 | tee cgra-gemv-4x4.log
+          grep -q "CGRA RoCC GEMV 4x4: PASS" cgra-gemv-4x4.log
+
+      - name: Run Histogram SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-histogram-4x4 2>&1 | tee cgra-histogram-4x4.log
+          grep -q "CGRA RoCC Histogram 4x4: PASS" cgra-histogram-4x4.log
+
+      - name: Run GEMM SoC test
+        if: ${{ hashFiles('tests/cgra-gemm-4x4.c') != '' }}
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-gemm-4x4 2>&1 | tee cgra-gemm-4x4.log
+          grep -q "CGRA RoCC GEMM 4x4: PASS" cgra-gemm-4x4.log
+
+      - name: Run SAD SoC test
+        if: ${{ hashFiles('tests/cgra-sad-4x4.c') != '' }}
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-sad-4x4 2>&1 | tee cgra-sad-4x4.log
+          grep -q "CGRA RoCC SAD 4x4: PASS" cgra-sad-4x4.log
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cgra-soc-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+            tests/generated/*.h
+          if-no-files-found: ignore
