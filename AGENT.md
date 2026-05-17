@@ -137,8 +137,6 @@ it and remove the explanatory comment in the test.
   [scripts/generate_single_cgra.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_single_cgra.py:1)
 - Semantic C API generation:
   [scripts/generate_cgra_c_api.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_c_api.py:1)
-- Control packet header generation:
-  [scripts/generate_cgra_control_signals.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_control_signals.py:1)
 - VectorCGRA arch/soc RTL loader:
   [VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py:1)
 - Chipyard CGRA RoCC wrapper:

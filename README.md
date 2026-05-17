@@ -14,8 +14,6 @@ baremetal C tests.
   from `arch.yaml` and `cgra_soc.yaml`, then syncs it into Chipyard.
 - `scripts/generate_cgra_c_api.py`: generates semantic C configuration APIs in
   `tests/generated/cgra_<kernel>_api.h`.
-- `scripts/generate_cgra_control_signals.py`: generates packet headers from a
-  kernel control YAML plus the layered arch/soc/kernel configs.
 - `tests/`: baremetal CPU+CGRA tests.
 - `tests/include/`: CGRA protocol constants, packet layout, and runtime helpers.
 - `VectorCGRA/`: backend CGRA generator and reference from-yaml tests.
