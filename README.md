@@ -114,10 +114,6 @@ For FIR, use `CgraRTL_fir4x4_test_from_yaml.py`; the older
 ```bash
 cd VectorCGRA
 python -m pytest cgra/test/CgraRTL_fir4x4_test_from_yaml.py -q
-python -m pytest cgra/test/CgraRTL_relu4x4_test_from_yaml.py -q
-python -m pytest cgra/test/CgraRTL_gemv_test_from_yaml.py -q
-python -m pytest cgra/test/CgraRTL_histogram_test_from_yaml.py -q
-python -m pytest cgra/test/CgraRTL_axpy_test_from_yaml.py -q
 ```
 
 Then return to the top level and run the CPU+CGRA flow.

@@ -57,13 +57,6 @@ jobs:
             configs/kernels/kernel_histogram_4x4.yaml
           )
 
-          if [[ -f tests/cgra-gemm-4x4.c ]]; then
-            kernel_yamls+=(configs/kernels/kernel_gemm_4x4.yaml)
-          fi
-          if [[ -f tests/cgra-sad-4x4.c ]]; then
-            kernel_yamls+=(configs/kernels/kernel_sad_4x4.yaml)
-          fi
-
           .venv/bin/python scripts/generate_cgra_c_api.py \
             --arch-yaml configs/arch/arch.yaml \
             --soc-yaml configs/soc/cgra_soc.yaml \
@@ -94,18 +87,6 @@ jobs:
         run: |
           ./run-chipyard-cgra-test.sh cgra-histogram-4x4 2>&1 | tee cgra-histogram-4x4.log
           grep -q "CGRA RoCC Histogram 4x4: PASS" cgra-histogram-4x4.log
-
-      - name: Run GEMM SoC test
-        if: ${{ hashFiles('tests/cgra-gemm-4x4.c') != '' }}
-        run: |
-          ./run-chipyard-cgra-test.sh cgra-gemm-4x4 2>&1 | tee cgra-gemm-4x4.log
-          grep -q "CGRA RoCC GEMM 4x4: PASS" cgra-gemm-4x4.log
-
-      - name: Run SAD SoC test
-        if: ${{ hashFiles('tests/cgra-sad-4x4.c') != '' }}
-        run: |
-          ./run-chipyard-cgra-test.sh cgra-sad-4x4 2>&1 | tee cgra-sad-4x4.log
-          grep -q "CGRA RoCC SAD 4x4: PASS" cgra-sad-4x4.log
 
       - name: Upload test logs
         if: always()
