@@ -23,6 +23,8 @@ $boundary_wires
 
 $boundary_assigns
 
+$tieoff_assigns
+
   $top_module cgra_inst (
 $inst_port_list
   );

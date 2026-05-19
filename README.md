@@ -12,6 +12,9 @@ baremetal C tests.
 - `configs/kernels/kernel_*_4x4.yaml`: kernel metadata and execution counts only.
 - `scripts/generate_single_cgra.py`: generates `CgraTemplateRTL_single` RTL
   from `arch.yaml` and `cgra_soc.yaml`, then syncs it into Chipyard.
+- `scripts/generate_multi_cgra.py`: generates `MeshMultiCgraTemplateRTL_multi`
+  RTL from `multi_cgra_arch.yaml` and `multi_cgra_soc.yaml`, then syncs it into
+  the same Chipyard BlackBox shape.
 - `scripts/generate_cgra_c_api.py`: generates semantic C configuration APIs in
   `tests/generated/cgra_<kernel>_api.h`.
 - `tests/`: baremetal CPU+CGRA tests.
@@ -104,6 +107,35 @@ that same RTL without `--rebuild`:
 ```bash
 ./run-chipyard-cgra-test.sh cgra-relu4x4
 ```
+
+## Multi-CGRA Flow
+
+The multi-CGRA Chipyard flow uses:
+
+```bash
+python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
+```
+
+The generated wrapper keeps the same external superset port shape used by
+`CGRABlackBox`. For `MeshMultiCgraTemplateRTL_multi`, CPU packets enter through
+the single raw `IntraCgraPkt` CPU interface. Inter-CGRA NoC, CGRA ID, and memory
+address bounds are handled inside the multi top, so the generated wrapper
+absorbs the corresponding external Chipyard ports.
+
+The C runtime has target-aware helpers. Existing `configure_<kernel>()` calls
+target CGRA 0. To send the same generated tile configuration to another CGRA,
+call the target-aware API, for example:
+
+```c
+configure_fir4x4_to(cgra_target_id(2));
+```
+
+`VectorCGRA/validation/script_generator.py` is unchanged. The current automatic
+path from kernel YAML through `scripts/generate_cgra_c_api.py` is intended for
+single-CGRA use, or for sending the same tile configuration to one
+`dst_cgra_id`. Automatic control-signal generation for kernels partitioned
+across multiple CGRAs is still TODO. Hand-written multi-CGRA control-signal
+tests are in `VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py`.
 
 ## Reference First
 

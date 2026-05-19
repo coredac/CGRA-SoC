@@ -15,6 +15,11 @@ YAMLs:
 The old `cgra-fir-2x2` path and the old mixed/unified kernel YAML schema are
 deprecated and should not be used as defaults or fallback paths.
 
+Multi-CGRA RTL/Chipyard generation is available through a separate flow. It
+uses `configs/arch/multi_cgra_arch.yaml` and
+`configs/soc/multi_cgra_soc.yaml`; do not fold those fields into the single-CGRA
+arch/soc files unless the task explicitly asks for a shared schema change.
+
 Currently supported CPU+CGRA kernels:
 
 | Kernel | Kernel config | C test | Generated API | Validation status |
@@ -79,6 +84,7 @@ From the top-level repository:
 
 ```bash
 python scripts/generate_single_cgra.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml
+python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
 python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild <c-test-name>
 ```
@@ -97,6 +103,58 @@ python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-y
 
 After rebuilding for the same generated RTL, rerun compatible C tests without
 `--rebuild`.
+
+## Multi-CGRA Flow
+
+Single and multi flows share the CPU/RoCC raw packet interface. The CPU sends
+raw `IntraCgraPkt` packets in both modes. In single-CGRA mode, existing APIs
+default to `dst_cgra_id = 0`. In multi-CGRA mode, software selects the target
+CGRA by setting the packet target fields through the C runtime helpers.
+
+Important RTL contract:
+
+- Single `CgraTemplateRTL` instantiation must explicitly pass
+  `is_multi_cgra=False` and `cgra_id=0`.
+- Multi `MeshMultiCgraTemplateRTL` instantiation must explicitly pass
+  `is_multi_cgra=True`.
+- The CPU-to-`cgra[0]` gateway, `dst_cgra_id` decoding, inter-CGRA routing, and
+  remote memory routing are VectorCGRA RTL capabilities. Do not reimplement
+  those mechanisms in Chipyard or the Python orchestration scripts.
+
+The multi generation entry point is:
+
+```bash
+python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
+```
+
+That script only orchestrates generation. It calls the VectorCGRA-level entry
+`VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_multi_test.py`, which
+parses multi-CGRA arch/soc YAMLs, constructs the `id2*` parameter maps, and
+instantiates `MeshMultiCgraTemplateRTL` with `is_multi_cgra=True`.
+
+Chipyard `CGRABlackBox` intentionally remains a superset interface with CPU
+packet ports, inter-CGRA NoC ports, `cgra_id`, address range ports, and optional
+boundary ports. `scripts/sync_cgra_blackbox.py` generates a wrapper with that
+same external shape for both single and multi tops. If an internal top does not
+expose a superset port, the wrapper leaves the input unused or ties the external
+output low.
+
+The C runtime has target-aware helpers while preserving old signatures:
+
+```c
+configure_fir4x4_to(cgra_target_id(2));
+```
+
+`configure_<kernel>()`, `send_basic`, `send_config`, `send_prologue`, and
+`read_mem(addr)` keep local single-CGRA behavior. `read_mem(addr)` remains
+target-local; remote memory routing is selected by `data_addr` in RTL.
+
+`VectorCGRA/validation/script_generator.py` is unchanged. The current automatic
+kernel-YAML-to-C-control-API path is intended for single-CGRA or for sending the
+same tile configuration to one selected `dst_cgra_id`. True automatic control
+signal generation across multiple CGRAs is still TODO. For hand-written
+multi-CGRA control signal tests, use
+`VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py` as the reference.
 
 ## VectorCGRA Reference Tests
 
@@ -135,6 +193,10 @@ it and remove the explanatory comment in the test.
 
 - RTL generation:
   [scripts/generate_single_cgra.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_single_cgra.py:1)
+- Multi RTL generation:
+  [scripts/generate_multi_cgra.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_multi_cgra.py:1)
+- VectorCGRA multi arch/soc RTL loader:
+  [VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_multi_test.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_multi_test.py:1)
 - Semantic C API generation:
   [scripts/generate_cgra_c_api.py](/mnt/public/sichuan_a/qjj/CGRA-SoC/scripts/generate_cgra_c_api.py:1)
 - VectorCGRA arch/soc RTL loader:
@@ -163,9 +225,9 @@ Current funct encodings:
 - `10`: `RAW_PKT_TOP`
 
 `tests/include/cgra_runtime.h` provides `send_basic`, `send_config`,
-`send_prologue`, and `read_mem`. `read_mem(addr)` sends a CGRA
-`CMD_LOAD_REQUEST`; `CGRA.scala` captures the matching CPU-destined
-`CMD_LOAD_RESPONSE`.
+`send_prologue`, target-aware `_to` variants, and `read_mem`. `read_mem(addr)`
+sends a CGRA `CMD_LOAD_REQUEST`; `CGRA.scala` captures the matching
+CPU-destined `CMD_LOAD_RESPONSE`.
 
 ## Generated Files
 
@@ -174,6 +236,14 @@ Current funct encodings:
 - `VectorCGRA/CgraTemplateRTL_single__pickled.v`
 - `chipyard/generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single__pickled.v`
 - `chipyard/generators/chipyard/src/main/resources/vsrc/CgraTemplateRTL_single_wrapper.v`
+- `chipyard/generators/chipyard/src/main/scala/example/CGRAGenerated.scala`
+- `tests/include/cgra_layout.h`
+
+`scripts/generate_multi_cgra.py` updates:
+
+- `VectorCGRA/MeshMultiCgraTemplateRTL_multi__pickled.v`
+- `chipyard/generators/chipyard/src/main/resources/vsrc/MeshMultiCgraTemplateRTL_multi__pickled.v`
+- `chipyard/generators/chipyard/src/main/resources/vsrc/MeshMultiCgraTemplateRTL_multi_wrapper.v`
 - `chipyard/generators/chipyard/src/main/scala/example/CGRAGenerated.scala`
 - `tests/include/cgra_layout.h`
 
@@ -197,3 +267,6 @@ are deliberately debugging generator output. Regenerate from the YAML instead.
   unchanged, rerun without `--rebuild`.
 - Avoid fixed packet-width assumptions. Use `tests/include/cgra_layout.h` and
   `tests/include/cgra_runtime.h`.
+- Remember that generated RTL/layout/Chipyard resources describe whichever
+  single or multi generator ran last. Regenerate the intended top before
+  rebuilding or running tests.

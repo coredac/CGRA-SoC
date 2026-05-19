@@ -356,7 +356,7 @@ def emit_config(pkt: object, nfo: int, nro: int) -> str:
   rreg_towards = [int(ctrl.read_reg_towards[i]) for i in range(nfo)]
   rreg_idx = [int(ctrl.read_reg_idx[i]) for i in range(nfo)]
   return (
-      f"  send_config({tile}, {ctrl_addr}, build_ctrl("
+      f"  send_config_to(target, {tile}, {ctrl_addr}, build_ctrl("
       f"{op_name(op)}, "
       f"{c_array(fu_in, nfo)}, "
       f"{c_array(routing_xbar, nro, PORT_INT_TO_C)}, "
@@ -379,24 +379,24 @@ def emit_packet(cfg: KernelConfig, pkt: object, nfo: int, nro: int) -> str:
   if cmd == CMD_CONST:
     data = int(pkt.payload.data.payload)
     pred = int(pkt.payload.data.predicate)
-    return f"  send_basic({tile}, CGRA_CMD_CONST, {data}, {pred}, 0);"
+    return f"  send_basic_to(target, {tile}, CGRA_CMD_CONST, {data}, {pred}, 0);"
 
   if cmd == CMD_CONFIG_COUNT_PER_ITER:
     return (
-        f"  send_basic({tile}, CGRA_CMD_CONFIG_COUNT_PER_ITER, "
+        f"  send_basic_to(target, {tile}, CGRA_CMD_CONFIG_COUNT_PER_ITER, "
         f"{cfg.name.upper()}_CTRL_COUNT_PER_ITER, 1, 0);"
     )
 
   if cmd == CMD_CONFIG_TOTAL_CTRL_COUNT:
     return (
-        f"  send_basic({tile}, CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT, "
+        f"  send_basic_to(target, {tile}, CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT, "
         f"{cfg.name.upper()}_TOTAL_CTRL_STEPS, 1, 0);"
     )
 
   if cmd == CMD_CONFIG_PROLOGUE_FU:
     count = int(pkt.payload.data.payload)
     return (
-        f"  send_prologue({tile}, CGRA_CMD_CONFIG_PROLOGUE_FU, "
+        f"  send_prologue_to(target, {tile}, CGRA_CMD_CONFIG_PROLOGUE_FU, "
         f"{ctrl_addr}, {count}, (cgra_ctrl_t){{0, 0, 0}});"
     )
 
@@ -405,7 +405,7 @@ def emit_packet(cfg: KernelConfig, pkt: object, nfo: int, nro: int) -> str:
     routing_xbar = [int(pkt.payload.ctrl.routing_xbar_outport[i])
                     for i in range(nro)]
     return (
-        f"  send_prologue({tile}, CGRA_CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR, "
+        f"  send_prologue_to(target, {tile}, CGRA_CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR, "
         f"{ctrl_addr}, {count}, build_ctrl(0, 0, "
         f"{c_array(routing_xbar, nro, PORT_INT_TO_C)}, "
         f"0, 0, 0, 0, 0));"
@@ -422,12 +422,12 @@ def emit_packet(cfg: KernelConfig, pkt: object, nfo: int, nro: int) -> str:
           "0, 0, 0, 0)"
       )
     return (
-        f"  send_prologue({tile}, CGRA_CMD_CONFIG_PROLOGUE_FU_CROSSBAR, "
+        f"  send_prologue_to(target, {tile}, CGRA_CMD_CONFIG_PROLOGUE_FU_CROSSBAR, "
         f"{ctrl_addr}, {count}, {ctrl_expr});"
     )
 
   if cmd == CMD_LAUNCH:
-    return f"  send_basic({tile}, CGRA_CMD_LAUNCH, 0, 0, 0);"
+    return f"  send_basic_to(target, {tile}, CGRA_CMD_LAUNCH, 0, 0, 0);"
 
   cmd_name = CMD_INT_TO_C.get(cmd, str(cmd))
   raise ValueError(f"unsupported packet command {cmd_name} ({cmd})")
@@ -452,7 +452,7 @@ def write_header(cfg: KernelConfig, packets: Sequence[tuple[tuple[int, int], obj
       f"#define {guard_kernel}_CTRL_COUNT_PER_ITER {cfg.compiled_ii}",
       f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
       "",
-      f"static inline void configure_{cfg.name}(void) {{",
+      f"static inline void configure_{cfg.name}_to(cgra_target_t target) {{",
   ]
 
   last_coord = None
@@ -464,6 +464,10 @@ def write_header(cfg: KernelConfig, packets: Sequence[tuple[tuple[int, int], obj
     lines.append(emit_packet(cfg, pkt, nfo, nro))
 
   lines.extend([
+      "}",
+      "",
+      f"static inline void configure_{cfg.name}(void) {{",
+      f"  configure_{cfg.name}_to(cgra_target_local());",
       "}",
       f"#endif",
       "",

@@ -19,6 +19,23 @@ typedef struct {
   uint64_t top;
 } cgra_packet_t;
 
+typedef struct {
+  uint8_t src_cgra_id;
+  uint8_t dst_cgra_id;
+  uint8_t src_cgra_x;
+  uint8_t src_cgra_y;
+  uint8_t dst_cgra_x;
+  uint8_t dst_cgra_y;
+} cgra_target_t;
+
+static inline cgra_target_t cgra_target_local(void) {
+  return (cgra_target_t){0, 0, 0, 0, 0, 0};
+}
+
+static inline cgra_target_t cgra_target_id(uint8_t dst_cgra_id) {
+  return (cgra_target_t){0, dst_cgra_id, 0, 0, 0, 0};
+}
+
 static inline uint64_t cgra_data_raw(uint32_t payload, uint8_t predicate) {
   return (((uint64_t)payload) << DATA_PAYLOAD_LSB) |
          (((uint64_t)predicate & 0x1ULL) << DATA_PREDICATE_LSB);
@@ -107,9 +124,28 @@ static inline void cgra_pkt_set_bits(cgra_packet_t *pkt, int lsb, int width,
   }
 }
 
+static inline cgra_packet_t cgra_build_intra_pkt_to(
+    cgra_target_t target, uint8_t src_tile, uint8_t dst_tile, uint8_t cmd,
+    uint64_t data, uint8_t data_addr, cgra_ctrl_t ctrl, uint8_t ctrl_addr);
+static inline void cgra_send_basic_to(cgra_target_t target, uint8_t tile,
+                                      uint8_t cmd, uint32_t data,
+                                      uint8_t predicate, uint8_t data_addr);
+static inline void cgra_send_config_to(cgra_target_t target, uint8_t tile,
+                                       uint8_t ctrl_addr, cgra_ctrl_t ctrl);
+static inline void cgra_send_prologue_to(cgra_target_t target, uint8_t tile,
+                                         uint8_t cmd, uint8_t ctrl_addr,
+                                         uint32_t count, cgra_ctrl_t ctrl);
+
 static inline cgra_packet_t cgra_build_intra_pkt(
     uint8_t src_tile, uint8_t dst_tile, uint8_t cmd, uint64_t data,
     uint8_t data_addr, cgra_ctrl_t ctrl, uint8_t ctrl_addr) {
+  return cgra_build_intra_pkt_to(cgra_target_local(), src_tile, dst_tile, cmd,
+                                 data, data_addr, ctrl, ctrl_addr);
+}
+
+static inline cgra_packet_t cgra_build_intra_pkt_to(
+    cgra_target_t target, uint8_t src_tile, uint8_t dst_tile, uint8_t cmd,
+    uint64_t data, uint8_t data_addr, cgra_ctrl_t ctrl, uint8_t ctrl_addr) {
   cgra_packet_t pkt = {0, 0, 0, 0};
   cgra_pkt_set_bits(&pkt, PKT_CTRL_ADDR_LSB, PKT_CTRL_ADDR_NBITS, ctrl_addr);
   cgra_pkt_set_bits(&pkt, PKT_CTRL_LSB, CTRL_LO_NBITS, ctrl.lo);
@@ -120,12 +156,18 @@ static inline cgra_packet_t cgra_build_intra_pkt(
   cgra_pkt_set_bits(&pkt, PKT_CMD_LSB, PKT_CMD_NBITS, cmd);
   cgra_pkt_set_bits(&pkt, PKT_VC_ID_LSB, PKT_VC_ID_NBITS, 0);
   cgra_pkt_set_bits(&pkt, PKT_OPAQUE_LSB, PKT_OPAQUE_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_Y_LSB, PKT_DST_CGRA_Y_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_X_LSB, PKT_DST_CGRA_X_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_Y_LSB, PKT_SRC_CGRA_Y_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_X_LSB, PKT_SRC_CGRA_X_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_ID_LSB, PKT_DST_CGRA_ID_NBITS, 0);
-  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_ID_LSB, PKT_SRC_CGRA_ID_NBITS, 0);
+  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_Y_LSB, PKT_DST_CGRA_Y_NBITS,
+                    target.dst_cgra_y);
+  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_X_LSB, PKT_DST_CGRA_X_NBITS,
+                    target.dst_cgra_x);
+  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_Y_LSB, PKT_SRC_CGRA_Y_NBITS,
+                    target.src_cgra_y);
+  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_X_LSB, PKT_SRC_CGRA_X_NBITS,
+                    target.src_cgra_x);
+  cgra_pkt_set_bits(&pkt, PKT_DST_CGRA_ID_LSB, PKT_DST_CGRA_ID_NBITS,
+                    target.dst_cgra_id);
+  cgra_pkt_set_bits(&pkt, PKT_SRC_CGRA_ID_LSB, PKT_SRC_CGRA_ID_NBITS,
+                    target.src_cgra_id);
   cgra_pkt_set_bits(&pkt, PKT_DST_TILE_LSB, PKT_DST_TILE_NBITS, dst_tile);
   cgra_pkt_set_bits(&pkt, PKT_SRC_TILE_LSB, PKT_SRC_TILE_NBITS, src_tile);
   return pkt;
@@ -146,22 +188,42 @@ static inline void cgra_send_packets(const cgra_packet_t *pkts, size_t count) {
 
 static inline void cgra_send_basic(uint8_t tile, uint8_t cmd, uint32_t data,
                                    uint8_t predicate, uint8_t data_addr) {
-  cgra_send_packet(cgra_build_intra_pkt(0, tile, cmd,
-                                        cgra_data_raw(data, predicate),
-                                        data_addr, cgra_ctrl_empty(), 0));
+  cgra_send_basic_to(cgra_target_local(), tile, cmd, data, predicate,
+                     data_addr);
+}
+
+static inline void cgra_send_basic_to(cgra_target_t target, uint8_t tile,
+                                      uint8_t cmd, uint32_t data,
+                                      uint8_t predicate, uint8_t data_addr) {
+  cgra_send_packet(cgra_build_intra_pkt_to(target, 0, tile, cmd,
+                                          cgra_data_raw(data, predicate),
+                                          data_addr, cgra_ctrl_empty(), 0));
 }
 
 static inline void cgra_send_config(uint8_t tile, uint8_t ctrl_addr,
                                     cgra_ctrl_t ctrl) {
-  cgra_send_packet(cgra_build_intra_pkt(0, tile, CGRA_CMD_CONFIG, 0, 0, ctrl,
-                                        ctrl_addr));
+  cgra_send_config_to(cgra_target_local(), tile, ctrl_addr, ctrl);
+}
+
+static inline void cgra_send_config_to(cgra_target_t target, uint8_t tile,
+                                       uint8_t ctrl_addr, cgra_ctrl_t ctrl) {
+  cgra_send_packet(cgra_build_intra_pkt_to(target, 0, tile, CGRA_CMD_CONFIG,
+                                          0, 0, ctrl, ctrl_addr));
 }
 
 static inline void cgra_send_prologue(uint8_t tile, uint8_t cmd,
                                       uint8_t ctrl_addr, uint32_t count,
                                       cgra_ctrl_t ctrl) {
-  cgra_send_packet(cgra_build_intra_pkt(0, tile, cmd, cgra_data_raw(count, 1),
-                                        0, ctrl, ctrl_addr));
+  cgra_send_prologue_to(cgra_target_local(), tile, cmd, ctrl_addr, count,
+                        ctrl);
+}
+
+static inline void cgra_send_prologue_to(cgra_target_t target, uint8_t tile,
+                                         uint8_t cmd, uint8_t ctrl_addr,
+                                         uint32_t count, cgra_ctrl_t ctrl) {
+  cgra_send_packet(cgra_build_intra_pkt_to(target, 0, tile, cmd,
+                                          cgra_data_raw(count, 1), 0, ctrl,
+                                          ctrl_addr));
 }
 
 static inline uint32_t cgra_read_mem(uint8_t data_addr) {
@@ -192,6 +254,13 @@ static inline cgra_packet_t build_intra_pkt(
                               ctrl_addr);
 }
 
+static inline cgra_packet_t build_intra_pkt_to(
+    cgra_target_t target, uint8_t src_tile, uint8_t dst_tile, uint8_t cmd,
+    uint64_t data, uint8_t data_addr, cgra_ctrl_t ctrl, uint8_t ctrl_addr) {
+  return cgra_build_intra_pkt_to(target, src_tile, dst_tile, cmd, data,
+                                 data_addr, ctrl, ctrl_addr);
+}
+
 static inline void send_packet(cgra_packet_t pkt) {
   cgra_send_packet(pkt);
 }
@@ -201,14 +270,31 @@ static inline void send_basic(uint8_t tile, uint8_t cmd, uint32_t data,
   cgra_send_basic(tile, cmd, data, predicate, data_addr);
 }
 
+static inline void send_basic_to(cgra_target_t target, uint8_t tile,
+                                 uint8_t cmd, uint32_t data,
+                                 uint8_t predicate, uint8_t data_addr) {
+  cgra_send_basic_to(target, tile, cmd, data, predicate, data_addr);
+}
+
 static inline void send_config(uint8_t tile, uint8_t ctrl_addr,
                                cgra_ctrl_t ctrl) {
   cgra_send_config(tile, ctrl_addr, ctrl);
 }
 
+static inline void send_config_to(cgra_target_t target, uint8_t tile,
+                                  uint8_t ctrl_addr, cgra_ctrl_t ctrl) {
+  cgra_send_config_to(target, tile, ctrl_addr, ctrl);
+}
+
 static inline void send_prologue(uint8_t tile, uint8_t cmd, uint8_t ctrl_addr,
                                  uint32_t count, cgra_ctrl_t ctrl) {
   cgra_send_prologue(tile, cmd, ctrl_addr, count, ctrl);
+}
+
+static inline void send_prologue_to(cgra_target_t target, uint8_t tile,
+                                    uint8_t cmd, uint8_t ctrl_addr,
+                                    uint32_t count, cgra_ctrl_t ctrl) {
+  cgra_send_prologue_to(target, tile, cmd, ctrl_addr, count, ctrl);
 }
 
 static inline uint32_t read_mem(uint8_t data_addr) {

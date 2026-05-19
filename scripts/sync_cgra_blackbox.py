@@ -68,6 +68,9 @@ class CgraMetadata:
     rtl_resource: str
     wrapper_resource: str
     has_boundary_ports: bool
+    has_inter_cgra_noc_ports: bool
+    has_cgra_id_port: bool
+    has_address_ports: bool
 
 
 def range_width(msb: int, lsb: int) -> int:
@@ -188,7 +191,7 @@ def find_top_module(text: str, requested: Optional[str]) -> str:
     modules = re.findall(r"^module\s+(\w+)\s*\(", text, re.M)
     candidates = [
         name for name in modules
-        if name.startswith(("CgraRTL", "CgraTemplateRTL")) and not name.endswith("_wrapper")
+        if name.startswith(("CgraRTL", "CgraTemplateRTL", "MeshMultiCgraTemplateRTL")) and not name.endswith("_wrapper")
     ]
     if not candidates:
         raise ValueError("could not infer top module; pass --top-module")
@@ -247,6 +250,43 @@ def require_port(ports: Dict[str, Port], name: str) -> Port:
     return ports[name]
 
 
+def optional_port(ports: Dict[str, Port], name: str) -> Optional[Port]:
+    return ports.get(name)
+
+
+def same_port_type(left: Port, right: Port) -> bool:
+    return left.sv_type is not None and left.sv_type == right.sv_type
+
+
+def find_inter_packet_type(
+    typedefs: Dict[str, str],
+    memo: Dict[str, int],
+    intra_type: str,
+    payload_type: str,
+) -> str:
+    intra_width = struct_width(intra_type, typedefs, memo)
+    candidates: List[Tuple[int, str]] = []
+    for type_name in typedefs:
+        if not type_name.startswith("InterCgraPacket"):
+            continue
+        try:
+            if field_type(type_name, "payload", typedefs) != payload_type:
+                continue
+            width = struct_width(type_name, typedefs, memo)
+        except ValueError:
+            continue
+        candidates.append((width, type_name))
+
+    if not candidates:
+        raise ValueError(
+            "top module has no inter-CGRA NoC ports and no matching "
+            "InterCgraPacket typedef was found"
+        )
+
+    candidates.sort(key=lambda item: (item[0] < intra_width, item[0], item[1]))
+    return candidates[-1][1]
+
+
 def infer_address_bounds(text: str, addr_width: int) -> Tuple[int, int]:
     match = re.search(r"controller2addr_map_\{0:\s*[\[\(](\d+),\s*(\d+)[\]\)]", text)
     if match:
@@ -257,6 +297,7 @@ def infer_address_bounds(text: str, addr_width: int) -> Tuple[int, int]:
 def infer_tile_shape(text: str, intra_type: str) -> Tuple[int, int, int]:
     shape_patterns = [
         r"// Full name: .*?__per_cgra_rows_(\d+)__per_cgra_columns_(\d+)",
+        r"// Full name: .*?__id2cgraSize_map_\{0:\s*\[(\d+),\s*(\d+)\]",
         r"// Full name: .*?__width_(\d+)__height_(\d+)",
     ]
     for pattern in shape_patterns:
@@ -279,14 +320,53 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
     ports = parse_ports(text, top, typedefs, memo)
 
     intra = require_port(ports, "recv_from_cpu_pkt__msg")
-    inter = require_port(ports, "recv_from_inter_cgra_noc__msg")
-    cgra_id = require_port(ports, "cgra_id")
-    address_lower = require_port(ports, "address_lower")
+    for cpu_port_name in (
+        "recv_from_cpu_pkt__val",
+        "recv_from_cpu_pkt__rdy",
+        "send_to_cpu_pkt__val",
+        "send_to_cpu_pkt__msg",
+        "send_to_cpu_pkt__rdy",
+    ):
+        require_port(ports, cpu_port_name)
 
-    if intra.sv_type is None or inter.sv_type is None:
-        raise ValueError("packet ports must use generated struct typedefs")
+    recv_inter = optional_port(ports, "recv_from_inter_cgra_noc__msg")
+    send_inter = optional_port(ports, "send_to_inter_cgra_noc__msg")
+    inter_ports = [
+        optional_port(ports, name)
+        for name in (
+            "recv_from_inter_cgra_noc__val",
+            "recv_from_inter_cgra_noc__msg",
+            "recv_from_inter_cgra_noc__rdy",
+            "send_to_inter_cgra_noc__val",
+            "send_to_inter_cgra_noc__msg",
+            "send_to_inter_cgra_noc__rdy",
+        )
+    ]
+    has_inter_cgra_noc_ports = any(port is not None for port in inter_ports)
+    if has_inter_cgra_noc_ports and not all(port is not None for port in inter_ports):
+        raise ValueError("top module has only a partial inter-CGRA NoC interface")
+
+    cgra_id = optional_port(ports, "cgra_id")
+    address_lower = optional_port(ports, "address_lower")
+    address_upper = optional_port(ports, "address_upper")
+    has_cgra_id_port = cgra_id is not None
+    has_address_ports = any(port is not None for port in (address_lower, address_upper))
+    if has_address_ports and not all(port is not None for port in (address_lower, address_upper)):
+        raise ValueError("top module has only a partial address bound interface")
+
+    if intra.sv_type is None:
+        raise ValueError("CPU packet ports must use generated struct typedefs")
 
     payload_type = field_type(intra.sv_type, "payload", typedefs)
+    if recv_inter is not None:
+        if recv_inter.sv_type is None or send_inter is None or send_inter.sv_type is None:
+            raise ValueError("inter-CGRA packet ports must use generated struct typedefs")
+        if not same_port_type(recv_inter, send_inter):
+            raise ValueError("inter-CGRA recv/send packet typedefs differ")
+        inter_type = recv_inter.sv_type
+    else:
+        inter_type = find_inter_packet_type(typedefs, memo, intra.sv_type, payload_type)
+
     data_type = field_type(payload_type, "data", typedefs)
     ctrl_type = field_type(payload_type, "ctrl", typedefs)
     data_width = struct_width(data_type, typedefs, memo)
@@ -296,7 +376,13 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
     cmd_width = field_width(payload_type, "cmd", typedefs, memo)
     data_addr_width = field_width(payload_type, "data_addr", typedefs, memo)
     ctrl_addr_width = field_width(payload_type, "ctrl_addr", typedefs, memo)
-    address_lo, address_hi = infer_address_bounds(text, address_lower.width)
+    id_width = (
+        cgra_id.width
+        if cgra_id is not None
+        else field_width(intra.sv_type, "dst_cgra_id", typedefs, memo)
+    )
+    addr_width = address_lower.width if address_lower is not None else data_addr_width
+    address_lo, address_hi = infer_address_bounds(text, addr_width)
 
     has_boundary_ports = "recv_data_on_boundary_south__msg" in ports
     if has_boundary_ports:
@@ -323,12 +409,12 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         top_module=top,
         wrapper_module=wrapper_name,
         intra_type=intra.sv_type,
-        inter_type=inter.sv_type,
+        inter_type=inter_type,
         data_type=data_type,
         payload_type=payload_type,
         ctrl_type=ctrl_type,
         intra_width=intra.width,
-        inter_width=inter.width,
+        inter_width=struct_width(inter_type, typedefs, memo),
         data_width=data_width,
         data_payload_width=data_payload_width,
         payload_width=payload_width,
@@ -337,8 +423,8 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         cmd_width=cmd_width,
         data_addr_width=data_addr_width,
         ctrl_addr_width=ctrl_addr_width,
-        id_width=cgra_id.width,
-        addr_width=address_lower.width,
+        id_width=id_width,
+        addr_width=addr_width,
         x_tiles=x_tiles,
         y_tiles=y_tiles,
         num_tiles=num_tiles,
@@ -347,6 +433,9 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         rtl_resource=f"/vsrc/{rtl_name}",
         wrapper_resource=f"/vsrc/{wrapper_name}.v",
         has_boundary_ports=has_boundary_ports,
+        has_inter_cgra_noc_ports=has_inter_cgra_noc_ports,
+        has_cgra_id_port=has_cgra_id_port,
+        has_address_ports=has_address_ports,
     )
 
 
@@ -434,6 +523,17 @@ def gen_boundary_assigns(side: str, count: int) -> str:
     return "\n".join(lines)
 
 
+def gen_tieoff_assigns(meta: CgraMetadata) -> str:
+    lines: List[str] = []
+    if not meta.has_inter_cgra_noc_ports:
+        lines.extend([
+            "  assign recv_from_inter_cgra_noc_rdy = 1'b0;",
+            "  assign send_to_inter_cgra_noc_val = 1'b0;",
+            "  assign w_send_to_inter_cgra_noc_msg = '0;",
+        ])
+    return "\n".join(lines)
+
+
 def render_template(template_name: str, **values: object) -> str:
     template_path = DEFAULT_TEMPLATE_DIR / template_name
     template = Template(template_path.read_text(encoding="utf-8"))
@@ -462,13 +562,16 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         ".send_to_cpu_pkt__val               ( send_to_cpu_pkt_val )",
         ".send_to_cpu_pkt__msg               ( w_send_to_cpu_pkt_msg )",
         ".send_to_cpu_pkt__rdy               ( send_to_cpu_pkt_rdy )",
-        ".recv_from_inter_cgra_noc__val      ( recv_from_inter_cgra_noc_val )",
-        ".recv_from_inter_cgra_noc__msg      ( w_recv_from_inter_cgra_noc_msg )",
-        ".recv_from_inter_cgra_noc__rdy      ( recv_from_inter_cgra_noc_rdy )",
-        ".send_to_inter_cgra_noc__val        ( send_to_inter_cgra_noc_val )",
-        ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
-        ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
     ]
+    if meta.has_inter_cgra_noc_ports:
+        inst_ports.extend([
+            ".recv_from_inter_cgra_noc__val      ( recv_from_inter_cgra_noc_val )",
+            ".recv_from_inter_cgra_noc__msg      ( w_recv_from_inter_cgra_noc_msg )",
+            ".recv_from_inter_cgra_noc__rdy      ( recv_from_inter_cgra_noc_rdy )",
+            ".send_to_inter_cgra_noc__val        ( send_to_inter_cgra_noc_val )",
+            ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
+            ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
+        ])
     if meta.has_boundary_ports:
         for side in SIDES:
             inst_ports.extend([
@@ -479,11 +582,13 @@ def gen_wrapper(meta: CgraMetadata) -> str:
                 f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
                 f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
             ])
-    inst_ports.extend([
-        ".cgra_id                            ( cgra_id )",
-        ".address_lower                      ( address_lower )",
-        ".address_upper                      ( address_upper )",
-    ])
+    if meta.has_cgra_id_port:
+        inst_ports.append(".cgra_id                            ( cgra_id )")
+    if meta.has_address_ports:
+        inst_ports.extend([
+            ".address_lower                      ( address_lower )",
+            ".address_upper                      ( address_upper )",
+        ])
 
     return render_template(
         "cgra_wrapper.v.tpl",
@@ -494,6 +599,7 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         inter_type=meta.inter_type,
         boundary_wires=boundary_wires,
         boundary_assigns=boundary_assigns,
+        tieoff_assigns=gen_tieoff_assigns(meta),
         inst_port_list=comma_join(inst_ports, indent="    "),
     )
 
@@ -674,6 +780,8 @@ def main() -> int:
     print(f"intra_width={meta.intra_width} inter_width={meta.inter_width} data_width={meta.data_width}")
     print(f"x_tiles={meta.x_tiles} y_tiles={meta.y_tiles} num_tiles={meta.num_tiles}")
     print(f"has_boundary_ports={meta.has_boundary_ports}")
+    print(f"has_inter_cgra_noc_ports={meta.has_inter_cgra_noc_ports}")
+    print(f"has_cgra_id_port={meta.has_cgra_id_port} has_address_ports={meta.has_address_ports}")
     print(f"scala_out={args.scala_out}")
     print(f"c_layout_out={args.c_layout_out}")
     print(f"wrapper_out={wrapper_path}")
