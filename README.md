@@ -78,6 +78,9 @@ and `CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`.
 GEMM and SAD may have local configs/tests, but they are not part of the current
 supported CPU+CGRA set unless explicitly promoted.
 
+## Set up the environment
+See [Setup documentation](./docs/Setup.md) for more details.
+
 ## Run Kernels
 
 Generate the canonical CGRA RTL from the layered arch/soc configs, generate C
