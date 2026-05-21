@@ -49,7 +49,7 @@ if [[ ! -f "$TEST_SRC" ]]; then
   exit 1
 fi
 
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUT_DIR" "$(dirname "$BIN_PATH")"
 
 cd "$CHIPYARD_DIR"
 set +u

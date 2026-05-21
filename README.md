@@ -137,6 +137,18 @@ single-CGRA use, or for sending the same tile configuration to one
 across multiple CGRAs is still TODO. Hand-written multi-CGRA control-signal
 tests are in `VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py`.
 
+Current supported multi-CGRA CPU+CGRA tests:
+
+- `multi-cgra/cgra-multi-homo`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_homo_meshrtl.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-homo`
+- `multi-cgra/cgra-multi-systolic-2x2`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_2x2.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-2x2`
+- `multi-cgra/cgra-multi-systolic-4x4`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_4x4_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_4x4_2x2.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4`
+
 ## Reference First
 
 When bringing up a kernel, first check the matching VectorCGRA from-yaml test.

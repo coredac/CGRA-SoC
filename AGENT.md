@@ -156,6 +156,18 @@ signal generation across multiple CGRAs is still TODO. For hand-written
 multi-CGRA control signal tests, use
 `VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py` as the reference.
 
+Current supported multi-CGRA CPU+CGRA tests:
+
+- `multi-cgra/cgra-multi-homo`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_homo_meshrtl.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-homo`
+- `multi-cgra/cgra-multi-systolic-2x2`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_2x2.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-2x2`
+- `multi-cgra/cgra-multi-systolic-4x4`
+  - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_4x4_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_4x4_2x2.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4`
+
 ## VectorCGRA Reference Tests
 
 Run these before debugging the CPU+CGRA integration:
