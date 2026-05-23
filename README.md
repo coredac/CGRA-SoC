@@ -149,6 +149,27 @@ Current supported multi-CGRA CPU+CGRA tests:
   - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_4x4_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_4x4_2x2.yaml`
   - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4`
 
+Multi-CGRA FIR CPU+CGRA tests live under `tests/multi-cgra/fir/`. Their C
+control packets are hand-written from
+`VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`; do not regenerate those
+control signals with a script. Regenerate the matching RTL/layout before each
+test because the scalar and vector FIR layouts use different `data_nbits`.
+
+- `multi-cgra/fir/cgra-multi-fir-scalar`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_scalar.yaml --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar`
+- `multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`
+- `multi-cgra/fir/cgra-multi-fir-vector`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_vector.yaml --soc-yaml configs/soc/multi_cgra_fir_vector.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector`
+
+All three FIR tests check one completion and result `0x8a7` (`2215`). The
+vector test uses `data_nbits: 64`, so `tests/include/cgra_runtime.h` encodes
+CGRA data payloads with an internal 128-bit word while still sending the same
+four 64-bit RoCC raw packet chunks.
+
 ## Reference First
 
 When bringing up a kernel, first check the matching VectorCGRA from-yaml test.

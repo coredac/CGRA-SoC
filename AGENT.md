@@ -168,6 +168,31 @@ Current supported multi-CGRA CPU+CGRA tests:
   - generate: `python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_4x4_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_systolic_4x4_2x2.yaml`
   - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4`
 
+Multi-CGRA FIR tests:
+
+- `multi-cgra/fir/cgra-multi-fir-scalar`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_scalar.yaml --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar`
+- `multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`
+- `multi-cgra/fir/cgra-multi-fir-vector`
+  - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_vector.yaml --soc-yaml configs/soc/multi_cgra_fir_vector.yaml`
+  - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector`
+
+The multi-CGRA FIR C control packets are hand-written in
+`tests/multi-cgra/fir/`, translated from
+`VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`. Do not regenerate these
+control signals with a script. Always regenerate the intended FIR RTL/layout
+before rebuilding, especially before switching between scalar `data_nbits: 32`
+and vector `data_nbits: 64`. All three FIR tests currently PASS with expected
+result `0x8a7` and one completion.
+
+Vector FIR needs the YAML FU names `vector_mul_combo`, `vector_adder_combo`,
+and `vector_all_reduce` mapped in `VectorCGRA/cgra/CgraTemplateRTL.py`. Keep
+`vfmul` mapped to `None`; do not add class-name aliases unless the YAML schema
+explicitly changes.
+
 ## VectorCGRA Reference Tests
 
 Run these before debugging the CPU+CGRA integration:
@@ -240,6 +265,11 @@ Current funct encodings:
 `send_prologue`, target-aware `_to` variants, and `read_mem`. `read_mem(addr)`
 sends a CGRA `CMD_LOAD_REQUEST`; `CGRA.scala` captures the matching
 CPU-destined `CMD_LOAD_RESPONSE`.
+
+The runtime supports 64-bit CGRA data payloads with `cgra_data_word_t`
+(`unsigned __int128`) for packet assembly. The RoCC raw packet interface still
+sends exactly four 64-bit chunks: LO, MID, HI, and TOP. Do not use a 64-bit
+generated layout for 32-bit scalar tests; regenerate the matching layout first.
 
 ## Generated Files
 
