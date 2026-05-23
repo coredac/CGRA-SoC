@@ -38,8 +38,10 @@ jobs:
         run: |
           python -m py_compile \
             scripts/generate_single_cgra.py \
+            scripts/generate_multi_cgra.py \
             scripts/generate_cgra_c_api.py \
-            VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py
+            VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py \
+            VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_multi_test.py
 
       - name: Generate canonical 4x4 CGRA RTL
         run: |
@@ -87,6 +89,54 @@ jobs:
         run: |
           ./run-chipyard-cgra-test.sh cgra-histogram-4x4 2>&1 | tee cgra-histogram-4x4.log
           grep -q "CGRA RoCC Histogram 4x4: PASS" cgra-histogram-4x4.log
+
+      - name: Run multi-CGRA homo SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml \
+            --soc-yaml configs/soc/multi_cgra_homo_meshrtl.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-homo 2>&1 | tee cgra-multi-homo.log
+          grep -q "CGRA RoCC multi homo MeshRTL: PASS" cgra-multi-homo.log
+
+      - name: Run multi-CGRA systolic 2x2 SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml \
+            --soc-yaml configs/soc/multi_cgra_systolic_2x2.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-2x2 2>&1 | tee cgra-multi-systolic-2x2.log
+          grep -q "CGRA RoCC multi systolic 2x2 MeshRTL: PASS" cgra-multi-systolic-2x2.log
+
+      - name: Run multi-CGRA systolic 4x4 SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_4x4_meshrtl.yaml \
+            --soc-yaml configs/soc/multi_cgra_systolic_4x4_2x2.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4 2>&1 | tee cgra-multi-systolic-4x4.log
+          grep -q "CGRA RoCC multi systolic 4x4 MeshRTL: PASS" cgra-multi-systolic-4x4.log
+
+      - name: Run multi-CGRA FIR scalar SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_scalar.yaml \
+            --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar 2>&1 | tee cgra-multi-fir-scalar.log
+          grep -q "CGRA RoCC multi FIR scalar 4x4: PASS" cgra-multi-fir-scalar.log
+
+      - name: Run multi-CGRA FIR scalar 2x2 SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_homo_meshrtl.yaml \
+            --soc-yaml configs/soc/multi_cgra_fir_scalar.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2 2>&1 | tee cgra-multi-fir-scalar-2x2-2x2.log
+          grep -q "CGRA RoCC multi FIR scalar 2x2-2x2: PASS" cgra-multi-fir-scalar-2x2-2x2.log
+
+      - name: Run multi-CGRA FIR vector SoC test
+        run: |
+          .venv/bin/python scripts/generate_multi_cgra.py \
+            --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_vector.yaml \
+            --soc-yaml configs/soc/multi_cgra_fir_vector.yaml
+          ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
+          grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
       - name: Upload test logs
         if: always()
