@@ -138,6 +138,22 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
+      - name: Run Gemmini and CGRA ReLU demo
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml
+          .venv/bin/python scripts/generate_cgra_c_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml \
+            configs/kernels/kernel_relu4x4_4x4.yaml \
+            --output-dir tests/generated
+          ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-demo.log
+          grep -q "Gemmini GEMM: PASS" cgra-gemmini-demo.log
+          grep -q "CGRA ReLU: PASS" cgra-gemmini-demo.log
+          grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini-demo.log
+
       - name: Upload test logs
         if: always()
         uses: actions/upload-artifact@v4

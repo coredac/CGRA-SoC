@@ -38,7 +38,7 @@ ensure_vectorcgra_submodules() {
 ensure_chipyard_submodules() {
   (
     cd "$CHIPYARD_DIR"
-    echo "Initializing Chipyard submodules needed for CGRARocketConfig."
+    echo "Initializing Chipyard submodules needed for CGRA and Gemmini tests."
 
     local -a recursive_submodules=(
       generators/hardfloat
@@ -48,6 +48,7 @@ ensure_chipyard_submodules() {
       generators/bar-fetchers
       generators/boom
       generators/diplomacy
+      generators/gemmini
       generators/icenet
       generators/rerocc
       generators/rocc-acc-utils
@@ -69,6 +70,29 @@ ensure_chipyard_submodules() {
     git submodule sync -- "${recursive_submodules[@]}" "${leaf_submodules[@]}"
     git submodule update --init --recursive -- "${recursive_submodules[@]}"
     git submodule update --init -- "${leaf_submodules[@]}"
+  )
+}
+
+ensure_gemmini_submodules() {
+  (
+    cd "$CHIPYARD_DIR/generators/gemmini"
+    echo "Initializing Gemmini software submodules needed for the CGRA demo."
+    local -a gemmini_submodules=(
+      software/gemmini-rocc-tests
+    )
+    git submodule sync -- "${gemmini_submodules[@]}"
+    git submodule update --init -- "${gemmini_submodules[@]}"
+  )
+
+  (
+    cd "$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
+    echo "Initializing Gemmini RoCC test support submodules."
+    local -a gemmini_test_submodules=(
+      rocc-software
+      riscv-tests
+    )
+    git submodule sync -- "${gemmini_test_submodules[@]}"
+    git submodule update --init -- "${gemmini_test_submodules[@]}"
   )
 }
 
@@ -187,6 +211,7 @@ PY
 ensure_root_submodules
 ensure_vectorcgra_submodules
 ensure_chipyard_submodules
+ensure_gemmini_submodules
 ensure_chipyard_env
 ensure_top_venv
 check_environment

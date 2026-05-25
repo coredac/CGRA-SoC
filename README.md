@@ -18,9 +18,11 @@ baremetal C tests.
 - `scripts/generate_cgra_c_api.py`: generates semantic C configuration APIs in
   `tests/generated/cgra_<kernel>_api.h`.
 - `tests/`: baremetal CPU+CGRA tests.
+- `tests/cgra-gemmini/`: Gemmini + single-CGRA combined demo.
 - `tests/include/`: CGRA protocol constants, packet layout, and runtime helpers.
 - `VectorCGRA/`: backend CGRA generator and reference from-yaml tests.
 - `chipyard/`: SoC integration and Verilator simulator.
+- `run-chipyard-cgra-gemmini-demo.sh`: builds/runs the Gemmini + CGRA demo.
 
 The old `cgra-fir-2x2` flow and mixed per-kernel hardware YAML flow are
 deprecated and are not the main validation path.
@@ -78,6 +80,12 @@ and `CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`.
 GEMM and SAD may have local configs/tests, but they are not part of the current
 supported CPU+CGRA set unless explicitly promoted.
 
+The supported combined accelerator demo is:
+
+| Demo | Config | C test | Notes |
+| --- | --- | --- | --- |
+| Gemmini GEMM + CGRA ReLU | `CGRAMinimalGemminiRocketConfig` | `tests/cgra-gemmini/gemmini-gemm-cgra-relu.c` | Gemmini uses `custom3`; CGRA uses `custom0`; data moves through DRAM and CPU-mediated CGRA stores. |
+
 ## Run Kernels
 
 Generate the canonical CGRA RTL from the layered arch/soc configs, generate C
@@ -107,6 +115,57 @@ that same RTL without `--rebuild`:
 ```bash
 ./run-chipyard-cgra-test.sh cgra-relu4x4
 ```
+
+## Gemmini + CGRA Demo
+
+Gemmini support is currently exposed through
+`CGRAMinimalGemminiRocketConfig` in
+`chipyard/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala`.
+That config combines `WithCGRA()` and a minimal Gemmini config. The CGRA RoCC
+uses `OpcodeSet.custom0`; Gemmini keeps its default `OpcodeSet.custom3`.
+
+The minimal Gemmini config keeps the GEMM path and removes nonessential
+features such as training convolutions, max pool, nonlinear activations,
+normalizations, depthwise convolutions, loop conv, and scale units. It uses
+weight-stationary dataflow, 64 KiB scratchpad, 32 KiB accumulator, 64-byte DMA
+max request size, and a 128-bit DMA/system bus width.
+
+The combined demo uses single-CGRA ReLU, not the current multi-CGRA generated
+top. Regenerate the matching single-CGRA RTL/API before rebuilding:
+
+```bash
+.venv/bin/python scripts/generate_single_cgra.py \
+  --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
+  --arch-yaml configs/arch/arch.yaml \
+  --soc-yaml configs/soc/cgra_soc.yaml
+.venv/bin/python scripts/generate_cgra_c_api.py \
+  --arch-yaml configs/arch/arch.yaml \
+  --soc-yaml configs/soc/cgra_soc.yaml \
+  configs/kernels/kernel_relu4x4_4x4.yaml \
+  --output-dir tests/generated
+./run-chipyard-cgra-gemmini-demo.sh --rebuild
+```
+
+Use `--rebuild` on the first run because Gemmini elaboration must generate a
+matching `gemmini_params.h`. Later runs can omit `--rebuild` if the RTL/config
+has not changed.
+
+The demo data path is intentionally memory-mediated:
+
+```text
+DRAM A/B -> Gemmini scratchpad/accumulator -> DRAM C
+  -> CPU -> CGRA STORE_REQUEST -> CGRA data memory
+  -> CGRA ReLU -> CGRA data memory -> CPU read_mem
+```
+
+There is no direct Gemmini-buffer-to-CGRA-buffer connection. The C code uses
+low-level Gemmini commands from `gemmini.h`, not `gemmini_loop_ws` or
+`tiled_matmul_auto`.
+
+CI initializes the additional Gemmini submodules needed by the demo:
+`chipyard/generators/gemmini`,
+`chipyard/generators/gemmini/software/gemmini-rocc-tests`, and that test
+repository's `rocc-software` and `riscv-tests` submodules.
 
 ## Multi-CGRA Flow
 
