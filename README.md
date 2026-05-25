@@ -86,6 +86,9 @@ The supported combined accelerator demo is:
 | --- | --- | --- | --- |
 | Gemmini GEMM + CGRA ReLU | `CGRAMinimalGemminiRocketConfig` | `tests/cgra-gemmini/gemmini-gemm-cgra-relu.c` | Gemmini uses `custom3`; CGRA uses `custom0`; data moves through DRAM and CPU-mediated CGRA stores. |
 
+## Set up the environment
+See [Setup documentation](./docs/Setup.md) for more details.
+
 ## Run Kernels
 
 Generate the canonical CGRA RTL from the layered arch/soc configs, generate C
