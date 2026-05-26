@@ -2,7 +2,7 @@
 
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_gemv_api.h"
+#include "generated/cgra_gemv_fast_api.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -16,12 +16,11 @@ enum {
 
 static void preload_gemv_data(void) {
   for (uint8_t addr = 0; addr < 16; ++addr) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)(addr + 1), 1, addr);
+    gemv_store_fast(addr, (uint32_t)(addr + 1));
   }
 
   for (uint8_t j = 0; j < GEMV_N; ++j) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)(j + 1), 1,
-               GEMV_BASE_X + j);
+    gemv_store_fast(GEMV_BASE_X + j, (uint32_t)(j + 1));
   }
 }
 
@@ -45,7 +44,7 @@ static int verify_gemv_data(void) {
    */
   for (uint8_t row = 1; row < GEMV_N; ++row) {
     uint8_t addr = GEMV_BASE_Y + row;
-    uint32_t actual = read_mem(addr);
+    uint32_t actual = gemv_read_mem_fast(addr);
     uint32_t expected = gemv_expected(row);
     if (actual != expected) {
       printf("Mismatch y[%u] addr=%u actual=0x%08x expected=0x%08x\n",
@@ -72,7 +71,7 @@ int main(void) {
   preload_gemv_data();
 
   printf("Configuring and launching GEMV...\n");
-  configure_gemv();
+  configure_gemv_fast();
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);

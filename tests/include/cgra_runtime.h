@@ -20,6 +20,10 @@ typedef struct {
   uint64_t top;
 } cgra_packet_t;
 
+#if CGRA_INTRA_PKT_NBITS > 256
+#error "cgra_send_packet_fast supports up to four 64-bit chunks"
+#endif
+
 typedef struct {
   uint8_t src_cgra_id;
   uint8_t dst_cgra_id;
@@ -210,6 +214,22 @@ static inline void cgra_send_packet(cgra_packet_t pkt) {
 static inline void cgra_send_packets(const cgra_packet_t *pkts, size_t count) {
   for (size_t i = 0; i < count; ++i) {
     cgra_send_packet(pkts[i]);
+  }
+}
+
+static inline void cgra_send_packet_fast(cgra_packet_t pkt) {
+  CGRA_RAW_PKT_LO(pkt.lo);
+  CGRA_RAW_PKT_MID(pkt.mid);
+  CGRA_RAW_PKT_HI(pkt.hi);
+#if CGRA_INTRA_PKT_NBITS > 192
+  CGRA_RAW_PKT_TOP(pkt.top);
+#endif
+}
+
+static inline void cgra_send_packets_fast(const cgra_packet_t *pkts,
+                                          size_t count) {
+  for (size_t i = 0; i < count; ++i) {
+    cgra_send_packet_fast(pkts[i]);
   }
 }
 

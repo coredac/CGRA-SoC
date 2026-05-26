@@ -2,7 +2,7 @@
 
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_histogram_api.h"
+#include "generated/cgra_histogram_fast_api.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -26,18 +26,18 @@ static uint32_t histogram_input(uint8_t addr) {
 
 static void preload_histogram_data(void) {
   for (uint8_t addr = 0; addr < HISTOGRAM_INPUT_COUNT; ++addr) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST, histogram_input(addr), 1, addr);
+    histogram_store_fast(addr, histogram_input(addr));
   }
 
   for (uint8_t bin = 0; bin < HISTOGRAM_BIN_COUNT; ++bin) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST, 0, 1, HISTOGRAM_BIN_BASE + bin);
+    histogram_store_fast(HISTOGRAM_BIN_BASE + bin, 0);
   }
 }
 
 static void fence_histogram_preload(void) {
   for (uint8_t bin = 0; bin < HISTOGRAM_BIN_COUNT; ++bin) {
     uint8_t addr = HISTOGRAM_BIN_BASE + bin;
-    uint32_t actual = read_mem(addr);
+    uint32_t actual = histogram_read_mem_fast(addr);
     printf("Preload fence addr=%u actual=0x%08x\n", addr, actual);
   }
 }
@@ -47,7 +47,7 @@ static int verify_histogram_data(void) {
 
   for (uint8_t bin = 0; bin < HISTOGRAM_BIN_COUNT; ++bin) {
     uint8_t addr = HISTOGRAM_BIN_BASE + bin;
-    uint32_t actual = read_mem(addr);
+    uint32_t actual = histogram_read_mem_fast(addr);
     uint32_t expected = 5;
     printf("Readback bin=%u addr=%u actual=0x%08x expected=0x%08x\n",
            bin, addr, actual, expected);
@@ -87,7 +87,7 @@ int main(void) {
   fence_histogram_preload();
 
   printf("Configuring and launching histogram...\n");
-  configure_histogram();
+  configure_histogram_fast();
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);

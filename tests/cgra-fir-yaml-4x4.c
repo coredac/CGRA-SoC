@@ -2,7 +2,7 @@
 
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_fir4x4_api.h"
+#include "generated/cgra_fir4x4_fast_api.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -15,8 +15,7 @@ enum {
 
 static void preload_fir4x4_data(void) {
   for (uint8_t addr = 0; addr < FIR4X4_INPUT_COUNT; ++addr) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST,
-               (uint32_t)(FIR4X4_INPUT_BASE_VALUE + addr), 1, addr);
+    fir4x4_store_fast(addr, (uint32_t)(FIR4X4_INPUT_BASE_VALUE + addr));
   }
 }
 
@@ -36,7 +35,7 @@ int main(void) {
   preload_fir4x4_data();
 
   printf("Configuring and launching FIR4x4...\n");
-  configure_fir4x4();
+  configure_fir4x4_fast();
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);

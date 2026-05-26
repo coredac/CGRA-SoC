@@ -2,7 +2,7 @@
 
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_axpy_api.h"
+#include "generated/cgra_axpy_fast_api.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -15,8 +15,7 @@ enum {
 
 static void preload_axpy_data(void) {
   for (uint8_t addr = 0; addr < AXPY_INPUT_COUNT; ++addr) {
-    send_basic(0, CGRA_CMD_STORE_REQUEST,
-               (uint32_t)(AXPY_INPUT_BASE_VALUE + addr), 1, addr);
+    axpy_store_fast(addr, (uint32_t)(AXPY_INPUT_BASE_VALUE + addr));
   }
 }
 
@@ -33,9 +32,9 @@ static int verify_axpy_data(void) {
    * back memory. A direct CgraRTL data_mem inspection with the same packets
    * leaves addr 0 at zero while addr 1..15 match the expected 4*x results.
    * Keep this CPU+CGRA test aligned with what the current kernel can prove.
-   */
+  */
   for (uint8_t addr = 1; addr < AXPY_INPUT_COUNT; ++addr) {
-    uint32_t actual = read_mem(addr);
+    uint32_t actual = axpy_read_mem_fast(addr);
     uint32_t expected = axpy_expected(addr);
     if (actual != expected) {
       printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n",
@@ -63,7 +62,7 @@ int main(void) {
   preload_axpy_data();
 
   printf("Configuring and launching AXPY...\n");
-  configure_axpy();
+  configure_axpy_fast();
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);

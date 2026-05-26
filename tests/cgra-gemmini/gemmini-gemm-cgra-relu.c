@@ -1,6 +1,6 @@
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_relu4x4_api.h"
+#include "generated/cgra_relu4x4_fast_api.h"
 #include "gemmini.h"
 
 #include <stdint.h>
@@ -31,7 +31,6 @@ static int run_gemmini_gemm(void) {
   const uint32_t C_addr_acc = (uint32_t)1 << (ADDR_LEN - 1);
 
   gemmini_flush(0);
-
   gemmini_config_ld(DIM * sizeof(elem_t));
   gemmini_config_ex(WEIGHT_STATIONARY, NO_ACTIVATION, 0);
   gemmini_config_st(DIM * sizeof(elem_t));
@@ -43,7 +42,6 @@ static int run_gemmini_gemm(void) {
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
 
   gemmini_mvout(C, C_addr_acc);
-
   gemmini_fence();
 
   int failures = 0;
@@ -61,7 +59,6 @@ static int run_gemmini_gemm(void) {
     return 1;
   }
 
-  printf("Gemmini GEMM: PASS\n");
   return 0;
 }
 
@@ -74,7 +71,7 @@ static int32_t cgra_input_value(int index) {
 static void preload_cgra_relu_inputs(void) {
   for (uint8_t addr = 0; addr < CGRA_RELU_INPUT_COUNT; ++addr) {
     int32_t v32 = cgra_input_value(addr);
-    send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)v32, 1, addr);
+    relu4x4_store_fast(addr, (uint32_t)v32);
   }
 }
 
@@ -84,7 +81,7 @@ static int verify_cgra_relu_outputs(void) {
   for (uint8_t addr = 0; addr < CGRA_RELU_INPUT_COUNT; ++addr) {
     int32_t value = cgra_input_value(addr);
     uint32_t expected = value > 0 ? (uint32_t)value : 0;
-    uint32_t actual = (uint32_t)read_mem(addr);
+    uint32_t actual = (uint32_t)relu4x4_read_mem_fast(addr);
     if (actual != expected) {
       printf("CGRA ReLU mismatch addr=%u actual=0x%08x expected=0x%08x input=%d\n",
              addr, actual, expected, (int)value);
@@ -101,8 +98,7 @@ static int run_cgra_relu(void) {
   preload_cgra_relu_inputs();
 
   CGRA_SET_EXPECTED_COMPLETES(CGRA_RELU_EXPECTED_COMPLETES);
-
-  configure_relu4x4();
+  configure_relu4x4_fast();
 
   CGRA_WAIT(wait_result);
 
@@ -113,7 +109,6 @@ static int run_cgra_relu(void) {
     return 1;
   }
 
-  printf("CGRA ReLU: PASS\n");
   return 0;
 }
 

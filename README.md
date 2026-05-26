@@ -15,8 +15,8 @@ baremetal C tests.
 - `scripts/generate_multi_cgra.py`: generates `MeshMultiCgraTemplateRTL_multi`
   RTL from `multi_cgra_arch.yaml` and `multi_cgra_soc.yaml`, then syncs it into
   the same Chipyard BlackBox shape.
-- `scripts/generate_cgra_c_api.py`: generates semantic C configuration APIs in
-  `tests/generated/cgra_<kernel>_api.h`.
+- `scripts/cgra_fast_api.py`: generates fast-only local single-CGRA headers in
+  `tests/generated/cgra_<kernel>_fast_api.h` from arch/soc and kernel YAMLs.
 - `tests/`: baremetal CPU+CGRA tests.
 - `tests/cgra-gemmini/`: Gemmini + single-CGRA combined demo.
 - `tests/include/`: CGRA protocol constants, packet layout, and runtime helpers.
@@ -24,8 +24,8 @@ baremetal C tests.
 - `chipyard/`: SoC integration and Verilator simulator.
 - `run-chipyard-cgra-gemmini-demo.sh`: builds/runs the Gemmini + CGRA demo.
 
-The old `cgra-fir-2x2` flow and mixed per-kernel hardware YAML flow are
-deprecated and are not the main validation path.
+The old `cgra-fir-2x2` manual flow and mixed per-kernel hardware YAML flow are
+deprecated and are not the validation path.
 
 ## Configuration Schema
 
@@ -64,8 +64,8 @@ execution:
 
 Kernel YAMLs must not contain `cgra`, `interface`, `memory`, `hardware`,
 `fu_list`, or `dfg_yaml`. `compiled_ii` and `loop_times` stay in the kernel YAML
-because the generated C API sends them through `CGRA_CMD_CONFIG_COUNT_PER_ITER`
-and `CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`.
+because the generated fast packets encode `CGRA_CMD_CONFIG_COUNT_PER_ITER` and
+`CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`.
 
 ## Supported Kernels
 
@@ -77,8 +77,9 @@ and `CGRA_CMD_CONFIG_TOTAL_CTRL_COUNT`.
 | Histogram | `configs/kernels/kernel_histogram_4x4.yaml` | `cgra-histogram-4x4` | Checks bins 1..3; skips known bin 0 issue. |
 | AXPY | `configs/kernels/kernel_axpy_4x4.yaml` | `cgra-axpy-4x4` | Checks addr 1..15; skips known addr 0 issue. |
 
-GEMM and SAD may have local configs/tests, but they are not part of the current
-supported CPU+CGRA set unless explicitly promoted.
+All supported single-CGRA tests use generated fast-only headers. GEMM and SAD
+may have local configs/tests or legacy generated files, but they are unsupported
+and skipped by the fast API generator.
 
 The supported combined accelerator demo is:
 
@@ -91,24 +92,25 @@ See [Setup documentation](./docs/Setup.md) for more details.
 
 ## Run Kernels
 
-Generate the canonical CGRA RTL from the layered arch/soc configs, generate C
-APIs for the kernels being tested, then rebuild the Chipyard simulator:
+Generate the canonical CGRA RTL from the layered arch/soc configs, generate
+fast-only C APIs for the kernels being tested, then rebuild the Chipyard
+simulator:
 
 ```bash
 python scripts/generate_single_cgra.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml
-python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
+python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild <c-test-name>
 ```
 
 Examples:
 
 ```bash
-python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_fir4x4_4x4.yaml --output-dir tests/generated
+python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_fir4x4_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild cgra-fir-yaml-4x4
 ```
 
 ```bash
-python scripts/generate_cgra_c_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_relu4x4_4x4.yaml --output-dir tests/generated
+python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_relu4x4_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild cgra-relu4x4
 ```
 
@@ -118,6 +120,39 @@ that same RTL without `--rebuild`:
 ```bash
 ./run-chipyard-cgra-test.sh cgra-relu4x4
 ```
+
+## Generated C APIs
+
+`scripts/cgra_fast_api.py` is the single-CGRA C API generator. It loads the
+layered arch/soc/kernel YAMLs, invokes VectorCGRA `ScriptFactory`, orders the
+packets, and emits fast-only headers named
+`tests/generated/cgra_<kernel>_fast_api.h`.
+
+The fast API encodes deterministic control/config/launch packets into
+`cgra_packet_t` constant arrays at generation time and sends them with
+`cgra_send_packets_fast()`, avoiding runtime `build_ctrl()` /
+`cgra_build_intra_pkt_to()` / per-bit packet construction for supported
+single-CGRA tests.
+
+The generated APIs are local single-CGRA only and are precomputed for
+`cgra_target_local()`. They do not generate a target-aware fast variant.
+Target-aware and hand-written multi-CGRA tests continue to use
+`tests/include/cgra_runtime.h`.
+
+Generated fast API functions follow this split:
+
+```c
+load_<kernel>_config_fast();  // non-launch packets only
+launch_<kernel>_fast();       // launch packets only
+configure_<kernel>_fast();    // config plus launch
+<kernel>_store_fast(addr, data);
+<kernel>_read_mem_fast(addr);
+<kernel>_basic_fast_templates_match_runtime();
+```
+
+The old generated semantic functions `configure_<kernel>()` and
+`configure_<kernel>_to()` are no longer emitted for supported single-CGRA
+kernels. ReLU fast timing lives in the canonical `tests/cgra-relu4x4.c`.
 
 ## Gemmini + CGRA Demo
 
@@ -133,15 +168,15 @@ normalizations, depthwise convolutions, loop conv, and scale units. It uses
 weight-stationary dataflow, 64 KiB scratchpad, 32 KiB accumulator, 64-byte DMA
 max request size, and a 128-bit DMA/system bus width.
 
-The combined demo uses single-CGRA ReLU, not the current multi-CGRA generated
-top. Regenerate the matching single-CGRA RTL/API before rebuilding:
+The combined demo uses single-CGRA ReLU fast APIs, not the current multi-CGRA
+generated top. Regenerate the matching single-CGRA RTL/API before rebuilding:
 
 ```bash
 .venv/bin/python scripts/generate_single_cgra.py \
   --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
   --arch-yaml configs/arch/arch.yaml \
   --soc-yaml configs/soc/cgra_soc.yaml
-.venv/bin/python scripts/generate_cgra_c_api.py \
+.venv/bin/python scripts/cgra_fast_api.py \
   --arch-yaml configs/arch/arch.yaml \
   --soc-yaml configs/soc/cgra_soc.yaml \
   configs/kernels/kernel_relu4x4_4x4.yaml \
@@ -157,8 +192,8 @@ The demo data path is intentionally memory-mediated:
 
 ```text
 DRAM A/B -> Gemmini scratchpad/accumulator -> DRAM C
-  -> CPU -> CGRA STORE_REQUEST -> CGRA data memory
-  -> CGRA ReLU -> CGRA data memory -> CPU read_mem
+  -> CPU -> CGRA fast STORE_REQUEST -> CGRA data memory
+  -> CGRA ReLU -> CGRA data memory -> CPU fast readback
 ```
 
 There is no direct Gemmini-buffer-to-CGRA-buffer connection. The C code uses
@@ -184,20 +219,16 @@ the single raw `IntraCgraPkt` CPU interface. Inter-CGRA NoC, CGRA ID, and memory
 address bounds are handled inside the multi top, so the generated wrapper
 absorbs the corresponding external Chipyard ports.
 
-The C runtime has target-aware helpers. Existing `configure_<kernel>()` calls
-target CGRA 0. To send the same generated tile configuration to another CGRA,
-call the target-aware API, for example:
+The C runtime still has semantic and target-aware helpers such as
+`send_basic_to`, `send_config_to`, `send_prologue_to`, `build_ctrl`, and
+`read_mem`. These helpers are kept for hand-written multi-CGRA tests; they are
+not a generated per-kernel semantic API.
 
-```c
-configure_fir4x4_to(cgra_target_id(2));
-```
-
-`VectorCGRA/validation/script_generator.py` is unchanged. The current automatic
-path from kernel YAML through `scripts/generate_cgra_c_api.py` is intended for
-single-CGRA use, or for sending the same tile configuration to one
-`dst_cgra_id`. Automatic control-signal generation for kernels partitioned
-across multiple CGRAs is still TODO. Hand-written multi-CGRA control-signal
-tests are in `VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py`.
+`VectorCGRA/validation/script_generator.py` is unchanged. The automatic
+`scripts/cgra_fast_api.py` path is local single-CGRA only. Automatic
+control-signal generation for kernels partitioned across multiple CGRAs is
+still TODO. Hand-written multi-CGRA control-signal tests are in
+`VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_test.py`.
 
 Current supported multi-CGRA CPU+CGRA tests:
 
@@ -248,13 +279,15 @@ Then return to the top level and run the CPU+CGRA flow.
 ## Runtime Notes
 
 The C tests use `tests/include/cgra_protocol.h` for protocol constants,
-`tests/include/cgra_runtime.h` for packet send/readback helpers, and the
-generated `tests/include/cgra_layout.h` for packet field offsets.
+`tests/include/cgra_runtime.h` for shared packet helpers, generated
+`tests/include/cgra_layout.h` for packet field offsets, and generated
+`tests/generated/cgra_<kernel>_fast_api.h` headers for supported single-CGRA
+kernels.
 
-`read_mem(addr)` sends a CGRA load request and reads back CGRA-side data memory
-through the RoCC wrapper. This is used by ReLU, GEMV, Histogram, and AXPY
-result checks. ReLU currently verifies every address `0..31` and expects
-`max(addr - 16, 0)`.
+`<kernel>_read_mem_fast(addr)` sends a fast CGRA load request and reads back
+CGRA-side data memory through the RoCC wrapper. This is used by ReLU, GEMV,
+Histogram, and AXPY result checks. ReLU currently verifies every address
+`0..31` and expects `max(addr - 16, 0)`.
 
 Known first-output issues are preserved in the C tests with comments: GEMV
 leaves logical row 0 (`addr20`) incorrect, Histogram leaves logical bin 0

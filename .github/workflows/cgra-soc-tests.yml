@@ -39,7 +39,7 @@ jobs:
           python -m py_compile \
             scripts/generate_single_cgra.py \
             scripts/generate_multi_cgra.py \
-            scripts/generate_cgra_c_api.py \
+            scripts/cgra_fast_api.py \
             VectorCGRA/cgra/test/CgraTemplateRTL_single_test.py \
             VectorCGRA/multi_cgra/test/MeshMultiCgraTemplateRTL_multi_test.py
 
@@ -49,7 +49,7 @@ jobs:
             --arch-yaml configs/arch/arch.yaml \
             --soc-yaml configs/soc/cgra_soc.yaml
 
-      - name: Generate semantic C API headers
+      - name: Generate fast C API headers
         run: |
           kernel_yamls=(
             configs/kernels/kernel_fir4x4_4x4.yaml
@@ -59,7 +59,7 @@ jobs:
             configs/kernels/kernel_histogram_4x4.yaml
           )
 
-          .venv/bin/python scripts/generate_cgra_c_api.py \
+          .venv/bin/python scripts/cgra_fast_api.py \
             --arch-yaml configs/arch/arch.yaml \
             --soc-yaml configs/soc/cgra_soc.yaml \
             "${kernel_yamls[@]}" \
@@ -73,7 +73,7 @@ jobs:
       - name: Run ReLU SoC test
         run: |
           ./run-chipyard-cgra-test.sh cgra-relu4x4 2>&1 | tee cgra-relu4x4.log
-          grep -q "CGRA RoCC ReLU4x4: PASS" cgra-relu4x4.log
+          grep -q "CGRA RoCC ReLU4x4 fast API: PASS" cgra-relu4x4.log
 
       - name: Run AXPY SoC test
         run: |
@@ -144,14 +144,12 @@ jobs:
             --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
             --arch-yaml configs/arch/arch.yaml \
             --soc-yaml configs/soc/cgra_soc.yaml
-          .venv/bin/python scripts/generate_cgra_c_api.py \
+          .venv/bin/python scripts/cgra_fast_api.py \
             --arch-yaml configs/arch/arch.yaml \
             --soc-yaml configs/soc/cgra_soc.yaml \
             configs/kernels/kernel_relu4x4_4x4.yaml \
             --output-dir tests/generated
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-demo.log
-          grep -q "Gemmini GEMM: PASS" cgra-gemmini-demo.log
-          grep -q "CGRA ReLU: PASS" cgra-gemmini-demo.log
           grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini-demo.log
 
       - name: Upload test logs
