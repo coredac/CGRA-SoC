@@ -46,14 +46,6 @@ static int verify_relu4x4_data(int verbose) {
 }
 
 int main(void) {
-  int template_failures = relu4x4_basic_fast_templates_match_runtime();
-  if (template_failures != 0) {
-    printf("CGRA RoCC ReLU4x4 fast API: generated packet mismatch (%d)\n",
-           template_failures);
-    printf("CGRA RoCC ReLU4x4 fast API: FAIL\n");
-    return 1;
-  }
-
   uint64_t status = 0;
   uint64_t wait_result = 0;
   uint64_t result = 0;

@@ -176,7 +176,6 @@ launch_<kernel>_fast();
 configure_<kernel>_fast();
 <kernel>_store_fast(addr, data);
 <kernel>_read_mem_fast(addr);
-<kernel>_basic_fast_templates_match_runtime();
 ```
 
 `configure_<kernel>_fast()` is just config plus launch. Fast APIs are local
