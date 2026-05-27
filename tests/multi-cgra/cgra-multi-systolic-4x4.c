@@ -3,7 +3,7 @@
 
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "cgra_multi_systolic_common.h"
+#include "cgra_multi_systolic_4x4_packets.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -20,148 +20,11 @@ enum {
   SYSTOLIC_EXPECTED_ADDR_37 = 0x12c,
 };
 
-static void preload_data(void) {
-  cgra_multi_systolic_preload(128, 1);
-  cgra_multi_systolic_preload(129, 2);
-  cgra_multi_systolic_preload(130, 3);
-  cgra_multi_systolic_preload(131, 4);
-  cgra_multi_systolic_preload(132, 5);
-  cgra_multi_systolic_preload(133, 6);
-  cgra_multi_systolic_preload(0, 7);
-  cgra_multi_systolic_preload(1, 8);
-  cgra_multi_systolic_preload(2, 9);
-}
-
-static void configure_and_launch_systolic(void) {
-  const cgra_target_t target_cgra4 = {0, 4, 0, 0, 0, 1};
-  const cgra_target_t target_cgra0 = {0, 0, 0, 0, 0, 0};
-  const cgra_target_t target_cgra5 = {0, 5, 0, 0, 1, 1};
-  const cgra_target_t target_cgra1 = {0, 1, 0, 0, 1, 0};
-
-  cgra_multi_systolic_send_const(target_cgra4, 2, 128);
-  cgra_multi_systolic_send_const(target_cgra4, 2, 129);
-  cgra_multi_systolic_send_const(target_cgra4, 2, 130);
-  cgra_multi_systolic_send_count_per_iter(target_cgra4, 2);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra4, 2);
-  cgra_multi_systolic_send_config(target_cgra4, 2,
-                                  cgra_multi_systolic_ctrl_ld_const_east());
-  cgra_multi_systolic_send_launch(target_cgra4, 2);
-
-  cgra_multi_systolic_send_const(target_cgra4, 0, 131);
-  cgra_multi_systolic_send_const(target_cgra4, 0, 132);
-  cgra_multi_systolic_send_const(target_cgra4, 0, 133);
-  cgra_multi_systolic_send_count_per_iter(target_cgra4, 0);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra4, 0);
-  cgra_multi_systolic_send_config(target_cgra4, 0,
-                                  cgra_multi_systolic_ctrl_ld_const_east());
-  cgra_multi_systolic_send_launch(target_cgra4, 0);
-
-  cgra_multi_systolic_send_const(target_cgra0, 2, 0);
-  cgra_multi_systolic_send_const(target_cgra0, 2, 1);
-  cgra_multi_systolic_send_const(target_cgra0, 2, 2);
-  cgra_multi_systolic_send_count_per_iter(target_cgra0, 2);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra0, 2);
-  cgra_multi_systolic_send_config(target_cgra0, 2,
-                                  cgra_multi_systolic_ctrl_ld_const_east());
-  cgra_multi_systolic_send_launch(target_cgra0, 2);
-
-  cgra_multi_systolic_send_const(target_cgra4, 3, 2);
-  cgra_multi_systolic_send_count_per_iter(target_cgra4, 3);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra4, 3);
-  cgra_multi_systolic_send_config(
-      target_cgra4, 3,
-      cgra_multi_systolic_ctrl_mul_const_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra4, 3);
-
-  cgra_multi_systolic_send_const(target_cgra4, 1, 4);
-  cgra_multi_systolic_send_count_per_iter(target_cgra4, 1);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra4, 1);
-  cgra_multi_systolic_send_config(
-      target_cgra4, 1,
-      cgra_multi_systolic_ctrl_mul_const_add_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra4, 1);
-
-  cgra_multi_systolic_send_const(target_cgra0, 3, 6);
-  cgra_multi_systolic_send_count_per_iter(target_cgra0, 3);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra0, 3);
-  cgra_multi_systolic_send_config(
-      target_cgra0, 3,
-      cgra_multi_systolic_ctrl_mul_const_add_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra0, 3);
-
-  cgra_multi_systolic_send_const(target_cgra0, 1, 3);
-  cgra_multi_systolic_send_const(target_cgra0, 1, 4);
-  cgra_multi_systolic_send_const(target_cgra0, 1, 5);
-  cgra_multi_systolic_send_count_per_iter(target_cgra0, 1);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra0, 1);
-  cgra_multi_systolic_send_config(target_cgra0, 1,
-                                  cgra_multi_systolic_ctrl_store_from_north());
-  cgra_multi_systolic_send_launch(target_cgra0, 1);
-
-  cgra_multi_systolic_send_const(target_cgra5, 2, 8);
-  cgra_multi_systolic_send_count_per_iter(target_cgra5, 2);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra5, 2);
-  cgra_multi_systolic_send_config(
-      target_cgra5, 2,
-      cgra_multi_systolic_ctrl_mul_const_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra5, 2);
-
-  cgra_multi_systolic_send_const(target_cgra5, 0, 10);
-  cgra_multi_systolic_send_count_per_iter(target_cgra5, 0);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra5, 0);
-  cgra_multi_systolic_send_config(
-      target_cgra5, 0,
-      cgra_multi_systolic_ctrl_mul_const_add_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra5, 0);
-
-  cgra_multi_systolic_send_const(target_cgra1, 2, 12);
-  cgra_multi_systolic_send_count_per_iter(target_cgra1, 2);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra1, 2);
-  cgra_multi_systolic_send_config(
-      target_cgra1, 2,
-      cgra_multi_systolic_ctrl_mul_const_add_forward_west_east_south());
-  cgra_multi_systolic_send_launch(target_cgra1, 2);
-
-  cgra_multi_systolic_send_const(target_cgra1, 0, 32);
-  cgra_multi_systolic_send_const(target_cgra1, 0, 33);
-  cgra_multi_systolic_send_const(target_cgra1, 0, 34);
-  cgra_multi_systolic_send_count_per_iter(target_cgra1, 0);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra1, 0);
-  cgra_multi_systolic_send_config(target_cgra1, 0,
-                                  cgra_multi_systolic_ctrl_store_from_north());
-  cgra_multi_systolic_send_launch(target_cgra1, 0);
-
-  cgra_multi_systolic_send_const(target_cgra5, 3, 14);
-  cgra_multi_systolic_send_count_per_iter(target_cgra5, 3);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra5, 3);
-  cgra_multi_systolic_send_config(
-      target_cgra5, 3, cgra_multi_systolic_ctrl_mul_const_from_west_south());
-  cgra_multi_systolic_send_launch(target_cgra5, 3);
-
-  cgra_multi_systolic_send_const(target_cgra5, 1, 16);
-  cgra_multi_systolic_send_count_per_iter(target_cgra5, 1);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra5, 1);
-  cgra_multi_systolic_send_config(
-      target_cgra5, 1,
-      cgra_multi_systolic_ctrl_mul_const_add_from_west_north_south());
-  cgra_multi_systolic_send_launch(target_cgra5, 1);
-
-  cgra_multi_systolic_send_const(target_cgra1, 3, 18);
-  cgra_multi_systolic_send_count_per_iter(target_cgra1, 3);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra1, 3);
-  cgra_multi_systolic_send_config(
-      target_cgra1, 3,
-      cgra_multi_systolic_ctrl_mul_const_add_from_west_north_south());
-  cgra_multi_systolic_send_launch(target_cgra1, 3);
-
-  cgra_multi_systolic_send_const(target_cgra1, 1, 35);
-  cgra_multi_systolic_send_const(target_cgra1, 1, 36);
-  cgra_multi_systolic_send_const(target_cgra1, 1, 37);
-  cgra_multi_systolic_send_count_per_iter(target_cgra1, 1);
-  cgra_multi_systolic_send_total_ctrl_count(target_cgra1, 1);
-  cgra_multi_systolic_send_config(target_cgra1, 1,
-                                  cgra_multi_systolic_ctrl_store_from_north());
-  cgra_multi_systolic_send_launch(target_cgra1, 1);
+static uint64_t load_result_from_packet(cgra_packet_t pkt) {
+  uint64_t result = 0;
+  cgra_send_packet_fast(pkt);
+  CGRA_LOAD_RESULT(result);
+  return result;
 }
 
 int main(void) {
@@ -175,10 +38,14 @@ int main(void) {
   CGRA_SET_EXPECTED_COMPLETES(SYSTOLIC_EXPECTED_COMPLETES);
 
   printf("Preloading multi-CGRA data memory...\n");
-  preload_data();
+  cgra_send_packets_fast(CGRA_MULTI_SYSTOLIC_4X4_PRELOAD_PACKETS,
+                         CGRA_MULTI_SYSTOLIC_4X4_PRELOAD_PACKET_COUNT);
 
   printf("Configuring and launching systolic CGRAs...\n");
-  configure_and_launch_systolic();
+  cgra_send_packets_fast(CGRA_MULTI_SYSTOLIC_4X4_CONFIG_PACKETS,
+                         CGRA_MULTI_SYSTOLIC_4X4_CONFIG_PACKET_COUNT);
+  cgra_send_packets_fast(CGRA_MULTI_SYSTOLIC_4X4_LAUNCH_PACKETS,
+                         CGRA_MULTI_SYSTOLIC_4X4_LAUNCH_PACKET_COUNT);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);
@@ -186,25 +53,34 @@ int main(void) {
   CGRA_STATUS(status);
   printf("Final status: 0x%lx\n", status);
 
-  uint32_t v3 = read_mem(3);
-  uint32_t v4 = read_mem(4);
-  uint32_t v5 = read_mem(5);
-  uint32_t v32 = read_mem(32);
-  uint32_t v33 = read_mem(33);
-  uint32_t v34 = read_mem(34);
-  uint32_t v35 = read_mem(35);
-  uint32_t v36 = read_mem(36);
-  uint32_t v37 = read_mem(37);
+  uint64_t v3 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[0]);
+  uint64_t v4 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[1]);
+  uint64_t v5 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[2]);
+  uint64_t v32 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[3]);
+  uint64_t v33 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[4]);
+  uint64_t v34 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[5]);
+  uint64_t v35 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[6]);
+  uint64_t v36 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[7]);
+  uint64_t v37 =
+      load_result_from_packet(CGRA_MULTI_SYSTOLIC_4X4_READBACK_PACKETS[8]);
 
-  printf("read_mem(3): 0x%x\n", v3);
-  printf("read_mem(4): 0x%x\n", v4);
-  printf("read_mem(5): 0x%x\n", v5);
-  printf("read_mem(32): 0x%x\n", v32);
-  printf("read_mem(33): 0x%x\n", v33);
-  printf("read_mem(34): 0x%x\n", v34);
-  printf("read_mem(35): 0x%x\n", v35);
-  printf("read_mem(36): 0x%x\n", v36);
-  printf("read_mem(37): 0x%x\n", v37);
+  printf("load addr 3: 0x%lx\n", v3);
+  printf("load addr 4: 0x%lx\n", v4);
+  printf("load addr 5: 0x%lx\n", v5);
+  printf("load addr 32: 0x%lx\n", v32);
+  printf("load addr 33: 0x%lx\n", v33);
+  printf("load addr 34: 0x%lx\n", v34);
+  printf("load addr 35: 0x%lx\n", v35);
+  printf("load addr 36: 0x%lx\n", v36);
+  printf("load addr 37: 0x%lx\n", v37);
 
   uint64_t complete = status & 0x1ULL;
   uint64_t complete_count = (status >> 1) & 0xFFFFULL;

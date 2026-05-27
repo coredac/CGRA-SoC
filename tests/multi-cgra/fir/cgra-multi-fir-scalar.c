@@ -1,9 +1,16 @@
 // CGRA RoCC multi-CGRA FIR scalar test, handwritten from
 // VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py::test_fir_scalar.
 
-#include "cgra_multi_fir_common.h"
+#include "cgra_protocol.h"
+#include "cgra_runtime.h"
+#include "cgra_multi_fir_scalar_packets.h"
 #include <stdint.h>
 #include <stdio.h>
+
+enum {
+  CGRA_MULTI_FIR_EXPECTED_COMPLETES = 1,
+  CGRA_MULTI_FIR_EXPECTED_RESULT = 2215,
+};
 
 int main(void) {
   uint64_t status = 0;
@@ -17,12 +24,16 @@ int main(void) {
   CGRA_SET_EXPECTED_COMPLETES(CGRA_MULTI_FIR_EXPECTED_COMPLETES);
 
   printf("Preloading FIR scalar data memory...\n");
-  cgra_multi_fir_preload_scalar();
+  cgra_send_packets_fast(CGRA_MULTI_FIR_SCALAR_PRELOAD_PACKETS,
+                         CGRA_MULTI_FIR_SCALAR_PRELOAD_PACKET_COUNT);
 
   printf("Configuring and launching FIR scalar tiles...\n");
-  cgra_multi_fir_configure_4x4(OPT_ADD, OPT_MUL,
-                               CGRA_MULTI_FIR_SCALAR_LOOP_UPPER_BOUND,
-                               CGRA_MULTI_FIR_SCALAR_TOTAL_CTRL_STEPS);
+  cgra_send_packets_fast(CGRA_MULTI_FIR_SCALAR_CONFIG_PACKETS,
+                         CGRA_MULTI_FIR_SCALAR_CONFIG_PACKET_COUNT);
+  cgra_send_packets_fast(CGRA_MULTI_FIR_SCALAR_PROLOGUE_PACKETS,
+                         CGRA_MULTI_FIR_SCALAR_PROLOGUE_PACKET_COUNT);
+  cgra_send_packets_fast(CGRA_MULTI_FIR_SCALAR_LAUNCH_PACKETS,
+                         CGRA_MULTI_FIR_SCALAR_LAUNCH_PACKET_COUNT);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);

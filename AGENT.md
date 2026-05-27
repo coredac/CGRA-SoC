@@ -187,17 +187,24 @@ The fast runtime helpers use the `_fast` suffix, for example
 189-bit intra-CGRA packet layout, the fast helper sends LO/MID/HI and skips
 TOP; the old `cgra_send_packet()` still sends all four chunks for compatibility.
 
+`tests/include/cgra_runtime.h` is now the minimal direct packet send API. It
+should contain only `cgra_packet_t`, `cgra_send_packet()`,
+`cgra_send_packets()`, `cgra_send_packet_fast()`, `cgra_send_packets_fast()`,
+the required includes, and the packet-width guard. Do not re-add semantic
+packet builders to this header.
+
 The old per-kernel semantic generator and generated functions
 `configure_<kernel>()` / `configure_<kernel>_to()` are removed for supported
-single-CGRA kernels. Keep the semantic runtime helpers in
-`tests/include/cgra_runtime.h` for hand-written and multi-CGRA tests.
+single-CGRA kernels. Supported single-CGRA fast tests should include only
+`tests/include/cgra_runtime.h` and generated fast headers.
 
 ## Multi-CGRA Flow
 
 Single and multi flows share the CPU/RoCC raw packet interface. The CPU sends
 raw `IntraCgraPkt` packets in both modes. Generated fast APIs are local
-single-CGRA only. In multi-CGRA mode, software selects the target CGRA by
-setting packet target fields through the C runtime helpers.
+single-CGRA only. Supported hand-written multi-CGRA tests now use preencoded
+direct packet headers and send `cgra_packet_t` constants; target CGRA fields
+are already encoded in those constants.
 
 Important RTL contract:
 
@@ -227,11 +234,39 @@ same external shape for both single and multi tops. If an internal top does not
 expose a superset port, the wrapper leaves the input unused or ties the external
 output low.
 
-The C runtime keeps semantic and target-aware helpers such as `send_basic`,
-`send_basic_to`, `send_config_to`, `send_prologue_to`, `build_ctrl`, and
-`read_mem(addr)`. These are shared runtime helpers for hand-written and
-multi-CGRA tests, not generated per-kernel semantic APIs. `read_mem(addr)`
-remains target-local; remote memory routing is selected by `data_addr` in RTL.
+Do not put supported multi-CGRA test hot paths back on the semantic runtime.
+The direct multi test `.c` files should include `tests/include/cgra_runtime.h`
+and their matching packet header. They should call only
+`cgra_send_packet_fast()` / `cgra_send_packets_fast()` for CGRA packets. For
+readback, send the preencoded `CGRA_CMD_LOAD_REQUEST` packet and then call
+`CGRA_LOAD_RESULT(result)`.
+
+Forbidden hot-path helper names in supported multi-CGRA direct tests:
+
+```bash
+build_ctrl
+cgra_build_ctrl
+cgra_build_intra_pkt
+cgra_pkt_set_bits
+cgra_ctrl_set_bits
+send_basic
+send_basic_to
+send_config
+send_config_to
+send_prologue
+send_prologue_to
+read_mem
+cgra_read_mem
+```
+
+Use this check after editing multi-CGRA tests:
+
+```bash
+rg -n "build_ctrl|cgra_build_ctrl|cgra_build_intra_pkt|cgra_pkt_set_bits|cgra_ctrl_set_bits|send_basic|send_basic_to|send_config|send_config_to|send_prologue|send_prologue_to|read_mem|cgra_read_mem" tests/multi-cgra
+```
+
+This check should not report hits in supported direct multi-CGRA tests or their
+packet headers.
 
 `VectorCGRA/validation/script_generator.py` is unchanged. The current automatic
 `scripts/cgra_fast_api.py` path is intended for local single-CGRA fast headers.
@@ -263,10 +298,11 @@ Multi-CGRA FIR tests:
   - generate: `.venv/bin/python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_fir_2x2_4x4_vector.yaml --soc-yaml configs/soc/multi_cgra_fir_vector.yaml`
   - run: `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector`
 
-The multi-CGRA FIR C control packets are hand-written in
-`tests/multi-cgra/fir/`, translated from
-`VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`. Do not regenerate these
-control signals with a script. Always regenerate the intended FIR RTL/layout
+The multi-CGRA direct packet headers are hand-written/frozen packet sources,
+translated from `VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`. Do not
+overwrite them with an ad hoc script unless the task explicitly says to redo the
+migration. If adding a supported multi-CGRA test, add a preencoded packet header
+and send those packets directly. Always regenerate the intended FIR RTL/layout
 before rebuilding, especially before switching between scalar `data_nbits: 32`
 and vector `data_nbits: 64`. All three FIR tests currently PASS with expected
 result `0x8a7` and one completion.
@@ -348,16 +384,15 @@ Current funct encodings:
 - `9`: `RESULT`
 - `10`: `RAW_PKT_TOP`
 
-`tests/include/cgra_runtime.h` provides shared helpers such as `send_basic`,
-`send_basic_to`, `send_config_to`, `send_prologue_to`, `build_ctrl`, and
-`read_mem`. Generated supported single-CGRA tests use the per-kernel fast
-`*_store_fast` and `*_read_mem_fast` helpers. `CGRA.scala` captures the matching
-CPU-destined `CMD_LOAD_RESPONSE`.
+`tests/include/cgra_runtime.h` provides only direct raw-packet send helpers.
+Generated supported single-CGRA tests use the per-kernel fast `*_store_fast` and
+`*_read_mem_fast` helpers. Supported multi-CGRA tests use fixed packet arrays in
+their direct packet headers. `CGRA.scala` captures the matching CPU-destined
+`CMD_LOAD_RESPONSE`.
 
-The runtime supports 64-bit CGRA data payloads with `cgra_data_word_t`
-(`unsigned __int128`) for packet assembly. The RoCC raw packet interface still
-sends exactly four 64-bit chunks: LO, MID, HI, and TOP. Do not use a 64-bit
-generated layout for 32-bit scalar tests; regenerate the matching layout first.
+The RoCC raw packet interface still sends up to four 64-bit chunks: LO, MID,
+HI, and TOP. Do not use a 64-bit generated layout for 32-bit scalar tests;
+regenerate the matching layout first.
 
 ## Generated Files
 
@@ -397,8 +432,11 @@ instead.
 - If generated RTL or Chipyard `CGRA.scala` changes, use `--rebuild`.
 - If only C test code or generated fast C API headers change and the active RTL is
   unchanged, rerun without `--rebuild`.
-- Avoid fixed packet-width assumptions. Use `tests/include/cgra_layout.h` and
-  `tests/include/cgra_runtime.h`.
+- Avoid fixed packet-width assumptions in runtime code. Use
+  `tests/include/cgra_layout.h` and the minimal direct
+  `tests/include/cgra_runtime.h`. For supported multi-CGRA tests, keep packet
+  widths encoded in their matching direct packet headers and regenerate the
+  intended layout before running.
 - Remember that generated RTL/layout/Chipyard resources describe whichever
   single or multi generator ran last. Regenerate the intended top before
   rebuilding or running tests.

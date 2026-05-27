@@ -86,54 +86,6 @@ static inline uint64_t gemv_read_mem_fast(uint32_t data_addr) {
   return result;
 }
 
-static inline int gemv_basic_fast_templates_match_runtime(void) {
-  const uint32_t data_values[] = {
-      UINT32_C(0x00000000), UINT32_C(0x00000001),
-      UINT32_C(0x80000000), UINT32_C(0xffffffff),
-  };
-  const uint32_t addr_values[] = {
-      UINT32_C(0x00000000), UINT32_C(0x00000001),
-      GEMV_FAST_DATA_ADDR_MASK,
-  };
-  int failures = 0;
-  for (size_t i = 0; i < sizeof(data_values) / sizeof(data_values[0]);
-       ++i) {
-    for (size_t j = 0;
-         j < sizeof(addr_values) / sizeof(addr_values[0]); ++j) {
-      uint32_t data_addr = addr_values[j];
-      uint32_t data = data_values[i];
-      cgra_packet_t fast = {
-    GEMV_STORE_PKT_BASE_LO,
-    GEMV_STORE_PKT_BASE_MID | GEMV_STORE_DATA_ADDR_MID(data_addr) | GEMV_STORE_DATA_PAYLOAD_MID(data),
-    GEMV_STORE_PKT_BASE_HI | GEMV_STORE_DATA_PAYLOAD_HI(data),
-    GEMV_STORE_PKT_BASE_TOP,
-      };
-      cgra_packet_t ref = cgra_build_intra_pkt_to(
-          cgra_target_local(), 0, 0, CGRA_CMD_STORE_REQUEST,
-          cgra_data_raw(data_values[i], 1), addr_values[j],
-          cgra_ctrl_empty(), 0);
-      failures += fast.lo != ref.lo || fast.mid != ref.mid ||
-                  fast.hi != ref.hi || fast.top != ref.top;
-    }
-  }
-  for (size_t i = 0; i < sizeof(addr_values) / sizeof(addr_values[0]);
-       ++i) {
-    uint32_t data_addr = addr_values[i];
-    cgra_packet_t fast = {
-    GEMV_LOAD_REQ_PKT_BASE_LO,
-    GEMV_LOAD_REQ_PKT_BASE_MID | GEMV_LOAD_REQ_DATA_ADDR_MID(data_addr),
-    GEMV_LOAD_REQ_PKT_BASE_HI,
-    GEMV_LOAD_REQ_PKT_BASE_TOP,
-    };
-    cgra_packet_t ref = cgra_build_intra_pkt_to(
-        cgra_target_local(), 0, 0, CGRA_CMD_LOAD_REQUEST,
-        cgra_data_raw(0, 0), addr_values[i], cgra_ctrl_empty(), 0);
-    failures += fast.lo != ref.lo || fast.mid != ref.mid ||
-                fast.hi != ref.hi || fast.top != ref.top;
-  }
-  return failures;
-}
-
 static const cgra_packet_t GEMV_FAST_CONFIG_PACKETS[] = {
   { UINT64_C(0x0000000000000000), UINT64_C(0x2000000000000000), UINT64_C(0x0000000340000000), UINT64_C(0x0000000000000000) },
   { UINT64_C(0x0000000000000000), UINT64_C(0xa000000000000000), UINT64_C(0x0000000340000000), UINT64_C(0x0000000000000000) },

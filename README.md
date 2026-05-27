@@ -59,7 +59,7 @@ GEMM and SAD are unsupported and skipped by the fast API generator. **NOTE**: Re
 - `<kernel>_store_fast(addr, data)`: writes CGRA data memory.
 - `<kernel>_read_mem_fast(addr)`: reads CGRA data memory through the RoCC wrapper.
 
-Generated fast APIs are local single-CGRA only and are precomputed for `cgra_target_local()`. Target-aware and hand-written multi-CGRA tests continue to use `tests/include/cgra_runtime.h`.
+Generated fast APIs are local single-CGRA only and use precomputed direct packets. `tests/include/cgra_runtime.h` is the shared low-level direct packet send interface.
 
 ### **Gemmini + CGRA demo**
 
@@ -90,13 +90,15 @@ Generate multi-CGRA RTL with the matching arch and SoC YAMLs:
 $ python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
 ```
 
+Supported hand-written multi-CGRA tests use preencoded direct packet headers next to the test sources. At runtime they send `cgra_packet_t` constants with `cgra_send_packet_fast()` / `cgra_send_packets_fast()`; packet construction is not done in the test hot path.
+
 Supported multi-CGRA CPU+CGRA tests:
 
 - `multi-cgra/cgra-multi-homo`: generate with `configs/arch/multi_cgra_homo_meshrtl.yaml` and `configs/soc/multi_cgra_homo_meshrtl.yaml`; run `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-homo`.
 - `multi-cgra/cgra-multi-systolic-2x2`: generate with `configs/arch/multi_cgra_homo_meshrtl.yaml` and `configs/soc/multi_cgra_systolic_2x2.yaml`; run `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-2x2`.
 - `multi-cgra/cgra-multi-systolic-4x4`: generate with `configs/arch/multi_cgra_4x4_meshrtl.yaml` and `configs/soc/multi_cgra_systolic_4x4_2x2.yaml`; run `./run-chipyard-cgra-test.sh --rebuild multi-cgra/cgra-multi-systolic-4x4`.
 
-Multi-CGRA FIR tests live under `tests/multi-cgra/fir/`. Their C control packets are hand-written from `VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`; do not regenerate those control signals with a script.
+Multi-CGRA FIR tests live under `tests/multi-cgra/fir/`. Their direct packet headers are hand-written from `VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py`; do not regenerate those control signals with a script.
 
 - `multi-cgra/fir/cgra-multi-fir-scalar`: generate with `configs/arch/multi_cgra_fir_2x2_4x4_scalar.yaml` and `configs/soc/multi_cgra_fir_scalar.yaml`; run `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar`.
 - `multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`: generate with `configs/arch/multi_cgra_homo_meshrtl.yaml` and `configs/soc/multi_cgra_fir_scalar.yaml`; run `./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-scalar-2x2-2x2`.
