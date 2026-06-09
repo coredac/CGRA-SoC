@@ -1,0 +1,48 @@
+name: openfpga_and2
+openfpga_root: OpenFPGA
+
+architecture:
+  vpr_arch: openfpga_flow/vpr_arch/k4_N4_tileable_40nm.xml
+  openfpga_arch: openfpga_flow/openfpga_arch/k4_N4_40nm_frame_no_const_input_openfpga.xml
+  shell_template: openfpga_flow/openfpga_shell_scripts/example_script.openfpga
+  simulation_setting: openfpga_flow/openfpga_simulation_settings/auto_sim_openfpga.xml
+  config_protocol:
+    type: frame_based
+    address_width: 14
+    data_width: 1
+
+application:
+  name: and2
+  top_module: and2
+  benchmark_blif: openfpga_flow/benchmarks/micro_benchmark/and2/and2.blif
+  benchmark_verilog: openfpga_flow/benchmarks/micro_benchmark/and2/and2.v
+  benchmark_act: openfpga_flow/benchmarks/micro_benchmark/and2/and2.act
+  chan_width: 300
+
+user_interface:
+  pin_map: auto
+  input_register:
+    name: USER_INPUT
+    fields:
+      - name: a
+        width: 1
+        bit: 0
+      - name: b
+        width: 1
+        bit: 1
+  output_register:
+    name: USER_OUTPUT
+    fields:
+      - name: c
+        width: 1
+        bit: 0
+
+soc:
+  base_address: 0x10050000
+  size: 0x1000
+
+chipyard:
+  config_name: OpenFPGADemoRocketConfig
+  peripheral_name: openfpga_and2
+  wrapper_module: OpenFPGAAnd2Wrapper
+  scala_object: OpenFPGAGenerated

@@ -7,3 +7,6 @@
 [submodule "VectorCGRA"]
 	path = VectorCGRA
 	url = https://github.com/HobbitQia/VectorCGRA.git
+[submodule "OpenFPGA"]
+	path = OpenFPGA
+	url = https://github.com/lnis-uofu/OpenFPGA.git

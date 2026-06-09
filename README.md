@@ -10,8 +10,10 @@ This repository integrates VectorCGRA-generated RTL with Chipyard RoCC. VectorCG
 - `scripts/generate_single_cgra.py`: Generates single-CGRA RTL and syncs it into Chipyard.
 - `scripts/generate_multi_cgra.py`: Generates multi-CGRA RTL and syncs it into the same Chipyard BlackBox wrapper shape.
 - `scripts/cgra_fast_api.py`: Generates fast-only C headers in `tests/generated/`.
+- `scripts/generate_openfpga_demo.py`: Generates OpenFPGA demo fabric RTL, Chipyard collateral, and baremetal headers.
 - `tests/`: Baremetal CPU+CGRA tests.
 - `VectorCGRA/`: CGRA generator and reference from-yaml tests.
+- `OpenFPGA/`: OpenFPGA submodule used to generate FPGA fabric RTL and bitstreams.
 - `chipyard/`: SoC integration and Verilator simulator.
 
 ## **Setup**
@@ -81,6 +83,47 @@ $ ./run-chipyard-cgra-gemmini-demo.sh --rebuild
 ```
 
 Use `--rebuild` on the first run because Gemmini elaboration must generate a matching `gemmini_params.h`.
+
+## **OpenFPGA MMIO demo flow**
+
+The current OpenFPGA demo integrates a generated FPGA fabric as a TileLink MMIO
+peripheral in Chipyard. The checked-in demo programs the OpenFPGA `and2` micro
+benchmark, drives the FPGA input pads from CPU MMIO writes, and checks the AND2
+truth table from a baremetal test.
+
+Generate the OpenFPGA collateral and sync it into Chipyard:
+
+```shell
+$ python scripts/generate_openfpga_demo.py --config configs/openfpga/openfpga_and2.yaml
+```
+
+Rebuild and run the default OpenFPGA test:
+
+```shell
+$ ./run-chipyard-openfpga-demo.sh --rebuild
+```
+
+After rebuilding for the same generated fabric and Chipyard config, rerun the
+same test without `--rebuild`:
+
+```shell
+$ ./run-chipyard-openfpga-demo.sh
+```
+
+The current demo config is `OpenFPGADemoRocketConfig`, the test is
+`tests/openfpga-and2.c`, and the generated MMIO peripheral is mapped at
+`0x10050000`. The CPU writes prepacked frame-based bitstream words to
+`CFG_WORD`, writes packed user inputs to `USER_INPUT`, and reads packed user
+outputs from `USER_OUTPUT`; the runtime test does not assemble bitstream words
+on the hot path.
+
+Generated OpenFPGA collateral includes:
+
+- `chipyard/generators/chipyard/src/main/resources/vsrc/openfpga_and2/`
+- `chipyard/generators/chipyard/src/main/scala/example/OpenFPGAGenerated.scala`
+- `chipyard/generators/chipyard/src/main/scala/config/OpenFPGAConfigGenerated.scala`
+- `tests/generated/openfpga_and2_bitstream.h`
+- `tests/generated/openfpga_and2_pin_map.h`
 
 ## **Multi-CGRA flow**
 
