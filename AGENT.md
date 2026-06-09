@@ -61,14 +61,18 @@ stack:
 
 The OpenFPGA source of truth is `configs/openfpga/openfpga_and2.yaml`. It selects
 the OpenFPGA/VPR architecture pair, benchmark files, frame-based config protocol,
-MMIO base address, Chipyard config name, and packed `USER_INPUT`/`USER_OUTPUT`
-fields. The current verified benchmark is OpenFPGA's `and2` micro benchmark.
+MMIO base address, and Chipyard config name. The packed `USER_INPUT` and
+`USER_OUTPUT` fields are derived from the OpenFPGA formal verification netlist:
+benchmark input/output ports are packed in formal module declaration order, with
+bits inside each port packed by ascending bit index. The current verified
+benchmark is OpenFPGA's `and2` micro benchmark.
 
-`scripts/generate_openfpga_demo.py` runs the local OpenFPGA flow, extracts the
-formal netlist pin map, parses and prepackages the bitstream, syncs generated
-RTL into Chipyard, and emits generated Scala/C collateral. Do not hand-edit the
-generated OpenFPGA wrapper, generated Scala metadata, or generated C headers as a
-lasting fix; regenerate them from the YAML instead.
+`scripts/openfpga/generate.py` runs the local OpenFPGA flow, extracts the
+formal netlist user-interface layout and pin map, parses and prepackages the
+bitstream, syncs generated RTL into Chipyard, and emits generated Scala/C
+collateral. Do not hand-edit the generated OpenFPGA wrapper, generated Scala
+metadata, or generated C headers as a lasting fix; regenerate them from the YAML
+instead.
 
 The Chipyard-side OpenFPGA peripheral is TileLink MMIO, not RoCC. The current
 register contract is:
@@ -85,8 +89,8 @@ and data packets in the C test hot path.
 
 The current Verilator-compatible OpenFPGA path uses the standard-cell mux
 architecture and the OpenFPGA cell-library `inv.v`, `buf4.v`, and `tap_buf4.v`
-models in the Chipyard manifest. Do not restore `scripts/openfpga_verilator_shims.py`
-or a generated `SRC/verilator/` replacement backend unless the task explicitly
+models in the Chipyard manifest. Do not restore the removed Verilator shim
+backend or a generated Verilator replacement tree unless the task explicitly
 changes this policy.
 
 ## Configuration Rules
@@ -142,7 +146,7 @@ python scripts/generate_single_cgra.py --arch-yaml configs/arch/arch.yaml --soc-
 python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
 python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild <c-test-name>
-python scripts/generate_openfpga_demo.py --config configs/openfpga/openfpga_and2.yaml
+python scripts/openfpga/generate.py --config configs/openfpga/openfpga_and2.yaml
 ./run-chipyard-openfpga-demo.sh --rebuild
 ```
 

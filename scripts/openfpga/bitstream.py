@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List
 
-from openfpga_demo_config import ConfigProtocol, DemoConfig
+from config import ConfigProtocol, DemoConfig
 
 
 @dataclass(frozen=True)

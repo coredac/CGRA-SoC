@@ -9,7 +9,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from openfpga_demo_config import DemoConfig, ROOT, ensure_dir, ensure_file, resolve_under
+from config import DemoConfig, ROOT, ensure_dir, ensure_file, resolve_under
 
 
 @dataclass(frozen=True)

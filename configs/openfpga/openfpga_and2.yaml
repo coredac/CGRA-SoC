@@ -19,24 +19,6 @@ application:
   benchmark_act: openfpga_flow/benchmarks/micro_benchmark/and2/and2.act
   chan_width: 300
 
-user_interface:
-  pin_map: auto
-  input_register:
-    name: USER_INPUT
-    fields:
-      - name: a
-        width: 1
-        bit: 0
-      - name: b
-        width: 1
-        bit: 1
-  output_register:
-    name: USER_OUTPUT
-    fields:
-      - name: c
-        width: 1
-        bit: 0
-
 soc:
   base_address: 0x10050000
   size: 0x1000

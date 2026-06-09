@@ -45,9 +45,13 @@ for site_packages in (
   if site_packages not in sys.path:
     sys.path.append(site_packages)
 
-import yaml  # noqa: E402
-
 from pymtl3 import b1, b2, clog2, mk_bits  # noqa: E402
+from util.schema import (  # noqa: E402
+    load_yaml_mapping,
+    require_int,
+    require_mapping,
+    require_string as require_str,
+)
 
 from VectorCGRA.lib.cmd_type import (
     CMD_CONFIG,
@@ -148,36 +152,6 @@ def rel_to_root(path: Path) -> str:
     return path.resolve().relative_to(ROOT).as_posix()
   except ValueError:
     return path.as_posix()
-
-
-def load_yaml_mapping(path: Path) -> Mapping[str, object]:
-  with path.open("r", encoding="utf-8") as stream:
-    data = yaml.safe_load(stream)
-  if not isinstance(data, Mapping):
-    raise ValueError(f"YAML must contain a top-level mapping: {path}")
-  return data
-
-
-def require_mapping(data: Mapping[str, object], key: str,
-                    path: Path) -> Mapping[str, object]:
-  value = data.get(key)
-  if not isinstance(value, Mapping):
-    raise ValueError(f"{path}: missing mapping '{key}'")
-  return value
-
-
-def require_int(data: Mapping[str, object], key: str, path: Path) -> int:
-  value = data.get(key)
-  if not isinstance(value, int) or isinstance(value, bool):
-    raise ValueError(f"{path}: '{key}' must be an integer")
-  return value
-
-
-def require_str(data: Mapping[str, object], key: str, path: Path) -> str:
-  value = data.get(key)
-  if not isinstance(value, str) or not value:
-    raise ValueError(f"{path}: '{key}' must be a non-empty string")
-  return value
 
 
 def load_kernel_config(path: Path, arch_yaml: Path,

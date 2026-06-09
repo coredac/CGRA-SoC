@@ -10,7 +10,7 @@ This repository integrates VectorCGRA-generated RTL with Chipyard RoCC. VectorCG
 - `scripts/generate_single_cgra.py`: Generates single-CGRA RTL and syncs it into Chipyard.
 - `scripts/generate_multi_cgra.py`: Generates multi-CGRA RTL and syncs it into the same Chipyard BlackBox wrapper shape.
 - `scripts/cgra_fast_api.py`: Generates fast-only C headers in `tests/generated/`.
-- `scripts/generate_openfpga_demo.py`: Generates OpenFPGA demo fabric RTL, Chipyard collateral, and baremetal headers.
+- `scripts/openfpga/generate.py`: Generates OpenFPGA demo fabric RTL, Chipyard collateral, and baremetal headers.
 - `tests/`: Baremetal CPU+CGRA tests.
 - `VectorCGRA/`: CGRA generator and reference from-yaml tests.
 - `OpenFPGA/`: OpenFPGA submodule used to generate FPGA fabric RTL and bitstreams.
@@ -94,7 +94,7 @@ truth table from a baremetal test.
 Generate the OpenFPGA collateral and sync it into Chipyard:
 
 ```shell
-$ python scripts/generate_openfpga_demo.py --config configs/openfpga/openfpga_and2.yaml
+$ python scripts/openfpga/generate.py --config configs/openfpga/openfpga_and2.yaml
 ```
 
 Rebuild and run the default OpenFPGA test:
@@ -116,6 +116,12 @@ The current demo config is `OpenFPGADemoRocketConfig`, the test is
 `CFG_WORD`, writes packed user inputs to `USER_INPUT`, and reads packed user
 outputs from `USER_OUTPUT`; the runtime test does not assemble bitstream words
 on the hot path.
+
+The demo YAML does not describe the `USER_INPUT` or `USER_OUTPUT` field layout.
+`scripts/openfpga/generate.py` derives that layout and the FPGA GPIO pad map from
+the OpenFPGA formal verification netlist. Benchmark inputs and outputs are packed
+by formal module port declaration order, with bits inside each port packed by
+ascending bit index.
 
 Generated OpenFPGA collateral includes:
 

@@ -7,13 +7,13 @@ import argparse
 import json
 from pathlib import Path
 
-from openfpga_bitstream import parse_bitstream
-from openfpga_chipyard_codegen import write_chipyard_config, write_scala_generated
-from openfpga_demo_config import ROOT, DemoConfig, ensure_file, load_demo_config
-from openfpga_flow_runner import run_openfpga_flow
-from openfpga_pinmap import extract_pin_map
-from openfpga_rtl_sync import sync_rtl
-from openfpga_test_codegen import write_c_header, write_pin_map_header, write_run_env
+from bitstream import parse_bitstream
+from chipyard import write_chipyard_config, write_scala_generated
+from config import ROOT, DemoConfig, ensure_file, load_demo_config
+from flow import run_openfpga_flow
+from pinmap import extract_interface_and_pin_map
+from rtl import sync_rtl
+from test import write_c_header, write_pin_map_header
 
 
 def parse_args() -> argparse.Namespace:
@@ -26,7 +26,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def write_metadata(demo: DemoConfig, paths, pin_map, bitstream) -> None:
+def write_metadata(demo: DemoConfig, paths, user_interface, pin_map, bitstream) -> None:
     metadata = {
         "name": demo.name,
         "workdir": str(paths.workdir.relative_to(ROOT)),
@@ -38,8 +38,10 @@ def write_metadata(demo: DemoConfig, paths, pin_map, bitstream) -> None:
             "word_width": demo.architecture.config_protocol.word_width,
         },
         "user_interface": {
-            "input_width": demo.input_width,
-            "output_width": demo.output_width,
+            "input_register": user_interface.input_register.name,
+            "input_width": user_interface.input_register.width,
+            "output_register": user_interface.output_register.name,
+            "output_width": user_interface.output_register.width,
         },
         "chipyard": {
             "config_name": demo.chipyard.config_name,
@@ -86,16 +88,17 @@ def main() -> int:
         paths.src_dir / f"{demo.application.top_module}_top_formal_verification.v",
         "OpenFPGA formal verification netlist",
     )
-    pin_map = extract_pin_map(demo, formal)
+    extracted = extract_interface_and_pin_map(formal)
+    user_interface = extracted.user_interface
+    pin_map = extracted.pin_map
     bitstream = parse_bitstream(paths.workdir / "fabric_bitstream.bit", demo)
 
-    sync_rtl(demo, paths, pin_map)
-    write_scala_generated(demo, bitstream)
+    sync_rtl(demo, paths, user_interface, pin_map)
+    write_scala_generated(demo, user_interface, bitstream)
     write_chipyard_config(demo)
-    write_c_header(demo, bitstream)
-    write_pin_map_header(demo, pin_map)
-    write_run_env(demo)
-    write_metadata(demo, paths, pin_map, bitstream)
+    write_c_header(demo, user_interface, bitstream)
+    write_pin_map_header(demo, user_interface, pin_map)
+    write_metadata(demo, paths, user_interface, pin_map, bitstream)
     print_summary(demo, paths, pin_map, bitstream)
     return 0
 

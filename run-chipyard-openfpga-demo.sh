@@ -4,23 +4,15 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
-ENV_FILE="$ROOT_DIR/tests/generated/openfpga_demo.env"
 
-if [[ ! -f "$ENV_FILE" ]]; then
-  echo "error: generated env not found: $ENV_FILE" >&2
-  echo "run: python scripts/generate_openfpga_demo.py --config configs/openfpga/openfpga_and2.yaml" >&2
-  exit 1
-fi
-
-source "$ENV_FILE"
-
-CONFIG="${CONFIG:-$OPENFPGA_CHIPYARD_CONFIG}"
+CONFIG="${CONFIG:-OpenFPGADemoRocketConfig}"
 REBUILD=0
-TEST_NAME="${TEST_NAME:-$OPENFPGA_DEFAULT_TEST}"
+TEST_NAME="${TEST_NAME:-openfpga-and2}"
 SEEN_TEST_NAME=0
 
 usage() {
-  echo "usage: $0 [--rebuild] [$OPENFPGA_DEFAULT_TEST]" >&2
+  echo "usage: $0 [--rebuild] [test-name]" >&2
+  echo "       default CONFIG=$CONFIG TEST_NAME=$TEST_NAME" >&2
 }
 
 while (($# > 0)); do
