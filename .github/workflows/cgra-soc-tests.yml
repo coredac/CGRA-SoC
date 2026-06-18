@@ -158,8 +158,31 @@ jobs:
         run: |
           .venv/bin/python scripts/openfpga/generate.py \
             --config configs/openfpga/openfpga_and2.yaml
-          ./run-chipyard-openfpga-demo.sh --rebuild 2>&1 | tee openfpga-and2.log
+          CONFIG=OpenFPGADemoRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-and2 2>&1 | tee openfpga-and2.log
           grep -q "OpenFPGA AND2 demo: PASS" openfpga-and2.log
+
+      - name: Run OpenFPGA AND2_OR2 SoC test
+        run: |
+          .venv/bin/python scripts/openfpga/generate.py \
+            --config configs/openfpga/openfpga_and2_or2_k4_frame.yaml
+          CONFIG=OpenFPGAAnd2Or2K4FrameRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-and2-or2-k4-frame 2>&1 | tee openfpga-and2-or2-k4-frame.log
+          grep -q "OpenFPGA AND2_OR2 k4 frame demo: PASS" openfpga-and2-or2-k4-frame.log
+
+      - name: Run OpenFPGA bin2bcd SoC test
+        run: |
+          .venv/bin/python scripts/openfpga/generate.py \
+            --config configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml \
+            --benchmark bin2bcd
+          CONFIG=OpenFPGABin2BcdK4FrameRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-bin2bcd-k4-frame 2>&1 | tee openfpga-bin2bcd-k4-frame.log
+          grep -q "OpenFPGA bin2bcd k4 frame demo: PASS" openfpga-bin2bcd-k4-frame.log
+
+      - name: Run OpenFPGA gcd6 SoC test
+        run: |
+          .venv/bin/python scripts/openfpga/generate.py \
+            --config configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml \
+            --benchmark gcd6
+          CONFIG=OpenFPGAGcd6K4FrameRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-gcd6-k4-frame 2>&1 | tee openfpga-gcd6-k4-frame.log
+          grep -q "OpenFPGA gcd6 k4 frame demo PASS" openfpga-gcd6-k4-frame.log
 
       - name: Upload test logs
         if: always()
@@ -170,5 +193,5 @@ jobs:
             *.log
             chipyard/build-setup.log
             tests/generated/*.h
-            build/openfpga/openfpga_and2/*.json
+            build/openfpga/*/*.json
           if-no-files-found: ignore

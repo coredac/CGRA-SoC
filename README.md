@@ -86,50 +86,27 @@ Use `--rebuild` on the first run because Gemmini elaboration must generate a mat
 
 ## **OpenFPGA MMIO demo flow**
 
-The current OpenFPGA demo integrates a generated FPGA fabric as a TileLink MMIO
-peripheral in Chipyard. The checked-in demo programs the OpenFPGA `and2` micro
-benchmark, drives the FPGA input pads from CPU MMIO writes, and checks the AND2
-truth table from a baremetal test.
+OpenFPGA fabrics are generated as TileLink MMIO peripherals. The CPU streams the
+generated frame-based bitstream to `CFG_WORD`, writes packed `USER_INPUT`, and
+reads packed `USER_OUTPUT`.
 
-Generate the OpenFPGA collateral and sync it into Chipyard:
+Supported SoC tests:
 
-```shell
-$ python scripts/openfpga/generate.py --config configs/openfpga/openfpga_and2.yaml
-```
+- `openfpga-and2`: `configs/openfpga/openfpga_and2.yaml`, `OpenFPGADemoRocketConfig`
+- `openfpga-and2-or2-k4-frame`: `configs/openfpga/openfpga_and2_or2_k4_frame.yaml`, `OpenFPGAAnd2Or2K4FrameRocketConfig`
+- `openfpga-bin2bcd-k4-frame`: `configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml --benchmark bin2bcd`, `OpenFPGABin2BcdK4FrameRocketConfig`
+- `openfpga-gcd6-k4-frame`: `configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml --benchmark gcd6`, `OpenFPGAGcd6K4FrameRocketConfig`
 
-Rebuild and run the default OpenFPGA test:
-
-```shell
-$ ./run-chipyard-openfpga-demo.sh --rebuild
-```
-
-After rebuilding for the same generated fabric and Chipyard config, rerun the
-same test without `--rebuild`:
+Example:
 
 ```shell
-$ ./run-chipyard-openfpga-demo.sh
+$ python scripts/openfpga/generate.py --config configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml --benchmark gcd6
+$ CONFIG=OpenFPGAGcd6K4FrameRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-gcd6-k4-frame
 ```
 
-The current demo config is `OpenFPGADemoRocketConfig`, the test is
-`tests/openfpga-and2.c`, and the generated MMIO peripheral is mapped at
-`0x10050000`. The CPU writes prepacked frame-based bitstream words to
-`CFG_WORD`, writes packed user inputs to `USER_INPUT`, and reads packed user
-outputs from `USER_OUTPUT`; the runtime test does not assemble bitstream words
-on the hot path.
-
-The demo YAML does not describe the `USER_INPUT` or `USER_OUTPUT` field layout.
-`scripts/openfpga/generate.py` derives that layout and the FPGA GPIO pad map from
-the OpenFPGA formal verification netlist. Benchmark inputs and outputs are packed
-by formal module port declaration order, with bits inside each port packed by
-ascending bit index.
-
-Generated OpenFPGA collateral includes:
-
-- `chipyard/generators/chipyard/src/main/resources/vsrc/openfpga_and2/`
-- `chipyard/generators/chipyard/src/main/scala/example/OpenFPGAGenerated.scala`
-- `chipyard/generators/chipyard/src/main/scala/config/OpenFPGAConfigGenerated.scala`
-- `tests/generated/openfpga_and2_bitstream.h`
-- `tests/generated/openfpga_and2_pin_map.h`
+Regenerate after changing an OpenFPGA YAML. Generated RTL, Scala metadata, and C
+headers are written under Chipyard resources and `tests/generated/`; do not edit
+those generated files by hand.
 
 ## **Multi-CGRA flow**
 

@@ -1,0 +1,30 @@
+name: openfpga_and2_or2_k4_frame
+openfpga_root: OpenFPGA
+
+architecture:
+  vpr_arch: openfpga_flow/vpr_arch/k4_N4_tileable_40nm.xml
+  openfpga_arch: openfpga_flow/openfpga_arch/k4_N4_40nm_frame_no_const_input_openfpga.xml
+  shell_template: openfpga_flow/openfpga_shell_scripts/example_script.openfpga
+  simulation_setting: openfpga_flow/openfpga_simulation_settings/auto_sim_openfpga.xml
+  config_protocol:
+    type: frame_based
+    address_width: 14
+    data_width: 1
+
+application:
+  name: and2_or2
+  top_module: and2_or2
+  benchmark_blif: openfpga_flow/benchmarks/micro_benchmark/and2_or2/and2_or2.blif
+  benchmark_verilog: openfpga_flow/benchmarks/micro_benchmark/and2_or2/and2_or2.v
+  benchmark_act: openfpga_flow/benchmarks/micro_benchmark/and2_or2/and2_or2.act
+  chan_width: 40
+
+soc:
+  base_address: 0x10050000
+  size: 0x1000
+
+chipyard:
+  config_name: OpenFPGAAnd2Or2K4FrameRocketConfig
+  peripheral_name: openfpga_and2_or2_k4_frame
+  wrapper_module: OpenFPGAAnd2Or2K4FrameWrapper
+  scala_object: OpenFPGAGenerated

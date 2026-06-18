@@ -18,12 +18,36 @@ _VERILOG_IDENT = r"[A-Za-z_][A-Za-z0-9_]*"
 class PinMap:
     inputs: Dict[str, List[int]]
     outputs: Dict[str, List[int]]
-    pad_left: int
-    pad_right: int
+    input_pad_port: str
+    input_pad_left: int
+    input_pad_right: int
+    output_pad_port: str
+    output_pad_left: int
+    output_pad_right: int
+
+    @property
+    def has_split_pads(self) -> bool:
+        return self.input_pad_port != self.output_pad_port
+
+    @property
+    def input_pad_count(self) -> int:
+        return abs(self.input_pad_left - self.input_pad_right) + 1
+
+    @property
+    def output_pad_count(self) -> int:
+        return abs(self.output_pad_left - self.output_pad_right) + 1
+
+    @property
+    def pad_left(self) -> int:
+        return self.input_pad_left
+
+    @property
+    def pad_right(self) -> int:
+        return self.input_pad_right
 
     @property
     def pad_count(self) -> int:
-        return abs(self.pad_left - self.pad_right) + 1
+        return max(self.input_pad_count, self.output_pad_count)
 
     @property
     def all_pads(self) -> List[int]:
@@ -37,6 +61,14 @@ class PinMap:
         return {
             "inputs": self.inputs,
             "outputs": self.outputs,
+            "input_pad_port": self.input_pad_port,
+            "input_pad_left": self.input_pad_left,
+            "input_pad_right": self.input_pad_right,
+            "input_pad_count": self.input_pad_count,
+            "output_pad_port": self.output_pad_port,
+            "output_pad_left": self.output_pad_left,
+            "output_pad_right": self.output_pad_right,
+            "output_pad_count": self.output_pad_count,
             "pad_left": self.pad_left,
             "pad_right": self.pad_right,
             "pad_count": self.pad_count,
@@ -160,18 +192,29 @@ def _build_register(name: str, ports: Iterable[FormalPort]) -> RegisterSpec:
     return RegisterSpec(name=name, fields=fields, width=next_lsb)
 
 
-def _derive_user_interface(ports: List[FormalPort], formal_verification: Path) -> UserInterfaceSpec:
-    input_ports = [port for port in ports if port.direction == "input"]
+def _derive_user_interface(
+    ports: List[FormalPort],
+    formal_verification: Path,
+    excluded_input_ports: set[str],
+) -> UserInterfaceSpec:
+    input_ports = [
+        port for port in ports if port.direction == "input" and port.name not in excluded_input_ports
+    ]
     output_ports = [port for port in ports if port.direction == "output"]
     if not input_ports:
-        raise ValueError(f"{formal_verification}: formal module declares no benchmark input ports")
+        raise ValueError(
+            f"{formal_verification}: formal module declares no software-visible benchmark input ports"
+        )
     if not output_ports:
         raise ValueError(f"{formal_verification}: formal module declares no benchmark output ports")
 
     input_register = _build_register("USER_INPUT", input_ports)
     output_register = _build_register("USER_OUTPUT", output_ports)
     if input_register.width > 32 or output_register.width > 32:
-        raise ValueError("packed USER_INPUT/USER_OUTPUT MMIO registers currently support widths <= 32")
+        raise ValueError(
+            "current single-register MMIO USER_INPUT/USER_OUTPUT backend supports widths <= 32; "
+            f"got input_width={input_register.width}, output_width={output_register.width}"
+        )
     return UserInterfaceSpec(input_register=input_register, output_register=output_register)
 
 
@@ -214,13 +257,30 @@ def _finalize(mapping: Dict[str, List[Optional[int]]], ports: Iterable[FormalPor
     return result
 
 
-def extract_interface_and_pin_map(formal_verification: Path) -> ExtractedInterface:
+def extract_interface_and_pin_map(
+    formal_verification: Path,
+    *,
+    excluded_input_ports: Iterable[str] = (),
+    known_input_ports: Iterable[str] = (),
+) -> ExtractedInterface:
     text = _strip_comments(formal_verification.read_text(encoding="utf-8"))
     ports = _parse_formal_ports(text, formal_verification)
-    user_interface = _derive_user_interface(ports, formal_verification)
+    excluded_inputs = set(excluded_input_ports)
+    known_inputs = set(known_input_ports)
+    input_port_names = {port.name for port in ports if port.direction == "input"}
+    output_port_names = {port.name for port in ports if port.direction == "output"}
+    for name in sorted(excluded_inputs | known_inputs):
+        if name in output_port_names:
+            raise ValueError(f"{formal_verification}: configured input port {name!r} is an output")
+        if name not in input_port_names:
+            raise ValueError(f"{formal_verification}: configured input port {name!r} is not declared")
+
+    user_interface = _derive_user_interface(ports, formal_verification, excluded_inputs)
     input_ports = [port for port in ports if port.direction == "input"]
     output_ports = [port for port in ports if port.direction == "output"]
     input_ports_by_name, output_ports_by_name = _port_maps(ports)
+    pad_ranges = _parse_pad_ranges(text, formal_verification)
+    input_pad_port, output_pad_port = _select_pad_ports(pad_ranges, formal_verification)
 
     input_map: Dict[str, List[Optional[int]]] = {
         port.name: [None] * port.width for port in input_ports
@@ -230,9 +290,14 @@ def extract_interface_and_pin_map(formal_verification: Path) -> ExtractedInterfa
     }
 
     input_assign_re = re.compile(
-        rf"\bassign\s+gfpga_pad_GPIO_PAD_fm\[(\d+)\]\s*=\s*({_VERILOG_IDENT})(?:\[(\d+)\])?\s*;"
+        rf"\bassign\s+(gfpga_pad_(?:GPIO|GPIN|GPOUT)_PAD)_fm\[(\d+)\]\s*=\s*"
+        rf"({_VERILOG_IDENT})(?:\[(\d+)\])?\s*;"
     )
-    for raw_pad, name, raw_bit in input_assign_re.findall(text):
+    for pad_port, raw_pad, name, raw_bit in input_assign_re.findall(text):
+        if pad_port != input_pad_port:
+            raise ValueError(
+                f"{formal_verification}: input pin map uses {pad_port}, expected {input_pad_port}"
+            )
         port = input_ports_by_name.get(name)
         if port is None:
             raise ValueError(f"{formal_verification}: GPIO input assign references non-input port {name!r}")
@@ -240,33 +305,95 @@ def extract_interface_and_pin_map(formal_verification: Path) -> ExtractedInterfa
         _record(input_map, port, bit, int(raw_pad), f"{formal_verification} input assign")
 
     output_assign_re = re.compile(
-        rf"\bassign\s+({_VERILOG_IDENT})(?:\[(\d+)\])?\s*=\s*gfpga_pad_GPIO_PAD_fm\[(\d+)\]\s*;"
+        rf"\bassign\s+({_VERILOG_IDENT})(?:\[(\d+)\])?\s*=\s*"
+        rf"(gfpga_pad_(?:GPIO|GPIN|GPOUT)_PAD)_fm\[(\d+)\]\s*;"
     )
-    for name, raw_bit, raw_pad in output_assign_re.findall(text):
+    for name, raw_bit, pad_port, raw_pad in output_assign_re.findall(text):
+        if pad_port != output_pad_port:
+            raise ValueError(
+                f"{formal_verification}: output pin map uses {pad_port}, expected {output_pad_port}"
+            )
         port = output_ports_by_name.get(name)
         if port is None:
             raise ValueError(f"{formal_verification}: GPIO output assign references non-output port {name!r}")
         bit = _bit_index(port, raw_bit if raw_bit != "" else None, f"{formal_verification} output assign")
         _record(output_map, port, bit, int(raw_pad), f"{formal_verification} output assign")
 
-    range_match = re.search(r"\bwire\s+\[\s*(\d+)\s*:\s*(\d+)\s*\]\s+gfpga_pad_GPIO_PAD_fm\s*;", text)
-    if not range_match:
-        raise ValueError(f"could not parse gfpga_pad_GPIO_PAD_fm range from {formal_verification}")
-    pad_left, pad_right = int(range_match.group(1)), int(range_match.group(2))
-    pad_min, pad_max = min(pad_left, pad_right), max(pad_left, pad_right)
-
     pin_map = PinMap(
         inputs=_finalize(input_map, input_ports, "input"),
         outputs=_finalize(output_map, output_ports, "output"),
-        pad_left=pad_left,
-        pad_right=pad_right,
+        input_pad_port=input_pad_port,
+        input_pad_left=pad_ranges[input_pad_port][0],
+        input_pad_right=pad_ranges[input_pad_port][1],
+        output_pad_port=output_pad_port,
+        output_pad_left=pad_ranges[output_pad_port][0],
+        output_pad_right=pad_ranges[output_pad_port][1],
     )
 
-    pads = pin_map.all_pads
-    if len(pads) != len(set(pads)):
-        raise ValueError(f"pin map has duplicate FPGA pads: {pin_map.to_json_dict()}")
-    for pad in pads:
-        if pad < pad_min or pad > pad_max:
-            raise ValueError(f"pin map pad {pad} is outside GPIO pad range [{pad_left}:{pad_right}]")
+    _validate_pin_map_pads(pin_map)
 
     return ExtractedInterface(user_interface=user_interface, pin_map=pin_map)
+
+
+def _parse_pad_ranges(text: str, formal_verification: Path) -> Dict[str, tuple[int, int]]:
+    range_re = re.compile(
+        r"\bwire\s+\[\s*(\d+)\s*:\s*(\d+)\s*\]\s+(gfpga_pad_(?:GPIO|GPIN|GPOUT)_PAD)_fm\s*;"
+    )
+    ranges: Dict[str, tuple[int, int]] = {}
+    for raw_left, raw_right, port in range_re.findall(text):
+        if port in ranges:
+            raise ValueError(f"{formal_verification}: duplicate pad range for {port}")
+        ranges[port] = (int(raw_left), int(raw_right))
+    return ranges
+
+
+def _select_pad_ports(
+    pad_ranges: Dict[str, tuple[int, int]], formal_verification: Path
+) -> tuple[str, str]:
+    if "gfpga_pad_GPIO_PAD" in pad_ranges:
+        return "gfpga_pad_GPIO_PAD", "gfpga_pad_GPIO_PAD"
+    if "gfpga_pad_GPIN_PAD" in pad_ranges and "gfpga_pad_GPOUT_PAD" in pad_ranges:
+        return "gfpga_pad_GPIN_PAD", "gfpga_pad_GPOUT_PAD"
+    raise ValueError(
+        f"could not parse supported FPGA GPIO pad ranges from {formal_verification}; "
+        "expected gfpga_pad_GPIO_PAD_fm or both gfpga_pad_GPIN_PAD_fm/gfpga_pad_GPOUT_PAD_fm"
+    )
+
+
+def _validate_port_pads(
+    pin_map: PinMap,
+    port_name: str,
+    pad_left: int,
+    pad_right: int,
+    pads: List[int],
+) -> None:
+    if len(pads) != len(set(pads)):
+        raise ValueError(f"pin map has duplicate FPGA pads on {port_name}: {pin_map.to_json_dict()}")
+    pad_min, pad_max = min(pad_left, pad_right), max(pad_left, pad_right)
+    for pad in pads:
+        if pad < pad_min or pad > pad_max:
+            raise ValueError(f"pin map pad {pad} is outside {port_name} range [{pad_left}:{pad_right}]")
+
+
+def _validate_pin_map_pads(pin_map: PinMap) -> None:
+    by_port: Dict[str, List[int]] = {}
+    by_port.setdefault(pin_map.input_pad_port, [])
+    by_port[pin_map.input_pad_port].extend(pad for pads in pin_map.inputs.values() for pad in pads)
+    by_port.setdefault(pin_map.output_pad_port, [])
+    by_port[pin_map.output_pad_port].extend(pad for pads in pin_map.outputs.values() for pad in pads)
+
+    _validate_port_pads(
+        pin_map,
+        pin_map.input_pad_port,
+        pin_map.input_pad_left,
+        pin_map.input_pad_right,
+        by_port[pin_map.input_pad_port],
+    )
+    if pin_map.output_pad_port != pin_map.input_pad_port:
+        _validate_port_pads(
+            pin_map,
+            pin_map.output_pad_port,
+            pin_map.output_pad_left,
+            pin_map.output_pad_right,
+            by_port[pin_map.output_pad_port],
+        )

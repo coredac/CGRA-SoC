@@ -1,0 +1,58 @@
+name: openfpga_fabric_k4_frame_4x4_w40
+openfpga_root: OpenFPGA
+
+architecture:
+  vpr_arch: openfpga_flow/vpr_arch/k4_N4_tileable_40nm.xml
+  openfpga_arch: openfpga_flow/openfpga_arch/k4_N4_40nm_frame_no_const_input_openfpga.xml
+  shell_template: openfpga_flow/openfpga_shell_scripts/implicit_verilog_example_script.openfpga
+  simulation_setting: openfpga_flow/openfpga_simulation_settings/fixed_sim_openfpga.xml
+  config_protocol:
+    type: frame_based
+    address_width: 17
+    data_width: 1
+
+flow:
+  fpga_flow: yosys_vpr
+  explicit_port_mapping: true
+  extra_template_vars:
+    openfpga_vpr_device_layout: 4x4
+    openfpga_default_net_type: none
+    openfpga_pin_constraints_file: openfpga_flow/tasks/fpga_verilog/verilog_netlist_formats/implicit_verilog/config/pin_constraints_reset.xml
+
+soc:
+  base_address: 0x10050000
+  size: 0x1000
+
+benchmarks:
+  bin2bcd:
+    name: openfpga_bin2bcd_k4_frame
+    application:
+      name: bin2bcd
+      top_module: bin2bcd
+      benchmark_verilog: openfpga_flow/benchmarks/quicklogic_tests/bin2bcd/bin2bcd.v
+      chan_width: 40
+    chipyard:
+      config_name: OpenFPGABin2BcdK4FrameRocketConfig
+      peripheral_name: openfpga_bin2bcd_k4_frame
+      wrapper_module: OpenFPGABin2BcdK4FrameWrapper
+      scala_object: OpenFPGAGenerated
+
+  gcd6:
+    name: openfpga_gcd6_k4_frame
+    flow:
+      extra_template_vars:
+        read_verilog_options: -nolatches
+    application:
+      name: gcd6
+      top_module: gcd6
+      benchmark_verilog: ../tests/fpga/gcd6.v
+      chan_width: 40
+      clock_ports:
+        - clk
+      reset_ports:
+        - reset
+    chipyard:
+      config_name: OpenFPGAGcd6K4FrameRocketConfig
+      peripheral_name: openfpga_gcd6_k4_frame
+      wrapper_module: OpenFPGAGcd6K4FrameWrapper
+      scala_object: OpenFPGAGenerated

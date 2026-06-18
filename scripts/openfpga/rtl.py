@@ -20,6 +20,7 @@ VERILATOR_FRIENDLY_INV_BUF_INCLUDES = (
     "SRC/cell_library/buf4.v",
     "SRC/cell_library/tap_buf4.v",
 )
+GENERATED_DATE_RE = re.compile(r"^//\s*Date:.*$")
 
 
 @dataclass(frozen=True)
@@ -51,10 +52,13 @@ def parse_include_order(fabric_netlists: Path) -> List[str]:
     includes: List[str] = []
     for include_path in re.findall(r'^\s*`include\s+"([^"]+)"', text, flags=re.MULTILINE):
         base = Path(include_path).name
+        normalized = include_path.replace("\\", "/")
+        if "/openfpga_cell_library/verilog/" in normalized:
+            includes.append(f"SRC/cell_library/{base}")
+            continue
         if base in CELL_LIBRARY_FILES:
             includes.append(f"SRC/cell_library/{base}")
             continue
-        normalized = include_path.replace("\\", "/")
         if normalized.startswith("./"):
             normalized = normalized[2:]
         if normalized.startswith("SRC/"):
@@ -76,47 +80,116 @@ def _rtl_uses_const_cells(src_dir: Path) -> bool:
 
 def _use_verilator_friendly_inv_buf_cells(includes: List[str], src_dir: Path) -> List[str]:
     if INV_BUF_PASSGATE_INCLUDE not in includes:
-        return includes
+        return _dedupe_includes(includes)
     if _rtl_uses_const_cells(src_dir):
-        raise ValueError(
-            "generated RTL instantiates const0/const1 from inv_buf_passgate.v; "
-            "cannot replace inv_buf_passgate.v with OpenFPGA cell-library inv/buf models"
-        )
+        return _dedupe_includes(includes)
 
     rewritten: List[str] = []
+    seen = set()
     for include in includes:
         if include == INV_BUF_PASSGATE_INCLUDE:
-            rewritten.extend(VERILATOR_FRIENDLY_INV_BUF_INCLUDES)
+            for replacement in VERILATOR_FRIENDLY_INV_BUF_INCLUDES:
+                if replacement not in seen:
+                    rewritten.append(replacement)
+                    seen.add(replacement)
         else:
+            if include not in seen:
+                rewritten.append(include)
+                seen.add(include)
+    return rewritten
+
+
+def _dedupe_includes(includes: List[str]) -> List[str]:
+    rewritten: List[str] = []
+    seen = set()
+    for include in includes:
+        if include not in seen:
             rewritten.append(include)
+            seen.add(include)
     return rewritten
 
 
 def sync_rtl(demo: DemoConfig, paths: GeneratedPaths, user_interface: UserInterfaceSpec, pin_map: PinMap) -> None:
-    target = paths.vsrc_dir
-    if target.exists():
-        shutil.rmtree(target)
+    wrapper_root = paths.vsrc_dir
+    fabric_root = demo.fabric_vsrc_dir
+
+    if wrapper_root.exists():
+        shutil.rmtree(wrapper_root)
+    wrapper_root.mkdir(parents=True)
+
+    staging_root = paths.workdir / "chipyard_vsrc_staging"
+    if staging_root.exists():
+        shutil.rmtree(staging_root)
+
+    includes = parse_include_order(paths.src_dir / "fabric_netlists.v")
+    includes = _prepare_fabric_src(demo, paths.src_dir, staging_root, includes)
+    _sync_fabric_src(staging_root / "SRC", fabric_root / "SRC", demo)
+    shutil.rmtree(staging_root)
+
+    fpga_ports = _parse_fpga_top_ports(fabric_root / "SRC" / "fpga_top.v")
+    _validate_fpga_top_ports(demo, fpga_ports, pin_map)
+    _write_manifest(wrapper_root / demo.manifest_filename, demo, includes, fabric_root)
+    _write_wrapper(demo.wrapper_path, demo, user_interface, pin_map, fpga_ports)
+
+
+def _prepare_fabric_src(demo: DemoConfig, src_dir: Path, target: Path, includes: List[str]) -> List[str]:
     (target / "SRC").mkdir(parents=True)
 
     for filename in ("fpga_defines.v", "fpga_top.v"):
-        shutil.copy2(paths.src_dir / filename, target / "SRC" / filename)
+        shutil.copy2(src_dir / filename, target / "SRC" / filename)
 
-    for dirname in ("sub_module", "lb", "routing"):
-        shutil.copytree(paths.src_dir / dirname, target / "SRC" / dirname)
+    for dirname in ("sub_module", "lb", "routing", "tile"):
+        src_subdir = src_dir / dirname
+        if src_subdir.is_dir():
+            shutil.copytree(src_subdir, target / "SRC" / dirname)
 
+    includes = _use_verilator_friendly_inv_buf_cells(includes, target / "SRC")
+    _copy_cell_library_files(demo, target, includes)
+    return includes
+
+
+def _sync_fabric_src(staged_src: Path, fabric_src: Path, demo: DemoConfig) -> None:
+    if fabric_src.exists():
+        if not _src_trees_match_ignoring_dates(staged_src, fabric_src):
+            raise ValueError(
+                f"generated fabric SRC for {demo.name} differs from shared fabric "
+                f"{demo.fabric_name}; use a distinct top-level multi-benchmark config"
+            )
+        return
+
+    fabric_src.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(staged_src, fabric_src)
+
+
+def _src_trees_match_ignoring_dates(left: Path, right: Path) -> bool:
+    left_files = sorted(path.relative_to(left) for path in left.rglob("*") if path.is_file())
+    right_files = sorted(path.relative_to(right) for path in right.rglob("*") if path.is_file())
+    if left_files != right_files:
+        return False
+    return all(
+        _read_verilog_without_generated_dates(left / relpath)
+        == _read_verilog_without_generated_dates(right / relpath)
+        for relpath in left_files
+    )
+
+
+def _read_verilog_without_generated_dates(path: Path) -> List[str]:
+    return [
+        line
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if GENERATED_DATE_RE.fullmatch(line) is None
+    ]
+
+
+def _copy_cell_library_files(demo: DemoConfig, target: Path, includes: List[str]) -> None:
+    cell_files = sorted(
+        {Path(include).name for include in includes if include.startswith("SRC/cell_library/")}
+    )
     cell_src = demo.openfpga_root / "openfpga_flow" / "openfpga_cell_library" / "verilog"
     cell_dst = target / "SRC" / "cell_library"
     cell_dst.mkdir()
-    for filename in CELL_LIBRARY_FILES:
+    for filename in cell_files:
         shutil.copy2(ensure_file(cell_src / filename, f"OpenFPGA cell library {filename}"), cell_dst / filename)
-
-    includes = parse_include_order(paths.src_dir / "fabric_netlists.v")
-    includes = _use_verilator_friendly_inv_buf_cells(includes, target / "SRC")
-
-    fpga_ports = _parse_fpga_top_ports(target / "SRC" / "fpga_top.v")
-    _validate_fpga_top_ports(demo, fpga_ports, pin_map)
-    _write_manifest(target / demo.manifest_filename, demo, includes)
-    _write_wrapper(demo.wrapper_path, demo, user_interface, pin_map, fpga_ports)
 
 
 def _parse_fpga_top_ports(path: Path) -> Dict[str, PortDecl]:
@@ -147,6 +220,13 @@ def _require_port(ports: Dict[str, PortDecl], name: str, direction: str) -> Port
     return port
 
 
+def _require_scalar_port(ports: Dict[str, PortDecl], name: str, direction: str) -> PortDecl:
+    port = _require_port(ports, name, direction)
+    if port.width != 1:
+        raise ValueError(f"fpga_top port {name!r} must be scalar")
+    return port
+
+
 def _validate_indexed_zero_based(port: PortDecl) -> None:
     if port.width_range is None:
         if port.width != 1:
@@ -163,37 +243,45 @@ def _validate_indexed_zero_based(port: PortDecl) -> None:
 
 def _validate_fpga_top_ports(demo: DemoConfig, ports: Dict[str, PortDecl], pin_map: PinMap) -> None:
     cfg = demo.architecture.config_protocol
+    _validate_pad_port(ports, pin_map.input_pad_port, pin_map.input_pad_count)
+    if pin_map.output_pad_port != pin_map.input_pad_port:
+        _validate_pad_port(ports, pin_map.output_pad_port, pin_map.output_pad_count)
+
+    _validate_frame_based_fpga_top_ports(ports, cfg)
+
+
+def _validate_pad_port(ports: Dict[str, PortDecl], name: str, expected_width: int) -> None:
+    port = _require_port(ports, name, "inout")
+    if port.width != expected_width:
+        raise ValueError(f"fpga_top pad port {name} width {port.width} != extracted pin_map {expected_width}")
+    _validate_indexed_zero_based(port)
+
+
+def _validate_frame_based_fpga_top_ports(ports: Dict[str, PortDecl], cfg) -> None:
     for scalar in ("set", "reset", "clk", "enable"):
-        port = _require_port(ports, scalar, "input")
-        if port.width != 1:
-            raise ValueError(f"fpga_top port {scalar!r} must be scalar")
+        _require_scalar_port(ports, scalar, "input")
 
     address = _require_port(ports, "address", "input")
     data_in = _require_port(ports, "data_in", "input")
-    gpio = _require_port(ports, "gfpga_pad_GPIO_PAD", "inout")
     if address.width != cfg.address_width:
         raise ValueError(f"fpga_top address width {address.width} != YAML {cfg.address_width}")
     if data_in.width != cfg.data_width:
         raise ValueError(f"fpga_top data_in width {data_in.width} != YAML {cfg.data_width}")
-    if gpio.width != pin_map.pad_count:
-        raise ValueError(f"fpga_top GPIO pad width {gpio.width} != extracted pin_map {pin_map.pad_count}")
     _validate_indexed_zero_based(address)
     _validate_indexed_zero_based(data_in)
-    _validate_indexed_zero_based(gpio)
 
 
-def _write_manifest(path: Path, demo: DemoConfig, includes: List[str]) -> None:
+def _write_manifest(path: Path, demo: DemoConfig, includes: List[str], fabric_root: Path) -> None:
     required = [
         "SRC/fpga_defines.v",
-        "SRC/cell_library/dff.v",
-        "SRC/cell_library/latch.v",
-        "SRC/cell_library/gpio.v",
-        "SRC/cell_library/mux2.v",
         "SRC/fpga_top.v",
     ]
     missing = [item for item in required if item not in includes]
     if missing:
         raise ValueError(f"manifest include list is missing required files: {missing}")
+    missing_files = [item for item in includes if not (fabric_root / item).is_file()]
+    if missing_files:
+        raise ValueError(f"manifest include list references missing files: {missing_files}")
 
     guard = f"{demo.macro_prefix}_MANIFEST_V"
     lines = [
@@ -204,7 +292,7 @@ def _write_manifest(path: Path, demo: DemoConfig, includes: List[str]) -> None:
         "",
     ]
     for include in includes:
-        include_path = (path.parent / include).resolve()
+        include_path = (fabric_root / include).resolve()
         lines.append(f'`include "{include_path}"')
     lines.extend(["", "`endif"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -216,7 +304,105 @@ def _signal_ref(signal: str, port: PortDecl) -> str:
     return port.width_range.select(signal)
 
 
+def _append_pad_wire_declarations(lines: List[str], pin_map: PinMap) -> None:
+    lines.append(
+        f"  wire [{pin_map.input_pad_left}:{pin_map.input_pad_right}] {pin_map.input_pad_port};"
+    )
+    if pin_map.output_pad_port != pin_map.input_pad_port:
+        lines.append(
+            f"  wire [{pin_map.output_pad_left}:{pin_map.output_pad_right}] {pin_map.output_pad_port};"
+        )
+    lines.append("")
+
+
+def _append_fpga_pad_connections(lines: List[str], pin_map: PinMap) -> None:
+    lines.append(
+        f"    .{pin_map.input_pad_port}({pin_map.input_pad_port}"
+        f"[{pin_map.input_pad_left}:{pin_map.input_pad_right}]),"
+    )
+    if pin_map.output_pad_port != pin_map.input_pad_port:
+        lines.append(
+            f"    .{pin_map.output_pad_port}({pin_map.output_pad_port}"
+            f"[{pin_map.output_pad_left}:{pin_map.output_pad_right}]),"
+        )
+
+
+def _append_user_pad_wiring(
+    lines: List[str],
+    user_interface: UserInterfaceSpec,
+    pin_map: PinMap,
+) -> None:
+    input_reg = user_interface.input_register
+    output_reg = user_interface.output_register
+
+    for field in input_reg.fields:
+        for bit, pad in enumerate(pin_map.inputs[field.name]):
+            source = f"user_input[{field.lsb + bit}]"
+            lines.append(f"  assign {pin_map.input_pad_port}[{pad}] = {source};")
+    for field in output_reg.fields:
+        for bit, pad in enumerate(pin_map.outputs[field.name]):
+            source = f"{pin_map.output_pad_port}[{pad}]"
+            lines.append(f"  assign user_output[{field.lsb + bit}] = {source};")
+
+    output_field_bits = {bit for field in output_reg.fields for bit in field.bit_indices}
+    for bit in range(output_reg.width):
+        if bit not in output_field_bits:
+            lines.append(f"  assign user_output[{bit}] = 1'b0;")
+    lines.append("")
+
+
+def _append_clock_pad_wiring(
+    lines: List[str],
+    demo: DemoConfig,
+    pin_map: PinMap,
+    clock_source: str,
+) -> None:
+    for port_name in demo.application.clock_ports:
+        pads = pin_map.inputs.get(port_name)
+        if pads is None:
+            raise ValueError(f"configured clock port {port_name!r} is missing from extracted pin map")
+        if len(pads) != 1:
+            raise ValueError(
+                f"configured clock port {port_name!r} must be scalar; extracted pads are {pads}"
+            )
+        lines.append(f"  assign {pin_map.input_pad_port}[{pads[0]}] = {clock_source};")
+    if demo.application.clock_ports:
+        lines.append("")
+
+
+def _append_unused_pad_tieoffs(lines: List[str], user_interface: UserInterfaceSpec, pin_map: PinMap) -> None:
+    output_reg = user_interface.output_register
+    pad_min = min(pin_map.input_pad_left, pin_map.input_pad_right)
+    pad_max = max(pin_map.input_pad_left, pin_map.input_pad_right)
+    driven_pads = {pad for pads in pin_map.inputs.values() for pad in pads}
+    output_pads = (
+        {pad for field in output_reg.fields for pad in pin_map.outputs[field.name]}
+        if pin_map.output_pad_port == pin_map.input_pad_port
+        else set()
+    )
+
+    lines.append(
+        f"  // Tie unused {pin_map.input_pad_port} pads low. "
+        "Pads used as fabric outputs are left undriven here."
+    )
+    for pad in range(pad_min, pad_max + 1):
+        if pad in driven_pads or pad in output_pads:
+            continue
+        lines.append(f"  assign {pin_map.input_pad_port}[{pad}] = 1'b0;")
+    lines.append("")
+
+
 def _write_wrapper(
+    path: Path,
+    demo: DemoConfig,
+    user_interface: UserInterfaceSpec,
+    pin_map: PinMap,
+    fpga_ports: Dict[str, PortDecl],
+) -> None:
+    _write_frame_based_wrapper(path, demo, user_interface, pin_map, fpga_ports)
+
+
+def _write_frame_based_wrapper(
     path: Path,
     demo: DemoConfig,
     user_interface: UserInterfaceSpec,
@@ -226,12 +412,6 @@ def _write_wrapper(
     cfg = demo.architecture.config_protocol
     input_reg = user_interface.input_register
     output_reg = user_interface.output_register
-    pad_left = pin_map.pad_left
-    pad_right = pin_map.pad_right
-    pad_min = min(pad_left, pad_right)
-    pad_max = max(pad_left, pad_right)
-    driven_pads = {pad for pads in pin_map.inputs.values() for pad in pads}
-    output_pads = {pad for pads in pin_map.outputs.values() for pad in pads}
     manifest = (path.parent / demo.manifest_filename).resolve()
     address_port = fpga_ports["address"]
     data_port = fpga_ports["data_in"]
@@ -251,11 +431,11 @@ def _write_wrapper(
         f"  output [{output_reg.width - 1}:0] user_output",
         ");",
         "",
-        f"  wire [{pad_left}:{pad_right}] gfpga_pad_GPIO_PAD;",
         f"  wire [0:{cfg.address_width - 1}] fabric_cfg_address;",
         f"  wire [0:{cfg.data_width - 1}] fabric_cfg_data;",
         "",
     ]
+    _append_pad_wire_declarations(lines, pin_map)
 
     for index in range(cfg.address_width):
         lines.append(f"  assign fabric_cfg_address[{index}] = cfg_address[{index}];")
@@ -263,24 +443,9 @@ def _write_wrapper(
         lines.append(f"  assign fabric_cfg_data[{index}] = cfg_data[{index}];")
     lines.append("")
 
-    for field in input_reg.fields:
-        for bit, pad in enumerate(pin_map.inputs[field.name]):
-            lines.append(f"  assign gfpga_pad_GPIO_PAD[{pad}] = user_input[{field.lsb + bit}];")
-    for field in output_reg.fields:
-        for bit, pad in enumerate(pin_map.outputs[field.name]):
-            lines.append(f"  assign user_output[{field.lsb + bit}] = gfpga_pad_GPIO_PAD[{pad}];")
-
-    output_field_bits = {bit for field in output_reg.fields for bit in field.bit_indices}
-    for bit in range(output_reg.width):
-        if bit not in output_field_bits:
-            lines.append(f"  assign user_output[{bit}] = 1'b0;")
-    lines.append("")
-
-    lines.append("  // Tie unused pads low. Pads used as fabric outputs are left undriven here.")
-    for pad in range(pad_min, pad_max + 1):
-        if pad in driven_pads or pad in output_pads:
-            continue
-        lines.append(f"  assign gfpga_pad_GPIO_PAD[{pad}] = 1'b0;")
+    _append_clock_pad_wiring(lines, demo, pin_map, "clock")
+    _append_user_pad_wiring(lines, user_interface, pin_map)
+    _append_unused_pad_tieoffs(lines, user_interface, pin_map)
 
     lines.extend(
         [
@@ -289,7 +454,11 @@ def _write_wrapper(
             "    .set(1'b0),",
             "    .reset(reset),",
             "    .clk(clock),",
-            f"    .gfpga_pad_GPIO_PAD(gfpga_pad_GPIO_PAD[{pad_left}:{pad_right}]),",
+        ]
+    )
+    _append_fpga_pad_connections(lines, pin_map)
+    lines.extend(
+        [
             "    .enable(cfg_we),",
             f"    .address({_signal_ref('fabric_cfg_address', address_port)}),",
             f"    .data_in({_signal_ref('fabric_cfg_data', data_port)})",

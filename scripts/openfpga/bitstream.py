@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Parse OpenFPGA fabric bitstreams and prepack MMIO CFG_WORD values."""
+"""Parse OpenFPGA fabric bitstreams and prepack MMIO config values."""
 
 from __future__ import annotations
 
@@ -34,26 +34,39 @@ def parse_bitstream(bitstream: Path, demo: DemoConfig) -> PackedBitstream:
     if "Bitstream width (LSB -> MSB)" not in header:
         raise ValueError(f"unsupported bitstream bit order in {bitstream}")
 
-    expected_header = f"<address {cfg.address_width} bits><data input {cfg.data_width} bits>"
-    if expected_header not in header:
-        raise ValueError(
-            f"bitstream header does not match CFG_WORD contract; expected {expected_header}"
-        )
-
     data_lines = [line.strip() for line in lines if re.fullmatch(r"[01]+", line.strip())]
     if not data_lines:
         raise ValueError(f"no bitstream records found in {bitstream}")
-    if any(len(line) != cfg.word_width for line in data_lines):
-        widths = sorted({len(line) for line in data_lines})
-        raise ValueError(f"unexpected bitstream record widths {widths}; expected {cfg.word_width}")
 
-    words = [_pack_cfg_word(line, cfg) for line in data_lines]
+    words = _parse_records(bitstream, header, data_lines, cfg)
     length_match = re.search(r"Bitstream length:\s+(\d+)", header)
     declared_len = int(length_match.group(1)) if length_match else None
     if declared_len is not None and declared_len != len(words):
         raise ValueError(f"bitstream length mismatch: header={declared_len} parsed={len(words)}")
 
     return PackedBitstream(words=words, declared_length=declared_len)
+
+
+def _parse_records(bitstream: Path, header: str, data_lines: List[str], cfg: ConfigProtocol) -> List[int]:
+    return _parse_frame_based_records(bitstream, header, data_lines, cfg)
+
+
+def _parse_frame_based_records(
+    bitstream: Path, header: str, data_lines: List[str], cfg: ConfigProtocol
+) -> List[int]:
+    expected_header = f"<address {cfg.address_width} bits><data input {cfg.data_width} bits>"
+    if expected_header not in header:
+        raise ValueError(
+            f"frame_based bitstream header does not match CFG_WORD contract; expected {expected_header}"
+        )
+    _require_record_widths(bitstream, data_lines, cfg.word_width)
+    return [_pack_cfg_word(line, cfg) for line in data_lines]
+
+
+def _require_record_widths(bitstream: Path, data_lines: List[str], expected_width: int) -> None:
+    if any(len(line) != expected_width for line in data_lines):
+        widths = sorted({len(line) for line in data_lines})
+        raise ValueError(f"unexpected bitstream record widths {widths} in {bitstream}; expected {expected_width}")
 
 
 def _pack_cfg_word(record: str, cfg: ConfigProtocol) -> int:

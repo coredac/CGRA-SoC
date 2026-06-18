@@ -10,6 +10,24 @@ from config import DemoConfig, FieldSpec, UserInterfaceSpec
 from pinmap import PinMap
 
 
+def _format_array(values: List[int], hex_digits: int) -> str:
+    formatted = [f"0x{word:0{hex_digits}x}" for word in values]
+    rows = [", ".join(formatted[i : i + 8]) for i in range(0, len(formatted), 8)]
+    return ",\n  ".join(rows)
+
+
+def _cfg_array_type(width: int) -> str:
+    if width <= 8:
+        return "uint8_t"
+    if width <= 16:
+        return "uint16_t"
+    if width <= 32:
+        return "uint32_t"
+    raise ValueError(
+        f"config word width {width} exceeds the current MMIO config-word backend limit of 32 bits"
+    )
+
+
 def _field_mask(field: FieldSpec) -> int:
     return ((1 << field.width) - 1) << field.lsb
 
@@ -46,9 +64,10 @@ def write_c_header(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstrea
     output_register = user_interface.output_register
     prefix = demo.macro_prefix
     array_name = f"{demo.c_identifier}_cfg_words"
-    values = [f"0x{word:04x}" for word in bitstream.words]
-    rows = [", ".join(values[i : i + 8]) for i in range(0, len(values), 8)]
-    array_body = ",\n  ".join(rows)
+    getter_name = f"{demo.c_identifier}_cfg_word"
+    array_type = _cfg_array_type(cfg.word_width)
+    hex_digits = max(1, (cfg.word_width + 3) // 4)
+    array_body = _format_array(bitstream.words, hex_digits)
 
     lines = [
         f"#ifndef {prefix}_BITSTREAM_H",
@@ -59,6 +78,7 @@ def write_c_header(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstrea
         f"#define {prefix}_BASE 0x{demo.soc.base_address:x}UL",
         f"#define {prefix}_SIZE 0x{demo.soc.size:x}UL",
         f"#define {prefix}_BITSTREAM_LEN {bitstream.parsed_length}",
+        f"#define {prefix}_CONFIG_PROTOCOL_{cfg.kind.upper()} 1",
         f"#define {prefix}_CFG_WORD_WIDTH {cfg.word_width}",
         f"#define {prefix}_CFG_ADDR_WIDTH {cfg.address_width}",
         f"#define {prefix}_CFG_DATA_WIDTH {cfg.data_width}",
@@ -70,9 +90,13 @@ def write_c_header(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstrea
     lines.extend(_field_macros(prefix, "OUTPUT", output_register.fields))
     lines.extend(
         [
-            f"static const uint16_t {array_name}[{prefix}_BITSTREAM_LEN] = {{",
+            f"static const {array_type} {array_name}[{prefix}_BITSTREAM_LEN] = {{",
             f"  {array_body}",
             "};",
+            "",
+            f"static inline uint32_t {getter_name}(uint32_t index) {{",
+            f"  return {array_name}[index];",
+            "}",
             "",
             "#endif",
             "",

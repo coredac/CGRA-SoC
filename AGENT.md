@@ -57,15 +57,16 @@ stack:
 
 | Demo | Config | C test | Status |
 | --- | --- | --- | --- |
-| OpenFPGA AND2 | `OpenFPGADemoRocketConfig` | `tests/openfpga-and2.c` | PASS in Verilator. |
+| OpenFPGA AND2 | `OpenFPGADemoRocketConfig` | `tests/fpga/openfpga-and2.c` | PASS in Verilator. |
+| OpenFPGA AND2_OR2 | `OpenFPGAAnd2Or2K4FrameRocketConfig` | `tests/fpga/openfpga-and2-or2-k4-frame.c` | PASS in Verilator. |
+| OpenFPGA bin2bcd | `OpenFPGABin2BcdK4FrameRocketConfig` | `tests/fpga/openfpga-bin2bcd-k4-frame.c` | PASS in Verilator. |
+| OpenFPGA gcd6 | `OpenFPGAGcd6K4FrameRocketConfig` | `tests/fpga/openfpga-gcd6-k4-frame.c` | PASS in Verilator. |
 
-The OpenFPGA source of truth is `configs/openfpga/openfpga_and2.yaml`. It selects
-the OpenFPGA/VPR architecture pair, benchmark files, frame-based config protocol,
-MMIO base address, and Chipyard config name. The packed `USER_INPUT` and
-`USER_OUTPUT` fields are derived from the OpenFPGA formal verification netlist:
-benchmark input/output ports are packed in formal module declaration order, with
-bits inside each port packed by ascending bit index. The current verified
-benchmark is OpenFPGA's `and2` micro benchmark.
+OpenFPGA source configs live under `configs/openfpga/`. `openfpga_and2.yaml`
+and `openfpga_and2_or2_k4_frame.yaml` are single-benchmark configs.
+`openfpga_fabric_k4_frame_4x4_w40.yaml` is a shared k4 frame-based fabric config
+with selectable `bin2bcd` and `gcd6` benchmarks. Current support is frame-based
+k4 fabric only; scan-chain configs are not supported in the Chipyard backend.
 
 `scripts/openfpga/generate.py` runs the local OpenFPGA flow, extracts the
 formal netlist user-interface layout and pin map, parses and prepackages the
@@ -78,7 +79,7 @@ The Chipyard-side OpenFPGA peripheral is TileLink MMIO, not RoCC. The current
 register contract is:
 
 - `0x00`: control, write bit 0 to clear programming state.
-- `0x08`: status, bit 0 is programmed and the upper 16 bits are the config word count.
+- `0x08`: status, bit 0 is programmed, bit 1 is config-active, and the high bits hold `cfgCount`.
 - `0x10`: `CFG_WORD`, a prepacked frame-based config word.
 - `0x20`: packed `USER_INPUT`.
 - `0x28`: packed `USER_OUTPUT`.
@@ -146,8 +147,8 @@ python scripts/generate_single_cgra.py --arch-yaml configs/arch/arch.yaml --soc-
 python scripts/generate_multi_cgra.py --arch-yaml configs/arch/multi_cgra_arch.yaml --soc-yaml configs/soc/multi_cgra_soc.yaml
 python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/cgra_soc.yaml configs/kernels/kernel_<kernel>_4x4.yaml --output-dir tests/generated
 ./run-chipyard-cgra-test.sh --rebuild <c-test-name>
-python scripts/openfpga/generate.py --config configs/openfpga/openfpga_and2.yaml
-./run-chipyard-openfpga-demo.sh --rebuild
+python scripts/openfpga/generate.py --config configs/openfpga/openfpga_fabric_k4_frame_4x4_w40.yaml --benchmark gcd6
+CONFIG=OpenFPGAGcd6K4FrameRocketConfig ./run-chipyard-openfpga-demo.sh --rebuild openfpga-gcd6-k4-frame
 ```
 
 Concrete examples:

@@ -23,19 +23,28 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="OpenFPGA demo YAML, e.g. configs/openfpga/openfpga_and2.yaml",
     )
+    parser.add_argument(
+        "--benchmark",
+        help="Benchmark key to select when --config contains a benchmarks mapping",
+    )
     return parser.parse_args()
 
 
 def write_metadata(demo: DemoConfig, paths, user_interface, pin_map, bitstream) -> None:
+    cfg = demo.architecture.config_protocol
     metadata = {
         "name": demo.name,
         "workdir": str(paths.workdir.relative_to(ROOT)),
         "vsrc_dir": str(paths.vsrc_dir.relative_to(ROOT)),
         "config_protocol": {
-            "type": demo.architecture.config_protocol.kind,
-            "address_width": demo.architecture.config_protocol.address_width,
-            "data_width": demo.architecture.config_protocol.data_width,
-            "word_width": demo.architecture.config_protocol.word_width,
+            "type": cfg.kind,
+            "address_width": cfg.address_width,
+            "data_width": cfg.data_width,
+            "word_width": cfg.word_width,
+        },
+        "application": {
+            "clock_ports": list(demo.application.clock_ports),
+            "reset_ports": list(demo.application.reset_ports),
         },
         "user_interface": {
             "input_register": user_interface.input_register.name,
@@ -49,6 +58,8 @@ def write_metadata(demo: DemoConfig, paths, user_interface, pin_map, bitstream) 
             "wrapper_module": demo.chipyard.wrapper_module,
             "wrapper_path": str(demo.wrapper_path.resolve()),
             "scala_object": demo.chipyard.scala_object,
+            "fabric_name": demo.fabric_name,
+            "fabric_vsrc_dir": str(demo.fabric_vsrc_dir.resolve()),
         },
         "pin_map": pin_map.to_json_dict(),
         "bitstream": bitstream.to_json_dict(),
@@ -66,29 +77,35 @@ def write_metadata(demo: DemoConfig, paths, user_interface, pin_map, bitstream) 
 
 def print_summary(demo: DemoConfig, paths, pin_map, bitstream) -> None:
     cfg = demo.architecture.config_protocol
-    data_slice = "0" if cfg.data_width == 1 else f"{cfg.data_width - 1}:0"
     print(f"Generated OpenFPGA demo in {paths.workdir.relative_to(ROOT)}")
-    print(f"Synced RTL to {paths.vsrc_dir.relative_to(ROOT)}")
+    print(f"Synced wrapper to {paths.vsrc_dir.relative_to(ROOT)}")
+    print(f"Synced fabric RTL to {demo.fabric_vsrc_dir.relative_to(ROOT)}")
     print(f"Wrapper module: {demo.chipyard.wrapper_module}")
     print(f"Pin map: {pin_map.summary()}")
     print(f"Bitstream length: {bitstream.parsed_length}")
-    print(
-        "CFG words are prepacked for "
-        f"CFG_WORD[{cfg.word_width - 1}:{cfg.data_width}]=address[{cfg.address_width - 1}:0], "
-        f"CFG_WORD[{data_slice}]=data[{cfg.data_width - 1}:0]"
-    )
+    if cfg.is_frame_based:
+        data_slice = "0" if cfg.data_width == 1 else f"{cfg.data_width - 1}:0"
+        print(
+            "CFG words are prepacked for "
+            f"CFG_WORD[{cfg.word_width - 1}:{cfg.data_width}]=address[{cfg.address_width - 1}:0], "
+            f"CFG_WORD[{data_slice}]=data[{cfg.data_width - 1}:0]"
+        )
 
 
 def main() -> int:
     args = parse_args()
-    demo = load_demo_config(Path(args.config))
+    demo = load_demo_config(Path(args.config), benchmark=args.benchmark)
 
     paths = run_openfpga_flow(demo)
     formal = ensure_file(
         paths.src_dir / f"{demo.application.top_module}_top_formal_verification.v",
         "OpenFPGA formal verification netlist",
     )
-    extracted = extract_interface_and_pin_map(formal)
+    extracted = extract_interface_and_pin_map(
+        formal,
+        excluded_input_ports=demo.application.clock_ports,
+        known_input_ports=demo.application.clock_ports + demo.application.reset_ports,
+    )
     user_interface = extracted.user_interface
     pin_map = extracted.pin_map
     bitstream = parse_bitstream(paths.workdir / "fabric_bitstream.bit", demo)
