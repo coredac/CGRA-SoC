@@ -67,6 +67,9 @@ and `openfpga_and2_or2_k4_frame.yaml` are single-benchmark configs.
 `openfpga_fabric_k4_frame_4x4_w40.yaml` is a shared k4 frame-based fabric config
 with selectable `bin2bcd` and `gcd6` benchmarks. Current support is frame-based
 k4 fabric only; scan-chain configs are not supported in the Chipyard backend.
+The `bin2bcd` benchmark uses the `yosys_vpr` flow, so CI setup must keep
+`OpenFPGA/build/yosys/bin/yosys` available without rebuilding OpenFPGA with
+`OPENFPGA_WITH_YOSYS=ON`.
 
 `scripts/openfpga/generate.py` runs the local OpenFPGA flow, extracts the
 formal netlist user-interface layout and pin map, parses and prepackages the

@@ -42,7 +42,7 @@ ensure_vectorcgra_submodules() {
 ensure_openfpga_submodules() {
   (
     cd "$OPENFPGA_DIR"
-    echo "Initializing OpenFPGA submodules needed for the AND2 fabric demo."
+    echo "Initializing OpenFPGA submodules needed for FPGA fabric demos."
     git submodule sync -- vtr-verilog-to-routing
     git submodule update --init --recursive -- vtr-verilog-to-routing
   )
@@ -279,31 +279,82 @@ ensure_openfpga_swig() {
   )
 }
 
-openfpga_env_ready() {
+openfpga_python_ready() {
   [[ -x "$OPENFPGA_VENV_DIR/bin/python" ]] || return 1
-  [[ -x "$OPENFPGA_DIR/build/openfpga/openfpga" ]] || return 1
-
   "$OPENFPGA_VENV_DIR/bin/python" - <<'PY' >/dev/null
 import coloredlogs
 import envyaml
 import humanize
 import pyverilog
 PY
+}
+
+openfpga_shell_ready() {
+  [[ -x "$OPENFPGA_DIR/build/openfpga/openfpga" ]] || return 1
   "$OPENFPGA_DIR/build/openfpga/openfpga" --version >/dev/null
 }
 
-ensure_openfpga_env() {
-  if openfpga_env_ready; then
-    echo "Reusing existing OpenFPGA Python/build environment."
+openfpga_yosys_ready() {
+  [[ -x "$OPENFPGA_DIR/build/yosys/bin/yosys" ]] || return 1
+  "$OPENFPGA_DIR/build/yosys/bin/yosys" -V >/dev/null
+}
+
+openfpga_env_ready() {
+  openfpga_python_ready &&
+  openfpga_shell_ready &&
+  openfpga_yosys_ready
+}
+
+link_openfpga_yosys() {
+  local yosys_bin
+  yosys_bin="$(command -v yosys || true)"
+  if [[ -z "$yosys_bin" ]]; then
+    return 1
+  fi
+
+  mkdir -p "$OPENFPGA_DIR/build/yosys/bin"
+  ln -sf "$yosys_bin" "$OPENFPGA_DIR/build/yosys/bin/yosys"
+
+  local yosys_abc=""
+  if have_cmd yosys-abc; then
+    yosys_abc="$(command -v yosys-abc)"
+  elif [[ -x /usr/lib/yosys/yosys-abc ]]; then
+    yosys_abc=/usr/lib/yosys/yosys-abc
+  fi
+  if [[ -n "$yosys_abc" ]]; then
+    ln -sf "$yosys_abc" "$OPENFPGA_DIR/build/yosys/bin/yosys-abc"
+  fi
+}
+
+ensure_openfpga_yosys() {
+  if openfpga_yosys_ready; then
     return
   fi
 
-  ensure_openfpga_python
+  if ! have_cmd yosys; then
+    if ! have_cmd sudo || ! have_cmd apt-get; then
+      echo "error: yosys is required for OpenFPGA yosys_vpr benchmarks, but it is not installed" >&2
+      return 1
+    fi
+    echo "Installing system Yosys for OpenFPGA yosys_vpr benchmarks."
+    sudo apt-get update
+    sudo apt-get install -y --no-install-recommends yosys
+  fi
+
+  link_openfpga_yosys
+  openfpga_yosys_ready
+}
+
+ensure_openfpga_shell() {
+  if openfpga_shell_ready; then
+    return
+  fi
+
   ensure_openfpga_pkgconf
   ensure_openfpga_tcl
   ensure_openfpga_swig
 
-  echo "Building minimal OpenFPGA shell for the AND2 fabric demo."
+  echo "Building minimal OpenFPGA shell for FPGA fabric demos."
   mkdir -p "$OPENFPGA_DIR/build"
   (
     cd "$ROOT_DIR"
@@ -323,6 +374,17 @@ ensure_openfpga_env() {
       -DOPENFPGA_READLINE_MODE=standard
     cmake --build "$OPENFPGA_DIR/build" --target openfpga -j"${OPENFPGA_BUILD_JOBS:-2}"
   )
+}
+
+ensure_openfpga_env() {
+  if openfpga_env_ready; then
+    echo "Reusing existing OpenFPGA Python/build environment."
+    return
+  fi
+
+  ensure_openfpga_python
+  ensure_openfpga_shell
+  ensure_openfpga_yosys
 }
 
 check_environment() {
@@ -355,6 +417,7 @@ import pyverilog
 print("openfpga_python_deps=ok")
 PY
   "$OPENFPGA_DIR/build/openfpga/openfpga" --version
+  "$OPENFPGA_DIR/build/yosys/bin/yosys" -V
 }
 
 ensure_root_submodules
