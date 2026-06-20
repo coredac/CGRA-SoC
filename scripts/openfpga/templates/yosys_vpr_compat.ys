@@ -1,0 +1,41 @@
+# Yosys synthesis script for ${TOP_MODULE}.
+# Keep this compatible with the system Yosys used by CI.
+read_verilog ${READ_VERILOG_OPTIONS} ${VERILOG_FILES}
+
+hierarchy -check -top ${TOP_MODULE}
+proc
+techmap -D NO_LUT -map +/adff2dff.v
+flatten
+
+opt_expr
+opt_clean
+check
+fsm
+opt_expr
+opt_merge
+opt_muxtree
+opt_reduce
+opt_clean
+wreduce
+opt_clean
+
+memory -nomap
+opt_expr
+opt_merge
+opt_clean
+memory_map
+opt_expr
+opt_merge
+opt_clean
+techmap
+opt_expr
+opt_merge
+opt_clean
+clean
+
+abc -lut ${LUT_SIZE}
+
+synth -run check
+
+opt_clean -purge
+write_blif ${OUTPUT_BLIF}

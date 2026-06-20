@@ -69,7 +69,9 @@ with selectable `bin2bcd` and `gcd6` benchmarks. Current support is frame-based
 k4 fabric only; scan-chain configs are not supported in the Chipyard backend.
 The `bin2bcd` benchmark uses the `yosys_vpr` flow, so CI setup must keep
 `OpenFPGA/build/yosys/bin/yosys` available without rebuilding OpenFPGA with
-`OPENFPGA_WITH_YOSYS=ON`.
+`OPENFPGA_WITH_YOSYS=ON`. Shared k4 `yosys_vpr` benchmarks use
+`scripts/openfpga/templates/yosys_vpr_compat.ys`; keep that template compatible
+with the system Yosys installed by CI.
 
 `scripts/openfpga/generate.py` runs the local OpenFPGA flow, extracts the
 formal netlist user-interface layout and pin map, parses and prepackages the

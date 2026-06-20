@@ -13,6 +13,7 @@ architecture:
 
 flow:
   fpga_flow: yosys_vpr
+  yosys_tmpl: ../scripts/openfpga/templates/yosys_vpr_compat.ys
   explicit_port_mapping: true
   extra_template_vars:
     openfpga_vpr_device_layout: 4x4

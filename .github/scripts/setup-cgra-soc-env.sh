@@ -43,8 +43,8 @@ ensure_openfpga_submodules() {
   (
     cd "$OPENFPGA_DIR"
     echo "Initializing OpenFPGA submodules needed for FPGA fabric demos."
-    git submodule sync -- vtr-verilog-to-routing
-    git submodule update --init --recursive -- vtr-verilog-to-routing
+    git submodule sync -- vtr-verilog-to-routing yosys
+    git submodule update --init --recursive -- vtr-verilog-to-routing yosys
   )
 }
 
@@ -295,35 +295,10 @@ openfpga_shell_ready() {
 }
 
 openfpga_yosys_ready() {
-  [[ -x "$OPENFPGA_DIR/build/yosys/bin/yosys" ]] || return 1
-  "$OPENFPGA_DIR/build/yosys/bin/yosys" -V >/dev/null
-}
-
-openfpga_env_ready() {
-  openfpga_python_ready &&
-  openfpga_shell_ready &&
-  openfpga_yosys_ready
-}
-
-link_openfpga_yosys() {
-  local yosys_bin
-  yosys_bin="$(command -v yosys || true)"
-  if [[ -z "$yosys_bin" ]]; then
-    return 1
-  fi
-
-  mkdir -p "$OPENFPGA_DIR/build/yosys/bin"
-  ln -sf "$yosys_bin" "$OPENFPGA_DIR/build/yosys/bin/yosys"
-
-  local yosys_abc=""
-  if have_cmd yosys-abc; then
-    yosys_abc="$(command -v yosys-abc)"
-  elif [[ -x /usr/lib/yosys/yosys-abc ]]; then
-    yosys_abc=/usr/lib/yosys/yosys-abc
-  fi
-  if [[ -n "$yosys_abc" ]]; then
-    ln -sf "$yosys_abc" "$OPENFPGA_DIR/build/yosys/bin/yosys-abc"
-  fi
+  local yosys_bin="$OPENFPGA_DIR/build/yosys/bin/yosys"
+  [[ -x "$yosys_bin" ]] || return 1
+  [[ ! -L "$yosys_bin" ]] || return 1
+  "$yosys_bin" -V >/dev/null
 }
 
 ensure_openfpga_yosys() {
@@ -331,17 +306,32 @@ ensure_openfpga_yosys() {
     return
   fi
 
-  if ! have_cmd yosys; then
-    if ! have_cmd sudo || ! have_cmd apt-get; then
-      echo "error: yosys is required for OpenFPGA yosys_vpr benchmarks, but it is not installed" >&2
-      return 1
-    fi
-    echo "Installing system Yosys for OpenFPGA yosys_vpr benchmarks."
-    sudo apt-get update
-    sudo apt-get install -y --no-install-recommends yosys
-  fi
+  echo "Building bundled OpenFPGA Yosys for yosys_vpr benchmarks."
+  rm -f "$OPENFPGA_DIR/build/yosys/bin/yosys" "$OPENFPGA_DIR/build/yosys/bin/yosys-abc"
+  (
+    cd "$ROOT_DIR"
+    PATH="$OPENFPGA_LOCAL_DIR/bin:$PATH" \
+    LD_LIBRARY_PATH="$OPENFPGA_LOCAL_DIR/lib:${LD_LIBRARY_PATH:-}" \
+    BUILD_USING_CCACHE=off \
+    cmake -S "$OPENFPGA_DIR" -B "$OPENFPGA_DIR/build" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_PREFIX_PATH="$OPENFPGA_LOCAL_DIR" \
+      -DOPENFPGA_IPO_BUILD=off \
+      -DOPENFPGA_WITH_YOSYS=ON \
+      -DOPENFPGA_WITH_SLANG=OFF \
+      -DOPENFPGA_WITH_SWIG=OFF \
+      -DOPENFPGA_WITH_TEST=OFF \
+      -DOPENFPGA_WITH_INSTALLER=OFF \
+      -DOPENFPGA_INSTALL_DOC=OFF \
+      -DOPENFPGA_READLINE_MODE=standard
+    cmake --build "$OPENFPGA_DIR/build" --target yosys -j"${OPENFPGA_BUILD_JOBS:-2}"
+  )
+  openfpga_yosys_ready
+}
 
-  link_openfpga_yosys
+openfpga_env_ready() {
+  openfpga_python_ready &&
+  openfpga_shell_ready &&
   openfpga_yosys_ready
 }
 
@@ -365,7 +355,7 @@ ensure_openfpga_shell() {
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_PREFIX_PATH="$OPENFPGA_LOCAL_DIR" \
       -DOPENFPGA_IPO_BUILD=off \
-      -DOPENFPGA_WITH_YOSYS=OFF \
+      -DOPENFPGA_WITH_YOSYS=ON \
       -DOPENFPGA_WITH_SLANG=OFF \
       -DOPENFPGA_WITH_SWIG=OFF \
       -DOPENFPGA_WITH_TEST=OFF \
