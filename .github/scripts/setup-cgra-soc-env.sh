@@ -323,7 +323,8 @@ ensure_openfpga_yosys() {
       -DOPENFPGA_WITH_TEST=OFF \
       -DOPENFPGA_WITH_INSTALLER=OFF \
       -DOPENFPGA_INSTALL_DOC=OFF \
-      -DOPENFPGA_READLINE_MODE=standard
+      -DOPENFPGA_READLINE_MODE=standard \
+      "-DYOSYS_BUILD_OPTION=ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0"
     cmake --build "$OPENFPGA_DIR/build" --target yosys -j"${OPENFPGA_BUILD_JOBS:-2}"
   )
   openfpga_yosys_ready
@@ -361,7 +362,8 @@ ensure_openfpga_shell() {
       -DOPENFPGA_WITH_TEST=OFF \
       -DOPENFPGA_WITH_INSTALLER=OFF \
       -DOPENFPGA_INSTALL_DOC=OFF \
-      -DOPENFPGA_READLINE_MODE=standard
+      -DOPENFPGA_READLINE_MODE=standard \
+      "-DYOSYS_BUILD_OPTION=ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0"
     cmake --build "$OPENFPGA_DIR/build" --target openfpga -j"${OPENFPGA_BUILD_JOBS:-2}"
   )
 }
