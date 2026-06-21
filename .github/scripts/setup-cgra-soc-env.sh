@@ -301,7 +301,54 @@ openfpga_yosys_ready() {
   "$yosys_bin" -V >/dev/null
 }
 
+openfpga_abc_bin() {
+  printf "%s\n" "$OPENFPGA_DIR/build/vtr-verilog-to-routing/abc/abc"
+}
+
+openfpga_abc_ready() {
+  local abc_bin
+  abc_bin="$(openfpga_abc_bin)"
+  [[ -x "$abc_bin" ]] || return 1
+  "$abc_bin" -c quit >/dev/null
+}
+
+# Reuse VTR's ABC instead of building Yosys' in-tree ABC in CI.
+openfpga_yosys_build_option() {
+  printf "ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0;ABCEXTERNAL=%s\n" "$(openfpga_abc_bin)"
+}
+
+ensure_openfpga_abc() {
+  if openfpga_abc_ready; then
+    return
+  fi
+
+  echo "Building OpenFPGA VTR ABC for bundled Yosys."
+  mkdir -p "$OPENFPGA_DIR/build"
+  (
+    cd "$ROOT_DIR"
+    PATH="$OPENFPGA_LOCAL_DIR/bin:$PATH" \
+    LD_LIBRARY_PATH="$OPENFPGA_LOCAL_DIR/lib:${LD_LIBRARY_PATH:-}" \
+    BUILD_USING_CCACHE=off \
+    cmake -S "$OPENFPGA_DIR" -B "$OPENFPGA_DIR/build" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_PREFIX_PATH="$OPENFPGA_LOCAL_DIR" \
+      -DOPENFPGA_IPO_BUILD=off \
+      -DOPENFPGA_WITH_YOSYS=ON \
+      -DOPENFPGA_WITH_SLANG=OFF \
+      -DOPENFPGA_WITH_SWIG=OFF \
+      -DOPENFPGA_WITH_TEST=OFF \
+      -DOPENFPGA_WITH_INSTALLER=OFF \
+      -DOPENFPGA_INSTALL_DOC=OFF \
+      -DOPENFPGA_READLINE_MODE=standard \
+      "-DYOSYS_BUILD_OPTION=$(openfpga_yosys_build_option)"
+    cmake --build "$OPENFPGA_DIR/build" --target abc -j"${OPENFPGA_BUILD_JOBS:-2}"
+  )
+  openfpga_abc_ready
+}
+
 ensure_openfpga_yosys() {
+  ensure_openfpga_abc
+
   if openfpga_yosys_ready; then
     return
   fi
@@ -324,7 +371,7 @@ ensure_openfpga_yosys() {
       -DOPENFPGA_WITH_INSTALLER=OFF \
       -DOPENFPGA_INSTALL_DOC=OFF \
       -DOPENFPGA_READLINE_MODE=standard \
-      "-DYOSYS_BUILD_OPTION=ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0"
+      "-DYOSYS_BUILD_OPTION=$(openfpga_yosys_build_option)"
     cmake --build "$OPENFPGA_DIR/build" --target yosys -j"${OPENFPGA_BUILD_JOBS:-2}"
   )
   openfpga_yosys_ready
@@ -333,6 +380,7 @@ ensure_openfpga_yosys() {
 openfpga_env_ready() {
   openfpga_python_ready &&
   openfpga_shell_ready &&
+  openfpga_abc_ready &&
   openfpga_yosys_ready
 }
 
@@ -363,7 +411,7 @@ ensure_openfpga_shell() {
       -DOPENFPGA_WITH_INSTALLER=OFF \
       -DOPENFPGA_INSTALL_DOC=OFF \
       -DOPENFPGA_READLINE_MODE=standard \
-      "-DYOSYS_BUILD_OPTION=ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0"
+      "-DYOSYS_BUILD_OPTION=$(openfpga_yosys_build_option)"
     cmake --build "$OPENFPGA_DIR/build" --target openfpga -j"${OPENFPGA_BUILD_JOBS:-2}"
   )
 }
@@ -409,6 +457,7 @@ import pyverilog
 print("openfpga_python_deps=ok")
 PY
   "$OPENFPGA_DIR/build/openfpga/openfpga" --version
+  "$(openfpga_abc_bin)" -c quit >/dev/null
   "$OPENFPGA_DIR/build/yosys/bin/yosys" -V
 }
 
