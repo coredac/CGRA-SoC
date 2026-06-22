@@ -279,6 +279,54 @@ ensure_openfpga_swig() {
   )
 }
 
+openfpga_flex_header() {
+  printf "%s\n" "$OPENFPGA_LOCAL_DIR/include/FlexLexer.h"
+}
+
+openfpga_flex_header_ready() {
+  [[ -f "$(openfpga_flex_header)" ]]
+}
+
+ensure_openfpga_flex_header() {
+  if openfpga_flex_header_ready; then
+    return
+  fi
+
+  echo "Installing Flex C++ header locally for bundled Yosys."
+  mkdir -p "$OPENFPGA_DEPS_DIR" "$OPENFPGA_LOCAL_DIR/include"
+
+  local system_header=""
+  if [[ -f /usr/include/FlexLexer.h ]]; then
+    system_header=/usr/include/FlexLexer.h
+  elif [[ -f /usr/local/include/FlexLexer.h ]]; then
+    system_header=/usr/local/include/FlexLexer.h
+  fi
+
+  if [[ -n "$system_header" ]]; then
+    cp "$system_header" "$(openfpga_flex_header)"
+    return
+  fi
+
+  local tarball="$OPENFPGA_DEPS_DIR/flex-2.6.4.tar.gz"
+  local source_dir="$OPENFPGA_DEPS_DIR/flex-2.6.4"
+  if [[ ! -f "$tarball" ]]; then
+    curl --fail -L --retry 3 -o "$tarball" "https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz"
+  fi
+  if [[ ! -d "$source_dir" ]]; then
+    tar -xzf "$tarball" -C "$OPENFPGA_DEPS_DIR"
+  fi
+
+  local flex_header="$source_dir/src/FlexLexer.h"
+  if [[ ! -f "$flex_header" ]]; then
+    flex_header="$(find "$source_dir" -name FlexLexer.h -print -quit)"
+  fi
+  [[ -f "$flex_header" ]] || {
+    echo "Failed to locate FlexLexer.h in $source_dir." >&2
+    return 1
+  }
+  cp "$flex_header" "$(openfpga_flex_header)"
+}
+
 openfpga_python_ready() {
   [[ -x "$OPENFPGA_VENV_DIR/bin/python" ]] || return 1
   "$OPENFPGA_VENV_DIR/bin/python" - <<'PY' >/dev/null
@@ -314,7 +362,9 @@ openfpga_abc_ready() {
 
 # Reuse VTR's ABC instead of building Yosys' in-tree ABC in CI.
 openfpga_yosys_build_option() {
-  printf "ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0;ABCEXTERNAL=%s\n" "$(openfpga_abc_bin)"
+  printf "ENABLE_CCACHE=0;ENABLE_READLINE=0;ENABLE_TCL=0;CPPFLAGS=-I%s;ABCEXTERNAL=%s\n" \
+    "$OPENFPGA_LOCAL_DIR/include" \
+    "$(openfpga_abc_bin)"
 }
 
 ensure_openfpga_abc() {
@@ -347,6 +397,7 @@ ensure_openfpga_abc() {
 }
 
 ensure_openfpga_yosys() {
+  ensure_openfpga_flex_header
   ensure_openfpga_abc
 
   if openfpga_yosys_ready; then
@@ -380,6 +431,7 @@ ensure_openfpga_yosys() {
 openfpga_env_ready() {
   openfpga_python_ready &&
   openfpga_shell_ready &&
+  openfpga_flex_header_ready &&
   openfpga_abc_ready &&
   openfpga_yosys_ready
 }
@@ -392,6 +444,7 @@ ensure_openfpga_shell() {
   ensure_openfpga_pkgconf
   ensure_openfpga_tcl
   ensure_openfpga_swig
+  ensure_openfpga_flex_header
 
   echo "Building minimal OpenFPGA shell for FPGA fabric demos."
   mkdir -p "$OPENFPGA_DIR/build"
@@ -457,6 +510,7 @@ import pyverilog
 print("openfpga_python_deps=ok")
 PY
   "$OPENFPGA_DIR/build/openfpga/openfpga" --version
+  test -f "$(openfpga_flex_header)"
   "$(openfpga_abc_bin)" -c quit >/dev/null
   "$OPENFPGA_DIR/build/yosys/bin/yosys" -V
 }
