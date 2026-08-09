@@ -39,7 +39,8 @@ suite:
 
 | Demo | Config | C test | Status |
 | --- | --- | --- | --- |
-| Gemmini GEMM + single-CGRA ReLU | `CGRAMinimalGemminiRocketConfig` | `tests/cgra-gemmini/gemmini-gemm-cgra-relu.c` | PASS in the saved timing run. |
+| Gemmini GEMM + CPU-fed CGRA ReLU | `CGRAMinimalGemminiRocketConfig` | `tests/cgra-gemmini/relu.c` | PASS. |
+| Gemmini GEMM + CGRA DMA ReLU smoke | `CGRAMinimalGemminiRocketConfig` | `tests/cgra-gemmini/relu_dma.c` | Chunk 0 PASS. |
 
 Gemmini uses `OpcodeSet.custom3`; CGRA uses `OpcodeSet.custom0`. Keep those
 opcodes distinct. The demo data path is:
@@ -48,6 +49,9 @@ opcodes distinct. The demo data path is:
 DRAM A/B -> Gemmini scratchpad/accumulator -> DRAM C
   -> CPU -> CGRA fast STORE_REQUEST -> CGRA data memory
   -> CGRA ReLU -> CGRA data memory -> CPU fast readback
+
+DRAM A/B -> Gemmini scratchpad/accumulator -> DRAM int32 C
+  -> CGRA DMA -> CGRA ReLU -> CGRA DMA -> DRAM output -> CPU verification
 ```
 
 Do not assume direct Gemmini buffer to CGRA data-memory connectivity.
@@ -415,7 +419,9 @@ it and remove the explanatory comment in the test.
 - Gemmini + CGRA runner:
   [run-chipyard-cgra-gemmini-demo.sh](/mnt/public/sichuan_a/qjj/CGRA-SoC/run-chipyard-cgra-gemmini-demo.sh:1)
 - Gemmini + CGRA demo source:
-  [tests/cgra-gemmini/gemmini-gemm-cgra-relu.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-gemmini/gemmini-gemm-cgra-relu.c:1)
+  [tests/cgra-gemmini/relu.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-gemmini/relu.c:1)
+- Gemmini + CGRA DMA smoke source:
+  [tests/cgra-gemmini/relu_dma.c](/mnt/public/sichuan_a/qjj/CGRA-SoC/tests/cgra-gemmini/relu_dma.c:1)
 
 ## RoCC Host Interface
 

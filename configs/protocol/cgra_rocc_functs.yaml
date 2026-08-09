@@ -1,0 +1,15 @@
+# Authoritative RoCC funct7 protocol for the single-CGRA SoC wrapper.
+# Scala and C definitions are generated from this table.
+functs:
+  STATUS: 2
+  WAIT: 4
+  RAW_PKT_LO: 5
+  RAW_PKT_MID: 6
+  RAW_PKT_HI: 7
+  SET_EXPECTED_COMPLETES: 8
+  RESULT: 9
+  RAW_PKT_TOP: 10
+  LOAD_RESULT: 11
+  DMA_MVIN_ASYNC: 12
+  DMA_MVOUT_ASYNC: 13
+  DMA_WAIT: 14

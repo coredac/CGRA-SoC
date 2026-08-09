@@ -7,11 +7,11 @@ CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
 CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
-TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/gemmini-gemm-cgra-relu.c}"
+TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 usage() {
-  echo "usage: $0 [--rebuild] [test-source.c]" >&2
+  echo "usage: $0 [--rebuild] [--fast] [test-source.c]" >&2
   echo "       CONFIG=$CONFIG TEST_SRC=$TEST_SRC $0 --rebuild" >&2
 }
 
@@ -19,6 +19,9 @@ while (($# > 0)); do
   case "$1" in
     --rebuild)
       REBUILD=1
+      ;;
+    --fast)
+      # Fast simulation is the only supported mode.
       ;;
     -h|--help)
       usage
@@ -42,6 +45,7 @@ if [[ ! -f "$TEST_SRC" ]]; then
   usage
   exit 1
 fi
+TEST_SRC="$(realpath "$TEST_SRC")"
 
 if (( ! REBUILD )); then
   echo "note: first run should use --rebuild so elaboration regenerates matching gemmini_params.h" >&2
@@ -88,7 +92,13 @@ riscv64-unknown-elf-gcc \
   "$TEST_SRC" \
   -o "$BIN_PATH"
 
-echo "$RUN_STEP Running $TEST_NAME on $CONFIG"
+# The combined generated model requires more host stack than the common
+# 8 MiB shell default. Keep this local to the simulator process tree.
+if [[ "$(ulimit -s)" != unlimited ]] && (( $(ulimit -s) < 32768 )); then
+  ulimit -s 32768
+fi
+
+echo "$RUN_STEP Running $TEST_NAME on $CONFIG (fast)"
 make -C sims/verilator \
   CONFIG="$CONFIG" \
   BINARY="$BIN_PATH" \

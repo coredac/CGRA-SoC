@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate and sync a YAML-configured single CgraTemplateRTL into Chipyard.
+Generate and sync a YAML-configured single IntegratedCgraWithDmaRTL into Chipyard.
 """
 
 from __future__ import annotations
@@ -12,10 +12,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VECTOR_RTL = ROOT / "VectorCGRA" / "CgraTemplateRTL_single__pickled.v"
-TOP_MODULE = "CgraTemplateRTL_single"
-PYTHON = ROOT / ".venv" / "bin" / "python"
-PYTHON_EXE = str(PYTHON if PYTHON.exists() else Path(sys.executable))
+GENERATED_RTL = ROOT / "build" / "cgra" / "IntegratedCgraWithDmaRTL_single__pickled.v"
+TOP_MODULE = "IntegratedCgraWithDmaRTL_single"
+PYTHON_CANDIDATES = (
+    ROOT / ".venv" / "bin" / "python",
+    ROOT / "chipyard" / ".conda-env" / "bin" / "python",
+)
+PYTHON_EXE = str(next((path for path in PYTHON_CANDIDATES if path.exists()),
+                      Path(sys.executable)))
 DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
 DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 
@@ -59,7 +63,9 @@ def main() -> int:
   args = parse_args()
   translate_cmd = [
       PYTHON_EXE,
-      str(ROOT / "VectorCGRA" / "cgra" / "test" / "CgraTemplateRTL_single_test.py"),
+      str(ROOT / "scripts" / "cgra_rtl_generator.py"),
+      "--output",
+      str(GENERATED_RTL),
   ]
   arch_yaml = resolve_input_path(args.arch_yaml)
   soc_yaml = resolve_input_path(args.soc_yaml)
@@ -86,9 +92,10 @@ def main() -> int:
     PYTHON_EXE,
     str(ROOT / "scripts" / "sync_cgra_blackbox.py"),
     "--rtl",
-    str(VECTOR_RTL),
+    str(GENERATED_RTL),
     "--top-module",
     TOP_MODULE,
+    "--require-dma",
   ])
 
   return 0

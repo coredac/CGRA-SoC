@@ -77,6 +77,11 @@ jobs:
           ./run-chipyard-cgra-test.sh cgra-relu4x4 2>&1 | tee cgra-relu4x4.log
           grep -q "CGRA RoCC ReLU4x4 fast API: PASS" cgra-relu4x4.log
 
+      - name: Run CGRA DMA ReLU SoC test
+        run: |
+          ./run-chipyard-cgra-test.sh cgra-dma-relu4x4 2>&1 | tee cgra-dma-relu4x4.log
+          grep -q "CGRA DMA ReLU4x4: PASS" cgra-dma-relu4x4.log
+
       - name: Run AXPY SoC test
         run: |
           ./run-chipyard-cgra-test.sh cgra-axpy-4x4 2>&1 | tee cgra-axpy-4x4.log
@@ -140,7 +145,7 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
-      - name: Run Gemmini and CGRA ReLU demo
+      - name: Run Gemmini and CGRA DMA ReLU demo
         run: |
           .venv/bin/python scripts/generate_single_cgra.py \
             --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
@@ -152,7 +157,7 @@ jobs:
             configs/kernels/kernel_relu4x4_4x4.yaml \
             --output-dir tests/generated
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-demo.log
-          grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini-demo.log
+          grep -q "Gemmini + CGRA DMA ReLU chunk 0 smoke test: PASS" cgra-gemmini-demo.log
 
       - name: Run OpenFPGA AND2 SoC test
         run: |

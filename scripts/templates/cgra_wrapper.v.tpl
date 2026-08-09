@@ -14,12 +14,14 @@ $port_list
   $intra_type w_send_to_cpu_pkt_msg;
   $inter_type w_recv_from_inter_cgra_noc_msg;
   $inter_type w_send_to_inter_cgra_noc_msg;
+$dma_wires
 $boundary_wires
 
   assign w_recv_from_cpu_pkt_msg = recv_from_cpu_pkt_msg;
   assign send_to_cpu_pkt_msg = w_send_to_cpu_pkt_msg;
   assign w_recv_from_inter_cgra_noc_msg = recv_from_inter_cgra_noc_msg;
   assign send_to_inter_cgra_noc_msg = w_send_to_inter_cgra_noc_msg;
+$dma_assigns
 
 $boundary_assigns
 
