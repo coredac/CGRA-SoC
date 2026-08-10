@@ -10,7 +10,6 @@ from typing import Dict, Iterable, List, Optional
 
 from config import FieldSpec, RegisterSpec, UserInterfaceSpec
 
-
 _VERILOG_IDENT = r"[A-Za-z_][A-Za-z0-9_]*"
 
 
@@ -101,7 +100,11 @@ class FormalPort:
 
 
 def _format_pads(pads: List[int]) -> str:
-    return str(pads[0]) if len(pads) == 1 else "[" + ",".join(str(pad) for pad in pads) + "]"
+    return (
+        str(pads[0])
+        if len(pads) == 1
+        else "[" + ",".join(str(pad) for pad in pads) + "]"
+    )
 
 
 def _strip_comments(text: str) -> str:
@@ -133,7 +136,9 @@ def _parse_formal_ports(text: str, formal_verification: Path) -> List[FormalPort
     )
     module_match = module_re.search(text)
     if module_match is None:
-        raise ValueError(f"could not parse formal module port declaration from {formal_verification}")
+        raise ValueError(
+            f"could not parse formal module port declaration from {formal_verification}"
+        )
 
     decl_re = re.compile(
         rf"^(?:(?P<direction>input|output)\s+)?"
@@ -168,18 +173,24 @@ def _parse_formal_ports(text: str, formal_verification: Path) -> List[FormalPort
 
         name = match.group("name")
         if name in seen_names:
-            raise ValueError(f"{formal_verification}: duplicate formal module port {name!r}")
+            raise ValueError(
+                f"{formal_verification}: duplicate formal module port {name!r}"
+            )
         seen_names.add(name)
         ports.append(
             FormalPort(
                 direction=direction,
                 name=name,
-                bit_indices=_parse_range(raw_range, f"{formal_verification} port {name}"),
+                bit_indices=_parse_range(
+                    raw_range, f"{formal_verification} port {name}"
+                ),
             )
         )
 
     if not ports:
-        raise ValueError(f"{formal_verification}: formal module declares no benchmark ports")
+        raise ValueError(
+            f"{formal_verification}: formal module declares no benchmark ports"
+        )
     return ports
 
 
@@ -198,7 +209,9 @@ def _derive_user_interface(
     excluded_input_ports: set[str],
 ) -> UserInterfaceSpec:
     input_ports = [
-        port for port in ports if port.direction == "input" and port.name not in excluded_input_ports
+        port
+        for port in ports
+        if port.direction == "input" and port.name not in excluded_input_ports
     ]
     output_ports = [port for port in ports if port.direction == "output"]
     if not input_ports:
@@ -206,7 +219,9 @@ def _derive_user_interface(
             f"{formal_verification}: formal module declares no software-visible benchmark input ports"
         )
     if not output_ports:
-        raise ValueError(f"{formal_verification}: formal module declares no benchmark output ports")
+        raise ValueError(
+            f"{formal_verification}: formal module declares no benchmark output ports"
+        )
 
     input_register = _build_register("USER_INPUT", input_ports)
     output_register = _build_register("USER_OUTPUT", output_ports)
@@ -215,10 +230,14 @@ def _derive_user_interface(
             "current single-register MMIO USER_INPUT/USER_OUTPUT backend supports widths <= 32; "
             f"got input_width={input_register.width}, output_width={output_register.width}"
         )
-    return UserInterfaceSpec(input_register=input_register, output_register=output_register)
+    return UserInterfaceSpec(
+        input_register=input_register, output_register=output_register
+    )
 
 
-def _port_maps(ports: List[FormalPort]) -> tuple[Dict[str, FormalPort], Dict[str, FormalPort]]:
+def _port_maps(
+    ports: List[FormalPort],
+) -> tuple[Dict[str, FormalPort], Dict[str, FormalPort]]:
     inputs = {port.name: port for port in ports if port.direction == "input"}
     outputs = {port.name: port for port in ports if port.direction == "output"}
     return inputs, outputs
@@ -228,7 +247,9 @@ def _bit_index(port: FormalPort, raw_bit: Optional[str], context: str) -> int:
     if raw_bit is None:
         if port.width == 1:
             return 0
-        raise ValueError(f"{context}: port {port.name!r} has width {port.width}; netlist must name a bit")
+        raise ValueError(
+            f"{context}: port {port.name!r} has width {port.width}; netlist must name a bit"
+        )
     bit = int(raw_bit)
     try:
         return port.bit_indices.index(bit)
@@ -238,7 +259,13 @@ def _bit_index(port: FormalPort, raw_bit: Optional[str], context: str) -> int:
         ) from exc
 
 
-def _record(mapping: Dict[str, List[Optional[int]]], port: FormalPort, bit: int, pad: int, context: str) -> None:
+def _record(
+    mapping: Dict[str, List[Optional[int]]],
+    port: FormalPort,
+    bit: int,
+    pad: int,
+    context: str,
+) -> None:
     current = mapping[port.name][bit]
     port_bit = port.bit_indices[bit]
     if current is not None:
@@ -246,13 +273,19 @@ def _record(mapping: Dict[str, List[Optional[int]]], port: FormalPort, bit: int,
     mapping[port.name][bit] = pad
 
 
-def _finalize(mapping: Dict[str, List[Optional[int]]], ports: Iterable[FormalPort], direction: str) -> Dict[str, List[int]]:
+def _finalize(
+    mapping: Dict[str, List[Optional[int]]], ports: Iterable[FormalPort], direction: str
+) -> Dict[str, List[int]]:
     result: Dict[str, List[int]] = {}
     for port in ports:
         values = mapping[port.name]
-        missing = [port.bit_indices[index] for index, pad in enumerate(values) if pad is None]
+        missing = [
+            port.bit_indices[index] for index, pad in enumerate(values) if pad is None
+        ]
         if missing:
-            raise ValueError(f"could not extract {direction} pin map for {port.name} bits {missing}")
+            raise ValueError(
+                f"could not extract {direction} pin map for {port.name} bits {missing}"
+            )
         result[port.name] = [int(pad) for pad in values if pad is not None]
     return result
 
@@ -271,9 +304,13 @@ def extract_interface_and_pin_map(
     output_port_names = {port.name for port in ports if port.direction == "output"}
     for name in sorted(excluded_inputs | known_inputs):
         if name in output_port_names:
-            raise ValueError(f"{formal_verification}: configured input port {name!r} is an output")
+            raise ValueError(
+                f"{formal_verification}: configured input port {name!r} is an output"
+            )
         if name not in input_port_names:
-            raise ValueError(f"{formal_verification}: configured input port {name!r} is not declared")
+            raise ValueError(
+                f"{formal_verification}: configured input port {name!r} is not declared"
+            )
 
     user_interface = _derive_user_interface(ports, formal_verification, excluded_inputs)
     input_ports = [port for port in ports if port.direction == "input"]
@@ -300,9 +337,17 @@ def extract_interface_and_pin_map(
             )
         port = input_ports_by_name.get(name)
         if port is None:
-            raise ValueError(f"{formal_verification}: GPIO input assign references non-input port {name!r}")
-        bit = _bit_index(port, raw_bit if raw_bit != "" else None, f"{formal_verification} input assign")
-        _record(input_map, port, bit, int(raw_pad), f"{formal_verification} input assign")
+            raise ValueError(
+                f"{formal_verification}: GPIO input assign references non-input port {name!r}"
+            )
+        bit = _bit_index(
+            port,
+            raw_bit if raw_bit != "" else None,
+            f"{formal_verification} input assign",
+        )
+        _record(
+            input_map, port, bit, int(raw_pad), f"{formal_verification} input assign"
+        )
 
     output_assign_re = re.compile(
         rf"\bassign\s+({_VERILOG_IDENT})(?:\[(\d+)\])?\s*=\s*"
@@ -315,9 +360,17 @@ def extract_interface_and_pin_map(
             )
         port = output_ports_by_name.get(name)
         if port is None:
-            raise ValueError(f"{formal_verification}: GPIO output assign references non-output port {name!r}")
-        bit = _bit_index(port, raw_bit if raw_bit != "" else None, f"{formal_verification} output assign")
-        _record(output_map, port, bit, int(raw_pad), f"{formal_verification} output assign")
+            raise ValueError(
+                f"{formal_verification}: GPIO output assign references non-output port {name!r}"
+            )
+        bit = _bit_index(
+            port,
+            raw_bit if raw_bit != "" else None,
+            f"{formal_verification} output assign",
+        )
+        _record(
+            output_map, port, bit, int(raw_pad), f"{formal_verification} output assign"
+        )
 
     pin_map = PinMap(
         inputs=_finalize(input_map, input_ports, "input"),
@@ -335,7 +388,9 @@ def extract_interface_and_pin_map(
     return ExtractedInterface(user_interface=user_interface, pin_map=pin_map)
 
 
-def _parse_pad_ranges(text: str, formal_verification: Path) -> Dict[str, tuple[int, int]]:
+def _parse_pad_ranges(
+    text: str, formal_verification: Path
+) -> Dict[str, tuple[int, int]]:
     range_re = re.compile(
         r"\bwire\s+\[\s*(\d+)\s*:\s*(\d+)\s*\]\s+(gfpga_pad_(?:GPIO|GPIN|GPOUT)_PAD)_fm\s*;"
     )
@@ -368,19 +423,27 @@ def _validate_port_pads(
     pads: List[int],
 ) -> None:
     if len(pads) != len(set(pads)):
-        raise ValueError(f"pin map has duplicate FPGA pads on {port_name}: {pin_map.to_json_dict()}")
+        raise ValueError(
+            f"pin map has duplicate FPGA pads on {port_name}: {pin_map.to_json_dict()}"
+        )
     pad_min, pad_max = min(pad_left, pad_right), max(pad_left, pad_right)
     for pad in pads:
         if pad < pad_min or pad > pad_max:
-            raise ValueError(f"pin map pad {pad} is outside {port_name} range [{pad_left}:{pad_right}]")
+            raise ValueError(
+                f"pin map pad {pad} is outside {port_name} range [{pad_left}:{pad_right}]"
+            )
 
 
 def _validate_pin_map_pads(pin_map: PinMap) -> None:
     by_port: Dict[str, List[int]] = {}
     by_port.setdefault(pin_map.input_pad_port, [])
-    by_port[pin_map.input_pad_port].extend(pad for pads in pin_map.inputs.values() for pad in pads)
+    by_port[pin_map.input_pad_port].extend(
+        pad for pads in pin_map.inputs.values() for pad in pads
+    )
     by_port.setdefault(pin_map.output_pad_port, [])
-    by_port[pin_map.output_pad_port].extend(pad for pads in pin_map.outputs.values() for pad in pads)
+    by_port[pin_map.output_pad_port].extend(
+        pad for pads in pin_map.outputs.values() for pad in pads
+    )
 
     _validate_port_pads(
         pin_map,

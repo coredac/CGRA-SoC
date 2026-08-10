@@ -20,6 +20,23 @@ This repository integrates VectorCGRA-generated RTL with Chipyard RoCC. VectorCG
 
 See [docs/Setup.md](./docs/Setup.md).
 
+## Code Format Style
+
+We follow LLVM style with LF line endings for C sources and use Black for the
+Python utilities under `scripts/`. The format configurations are in
+`.clang-format` and `pyproject.toml` at the repo root. Generated C files are
+listed in `.clang-format-ignore`.
+
+Format the tracked C sources and Python utilities with:
+
+```shell
+$ git ls-files -z '*.c' '*.h' | xargs -0 -r clang-format-18 -i
+$ black scripts
+```
+
+The VectorCGRA, Chipyard, and OpenFPGA submodules keep their own formatting
+rules.
+
 ## **Single-CGRA flow**
 
 Generate the canonical single-CGRA RTL:

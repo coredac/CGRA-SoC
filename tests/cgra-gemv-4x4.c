@@ -47,8 +47,8 @@ static int verify_gemv_data(void) {
     uint32_t actual = gemv_read_mem_fast(addr);
     uint32_t expected = gemv_expected(row);
     if (actual != expected) {
-      printf("Mismatch y[%u] addr=%u actual=0x%08x expected=0x%08x\n",
-             row, addr, actual, expected);
+      printf("Mismatch y[%u] addr=%u actual=0x%08x expected=0x%08x\n", row,
+             addr, actual, expected);
       ++failures;
     }
   }
@@ -88,8 +88,7 @@ int main(void) {
 
   if (wait_result != 1 || complete != 1 ||
       complete_count != GEMV_EXPECTED_COMPLETES ||
-      result != GEMV_EXPECTED_RESULT ||
-      data_failures != 0) {
+      result != GEMV_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC GEMV 4x4: FAIL\n");
     return 1;
   }

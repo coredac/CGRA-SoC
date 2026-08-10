@@ -1,9 +1,9 @@
 // CGRA RoCC multi-CGRA FIR scalar test, handwritten from
 // VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py::test_fir_scalar.
 
+#include "cgra_multi_fir_scalar_packets.h"
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "cgra_multi_fir_scalar_packets.h"
 #include <stdint.h>
 #include <stdio.h>
 

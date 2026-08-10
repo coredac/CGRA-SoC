@@ -13,7 +13,6 @@ from config import CELL_LIBRARY_FILES, DemoConfig, UserInterfaceSpec, ensure_fil
 from flow import GeneratedPaths
 from pinmap import PinMap
 
-
 INV_BUF_PASSGATE_INCLUDE = "SRC/sub_module/inv_buf_passgate.v"
 VERILATOR_FRIENDLY_INV_BUF_INCLUDES = (
     "SRC/cell_library/inv.v",
@@ -50,7 +49,9 @@ class PortDecl:
 def parse_include_order(fabric_netlists: Path) -> List[str]:
     text = fabric_netlists.read_text(encoding="utf-8")
     includes: List[str] = []
-    for include_path in re.findall(r'^\s*`include\s+"([^"]+)"', text, flags=re.MULTILINE):
+    for include_path in re.findall(
+        r'^\s*`include\s+"([^"]+)"', text, flags=re.MULTILINE
+    ):
         base = Path(include_path).name
         normalized = include_path.replace("\\", "/")
         if "/openfpga_cell_library/verilog/" in normalized:
@@ -78,7 +79,9 @@ def _rtl_uses_const_cells(src_dir: Path) -> bool:
     return False
 
 
-def _use_verilator_friendly_inv_buf_cells(includes: List[str], src_dir: Path) -> List[str]:
+def _use_verilator_friendly_inv_buf_cells(
+    includes: List[str], src_dir: Path
+) -> List[str]:
     if INV_BUF_PASSGATE_INCLUDE not in includes:
         return _dedupe_includes(includes)
     if _rtl_uses_const_cells(src_dir):
@@ -109,7 +112,12 @@ def _dedupe_includes(includes: List[str]) -> List[str]:
     return rewritten
 
 
-def sync_rtl(demo: DemoConfig, paths: GeneratedPaths, user_interface: UserInterfaceSpec, pin_map: PinMap) -> None:
+def sync_rtl(
+    demo: DemoConfig,
+    paths: GeneratedPaths,
+    user_interface: UserInterfaceSpec,
+    pin_map: PinMap,
+) -> None:
     wrapper_root = paths.vsrc_dir
     fabric_root = demo.fabric_vsrc_dir
 
@@ -132,7 +140,9 @@ def sync_rtl(demo: DemoConfig, paths: GeneratedPaths, user_interface: UserInterf
     _write_wrapper(demo.wrapper_path, demo, user_interface, pin_map, fpga_ports)
 
 
-def _prepare_fabric_src(demo: DemoConfig, src_dir: Path, target: Path, includes: List[str]) -> List[str]:
+def _prepare_fabric_src(
+    demo: DemoConfig, src_dir: Path, target: Path, includes: List[str]
+) -> List[str]:
     (target / "SRC").mkdir(parents=True)
 
     for filename in ("fpga_defines.v", "fpga_top.v"):
@@ -162,8 +172,12 @@ def _sync_fabric_src(staged_src: Path, fabric_src: Path, demo: DemoConfig) -> No
 
 
 def _src_trees_match_ignoring_dates(left: Path, right: Path) -> bool:
-    left_files = sorted(path.relative_to(left) for path in left.rglob("*") if path.is_file())
-    right_files = sorted(path.relative_to(right) for path in right.rglob("*") if path.is_file())
+    left_files = sorted(
+        path.relative_to(left) for path in left.rglob("*") if path.is_file()
+    )
+    right_files = sorted(
+        path.relative_to(right) for path in right.rglob("*") if path.is_file()
+    )
     if left_files != right_files:
         return False
     return all(
@@ -181,15 +195,26 @@ def _read_verilog_without_generated_dates(path: Path) -> List[str]:
     ]
 
 
-def _copy_cell_library_files(demo: DemoConfig, target: Path, includes: List[str]) -> None:
+def _copy_cell_library_files(
+    demo: DemoConfig, target: Path, includes: List[str]
+) -> None:
     cell_files = sorted(
-        {Path(include).name for include in includes if include.startswith("SRC/cell_library/")}
+        {
+            Path(include).name
+            for include in includes
+            if include.startswith("SRC/cell_library/")
+        }
     )
-    cell_src = demo.openfpga_root / "openfpga_flow" / "openfpga_cell_library" / "verilog"
+    cell_src = (
+        demo.openfpga_root / "openfpga_flow" / "openfpga_cell_library" / "verilog"
+    )
     cell_dst = target / "SRC" / "cell_library"
     cell_dst.mkdir()
     for filename in cell_files:
-        shutil.copy2(ensure_file(cell_src / filename, f"OpenFPGA cell library {filename}"), cell_dst / filename)
+        shutil.copy2(
+            ensure_file(cell_src / filename, f"OpenFPGA cell library {filename}"),
+            cell_dst / filename,
+        )
 
 
 def _parse_fpga_top_ports(path: Path) -> Dict[str, PortDecl]:
@@ -216,11 +241,15 @@ def _require_port(ports: Dict[str, PortDecl], name: str, direction: str) -> Port
     if port is None:
         raise ValueError(f"fpga_top is missing required port {name!r}")
     if port.direction != direction:
-        raise ValueError(f"fpga_top port {name!r} direction is {port.direction}, expected {direction}")
+        raise ValueError(
+            f"fpga_top port {name!r} direction is {port.direction}, expected {direction}"
+        )
     return port
 
 
-def _require_scalar_port(ports: Dict[str, PortDecl], name: str, direction: str) -> PortDecl:
+def _require_scalar_port(
+    ports: Dict[str, PortDecl], name: str, direction: str
+) -> PortDecl:
     port = _require_port(ports, name, direction)
     if port.width != 1:
         raise ValueError(f"fpga_top port {name!r} must be scalar")
@@ -232,7 +261,12 @@ def _validate_indexed_zero_based(port: PortDecl) -> None:
         if port.width != 1:
             raise ValueError(f"internal error: scalar port {port.name} has non-1 width")
         return
-    indices = set(range(min(port.width_range.left, port.width_range.right), max(port.width_range.left, port.width_range.right) + 1))
+    indices = set(
+        range(
+            min(port.width_range.left, port.width_range.right),
+            max(port.width_range.left, port.width_range.right) + 1,
+        )
+    )
     expected = set(range(port.width))
     if indices != expected:
         raise ValueError(
@@ -241,7 +275,9 @@ def _validate_indexed_zero_based(port: PortDecl) -> None:
         )
 
 
-def _validate_fpga_top_ports(demo: DemoConfig, ports: Dict[str, PortDecl], pin_map: PinMap) -> None:
+def _validate_fpga_top_ports(
+    demo: DemoConfig, ports: Dict[str, PortDecl], pin_map: PinMap
+) -> None:
     cfg = demo.architecture.config_protocol
     _validate_pad_port(ports, pin_map.input_pad_port, pin_map.input_pad_count)
     if pin_map.output_pad_port != pin_map.input_pad_port:
@@ -250,10 +286,14 @@ def _validate_fpga_top_ports(demo: DemoConfig, ports: Dict[str, PortDecl], pin_m
     _validate_frame_based_fpga_top_ports(ports, cfg)
 
 
-def _validate_pad_port(ports: Dict[str, PortDecl], name: str, expected_width: int) -> None:
+def _validate_pad_port(
+    ports: Dict[str, PortDecl], name: str, expected_width: int
+) -> None:
     port = _require_port(ports, name, "inout")
     if port.width != expected_width:
-        raise ValueError(f"fpga_top pad port {name} width {port.width} != extracted pin_map {expected_width}")
+        raise ValueError(
+            f"fpga_top pad port {name} width {port.width} != extracted pin_map {expected_width}"
+        )
     _validate_indexed_zero_based(port)
 
 
@@ -264,14 +304,20 @@ def _validate_frame_based_fpga_top_ports(ports: Dict[str, PortDecl], cfg) -> Non
     address = _require_port(ports, "address", "input")
     data_in = _require_port(ports, "data_in", "input")
     if address.width != cfg.address_width:
-        raise ValueError(f"fpga_top address width {address.width} != YAML {cfg.address_width}")
+        raise ValueError(
+            f"fpga_top address width {address.width} != YAML {cfg.address_width}"
+        )
     if data_in.width != cfg.data_width:
-        raise ValueError(f"fpga_top data_in width {data_in.width} != YAML {cfg.data_width}")
+        raise ValueError(
+            f"fpga_top data_in width {data_in.width} != YAML {cfg.data_width}"
+        )
     _validate_indexed_zero_based(address)
     _validate_indexed_zero_based(data_in)
 
 
-def _write_manifest(path: Path, demo: DemoConfig, includes: List[str], fabric_root: Path) -> None:
+def _write_manifest(
+    path: Path, demo: DemoConfig, includes: List[str], fabric_root: Path
+) -> None:
     required = [
         "SRC/fpga_defines.v",
         "SRC/fpga_top.v",
@@ -281,7 +327,9 @@ def _write_manifest(path: Path, demo: DemoConfig, includes: List[str], fabric_ro
         raise ValueError(f"manifest include list is missing required files: {missing}")
     missing_files = [item for item in includes if not (fabric_root / item).is_file()]
     if missing_files:
-        raise ValueError(f"manifest include list references missing files: {missing_files}")
+        raise ValueError(
+            f"manifest include list references missing files: {missing_files}"
+        )
 
     guard = f"{demo.macro_prefix}_MANIFEST_V"
     lines = [
@@ -344,7 +392,9 @@ def _append_user_pad_wiring(
             source = f"{pin_map.output_pad_port}[{pad}]"
             lines.append(f"  assign user_output[{field.lsb + bit}] = {source};")
 
-    output_field_bits = {bit for field in output_reg.fields for bit in field.bit_indices}
+    output_field_bits = {
+        bit for field in output_reg.fields for bit in field.bit_indices
+    }
     for bit in range(output_reg.width):
         if bit not in output_field_bits:
             lines.append(f"  assign user_output[{bit}] = 1'b0;")
@@ -360,7 +410,9 @@ def _append_clock_pad_wiring(
     for port_name in demo.application.clock_ports:
         pads = pin_map.inputs.get(port_name)
         if pads is None:
-            raise ValueError(f"configured clock port {port_name!r} is missing from extracted pin map")
+            raise ValueError(
+                f"configured clock port {port_name!r} is missing from extracted pin map"
+            )
         if len(pads) != 1:
             raise ValueError(
                 f"configured clock port {port_name!r} must be scalar; extracted pads are {pads}"
@@ -370,7 +422,9 @@ def _append_clock_pad_wiring(
         lines.append("")
 
 
-def _append_unused_pad_tieoffs(lines: List[str], user_interface: UserInterfaceSpec, pin_map: PinMap) -> None:
+def _append_unused_pad_tieoffs(
+    lines: List[str], user_interface: UserInterfaceSpec, pin_map: PinMap
+) -> None:
     output_reg = user_interface.output_register
     pad_min = min(pin_map.input_pad_left, pin_map.input_pad_right)
     pad_max = max(pin_map.input_pad_left, pin_map.input_pad_right)
@@ -418,7 +472,7 @@ def _write_frame_based_wrapper(
 
     lines = [
         "// Auto-generated by scripts/openfpga/rtl.py.",
-        f"`include \"{manifest}\"",
+        f'`include "{manifest}"',
         "",
         "`default_nettype none",
         f"module {demo.chipyard.wrapper_module}(",

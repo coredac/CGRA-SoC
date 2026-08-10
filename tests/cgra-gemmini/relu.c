@@ -1,7 +1,7 @@
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_relu4x4_fast_api.h"
 #include "gemmini.h"
+#include "generated/cgra_relu4x4_fast_api.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -48,8 +48,8 @@ static int run_gemmini_gemm(void) {
   for (int i = 0; i < DIM; ++i) {
     for (int j = 0; j < DIM; ++j) {
       if (C[i][j] != A[i][j]) {
-        printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n",
-               i, j, (int)C[i][j], (int)A[i][j]);
+        printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", i, j,
+               (int)C[i][j], (int)A[i][j]);
         ++failures;
       }
     }
@@ -83,8 +83,9 @@ static int verify_cgra_relu_outputs(void) {
     uint32_t expected = value > 0 ? (uint32_t)value : 0;
     uint32_t actual = (uint32_t)relu4x4_read_mem_fast(addr);
     if (actual != expected) {
-      printf("CGRA ReLU mismatch addr=%u actual=0x%08x expected=0x%08x input=%d\n",
-             addr, actual, expected, (int)value);
+      printf(
+          "CGRA ReLU mismatch addr=%u actual=0x%08x expected=0x%08x input=%d\n",
+          addr, actual, expected, (int)value);
       ++failures;
     }
   }

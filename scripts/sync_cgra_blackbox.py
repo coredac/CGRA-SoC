@@ -23,11 +23,29 @@ from typing import Dict, Iterable, List, Optional, Tuple
 
 import yaml
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RTL = ROOT / "VectorCGRA" / "CgraRTL_2x2__pickled.v"
-DEFAULT_VSRC = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
-DEFAULT_SCALA = ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example" / "CGRAGenerated.scala"
+DEFAULT_VSRC = (
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "chipyard"
+    / "src"
+    / "main"
+    / "resources"
+    / "vsrc"
+)
+DEFAULT_SCALA = (
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "chipyard"
+    / "src"
+    / "main"
+    / "scala"
+    / "example"
+    / "CGRAGenerated.scala"
+)
 DEFAULT_C_LAYOUT = ROOT / "tests" / "include" / "cgra_layout.h"
 DEFAULT_C_PROTOCOL = ROOT / "tests" / "generated" / "cgra_protocol_generated.h"
 DEFAULT_TEMPLATE_DIR = ROOT / "scripts" / "templates"
@@ -123,9 +141,12 @@ def load_command_ids(path: Path = CMD_TYPE_SOURCE) -> Dict[str, int]:
         if not isinstance(node, ast.Assign) or len(node.targets) != 1:
             continue
         target = node.targets[0]
-        if (isinstance(target, ast.Name) and target.id.startswith("CMD_") and
-                isinstance(node.value, ast.Constant) and
-                isinstance(node.value.value, int)):
+        if (
+            isinstance(target, ast.Name)
+            and target.id.startswith("CMD_")
+            and isinstance(node.value, ast.Constant)
+            and isinstance(node.value.value, int)
+        ):
             commands[target.id] = node.value.value
     if not commands:
         raise ValueError(f"no CMD_* integer assignments found in {path}")
@@ -148,9 +169,18 @@ def load_rocc_functs(path: Path = ROCC_PROTOCOL) -> Dict[str, int]:
         functs[name] = value
         used_values.add(value)
     required = {
-        "STATUS", "WAIT", "RAW_PKT_LO", "RAW_PKT_MID", "RAW_PKT_HI",
-        "SET_EXPECTED_COMPLETES", "RESULT", "RAW_PKT_TOP", "LOAD_RESULT",
-        "DMA_MVIN_ASYNC", "DMA_MVOUT_ASYNC", "DMA_WAIT",
+        "STATUS",
+        "WAIT",
+        "RAW_PKT_LO",
+        "RAW_PKT_MID",
+        "RAW_PKT_HI",
+        "SET_EXPECTED_COMPLETES",
+        "RESULT",
+        "RAW_PKT_TOP",
+        "LOAD_RESULT",
+        "DMA_MVIN_ASYNC",
+        "DMA_MVOUT_ASYNC",
+        "DMA_WAIT",
     }
     missing = required - functs.keys()
     if missing:
@@ -163,7 +193,10 @@ def range_width(msb: int, lsb: int) -> int:
 
 
 def packed_dims(text: str) -> List[int]:
-    return [range_width(int(msb), int(lsb)) for msb, lsb in re.findall(r"\[(\d+)\s*:\s*(\d+)\]", text)]
+    return [
+        range_width(int(msb), int(lsb))
+        for msb, lsb in re.findall(r"\[(\d+)\s*:\s*(\d+)\]", text)
+    ]
 
 
 def packed_dims_width(text: str) -> int:
@@ -198,7 +231,9 @@ def parse_struct_fields(body: str) -> List[Tuple[str, str, int]]:
         line = strip_line(raw_line)
         if not line:
             continue
-        logic_match = re.match(r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line)
+        logic_match = re.match(
+            r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line
+        )
         if logic_match:
             dims = logic_match.group("dims")
             width = packed_dims_width(dims) if dims else 1
@@ -218,9 +253,13 @@ def logic_field_dims(type_name: str, typedefs: Dict[str, str]) -> Dict[str, List
         line = strip_line(raw_line)
         if not line:
             continue
-        logic_match = re.match(r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line)
+        logic_match = re.match(
+            r"logic\s+(?P<dims>(?:\[[^\]]+\]\s*)*)\s*(?P<name>\w+)$", line
+        )
         if logic_match:
-            dims_by_name[logic_match.group("name")] = packed_dims(logic_match.group("dims"))
+            dims_by_name[logic_match.group("name")] = packed_dims(
+                logic_match.group("dims")
+            )
     return dims_by_name
 
 
@@ -230,7 +269,9 @@ def struct_width(type_name: str, typedefs: Dict[str, str], memo: Dict[str, int])
     if type_name not in typedefs:
         raise ValueError(f"unknown struct typedef: {type_name}")
     total = 0
-    for field_type, _field_name, field_width in parse_struct_fields(typedefs[type_name]):
+    for field_type, _field_name, field_width in parse_struct_fields(
+        typedefs[type_name]
+    ):
         if field_type == "logic":
             total += field_width
         else:
@@ -246,7 +287,9 @@ def field_type(type_name: str, field_name: str, typedefs: Dict[str, str]) -> str
     raise ValueError(f"{type_name} has no field named {field_name}")
 
 
-def field_width(type_name: str, field_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> int:
+def field_width(
+    type_name: str, field_name: str, typedefs: Dict[str, str], memo: Dict[str, int]
+) -> int:
     for field_type, name, width in parse_struct_fields(typedefs[type_name]):
         if name != field_name:
             continue
@@ -256,12 +299,16 @@ def field_width(type_name: str, field_name: str, typedefs: Dict[str, str], memo:
     raise ValueError(f"{type_name} has no field named {field_name}")
 
 
-def field_offsets(type_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Dict[str, Tuple[int, int]]:
+def field_offsets(
+    type_name: str, typedefs: Dict[str, str], memo: Dict[str, int]
+) -> Dict[str, Tuple[int, int]]:
     fields = parse_struct_fields(typedefs[type_name])
     cursor = struct_width(type_name, typedefs, memo)
     offsets: Dict[str, Tuple[int, int]] = {}
     for field_type, name, width in fields:
-        field_nbits = width if field_type == "logic" else struct_width(field_type, typedefs, memo)
+        field_nbits = (
+            width if field_type == "logic" else struct_width(field_type, typedefs, memo)
+        )
         cursor -= field_nbits
         offsets[name] = (cursor, field_nbits)
     return offsets
@@ -275,8 +322,10 @@ def find_top_module(text: str, requested: Optional[str]) -> str:
 
     modules = re.findall(r"^module\s+(\w+)\s*\(", text, re.M)
     candidates = [
-        name for name in modules
-        if name.startswith(("CgraRTL", "CgraTemplateRTL", "MeshMultiCgraTemplateRTL")) and not name.endswith("_wrapper")
+        name
+        for name in modules
+        if name.startswith(("CgraRTL", "CgraTemplateRTL", "MeshMultiCgraTemplateRTL"))
+        and not name.endswith("_wrapper")
     ]
     if not candidates:
         raise ValueError("could not infer top module; pass --top-module")
@@ -284,13 +333,17 @@ def find_top_module(text: str, requested: Optional[str]) -> str:
 
 
 def module_port_block(text: str, module_name: str) -> str:
-    match = re.search(rf"^module\s+{re.escape(module_name)}\s*\((?P<body>.*?)^\);", text, re.M | re.S)
+    match = re.search(
+        rf"^module\s+{re.escape(module_name)}\s*\((?P<body>.*?)^\);", text, re.M | re.S
+    )
     if not match:
         raise ValueError(f"could not parse module port block for {module_name}")
     return match.group("body")
 
 
-def parse_port_line(line: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Optional[Port]:
+def parse_port_line(
+    line: str, typedefs: Dict[str, str], memo: Dict[str, int]
+) -> Optional[Port]:
     line = strip_line(line)
     if not line:
         return None
@@ -309,18 +362,24 @@ def parse_port_line(line: str, typedefs: Dict[str, str], memo: Dict[str, int]) -
     name = port_match.group("name")
     alo = port_match.group("alo")
     ahi = port_match.group("ahi")
-    arr_len = array_len(int(alo), int(ahi)) if alo is not None and ahi is not None else None
+    arr_len = (
+        array_len(int(alo), int(ahi)) if alo is not None and ahi is not None else None
+    )
 
     if prefix.startswith("logic"):
-        dims = prefix[len("logic"):].strip()
+        dims = prefix[len("logic") :].strip()
         width = packed_dims_width(dims) if dims else 1
         return Port(direction, name, width, None, arr_len)
 
     sv_type = prefix
-    return Port(direction, name, struct_width(sv_type, typedefs, memo), sv_type, arr_len)
+    return Port(
+        direction, name, struct_width(sv_type, typedefs, memo), sv_type, arr_len
+    )
 
 
-def parse_ports(text: str, module_name: str, typedefs: Dict[str, str], memo: Dict[str, int]) -> Dict[str, Port]:
+def parse_ports(
+    text: str, module_name: str, typedefs: Dict[str, str], memo: Dict[str, int]
+) -> Dict[str, Port]:
     ports: Dict[str, Port] = {}
     for line in module_port_block(text, module_name).splitlines():
         port = parse_port_line(line, typedefs, memo)
@@ -378,16 +437,21 @@ def find_dma_cmd_type(typedefs: Dict[str, str]) -> str:
     for type_name in typedefs:
         if not type_name.startswith("DmaCmd_"):
             continue
-        fields = {name for _kind, name, _width in parse_struct_fields(typedefs[type_name])}
+        fields = {
+            name for _kind, name, _width in parse_struct_fields(typedefs[type_name])
+        }
         if required_fields.issubset(fields):
             candidates.append(type_name)
     if len(candidates) != 1:
-        raise ValueError(f"expected exactly one generated DmaCmd typedef, found {candidates}")
+        raise ValueError(
+            f"expected exactly one generated DmaCmd typedef, found {candidates}"
+        )
     return candidates[0]
 
 
-def insert_packet_field(packet: int, value: int, lsb: int, width: int,
-                        field_name: str) -> int:
+def insert_packet_field(
+    packet: int, value: int, lsb: int, width: int, field_name: str
+) -> int:
     if value < 0 or value >= (1 << width):
         raise ValueError(f"{field_name}={value} does not fit {width} bits")
     mask = ((1 << width) - 1) << lsb
@@ -396,8 +460,14 @@ def insert_packet_field(packet: int, value: int, lsb: int, width: int,
     return packet | (value << lsb)
 
 
-def build_dma_packet_words(meta: CgraMetadata, dram_addr: int, spm_addr: int,
-                           nbytes: int, tag: int, dma_cmd: int) -> Tuple[int, ...]:
+def build_dma_packet_words(
+    meta: CgraMetadata,
+    dram_addr: int,
+    spm_addr: int,
+    nbytes: int,
+    tag: int,
+    dma_cmd: int,
+) -> Tuple[int, ...]:
     dma = meta.dma
     if not dma.enabled:
         raise ValueError("generated CGRA top has no DMA interface")
@@ -428,16 +498,33 @@ def build_dma_packet_words(meta: CgraMetadata, dram_addr: int, spm_addr: int,
     templates.append(dma.packet_templates[5 if dma_cmd == dma.cmd_mvin else 6])
     data_width = meta.data_payload_width
     packets = [
-        insert_packet_field(templates[0], dram_addr & ((1 << data_width) - 1),
-                            meta.pkt_data_payload_lsb, data_width, "dram_addr_lo"),
-        insert_packet_field(templates[1], dram_addr >> data_width,
-                            meta.pkt_data_payload_lsb, data_width, "dram_addr_hi"),
-        insert_packet_field(templates[2], spm_addr, meta.pkt_data_addr_lsb,
-                            dma.spm_addr_width, "spm_addr"),
-        insert_packet_field(templates[3], nbytes, meta.pkt_data_payload_lsb,
-                            dma.nbytes_width, "nbytes"),
-        insert_packet_field(templates[4], tag, meta.pkt_data_payload_lsb,
-                            dma.tag_width, "tag"),
+        insert_packet_field(
+            templates[0],
+            dram_addr & ((1 << data_width) - 1),
+            meta.pkt_data_payload_lsb,
+            data_width,
+            "dram_addr_lo",
+        ),
+        insert_packet_field(
+            templates[1],
+            dram_addr >> data_width,
+            meta.pkt_data_payload_lsb,
+            data_width,
+            "dram_addr_hi",
+        ),
+        insert_packet_field(
+            templates[2],
+            spm_addr,
+            meta.pkt_data_addr_lsb,
+            dma.spm_addr_width,
+            "spm_addr",
+        ),
+        insert_packet_field(
+            templates[3], nbytes, meta.pkt_data_payload_lsb, dma.nbytes_width, "nbytes"
+        ),
+        insert_packet_field(
+            templates[4], tag, meta.pkt_data_payload_lsb, dma.tag_width, "tag"
+        ),
         templates[5],
     ]
     packet_limit = 1 << meta.intra_width
@@ -510,7 +597,9 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
     address_upper = optional_port(ports, "address_upper")
     has_cgra_id_port = cgra_id is not None
     has_address_ports = any(port is not None for port in (address_lower, address_upper))
-    if has_address_ports and not all(port is not None for port in (address_lower, address_upper)):
+    if has_address_ports and not all(
+        port is not None for port in (address_lower, address_upper)
+    ):
         raise ValueError("top module has only a partial address bound interface")
 
     if intra.sv_type is None:
@@ -518,8 +607,14 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
 
     payload_type = field_type(intra.sv_type, "payload", typedefs)
     if recv_inter is not None:
-        if recv_inter.sv_type is None or send_inter is None or send_inter.sv_type is None:
-            raise ValueError("inter-CGRA packet ports must use generated struct typedefs")
+        if (
+            recv_inter.sv_type is None
+            or send_inter is None
+            or send_inter.sv_type is None
+        ):
+            raise ValueError(
+                "inter-CGRA packet ports must use generated struct typedefs"
+            )
         if not same_port_type(recv_inter, send_inter):
             raise ValueError("inter-CGRA recv/send packet typedefs differ")
         inter_type = recv_inter.sv_type
@@ -557,12 +652,18 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
     pkt_dst_tile_lsb, _ = require_offset(pkt_offsets, "dst")
 
     dma_port_names = (
-        "send_to_dram_rd_req__val", "send_to_dram_rd_req__msg",
-        "send_to_dram_rd_req__rdy", "recv_from_dram_rd_resp__val",
-        "recv_from_dram_rd_resp__msg", "recv_from_dram_rd_resp__rdy",
-        "send_to_dram_wr_req__val", "send_to_dram_wr_req__msg",
-        "send_to_dram_wr_req__rdy", "recv_from_dram_wr_resp__val",
-        "recv_from_dram_wr_resp__msg", "recv_from_dram_wr_resp__rdy",
+        "send_to_dram_rd_req__val",
+        "send_to_dram_rd_req__msg",
+        "send_to_dram_rd_req__rdy",
+        "recv_from_dram_rd_resp__val",
+        "recv_from_dram_rd_resp__msg",
+        "recv_from_dram_rd_resp__rdy",
+        "send_to_dram_wr_req__val",
+        "send_to_dram_wr_req__msg",
+        "send_to_dram_wr_req__rdy",
+        "recv_from_dram_wr_resp__val",
+        "recv_from_dram_wr_resp__msg",
+        "recv_from_dram_wr_resp__rdy",
     )
     present_dma_ports = [name for name in dma_port_names if name in ports]
     if present_dma_ports and len(present_dma_ports) != len(dma_port_names):
@@ -588,13 +689,16 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         for port_name, direction in expected_directions.items():
             if ports[port_name].direction != direction:
                 raise ValueError(
-                    f"DMA port {port_name} is {ports[port_name].direction}, expected {direction}")
+                    f"DMA port {port_name} is {ports[port_name].direction}, expected {direction}"
+                )
 
         rd_req = require_port(ports, "send_to_dram_rd_req__msg")
         rd_resp = require_port(ports, "recv_from_dram_rd_resp__msg")
         wr_req = require_port(ports, "send_to_dram_wr_req__msg")
         if wr_req.sv_type is None:
-            raise ValueError("DMA DRAM write request must use a generated struct typedef")
+            raise ValueError(
+                "DMA DRAM write request must use a generated struct typedef"
+            )
         wr_offsets = field_offsets(wr_req.sv_type, typedefs, memo)
         wr_addr_lsb, wr_addr_width = require_offset(wr_offsets, "addr")
         wr_data_lsb, wr_data_width = require_offset(wr_offsets, "data")
@@ -614,7 +718,8 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         if dma_dram_width != 2 * data_payload_width:
             raise ValueError(
                 "current six-packet DMA protocol requires DRAM address width "
-                "to equal two packet data payloads")
+                "to equal two packet data payloads"
+            )
         if dma_nbytes_width > data_payload_width:
             raise ValueError("DMA nbytes field does not fit one packet data payload")
         if dma_tag_width > data_payload_width or dma_tag_width > pkt_opaque_width:
@@ -628,16 +733,23 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         descriptor_width = descriptor_tag_lsb + dma_tag_width
         if descriptor_width > ROCC_XLEN:
             raise ValueError(
-                f"DMA descriptor needs {descriptor_width} bits, exceeding xLen={ROCC_XLEN}")
+                f"DMA descriptor needs {descriptor_width} bits, exceeding xLen={ROCC_XLEN}"
+            )
 
         commands = load_command_ids()
         required_dma_commands = (
-            "CMD_DMA_CONFIG_DRAM_ADDR_LO", "CMD_DMA_CONFIG_DRAM_ADDR_HI",
-            "CMD_DMA_CONFIG_SPM_ADDR", "CMD_DMA_CONFIG_BYTES",
-            "CMD_DMA_CONFIG_TAG", "CMD_DMA_MVIN", "CMD_DMA_MVOUT",
+            "CMD_DMA_CONFIG_DRAM_ADDR_LO",
+            "CMD_DMA_CONFIG_DRAM_ADDR_HI",
+            "CMD_DMA_CONFIG_SPM_ADDR",
+            "CMD_DMA_CONFIG_BYTES",
+            "CMD_DMA_CONFIG_TAG",
+            "CMD_DMA_MVIN",
+            "CMD_DMA_MVOUT",
             "CMD_DMA_DONE",
         )
-        missing_commands = [name for name in required_dma_commands if name not in commands]
+        missing_commands = [
+            name for name in required_dma_commands if name not in commands
+        ]
         if missing_commands:
             raise ValueError(f"{CMD_TYPE_SOURCE}: missing {missing_commands}")
 
@@ -646,7 +758,9 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
             if predicate:
                 packet |= 1 << pkt_data_predicate_lsb
             if packet >= (1 << intra.width):
-                raise ValueError(f"DMA packet template {command_name} exceeds packet width")
+                raise ValueError(
+                    f"DMA packet template {command_name} exceeds packet width"
+                )
             return packet
 
         packet_templates = (
@@ -661,7 +775,8 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         spm_words = address_hi + 1
         if address_lo != 0 or spm_words > (1 << data_addr_width):
             raise ValueError(
-                "DMA descriptor currently requires a zero-based software-visible SPM range")
+                "DMA descriptor currently requires a zero-based software-visible SPM range"
+            )
         dma_meta = DmaMetadata(
             enabled=True,
             write_req_type=wr_req.sv_type,
@@ -775,22 +890,24 @@ def wrapper_ports(meta: CgraMetadata) -> List[str]:
     ]
 
     if meta.dma.enabled:
-        ports.extend([
-            "output logic        send_to_dram_rd_req_val",
-            f"output logic{flat_range(meta.dma.dram_addr_width)} send_to_dram_rd_req_addr",
-            "input  logic        send_to_dram_rd_req_rdy",
-            "input  logic        recv_from_dram_rd_resp_val",
-            f"input  logic{flat_range(meta.dma.dram_data_width)} recv_from_dram_rd_resp_data",
-            "output logic        recv_from_dram_rd_resp_rdy",
-            "output logic        send_to_dram_wr_req_val",
-            f"output logic{flat_range(meta.dma.dram_addr_width)} send_to_dram_wr_req_addr",
-            f"output logic{flat_range(meta.dma.dram_data_width)} send_to_dram_wr_req_data",
-            f"output logic{flat_range(meta.dma.dram_mask_width)} send_to_dram_wr_req_mask",
-            "input  logic        send_to_dram_wr_req_rdy",
-            "input  logic        recv_from_dram_wr_resp_val",
-            "input  logic        recv_from_dram_wr_resp_msg",
-            "output logic        recv_from_dram_wr_resp_rdy",
-        ])
+        ports.extend(
+            [
+                "output logic        send_to_dram_rd_req_val",
+                f"output logic{flat_range(meta.dma.dram_addr_width)} send_to_dram_rd_req_addr",
+                "input  logic        send_to_dram_rd_req_rdy",
+                "input  logic        recv_from_dram_rd_resp_val",
+                f"input  logic{flat_range(meta.dma.dram_data_width)} recv_from_dram_rd_resp_data",
+                "output logic        recv_from_dram_rd_resp_rdy",
+                "output logic        send_to_dram_wr_req_val",
+                f"output logic{flat_range(meta.dma.dram_addr_width)} send_to_dram_wr_req_addr",
+                f"output logic{flat_range(meta.dma.dram_data_width)} send_to_dram_wr_req_data",
+                f"output logic{flat_range(meta.dma.dram_mask_width)} send_to_dram_wr_req_mask",
+                "input  logic        send_to_dram_wr_req_rdy",
+                "input  logic        recv_from_dram_wr_resp_val",
+                "input  logic        recv_from_dram_wr_resp_msg",
+                "output logic        recv_from_dram_wr_resp_rdy",
+            ]
+        )
 
     if meta.has_boundary_ports:
         side_sizes = {
@@ -801,29 +918,38 @@ def wrapper_ports(meta: CgraMetadata) -> List[str]:
         }
         for side in SIDES:
             for idx in range(side_sizes[side]):
-                ports.extend([
-                    f"input  logic        recv_data_on_boundary_{side}_{idx}_val",
-                    f"input  logic{flat_range(meta.data_width)} recv_data_on_boundary_{side}_{idx}_msg",
-                    f"output logic        recv_data_on_boundary_{side}_{idx}_rdy",
-                ])
+                ports.extend(
+                    [
+                        f"input  logic        recv_data_on_boundary_{side}_{idx}_val",
+                        f"input  logic{flat_range(meta.data_width)} recv_data_on_boundary_{side}_{idx}_msg",
+                        f"output logic        recv_data_on_boundary_{side}_{idx}_rdy",
+                    ]
+                )
             for idx in range(side_sizes[side]):
-                ports.extend([
-                    f"output logic        send_data_on_boundary_{side}_{idx}_val",
-                    f"output logic{flat_range(meta.data_width)} send_data_on_boundary_{side}_{idx}_msg",
-                    f"input  logic        send_data_on_boundary_{side}_{idx}_rdy",
-                ])
+                ports.extend(
+                    [
+                        f"output logic        send_data_on_boundary_{side}_{idx}_val",
+                        f"output logic{flat_range(meta.data_width)} send_data_on_boundary_{side}_{idx}_msg",
+                        f"input  logic        send_data_on_boundary_{side}_{idx}_rdy",
+                    ]
+                )
 
-    ports.extend([
-        f"input  logic{flat_range(meta.id_width)} cgra_id",
-        f"input  logic{flat_range(meta.addr_width)} address_lower",
-        f"input  logic{flat_range(meta.addr_width)} address_upper",
-    ])
+    ports.extend(
+        [
+            f"input  logic{flat_range(meta.id_width)} cgra_id",
+            f"input  logic{flat_range(meta.addr_width)} address_lower",
+            f"input  logic{flat_range(meta.addr_width)} address_upper",
+        ]
+    )
     return ports
 
 
 def comma_join(lines: Iterable[str], indent: str = "  ") -> str:
     items = list(lines)
-    return "\n".join(f"{indent}{line}{',' if idx != len(items) - 1 else ''}" for idx, line in enumerate(items))
+    return "\n".join(
+        f"{indent}{line}{',' if idx != len(items) - 1 else ''}"
+        for idx, line in enumerate(items)
+    )
 
 
 def gen_boundary_wires(meta: CgraMetadata, side: str, count: int) -> str:
@@ -840,28 +966,34 @@ def gen_boundary_wires(meta: CgraMetadata, side: str, count: int) -> str:
 def gen_boundary_assigns(side: str, count: int) -> str:
     lines: List[str] = []
     for idx in range(count):
-        lines.extend([
-            f"  assign w_recv_{side}_val[{idx}] = recv_data_on_boundary_{side}_{idx}_val;",
-            f"  assign w_recv_{side}_msg[{idx}] = recv_data_on_boundary_{side}_{idx}_msg;",
-            f"  assign recv_data_on_boundary_{side}_{idx}_rdy = w_recv_{side}_rdy[{idx}];",
-        ])
+        lines.extend(
+            [
+                f"  assign w_recv_{side}_val[{idx}] = recv_data_on_boundary_{side}_{idx}_val;",
+                f"  assign w_recv_{side}_msg[{idx}] = recv_data_on_boundary_{side}_{idx}_msg;",
+                f"  assign recv_data_on_boundary_{side}_{idx}_rdy = w_recv_{side}_rdy[{idx}];",
+            ]
+        )
     for idx in range(count):
-        lines.extend([
-            f"  assign send_data_on_boundary_{side}_{idx}_val = w_send_{side}_val[{idx}];",
-            f"  assign send_data_on_boundary_{side}_{idx}_msg = w_send_{side}_msg[{idx}];",
-            f"  assign w_send_{side}_rdy[{idx}] = send_data_on_boundary_{side}_{idx}_rdy;",
-        ])
+        lines.extend(
+            [
+                f"  assign send_data_on_boundary_{side}_{idx}_val = w_send_{side}_val[{idx}];",
+                f"  assign send_data_on_boundary_{side}_{idx}_msg = w_send_{side}_msg[{idx}];",
+                f"  assign w_send_{side}_rdy[{idx}] = send_data_on_boundary_{side}_{idx}_rdy;",
+            ]
+        )
     return "\n".join(lines)
 
 
 def gen_tieoff_assigns(meta: CgraMetadata) -> str:
     lines: List[str] = []
     if not meta.has_inter_cgra_noc_ports:
-        lines.extend([
-            "  assign recv_from_inter_cgra_noc_rdy = 1'b0;",
-            "  assign send_to_inter_cgra_noc_val = 1'b0;",
-            "  assign w_send_to_inter_cgra_noc_msg = '0;",
-        ])
+        lines.extend(
+            [
+                "  assign recv_from_inter_cgra_noc_rdy = 1'b0;",
+                "  assign send_to_inter_cgra_noc_val = 1'b0;",
+                "  assign w_send_to_inter_cgra_noc_msg = '0;",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -874,11 +1006,13 @@ def gen_dma_wires(meta: CgraMetadata) -> str:
 def gen_dma_assigns(meta: CgraMetadata) -> str:
     if not meta.dma.enabled:
         return ""
-    return "\n".join([
-        "  assign send_to_dram_wr_req_addr = w_send_to_dram_wr_req_msg.addr;",
-        "  assign send_to_dram_wr_req_data = w_send_to_dram_wr_req_msg.data;",
-        "  assign send_to_dram_wr_req_mask = w_send_to_dram_wr_req_msg.mask;",
-    ])
+    return "\n".join(
+        [
+            "  assign send_to_dram_wr_req_addr = w_send_to_dram_wr_req_msg.addr;",
+            "  assign send_to_dram_wr_req_data = w_send_to_dram_wr_req_msg.data;",
+            "  assign send_to_dram_wr_req_mask = w_send_to_dram_wr_req_msg.mask;",
+        ]
+    )
 
 
 def render_template(template_name: str, **values: object) -> str:
@@ -897,8 +1031,12 @@ def gen_wrapper(meta: CgraMetadata) -> str:
     boundary_wires = ""
     boundary_assigns = ""
     if meta.has_boundary_ports:
-        boundary_wires = "".join(gen_boundary_wires(meta, side, side_sizes[side]) for side in SIDES).rstrip()
-        boundary_assigns = "\n\n".join(gen_boundary_assigns(side, side_sizes[side]) for side in SIDES).rstrip()
+        boundary_wires = "".join(
+            gen_boundary_wires(meta, side, side_sizes[side]) for side in SIDES
+        ).rstrip()
+        boundary_assigns = "\n\n".join(
+            gen_boundary_assigns(side, side_sizes[side]) for side in SIDES
+        ).rstrip()
 
     inst_ports = [
         ".clk                                ( clk )",
@@ -911,46 +1049,54 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         ".send_to_cpu_pkt__rdy               ( send_to_cpu_pkt_rdy )",
     ]
     if meta.dma.enabled:
-        inst_ports.extend([
-            ".send_to_dram_rd_req__val          ( send_to_dram_rd_req_val )",
-            ".send_to_dram_rd_req__msg          ( send_to_dram_rd_req_addr )",
-            ".send_to_dram_rd_req__rdy          ( send_to_dram_rd_req_rdy )",
-            ".recv_from_dram_rd_resp__val       ( recv_from_dram_rd_resp_val )",
-            ".recv_from_dram_rd_resp__msg       ( recv_from_dram_rd_resp_data )",
-            ".recv_from_dram_rd_resp__rdy       ( recv_from_dram_rd_resp_rdy )",
-            ".send_to_dram_wr_req__val          ( send_to_dram_wr_req_val )",
-            ".send_to_dram_wr_req__msg          ( w_send_to_dram_wr_req_msg )",
-            ".send_to_dram_wr_req__rdy          ( send_to_dram_wr_req_rdy )",
-            ".recv_from_dram_wr_resp__val       ( recv_from_dram_wr_resp_val )",
-            ".recv_from_dram_wr_resp__msg       ( recv_from_dram_wr_resp_msg )",
-            ".recv_from_dram_wr_resp__rdy       ( recv_from_dram_wr_resp_rdy )",
-        ])
+        inst_ports.extend(
+            [
+                ".send_to_dram_rd_req__val          ( send_to_dram_rd_req_val )",
+                ".send_to_dram_rd_req__msg          ( send_to_dram_rd_req_addr )",
+                ".send_to_dram_rd_req__rdy          ( send_to_dram_rd_req_rdy )",
+                ".recv_from_dram_rd_resp__val       ( recv_from_dram_rd_resp_val )",
+                ".recv_from_dram_rd_resp__msg       ( recv_from_dram_rd_resp_data )",
+                ".recv_from_dram_rd_resp__rdy       ( recv_from_dram_rd_resp_rdy )",
+                ".send_to_dram_wr_req__val          ( send_to_dram_wr_req_val )",
+                ".send_to_dram_wr_req__msg          ( w_send_to_dram_wr_req_msg )",
+                ".send_to_dram_wr_req__rdy          ( send_to_dram_wr_req_rdy )",
+                ".recv_from_dram_wr_resp__val       ( recv_from_dram_wr_resp_val )",
+                ".recv_from_dram_wr_resp__msg       ( recv_from_dram_wr_resp_msg )",
+                ".recv_from_dram_wr_resp__rdy       ( recv_from_dram_wr_resp_rdy )",
+            ]
+        )
     if meta.has_inter_cgra_noc_ports:
-        inst_ports.extend([
-            ".recv_from_inter_cgra_noc__val      ( recv_from_inter_cgra_noc_val )",
-            ".recv_from_inter_cgra_noc__msg      ( w_recv_from_inter_cgra_noc_msg )",
-            ".recv_from_inter_cgra_noc__rdy      ( recv_from_inter_cgra_noc_rdy )",
-            ".send_to_inter_cgra_noc__val        ( send_to_inter_cgra_noc_val )",
-            ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
-            ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
-        ])
+        inst_ports.extend(
+            [
+                ".recv_from_inter_cgra_noc__val      ( recv_from_inter_cgra_noc_val )",
+                ".recv_from_inter_cgra_noc__msg      ( w_recv_from_inter_cgra_noc_msg )",
+                ".recv_from_inter_cgra_noc__rdy      ( recv_from_inter_cgra_noc_rdy )",
+                ".send_to_inter_cgra_noc__val        ( send_to_inter_cgra_noc_val )",
+                ".send_to_inter_cgra_noc__msg        ( w_send_to_inter_cgra_noc_msg )",
+                ".send_to_inter_cgra_noc__rdy        ( send_to_inter_cgra_noc_rdy )",
+            ]
+        )
     if meta.has_boundary_ports:
         for side in SIDES:
-            inst_ports.extend([
-                f".recv_data_on_boundary_{side}__val   ( w_recv_{side}_val )",
-                f".recv_data_on_boundary_{side}__msg   ( w_recv_{side}_msg )",
-                f".recv_data_on_boundary_{side}__rdy   ( w_recv_{side}_rdy )",
-                f".send_data_on_boundary_{side}__val   ( w_send_{side}_val )",
-                f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
-                f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
-            ])
+            inst_ports.extend(
+                [
+                    f".recv_data_on_boundary_{side}__val   ( w_recv_{side}_val )",
+                    f".recv_data_on_boundary_{side}__msg   ( w_recv_{side}_msg )",
+                    f".recv_data_on_boundary_{side}__rdy   ( w_recv_{side}_rdy )",
+                    f".send_data_on_boundary_{side}__val   ( w_send_{side}_val )",
+                    f".send_data_on_boundary_{side}__msg   ( w_send_{side}_msg )",
+                    f".send_data_on_boundary_{side}__rdy   ( w_send_{side}_rdy )",
+                ]
+            )
     if meta.has_cgra_id_port:
         inst_ports.append(".cgra_id                            ( cgra_id )")
     if meta.has_address_ports:
-        inst_ports.extend([
-            ".address_lower                      ( address_lower )",
-            ".address_upper                      ( address_upper )",
-        ])
+        inst_ports.extend(
+            [
+                ".address_lower                      ( address_lower )",
+                ".address_upper                      ( address_upper )",
+            ]
+        )
 
     return render_template(
         "cgra_wrapper.v.tpl",
@@ -971,19 +1117,28 @@ def gen_wrapper(meta: CgraMetadata) -> str:
 def gen_scala(meta: CgraMetadata) -> str:
     commands = load_command_ids()
     functs = load_rocc_functs()
-    rocc_funct_object = "\n".join([
-        "object CGRARoCCGenerated {",
-        *(f"  val {name} = {value}" for name, value in functs.items()),
-        "}",
-    ])
-    cgra_cmd_object = "\n".join([
-        "object CGRACmdGenerated {",
-        *(f"  val {name} = {value}" for name, value in
-          sorted(commands.items(), key=lambda item: (item[1], item[0]))),
-        "}",
-    ])
+    rocc_funct_object = "\n".join(
+        [
+            "object CGRARoCCGenerated {",
+            *(f"  val {name} = {value}" for name, value in functs.items()),
+            "}",
+        ]
+    )
+    cgra_cmd_object = "\n".join(
+        [
+            "object CGRACmdGenerated {",
+            *(
+                f"  val {name} = {value}"
+                for name, value in sorted(
+                    commands.items(), key=lambda item: (item[1], item[0])
+                )
+            ),
+            "}",
+        ]
+    )
     dma_templates = ", ".join(
-        f'BigInt("{packet:x}", 16)' for packet in meta.dma.packet_templates)
+        f'BigInt("{packet:x}", 16)' for packet in meta.dma.packet_templates
+    )
     return render_template(
         "cgra_generated.scala.tpl",
         top_module=meta.top_module,
@@ -1080,12 +1235,19 @@ def gen_c_layout(meta: CgraMetadata, typedefs: Dict[str, str]) -> str:
     payload_offsets = field_offsets(meta.payload_type, typedefs, memo)
     pkt_offsets = field_offsets(meta.intra_type, typedefs, memo)
 
-    def append_lsb_nbits(lines: List[str], define_base: str, offsets: Dict[str, Tuple[int, int]], field: str) -> None:
+    def append_lsb_nbits(
+        lines: List[str],
+        define_base: str,
+        offsets: Dict[str, Tuple[int, int]],
+        field: str,
+    ) -> None:
         lsb, nbits = require_offset(offsets, field)
         lines.append(c_define(f"{define_base}_LSB", lsb))
         lines.append(c_define(f"{define_base}_NBITS", nbits))
 
-    def append_packed_array_shape(lines: List[str], define_base: str, field: str) -> None:
+    def append_packed_array_shape(
+        lines: List[str], define_base: str, field: str
+    ) -> None:
         dims = ctrl_dims.get(field, [])
         if len(dims) > 1:
             elem_width = 1
@@ -1209,16 +1371,46 @@ def write_text(path: Path, text: str) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--rtl", type=Path, default=DEFAULT_RTL, help="PyMTL3-generated CGRA Verilog")
-    parser.add_argument("--top-module", help="Top module name to wrap; inferred if omitted")
-    parser.add_argument("--chipyard-vsrc", type=Path, default=DEFAULT_VSRC, help="Chipyard vsrc output directory")
-    parser.add_argument("--scala-out", type=Path, default=DEFAULT_SCALA, help="Generated Scala params output")
-    parser.add_argument("--c-layout-out", type=Path, default=DEFAULT_C_LAYOUT, help="Generated C layout header output")
-    parser.add_argument("--c-protocol-out", type=Path, default=DEFAULT_C_PROTOCOL,
-                        help="Generated C command/funct protocol header output")
-    parser.add_argument("--dry-run", action="store_true", help="Parse and print metadata without writing files")
-    parser.add_argument("--require-dma", action="store_true",
-                        help="fail unless the complete generated DMA interface is present")
+    parser.add_argument(
+        "--rtl", type=Path, default=DEFAULT_RTL, help="PyMTL3-generated CGRA Verilog"
+    )
+    parser.add_argument(
+        "--top-module", help="Top module name to wrap; inferred if omitted"
+    )
+    parser.add_argument(
+        "--chipyard-vsrc",
+        type=Path,
+        default=DEFAULT_VSRC,
+        help="Chipyard vsrc output directory",
+    )
+    parser.add_argument(
+        "--scala-out",
+        type=Path,
+        default=DEFAULT_SCALA,
+        help="Generated Scala params output",
+    )
+    parser.add_argument(
+        "--c-layout-out",
+        type=Path,
+        default=DEFAULT_C_LAYOUT,
+        help="Generated C layout header output",
+    )
+    parser.add_argument(
+        "--c-protocol-out",
+        type=Path,
+        default=DEFAULT_C_PROTOCOL,
+        help="Generated C command/funct protocol header output",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Parse and print metadata without writing files",
+    )
+    parser.add_argument(
+        "--require-dma",
+        action="store_true",
+        help="fail unless the complete generated DMA interface is present",
+    )
     return parser.parse_args()
 
 
@@ -1236,17 +1428,23 @@ def main() -> int:
 
     print(f"top_module={meta.top_module}")
     print(f"wrapper_module={meta.wrapper_module}")
-    print(f"intra_width={meta.intra_width} inter_width={meta.inter_width} data_width={meta.data_width}")
+    print(
+        f"intra_width={meta.intra_width} inter_width={meta.inter_width} data_width={meta.data_width}"
+    )
     print(f"x_tiles={meta.x_tiles} y_tiles={meta.y_tiles} num_tiles={meta.num_tiles}")
     print(f"has_boundary_ports={meta.has_boundary_ports}")
     print(f"has_inter_cgra_noc_ports={meta.has_inter_cgra_noc_ports}")
-    print(f"has_cgra_id_port={meta.has_cgra_id_port} has_address_ports={meta.has_address_ports}")
+    print(
+        f"has_cgra_id_port={meta.has_cgra_id_port} has_address_ports={meta.has_address_ports}"
+    )
     print(
         f"has_dma={meta.dma.enabled} dram_addr_width={meta.dma.dram_addr_width} "
-        f"dram_data_width={meta.dma.dram_data_width} dram_mask_width={meta.dma.dram_mask_width}")
+        f"dram_data_width={meta.dma.dram_data_width} dram_mask_width={meta.dma.dram_mask_width}"
+    )
     print(
         f"dma_spm_addr_width={meta.dma.spm_addr_width} nbytes_width={meta.dma.nbytes_width} "
-        f"tag_width={meta.dma.tag_width} descriptor_width={meta.dma.descriptor_width}")
+        f"tag_width={meta.dma.tag_width} descriptor_width={meta.dma.descriptor_width}"
+    )
     print(f"scala_out={args.scala_out}")
     print(f"c_layout_out={args.c_layout_out}")
     print(f"c_protocol_out={args.c_protocol_out}")

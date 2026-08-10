@@ -53,7 +53,8 @@ static uint32_t pack_input(uint8_t reset, uint8_t start, uint8_t a, uint8_t b) {
          OPENFPGA_GCD6_K4_FRAME_INPUT_FIELD_B_5_PACK((b >> 5) & 1u);
 }
 
-static void set_input(uint32_t base, uint8_t reset, uint8_t start, uint8_t a, uint8_t b) {
+static void set_input(uint32_t base, uint8_t reset, uint8_t start, uint8_t a,
+                      uint8_t b) {
   (void)base;
   openfpga_write(OPENFPGA_USER_INPUT, pack_input(reset, start, a, b));
 }
@@ -69,7 +70,8 @@ static uint32_t unpack_result(uint32_t output) {
 
 static int program_bitstream(uint32_t base) {
   (void)base;
-  printf("Programming %u OpenFPGA cfg words...\n", (unsigned)OPENFPGA_GCD6_K4_FRAME_BITSTREAM_LEN);
+  printf("Programming %u OpenFPGA cfg words...\n",
+         (unsigned)OPENFPGA_GCD6_K4_FRAME_BITSTREAM_LEN);
   openfpga_write(OPENFPGA_CONTROL, 1u);
   for (uint32_t i = 0; i < OPENFPGA_GCD6_K4_FRAME_BITSTREAM_LEN; ++i) {
     uint32_t word = openfpga_gcd6_k4_frame_cfg_word(i);
@@ -80,7 +82,8 @@ static int program_bitstream(uint32_t base) {
   }
   uint32_t status = openfpga_read(OPENFPGA_STATUS);
   if ((status & STATUS_PROGRAMMED) == 0u) {
-    printf("ERROR: programmed status bit not set, status=0x%08x\n", (unsigned)status);
+    printf("ERROR: programmed status bit not set, status=0x%08x\n",
+           (unsigned)status);
     return 1;
   }
   printf("Programming done, status=0x%08x\n", (unsigned)status);
@@ -100,13 +103,9 @@ static int run_case(uint32_t base, uint8_t a, uint8_t b) {
     uint32_t result = unpack_result(output);
     if (done != 0u) {
       if (result != expected) {
-        printf(
-            "ERROR: gcd(%u,%u) got %u, expected %u, raw=0x%08x\n",
-            (unsigned)a,
-            (unsigned)b,
-            (unsigned)result,
-            (unsigned)expected,
-            (unsigned)output);
+        printf("ERROR: gcd(%u,%u) got %u, expected %u, raw=0x%08x\n",
+               (unsigned)a, (unsigned)b, (unsigned)result, (unsigned)expected,
+               (unsigned)output);
         return 1;
       }
       printf("gcd(%u,%u) = %u\n", (unsigned)a, (unsigned)b, (unsigned)result);
@@ -131,14 +130,8 @@ int main(void) {
   set_input(base, 0u, 0u, 0u, 0u);
 
   static const uint8_t cases[][2] = {
-      {0u, 0u},
-      {12u, 8u},
-      {15u, 15u},
-      {21u, 6u},
-      {27u, 18u},
-      {35u, 14u},
-      {63u, 21u},
-      {62u, 45u},
+      {0u, 0u},   {12u, 8u},  {15u, 15u}, {21u, 6u},
+      {27u, 18u}, {35u, 14u}, {63u, 21u}, {62u, 45u},
   };
 
   for (uint32_t i = 0; i < sizeof(cases) / sizeof(cases[0]); ++i) {

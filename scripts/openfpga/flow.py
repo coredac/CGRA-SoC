@@ -57,7 +57,9 @@ def _make_shell_template(
 
         text, count = vpr_re.subn(add_vpr_options, text, count=1)
         if count != 1:
-            raise ValueError(f"could not find a VPR command for option injection in {src}")
+            raise ValueError(
+                f"could not find a VPR command for option injection in {src}"
+            )
 
     if not re.search(r"^\s*write_fabric_bitstream\b", text, flags=re.MULTILINE):
         build_bitstream_re = re.compile(
@@ -75,7 +77,9 @@ def _make_shell_template(
 
         text, count = build_bitstream_re.subn(add_write_fabric_bitstream, text, count=1)
         if count != 1:
-            raise ValueError(f"could not find build_fabric_bitstream for bitstream output injection in {src}")
+            raise ValueError(
+                f"could not find build_fabric_bitstream for bitstream output injection in {src}"
+            )
 
     if explicit_port_mapping:
         for command in (
@@ -121,7 +125,9 @@ def _resolve_optional_file(root: Path, value: str | None, label: str) -> str | N
     return str(ensure_file(resolve_under(root, value), label))
 
 
-def _resolve_semicolon_files(root: Path, values: tuple[str, ...], label: str) -> str | None:
+def _resolve_semicolon_files(
+    root: Path, values: tuple[str, ...], label: str
+) -> str | None:
     if not values:
         return None
     resolved = [str(ensure_file(resolve_under(root, value), label)) for value in values]
@@ -130,7 +136,9 @@ def _resolve_semicolon_files(root: Path, values: tuple[str, ...], label: str) ->
 
 def _resolve_extra_template_var(root: Path, key: str, value: str) -> str:
     if key.lower() in _EXTRA_TEMPLATE_PATH_KEYS:
-        return str(ensure_file(resolve_under(root, value), f"flow.extra_template_vars.{key}"))
+        return str(
+            ensure_file(resolve_under(root, value), f"flow.extra_template_vars.{key}")
+        )
     return value
 
 
@@ -141,10 +149,18 @@ def run_openfpga_flow(demo: DemoConfig) -> GeneratedPaths:
     flow = demo.flow
 
     vpr_arch = ensure_file(resolve_under(root, arch.vpr_arch), "VPR arch")
-    openfpga_arch = ensure_file(resolve_under(root, arch.openfpga_arch), "OpenFPGA arch")
-    sim_setting = ensure_file(resolve_under(root, arch.simulation_setting), "OpenFPGA simulation setting")
-    shell_template = ensure_file(resolve_under(root, arch.shell_template), "OpenFPGA shell template")
-    ref_verilog = ensure_file(resolve_under(root, app.benchmark_verilog), "reference Verilog")
+    openfpga_arch = ensure_file(
+        resolve_under(root, arch.openfpga_arch), "OpenFPGA arch"
+    )
+    sim_setting = ensure_file(
+        resolve_under(root, arch.simulation_setting), "OpenFPGA simulation setting"
+    )
+    shell_template = ensure_file(
+        resolve_under(root, arch.shell_template), "OpenFPGA shell template"
+    )
+    ref_verilog = ensure_file(
+        resolve_under(root, app.benchmark_verilog), "reference Verilog"
+    )
 
     if flow.fpga_flow == "vpr_blif":
         benchmark_files = [_required_app_file(root, app.benchmark_blif, "BLIF")]
@@ -157,22 +173,29 @@ def run_openfpga_flow(demo: DemoConfig) -> GeneratedPaths:
     else:
         raise ValueError(f"unsupported OpenFPGA flow {flow.fpga_flow!r}")
 
-    flow_py = ensure_file(root / "openfpga_flow" / "scripts" / "run_fpga_flow.py", "OpenFPGA flow script")
+    flow_py = ensure_file(
+        root / "openfpga_flow" / "scripts" / "run_fpga_flow.py", "OpenFPGA flow script"
+    )
     openfpga_python = ensure_file(root / ".venv" / "bin" / "python", "OpenFPGA Python")
 
     template = _make_shell_template(
         shell_template,
         demo.workdir.parent / f"{demo.name}_route_chan_template.openfpga",
         inject_route_chan_width=flow.inject_route_chan_width,
-        inject_vpr_device_layout="openfpga_vpr_device_layout" in flow.extra_template_vars,
+        inject_vpr_device_layout="openfpga_vpr_device_layout"
+        in flow.extra_template_vars,
         explicit_port_mapping=flow.explicit_port_mapping,
     )
     yosys_tmpl = _resolve_optional_file(root, flow.yosys_tmpl, "Yosys template")
-    ys_rewrite_tmpl = _resolve_semicolon_files(root, flow.ys_rewrite_tmpl, "Yosys rewrite template")
+    ys_rewrite_tmpl = _resolve_semicolon_files(
+        root, flow.ys_rewrite_tmpl, "Yosys rewrite template"
+    )
 
     env = os.environ.copy()
     env["PATH"] = f"{root / '.local' / 'bin'}:{env.get('PATH', '')}"
-    env["LD_LIBRARY_PATH"] = f"{root / '.local' / 'lib'}:{env.get('LD_LIBRARY_PATH', '')}"
+    env["LD_LIBRARY_PATH"] = (
+        f"{root / '.local' / 'lib'}:{env.get('LD_LIBRARY_PATH', '')}"
+    )
     env["BUILD_USING_CCACHE"] = "off"
 
     cmd = [

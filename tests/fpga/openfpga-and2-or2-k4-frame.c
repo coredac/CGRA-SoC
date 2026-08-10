@@ -35,7 +35,8 @@ int main(void) {
 
   uint32_t status = openfpga_read(OPENFPGA_STATUS);
   if ((status & 0x1u) == 0) {
-    printf("OpenFPGA AND2_OR2 k4 frame demo: STATUS not programmed, status=0x%08x\n",
+    printf("OpenFPGA AND2_OR2 k4 frame demo: STATUS not programmed, "
+           "status=0x%08x\n",
            status);
     return 1;
   }
@@ -47,15 +48,14 @@ int main(void) {
       openfpga_write(OPENFPGA_USER_INPUT, input);
 
       uint32_t output = openfpga_read(OPENFPGA_USER_OUTPUT);
-      uint32_t actual_c =
-          OPENFPGA_AND2_OR2_K4_FRAME_OUTPUT_FIELD_C_GET(output);
-      uint32_t actual_d =
-          OPENFPGA_AND2_OR2_K4_FRAME_OUTPUT_FIELD_D_GET(output);
+      uint32_t actual_c = OPENFPGA_AND2_OR2_K4_FRAME_OUTPUT_FIELD_C_GET(output);
+      uint32_t actual_d = OPENFPGA_AND2_OR2_K4_FRAME_OUTPUT_FIELD_D_GET(output);
       uint32_t expected_c = a & b;
       uint32_t expected_d = a | b;
 
       if (actual_c != expected_c || actual_d != expected_d) {
-        printf("OpenFPGA AND2_OR2 k4 frame demo: mismatch a=%u b=%u c=%u/%u d=%u/%u status=0x%08x\n",
+        printf("OpenFPGA AND2_OR2 k4 frame demo: mismatch a=%u b=%u c=%u/%u "
+               "d=%u/%u status=0x%08x\n",
                a, b, actual_c, expected_c, actual_d, expected_d,
                openfpga_read(OPENFPGA_STATUS));
         return 1;

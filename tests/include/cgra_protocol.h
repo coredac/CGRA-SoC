@@ -1,26 +1,19 @@
 #ifndef CGRA_PROTOCOL_H
 #define CGRA_PROTOCOL_H
 
-#include "rocc.h"
 #include "generated/cgra_protocol_generated.h"
+#include "rocc.h"
 
-#define CGRA_STATUS(result) \
-  ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_STATUS)
-#define CGRA_WAIT(result) \
-  ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_WAIT)
-#define CGRA_RAW_PKT_LO(lo) \
-  ROCC_INSTRUCTION_S(0, lo, CGRA_FUNCT_RAW_PKT_LO)
-#define CGRA_RAW_PKT_MID(mid) \
-  ROCC_INSTRUCTION_S(0, mid, CGRA_FUNCT_RAW_PKT_MID)
-#define CGRA_RAW_PKT_HI(hi) \
-  ROCC_INSTRUCTION_S(0, hi, CGRA_FUNCT_RAW_PKT_HI)
-#define CGRA_SET_EXPECTED_COMPLETES(count) \
+#define CGRA_STATUS(result) ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_STATUS)
+#define CGRA_WAIT(result) ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_WAIT)
+#define CGRA_RAW_PKT_LO(lo) ROCC_INSTRUCTION_S(0, lo, CGRA_FUNCT_RAW_PKT_LO)
+#define CGRA_RAW_PKT_MID(mid) ROCC_INSTRUCTION_S(0, mid, CGRA_FUNCT_RAW_PKT_MID)
+#define CGRA_RAW_PKT_HI(hi) ROCC_INSTRUCTION_S(0, hi, CGRA_FUNCT_RAW_PKT_HI)
+#define CGRA_SET_EXPECTED_COMPLETES(count)                                     \
   ROCC_INSTRUCTION_S(0, count, CGRA_FUNCT_SET_EXPECTED_COMPLETES)
-#define CGRA_RESULT(result) \
-  ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_RESULT)
-#define CGRA_RAW_PKT_TOP(top) \
-  ROCC_INSTRUCTION_S(0, top, CGRA_FUNCT_RAW_PKT_TOP)
-#define CGRA_LOAD_RESULT(result) \
+#define CGRA_RESULT(result) ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_RESULT)
+#define CGRA_RAW_PKT_TOP(top) ROCC_INSTRUCTION_S(0, top, CGRA_FUNCT_RAW_PKT_TOP)
+#define CGRA_LOAD_RESULT(result)                                               \
   ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_LOAD_RESULT)
 
 enum {

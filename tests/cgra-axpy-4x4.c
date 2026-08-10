@@ -32,13 +32,13 @@ static int verify_axpy_data(void) {
    * back memory. A direct CgraRTL data_mem inspection with the same packets
    * leaves addr 0 at zero while addr 1..15 match the expected 4*x results.
    * Keep this CPU+CGRA test aligned with what the current kernel can prove.
-  */
+   */
   for (uint8_t addr = 1; addr < AXPY_INPUT_COUNT; ++addr) {
     uint32_t actual = axpy_read_mem_fast(addr);
     uint32_t expected = axpy_expected(addr);
     if (actual != expected) {
-      printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n",
-             addr, actual, expected);
+      printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual,
+             expected);
       ++failures;
     }
   }
@@ -79,8 +79,7 @@ int main(void) {
 
   if (wait_result != 1 || complete != 1 ||
       complete_count != AXPY_EXPECTED_COMPLETES ||
-      result != AXPY_EXPECTED_RESULT ||
-      data_failures != 0) {
+      result != AXPY_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC AXPY 4x4: FAIL\n");
     return 1;
   }

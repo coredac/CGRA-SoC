@@ -1,9 +1,9 @@
 // CGRA RoCC multi-CGRA 2x2 homo MeshRTL reference test, handwritten from
 // VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py::test_homo.
 
+#include "cgra_multi_homo_packets.h"
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "cgra_multi_homo_packets.h"
 #include <stdint.h>
 #include <stdio.h>
 

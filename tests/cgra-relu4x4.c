@@ -35,8 +35,8 @@ static int verify_relu4x4_data(int verbose) {
     uint32_t expected = relu4x4_expected(addr);
     if (actual != expected) {
       if (verbose) {
-        printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n",
-               addr, actual, expected);
+        printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual,
+               expected);
       }
       ++failures;
     }
@@ -63,8 +63,7 @@ int main(void) {
 
   if (wait_result != 1 || complete != 1 ||
       complete_count != RELU4X4_EXPECTED_COMPLETES ||
-      result != RELU4X4_EXPECTED_RESULT ||
-      data_failures != 0) {
+      result != RELU4X4_EXPECTED_RESULT || data_failures != 0) {
     if (data_failures != 0) {
       verify_relu4x4_data(1);
     }

@@ -10,7 +10,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_RTL = ROOT / "build" / "cgra" / "IntegratedCgraWithDmaRTL_single__pickled.v"
 TOP_MODULE = "IntegratedCgraWithDmaRTL_single"
@@ -18,88 +17,93 @@ PYTHON_CANDIDATES = (
     ROOT / ".venv" / "bin" / "python",
     ROOT / "chipyard" / ".conda-env" / "bin" / "python",
 )
-PYTHON_EXE = str(next((path for path in PYTHON_CANDIDATES if path.exists()),
-                      Path(sys.executable)))
+PYTHON_EXE = str(
+    next((path for path in PYTHON_CANDIDATES if path.exists()), Path(sys.executable))
+)
 DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
 DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 
 
 def resolve_input_path(path: str) -> Path:
-  candidate = Path(path)
-  if candidate.is_absolute():
-    return candidate
-  for base in (Path.cwd(), ROOT, ROOT / "VectorCGRA"):
-    resolved = base / candidate
-    if resolved.exists():
-      return resolved
-  return Path.cwd() / candidate
+    candidate = Path(path)
+    if candidate.is_absolute():
+        return candidate
+    for base in (Path.cwd(), ROOT, ROOT / "VectorCGRA"):
+        resolved = base / candidate
+        if resolved.exists():
+            return resolved
+    return Path.cwd() / candidate
 
 
 def run(cmd: list[str]) -> None:
-  print(" ".join(cmd))
-  subprocess.run(cmd, cwd=ROOT, check=True)
+    print(" ".join(cmd))
+    subprocess.run(cmd, cwd=ROOT, check=True)
 
 
 def parse_args() -> argparse.Namespace:
-  parser = argparse.ArgumentParser(description=__doc__)
-  parser.add_argument(
-    "--kernel-yaml",
-    help="Per-kernel metadata YAML. Does not override arch/soc RTL parameters.",
-  )
-  parser.add_argument(
-    "--arch-yaml",
-    default=str(DEFAULT_ARCH_YAML),
-    help=f"CGRA architecture YAML (default: {DEFAULT_ARCH_YAML.relative_to(ROOT)})",
-  )
-  parser.add_argument(
-    "--soc-yaml",
-    default=str(DEFAULT_SOC_YAML),
-    help=f"SoC/interface YAML (default: {DEFAULT_SOC_YAML.relative_to(ROOT)})",
-  )
-  return parser.parse_args()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--kernel-yaml",
+        help="Per-kernel metadata YAML. Does not override arch/soc RTL parameters.",
+    )
+    parser.add_argument(
+        "--arch-yaml",
+        default=str(DEFAULT_ARCH_YAML),
+        help=f"CGRA architecture YAML (default: {DEFAULT_ARCH_YAML.relative_to(ROOT)})",
+    )
+    parser.add_argument(
+        "--soc-yaml",
+        default=str(DEFAULT_SOC_YAML),
+        help=f"SoC/interface YAML (default: {DEFAULT_SOC_YAML.relative_to(ROOT)})",
+    )
+    return parser.parse_args()
 
 
 def main() -> int:
-  args = parse_args()
-  translate_cmd = [
-      PYTHON_EXE,
-      str(ROOT / "scripts" / "cgra_rtl_generator.py"),
-      "--output",
-      str(GENERATED_RTL),
-  ]
-  arch_yaml = resolve_input_path(args.arch_yaml)
-  soc_yaml = resolve_input_path(args.soc_yaml)
-  if not arch_yaml.exists():
-    raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
-  if not soc_yaml.exists():
-    raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
-  translate_cmd.extend([
-      "--arch-yaml",
-      str(arch_yaml),
-      "--soc-yaml",
-      str(soc_yaml),
-  ])
+    args = parse_args()
+    translate_cmd = [
+        PYTHON_EXE,
+        str(ROOT / "scripts" / "cgra_rtl_generator.py"),
+        "--output",
+        str(GENERATED_RTL),
+    ]
+    arch_yaml = resolve_input_path(args.arch_yaml)
+    soc_yaml = resolve_input_path(args.soc_yaml)
+    if not arch_yaml.exists():
+        raise FileNotFoundError(f"arch yaml not found: {arch_yaml}")
+    if not soc_yaml.exists():
+        raise FileNotFoundError(f"soc yaml not found: {soc_yaml}")
+    translate_cmd.extend(
+        [
+            "--arch-yaml",
+            str(arch_yaml),
+            "--soc-yaml",
+            str(soc_yaml),
+        ]
+    )
 
-  if args.kernel_yaml:
-    kernel_yaml = resolve_input_path(args.kernel_yaml)
-    if not kernel_yaml.exists():
-      raise FileNotFoundError(f"kernel yaml not found: {kernel_yaml}")
-    translate_cmd.extend(["--kernel-yaml", str(kernel_yaml)])
+    if args.kernel_yaml:
+        kernel_yaml = resolve_input_path(args.kernel_yaml)
+        if not kernel_yaml.exists():
+            raise FileNotFoundError(f"kernel yaml not found: {kernel_yaml}")
+        translate_cmd.extend(["--kernel-yaml", str(kernel_yaml)])
 
-  run(translate_cmd)
+    run(translate_cmd)
 
-  run([
-    PYTHON_EXE,
-    str(ROOT / "scripts" / "sync_cgra_blackbox.py"),
-    "--rtl",
-    str(GENERATED_RTL),
-    "--top-module",
-    TOP_MODULE,
-    "--require-dma",
-  ])
+    run(
+        [
+            PYTHON_EXE,
+            str(ROOT / "scripts" / "sync_cgra_blackbox.py"),
+            "--rtl",
+            str(GENERATED_RTL),
+            "--top-module",
+            TOP_MODULE,
+            "--require-dma",
+        ]
+    )
 
-  return 0
+    return 0
 
 
 if __name__ == "__main__":
-  raise SystemExit(main())
+    raise SystemExit(main())

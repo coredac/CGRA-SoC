@@ -58,7 +58,9 @@ def _field_macros(prefix: str, register: str, fields: List[FieldSpec]) -> List[s
     return lines
 
 
-def write_c_header(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstream: PackedBitstream) -> None:
+def write_c_header(
+    demo: DemoConfig, user_interface: UserInterfaceSpec, bitstream: PackedBitstream
+) -> None:
     cfg = demo.architecture.config_protocol
     input_register = user_interface.input_register
     output_register = user_interface.output_register
@@ -106,7 +108,9 @@ def write_c_header(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstrea
     demo.bitstream_header_path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def write_pin_map_header(demo: DemoConfig, user_interface: UserInterfaceSpec, pin_map: PinMap) -> None:
+def write_pin_map_header(
+    demo: DemoConfig, user_interface: UserInterfaceSpec, pin_map: PinMap
+) -> None:
     prefix = demo.macro_prefix
     lines = [
         f"#ifndef {prefix}_PIN_MAP_H",

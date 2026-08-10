@@ -1,9 +1,9 @@
 // CGRA RoCC multi-CGRA FIR vector test, handwritten from
 // VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py::test_fir_vector.
 
+#include "cgra_multi_fir_vector_packets.h"
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "cgra_multi_fir_vector_packets.h"
 #include <stdint.h>
 #include <stdio.h>
 

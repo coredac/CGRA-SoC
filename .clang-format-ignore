@@ -1,0 +1,11 @@
+# Submodules keep their own formatting rules.
+OpenFPGA/**
+VectorCGRA/**
+chipyard/**
+firesim/**
+
+# Generated files and precomputed packet headers are not formatted by hand.
+tests/generated/**
+tests/include/cgra_layout.h
+tests/multi-cgra/*_packets.h
+tests/multi-cgra/fir/*_packets.h

@@ -1,9 +1,9 @@
 // CGRA RoCC multi-CGRA 2x2 systolic test, handwritten from
 // VectorCGRA/multi_cgra/test/MeshMultiCgraRTL_test.py::test_systolic.
 
+#include "cgra_multi_systolic_2x2_packets.h"
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "cgra_multi_systolic_2x2_packets.h"
 #include <stdint.h>
 #include <stdio.h>
 

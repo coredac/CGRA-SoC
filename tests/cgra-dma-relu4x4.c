@@ -20,8 +20,8 @@ enum {
 static int32_t input[RELU4X4_ELEMENT_COUNT] __attribute__((aligned(16)));
 static int32_t output[RELU4X4_ELEMENT_COUNT] __attribute__((aligned(16)));
 
-static const cgra_dma_desc_t MVIN_DESC = CGRA_DMA_DESC_CONST(
-    RELU4X4_SPM_WORD_ADDR, sizeof(input), RELU4X4_MVIN_TAG);
+static const cgra_dma_desc_t MVIN_DESC =
+    CGRA_DMA_DESC_CONST(RELU4X4_SPM_WORD_ADDR, sizeof(input), RELU4X4_MVIN_TAG);
 static const cgra_dma_desc_t MVOUT_DESC = CGRA_DMA_DESC_CONST(
     RELU4X4_SPM_WORD_ADDR, sizeof(output), RELU4X4_MVOUT_TAG);
 
@@ -75,8 +75,8 @@ int main(void) {
   for (int i = 0; i < RELU4X4_ELEMENT_COUNT; ++i) {
     int32_t expected = input[i] > 0 ? input[i] : 0;
     if (output[i] != expected) {
-      printf("CGRA DMA ReLU4x4: output[%d]=%d expected=%d\n",
-             i, output[i], expected);
+      printf("CGRA DMA ReLU4x4: output[%d]=%d expected=%d\n", i, output[i],
+             expected);
       ++output_failures;
     }
   }

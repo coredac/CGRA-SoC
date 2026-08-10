@@ -35,7 +35,8 @@ int main(void) {
 
   uint32_t status = openfpga_read(OPENFPGA_STATUS);
   if ((status & 0x1u) == 0) {
-    printf("OpenFPGA AND2 demo: STATUS not programmed, status=0x%08x\n", status);
+    printf("OpenFPGA AND2 demo: STATUS not programmed, status=0x%08x\n",
+           status);
     return 1;
   }
 
@@ -45,8 +46,8 @@ int main(void) {
                        OPENFPGA_AND2_INPUT_FIELD_B_PACK(b);
       uint32_t expected = a & b;
       openfpga_write(OPENFPGA_USER_INPUT, input);
-      uint32_t actual = OPENFPGA_AND2_OUTPUT_FIELD_C_GET(
-          openfpga_read(OPENFPGA_USER_OUTPUT));
+      uint32_t actual =
+          OPENFPGA_AND2_OUTPUT_FIELD_C_GET(openfpga_read(OPENFPGA_USER_OUTPUT));
       if (actual != expected) {
         printf("OpenFPGA AND2 demo: mismatch a=%u b=%u actual=%u expected=%u\n",
                a, b, actual, expected);

@@ -16,10 +16,7 @@ enum {
 
 static uint32_t histogram_input(uint8_t addr) {
   static const uint32_t preload_data_values[HISTOGRAM_INPUT_COUNT] = {
-      1, 1, 1, 1, 1,
-      5, 5, 5, 5, 5,
-      9, 9, 9, 9, 9,
-      13, 13, 13, 13, 13,
+      1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9, 13, 13, 13, 13, 13,
   };
   return preload_data_values[addr];
 }
@@ -49,8 +46,8 @@ static int verify_histogram_data(void) {
     uint8_t addr = HISTOGRAM_BIN_BASE + bin;
     uint32_t actual = histogram_read_mem_fast(addr);
     uint32_t expected = 5;
-    printf("Readback bin=%u addr=%u actual=0x%08x expected=0x%08x\n",
-           bin, addr, actual, expected);
+    printf("Readback bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin, addr,
+           actual, expected);
     if (addr == HISTOGRAM_BIN_BASE) {
       // Known VectorCGRA issue: histogram from_yaml with the default
       // ExclusiveDivRTL(latency=4) plus OPT_DIV_CONST leaves addr20 incorrect
@@ -61,8 +58,8 @@ static int verify_histogram_data(void) {
       continue;
     }
     if (actual != expected) {
-      printf("Mismatch bin=%u addr=%u actual=0x%08x expected=0x%08x\n",
-             bin, addr, actual, expected);
+      printf("Mismatch bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin,
+             addr, actual, expected);
       ++failures;
     }
   }
@@ -104,8 +101,7 @@ int main(void) {
 
   if (wait_result != 1 || complete != 1 ||
       complete_count != HISTOGRAM_EXPECTED_COMPLETES ||
-      result != HISTOGRAM_EXPECTED_RESULT ||
-      data_failures != 0) {
+      result != HISTOGRAM_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC Histogram 4x4: FAIL\n");
     return 1;
   }

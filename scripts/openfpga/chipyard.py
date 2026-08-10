@@ -9,7 +9,6 @@ import re
 from bitstream import PackedBitstream
 from config import ROOT, DemoConfig, FieldSpec, UserInterfaceSpec
 
-
 CHIPYARD_CONFIG_GENERATED = (
     ROOT
     / "chipyard"
@@ -42,20 +41,26 @@ def _compatible(peripheral_name: str) -> str:
 
 
 def _dts_node_name(peripheral_name: str, base_address: int) -> str:
-    text = re.sub(r"[^A-Za-z0-9,._+-]+", "-", peripheral_name.replace("_", "-").lower()).strip("-")
+    text = re.sub(
+        r"[^A-Za-z0-9,._+-]+", "-", peripheral_name.replace("_", "-").lower()
+    ).strip("-")
     if not text or not text[0].isalpha():
         text = f"openfpga-{text}"
 
     max_name_len = 47 - 1 - len(f"{base_address:x}")
     if max_name_len < 10:
-        raise ValueError(f"soc.base_address 0x{base_address:x} leaves too little room for a DTS node name")
+        raise ValueError(
+            f"soc.base_address 0x{base_address:x} leaves too little room for a DTS node name"
+        )
     if len(text) > max_name_len:
         suffix = hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
         text = f"{text[: max_name_len - len(suffix) - 1].rstrip('-')}-{suffix}"
     return text
 
 
-def write_scala_generated(demo: DemoConfig, user_interface: UserInterfaceSpec, bitstream: PackedBitstream) -> None:
+def write_scala_generated(
+    demo: DemoConfig, user_interface: UserInterfaceSpec, bitstream: PackedBitstream
+) -> None:
     cfg = demo.architecture.config_protocol
     input_register = user_interface.input_register
     output_register = user_interface.output_register

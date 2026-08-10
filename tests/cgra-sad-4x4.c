@@ -16,8 +16,7 @@ enum {
 static void preload_sad_data(void) {
   for (uint8_t i = 0; i < SAD_N; ++i) {
     send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)(i + 1), 1, i);
-    send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)(i + 4), 1,
-               SAD_BASE_B + i);
+    send_basic(0, CGRA_CMD_STORE_REQUEST, (uint32_t)(i + 4), 1, SAD_BASE_B + i);
   }
 }
 

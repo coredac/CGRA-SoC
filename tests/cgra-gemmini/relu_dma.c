@@ -1,8 +1,8 @@
 #include "cgra_dma.h"
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
-#include "generated/cgra_relu4x4_fast_api.h"
 #include "gemmini.h"
+#include "generated/cgra_relu4x4_fast_api.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -56,8 +56,7 @@ static void init_inputs(void) {
   for (int i = 0; i < DIM; ++i) {
     for (int j = 0; j < DIM; ++j) {
       const int index = i * DIM + j;
-      A[i][j] = (elem_t)(index % CGRA_CHUNK_ELEMENTS -
-                         CGRA_CHUNK_ELEMENTS / 2);
+      A[i][j] = (elem_t)(index % CGRA_CHUNK_ELEMENTS - CGRA_CHUNK_ELEMENTS / 2);
       B[i][j] = i == j ? (elem_t)1 : (elem_t)0;
       cgra_output[i][j] = (acc_t)0x5a5a5a5a;
     }
@@ -65,10 +64,10 @@ static void init_inputs(void) {
 }
 
 int main(void) {
-  static const uint32_t GEMMINI_ACCUMULATOR_ADDR_BIT =
-      UINT32_C(1) << (ADDR_LEN - 1);
-  static const uint32_t GEMMINI_READ_FULL_ACC_ROW_BIT =
-      UINT32_C(1) << (ADDR_LEN - 3);
+  static const uint32_t GEMMINI_ACCUMULATOR_ADDR_BIT = UINT32_C(1)
+                                                       << (ADDR_LEN - 1);
+  static const uint32_t GEMMINI_READ_FULL_ACC_ROW_BIT = UINT32_C(1)
+                                                        << (ADDR_LEN - 3);
   const uint32_t A_addr = 0;
   const uint32_t B_addr = DIM;
   const uint32_t accumulator_write_addr = GEMMINI_ACCUMULATOR_ADDR_BIT;
@@ -118,7 +117,8 @@ int main(void) {
       complete_count != CGRA_EXPECTED_COMPLETES ||
       result != CGRA_EXPECTED_RESULT) {
     printf("chunk 0 CGRA completion failure: wait=%lu status=0x%lx "
-           "result=%lu\n", wait_result, status, result);
+           "result=%lu\n",
+           wait_result, status, result);
     return 1;
   }
 
@@ -139,19 +139,16 @@ int main(void) {
     const int row = index / DIM;
     const int column = index % DIM;
     const acc_t expected_gemmini = (acc_t)A[row][column];
-    const acc_t expected_cgra =
-        expected_gemmini > 0 ? expected_gemmini : 0;
+    const acc_t expected_cgra = expected_gemmini > 0 ? expected_gemmini : 0;
 
     if (gemmini_words[index] != expected_gemmini) {
-      printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n",
-             row, column, (int)gemmini_words[index],
-             (int)expected_gemmini);
+      printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", row, column,
+             (int)gemmini_words[index], (int)expected_gemmini);
       ++gemmini_failures;
     }
     if (cgra_words[index] != expected_cgra) {
-      printf("CGRA mismatch [%d][%d]: actual=%d expected=%d\n",
-             row, column, (int)cgra_words[index],
-             (int)expected_cgra);
+      printf("CGRA mismatch [%d][%d]: actual=%d expected=%d\n", row, column,
+             (int)cgra_words[index], (int)expected_cgra);
       ++cgra_failures;
     }
   }

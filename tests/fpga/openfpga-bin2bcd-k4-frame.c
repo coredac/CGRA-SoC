@@ -31,8 +31,7 @@ static void openfpga_delay(void) {
 
 static uint32_t expected_bcd(uint32_t value) {
   value &= 0xffu;
-  return ((value / 100u) << 8) | (((value / 10u) % 10u) << 4) |
-         (value % 10u);
+  return ((value / 100u) << 8) | (((value / 10u) % 10u) << 4) | (value % 10u);
 }
 
 static void log_progress(const char *message, uint32_t value) {
@@ -47,7 +46,8 @@ static int check_case(uint32_t input) {
   uint32_t actual = openfpga_read(OPENFPGA_USER_OUTPUT) & 0xfffu;
   uint32_t expected = expected_bcd(input);
   if (actual != expected) {
-    printf("OpenFPGA bin2bcd k4 frame demo: mismatch input=%u bcd=0x%03x/0x%03x status=0x%08x\n",
+    printf("OpenFPGA bin2bcd k4 frame demo: mismatch input=%u "
+           "bcd=0x%03x/0x%03x status=0x%08x\n",
            input & 0xffu, actual, expected, openfpga_read(OPENFPGA_STATUS));
     fflush(stdout);
     return 1;
@@ -77,7 +77,8 @@ int main(void) {
   printf("OpenFPGA bin2bcd k4 frame demo: status=0x%08x\n", status);
   fflush(stdout);
   if ((status & 0x1u) == 0) {
-    printf("OpenFPGA bin2bcd k4 frame demo: STATUS not programmed, status=0x%08x\n",
+    printf("OpenFPGA bin2bcd k4 frame demo: STATUS not programmed, "
+           "status=0x%08x\n",
            status);
     fflush(stdout);
     return 1;

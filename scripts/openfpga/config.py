@@ -22,16 +22,30 @@ from util.schema import (  # noqa: E402
     require_string,
 )
 
-
 ROOT = Path(__file__).resolve().parents[2]
 CHIPYARD_VSRC = (
-    ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "resources" / "vsrc"
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "chipyard"
+    / "src"
+    / "main"
+    / "resources"
+    / "vsrc"
 )
 CHIPYARD_SCALA = (
     ROOT / "chipyard" / "generators" / "chipyard" / "src" / "main" / "scala" / "example"
 )
 TESTS_GENERATED = ROOT / "tests" / "generated"
-CELL_LIBRARY_FILES = ("dff.v", "latch.v", "gpio.v", "mux2.v", "inv.v", "buf4.v", "tap_buf4.v")
+CELL_LIBRARY_FILES = (
+    "dff.v",
+    "latch.v",
+    "gpio.v",
+    "mux2.v",
+    "inv.v",
+    "buf4.v",
+    "tap_buf4.v",
+)
 
 _IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 _FILE_STEM_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]*$")
@@ -227,18 +241,25 @@ class DemoConfig:
     def wrapper_path(self) -> Path:
         return self.vsrc_dir / f"{self.chipyard.wrapper_module}.v"
 
+
 def _parse_protocol(data: Dict[str, Any]) -> ConfigProtocol:
     kind = require_string(data, "type", "architecture.config_protocol")
     if kind != "frame_based":
-        raise ValueError(f"unsupported config_protocol.type {kind!r}; only frame_based is supported")
+        raise ValueError(
+            f"unsupported config_protocol.type {kind!r}; only frame_based is supported"
+        )
 
     protocol = ConfigProtocol(
         kind=kind,
-        address_width=require_int(data, "address_width", "architecture.config_protocol"),
+        address_width=require_int(
+            data, "address_width", "architecture.config_protocol"
+        ),
         data_width=require_int(data, "data_width", "architecture.config_protocol"),
     )
     if protocol.address_width <= 0 or protocol.data_width <= 0:
-        raise ValueError("frame_based config protocol address_width and data_width must be positive")
+        raise ValueError(
+            "frame_based config protocol address_width and data_width must be positive"
+        )
 
     if protocol.word_width > 32:
         raise ValueError(
@@ -254,7 +275,9 @@ def _parse_architecture(data: Dict[str, Any]) -> ArchitectureSpec:
         openfpga_arch=require_string(data, "openfpga_arch", "architecture"),
         shell_template=require_string(data, "shell_template", "architecture"),
         simulation_setting=require_string(data, "simulation_setting", "architecture"),
-        config_protocol=_parse_protocol(require_mapping(data, "config_protocol", "architecture")),
+        config_protocol=_parse_protocol(
+            require_mapping(data, "config_protocol", "architecture")
+        ),
     )
 
 
@@ -264,7 +287,9 @@ def _optional_string(data: Dict[str, Any], key: str, context: str) -> Optional[s
     return require_string(data, key, context)
 
 
-def _require_bool(data: Dict[str, Any], key: str, context: str, *, default: bool) -> bool:
+def _require_bool(
+    data: Dict[str, Any], key: str, context: str, *, default: bool
+) -> bool:
     value = data.get(key, default)
     if type(value) is not bool:
         raise TypeError(f"{context}.{key} must be a boolean, got {value!r}")
@@ -276,9 +301,13 @@ def _string_tuple(value: Any, label: str) -> Tuple[str, ...]:
         return ()
     if isinstance(value, str):
         return (value,)
-    if isinstance(value, list) and all(isinstance(item, str) and item for item in value):
+    if isinstance(value, list) and all(
+        isinstance(item, str) and item for item in value
+    ):
         return tuple(value)
-    raise TypeError(f"{label} must be a non-empty string or a list of non-empty strings")
+    raise TypeError(
+        f"{label} must be a non-empty string or a list of non-empty strings"
+    )
 
 
 def _identifier_tuple(value: Any, label: str) -> Tuple[str, ...]:
@@ -298,9 +327,13 @@ def _parse_extra_template_vars(data: Dict[str, Any]) -> Dict[str, str]:
     result: Dict[str, str] = {}
     for key, value in raw.items():
         if not isinstance(key, str) or not _IDENT_RE.fullmatch(key):
-            raise ValueError(f"flow.extra_template_vars key must be an identifier, got {key!r}")
+            raise ValueError(
+                f"flow.extra_template_vars key must be an identifier, got {key!r}"
+            )
         if not isinstance(value, (str, int)):
-            raise TypeError(f"flow.extra_template_vars.{key} must be a string or integer, got {value!r}")
+            raise TypeError(
+                f"flow.extra_template_vars.{key} must be a string or integer, got {value!r}"
+            )
         result[key] = str(value)
     return result
 
@@ -308,19 +341,29 @@ def _parse_extra_template_vars(data: Dict[str, Any]) -> Dict[str, str]:
 def _parse_flow(data: Dict[str, Any]) -> FlowSpec:
     kind = require_string(data, "fpga_flow", "flow", default="vpr_blif")
     if kind not in ("vpr_blif", "yosys_vpr"):
-        raise ValueError(f"unsupported flow.fpga_flow {kind!r}; supported flows are vpr_blif and yosys_vpr")
+        raise ValueError(
+            f"unsupported flow.fpga_flow {kind!r}; supported flows are vpr_blif and yosys_vpr"
+        )
 
     extra_flags = _string_tuple(data.get("extra_flags"), "flow.extra_flags")
     for flag in extra_flags:
         if not _IDENT_RE.fullmatch(flag):
-            raise ValueError(f"flow.extra_flags entries must be parser flag names, got {flag!r}")
+            raise ValueError(
+                f"flow.extra_flags entries must be parser flag names, got {flag!r}"
+            )
 
     return FlowSpec(
         fpga_flow=kind,
-        inject_route_chan_width=_require_bool(data, "inject_route_chan_width", "flow", default=True),
-        explicit_port_mapping=_require_bool(data, "explicit_port_mapping", "flow", default=False),
+        inject_route_chan_width=_require_bool(
+            data, "inject_route_chan_width", "flow", default=True
+        ),
+        explicit_port_mapping=_require_bool(
+            data, "explicit_port_mapping", "flow", default=False
+        ),
         yosys_tmpl=_optional_string(data, "yosys_tmpl", "flow"),
-        ys_rewrite_tmpl=_string_tuple(data.get("ys_rewrite_tmpl"), "flow.ys_rewrite_tmpl"),
+        ys_rewrite_tmpl=_string_tuple(
+            data.get("ys_rewrite_tmpl"), "flow.ys_rewrite_tmpl"
+        ),
         extra_template_vars=_parse_extra_template_vars(data),
         extra_flags=extra_flags,
     )
@@ -334,8 +377,12 @@ def _parse_application(data: Dict[str, Any]) -> ApplicationSpec:
         raise ValueError(f"application clock_ports and reset_ports overlap: {overlap}")
 
     return ApplicationSpec(
-        name=_require_identifier(require_string(data, "name", "application"), "application.name"),
-        top_module=_require_identifier(require_string(data, "top_module", "application"), "application.top_module"),
+        name=_require_identifier(
+            require_string(data, "name", "application"), "application.name"
+        ),
+        top_module=_require_identifier(
+            require_string(data, "top_module", "application"), "application.top_module"
+        ),
         benchmark_blif=_optional_string(data, "benchmark_blif", "application"),
         benchmark_verilog=require_string(data, "benchmark_verilog", "application"),
         benchmark_act=_optional_string(data, "benchmark_act", "application"),
@@ -349,16 +396,32 @@ def _parse_chipyard(data: Dict[str, Any], demo_name: str) -> ChipyardSpec:
     wrapper_default = f"{_pascal_case(demo_name)}Wrapper"
     return ChipyardSpec(
         config_name=_require_identifier(
-            require_string(data, "config_name", "chipyard") if "config_name" in data else "OpenFPGADemoRocketConfig",
+            (
+                require_string(data, "config_name", "chipyard")
+                if "config_name" in data
+                else "OpenFPGADemoRocketConfig"
+            ),
             "chipyard.config_name",
         ),
-        peripheral_name=require_string(data, "peripheral_name", "chipyard") if "peripheral_name" in data else demo_name,
+        peripheral_name=(
+            require_string(data, "peripheral_name", "chipyard")
+            if "peripheral_name" in data
+            else demo_name
+        ),
         wrapper_module=_require_identifier(
-            require_string(data, "wrapper_module", "chipyard") if "wrapper_module" in data else wrapper_default,
+            (
+                require_string(data, "wrapper_module", "chipyard")
+                if "wrapper_module" in data
+                else wrapper_default
+            ),
             "chipyard.wrapper_module",
         ),
         scala_object=_require_identifier(
-            require_string(data, "scala_object", "chipyard") if "scala_object" in data else "OpenFPGAGenerated",
+            (
+                require_string(data, "scala_object", "chipyard")
+                if "scala_object" in data
+                else "OpenFPGAGenerated"
+            ),
             "chipyard.scala_object",
         ),
     )
@@ -374,11 +437,15 @@ def _merge_mapping(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, 
     return result
 
 
-def _select_benchmark(raw: Dict[str, Any], benchmark: Optional[str]) -> Tuple[str, Dict[str, Any]]:
+def _select_benchmark(
+    raw: Dict[str, Any], benchmark: Optional[str]
+) -> Tuple[str, Dict[str, Any]]:
     benchmarks = require_mapping(raw, "benchmarks")
     if benchmark is None:
         choices = ", ".join(sorted(benchmarks))
-        raise ValueError(f"{raw['name']} defines multiple benchmarks; pass --benchmark <name>. Choices: {choices}")
+        raise ValueError(
+            f"{raw['name']} defines multiple benchmarks; pass --benchmark <name>. Choices: {choices}"
+        )
     if benchmark in benchmarks:
         selected = require_mapping(benchmarks, benchmark, "benchmarks")
         return benchmark, dict(selected)
@@ -391,12 +458,16 @@ def _select_benchmark(raw: Dict[str, Any], benchmark: Optional[str]) -> Tuple[st
         if "application" in selected:
             app = require_mapping(selected, "application", f"benchmarks.{key}")
             if "name" in app:
-                names.append(require_string(app, "name", f"benchmarks.{key}.application"))
+                names.append(
+                    require_string(app, "name", f"benchmarks.{key}.application")
+                )
         if benchmark in names:
             return key, dict(selected)
 
     choices = ", ".join(sorted(benchmarks))
-    raise ValueError(f"unknown benchmark {benchmark!r} in {raw['name']}; choices: {choices}")
+    raise ValueError(
+        f"unknown benchmark {benchmark!r} in {raw['name']}; choices: {choices}"
+    )
 
 
 def _load_multi_benchmark_config(
@@ -407,12 +478,16 @@ def _load_multi_benchmark_config(
 ) -> DemoConfig:
     fabric_name = require_string(raw, "name")
     if not _FILE_STEM_RE.fullmatch(fabric_name):
-        raise ValueError(f"name must be a stable fabric file/directory stem, got {fabric_name!r}")
+        raise ValueError(
+            f"name must be a stable fabric file/directory stem, got {fabric_name!r}"
+        )
 
     benchmark_key, selected = _select_benchmark(raw, benchmark)
     demo_name = require_string(selected, "name", f"benchmarks.{benchmark_key}")
     if not _FILE_STEM_RE.fullmatch(demo_name):
-        raise ValueError(f"benchmarks.{benchmark_key}.name must be a stable file/directory stem, got {demo_name!r}")
+        raise ValueError(
+            f"benchmarks.{benchmark_key}.name must be a stable file/directory stem, got {demo_name!r}"
+        )
     _require_identifier(_c_identifier(demo_name), "derived C identifier")
 
     openfpga_root = resolve_under(ROOT, require_string(raw, "openfpga_root"))
@@ -439,13 +514,19 @@ def _load_multi_benchmark_config(
         openfpga_root=openfpga_root,
         architecture=_parse_architecture(architecture_raw),
         flow=_parse_flow(flow_raw),
-        application=_parse_application(require_mapping(selected, "application", f"benchmarks.{benchmark_key}")),
+        application=_parse_application(
+            require_mapping(selected, "application", f"benchmarks.{benchmark_key}")
+        ),
         soc=SocSpec(
             base_address=require_int(soc_raw, "base_address", "soc"),
             size=require_int(soc_raw, "size", "soc"),
         ),
         chipyard=_parse_chipyard(
-            require_mapping(selected, "chipyard", f"benchmarks.{benchmark_key}") if "chipyard" in selected else {},
+            (
+                require_mapping(selected, "chipyard", f"benchmarks.{benchmark_key}")
+                if "chipyard" in selected
+                else {}
+            ),
             demo_name,
         ),
     )
@@ -458,7 +539,9 @@ def load_demo_config(path: Path, *, benchmark: Optional[str] = None) -> DemoConf
     if "benchmarks" in raw:
         return _load_multi_benchmark_config(config_path, raw, benchmark=benchmark)
     if benchmark is not None:
-        raise ValueError(f"{config_path} is a single-benchmark config; do not pass --benchmark")
+        raise ValueError(
+            f"{config_path} is a single-benchmark config; do not pass --benchmark"
+        )
 
     name = require_string(raw, "name")
     if not _FILE_STEM_RE.fullmatch(name):
@@ -478,8 +561,12 @@ def load_demo_config(path: Path, *, benchmark: Optional[str] = None) -> DemoConf
         flow=_parse_flow(dict(require_mapping(raw, "flow", default={}))),
         application=_parse_application(require_mapping(raw, "application")),
         soc=SocSpec(
-            base_address=require_int(require_mapping(raw, "soc"), "base_address", "soc"),
+            base_address=require_int(
+                require_mapping(raw, "soc"), "base_address", "soc"
+            ),
             size=require_int(require_mapping(raw, "soc"), "size", "soc"),
         ),
-        chipyard=_parse_chipyard(require_mapping(raw, "chipyard") if "chipyard" in raw else {}, name),
+        chipyard=_parse_chipyard(
+            require_mapping(raw, "chipyard") if "chipyard" in raw else {}, name
+        ),
     )
