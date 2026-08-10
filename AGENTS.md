@@ -2,14 +2,19 @@
 
 ## Scope
 
-This repository is the top-level integration workspace for VectorCGRA,
-OpenFPGA, Gemmini, and Chipyard. Apply these instructions to root-owned files.
+This repository is the top-level integration and runtime workspace for
+VectorCGRA, OpenFPGA, Gemmini, and Chipyard. It owns system configuration,
+integration scripts, tests, documentation, and future runtime development.
+
 The `VectorCGRA/`, `OpenFPGA/`, `chipyard/`, and `firesim/` submodules retain
-their own conventions and should only be changed when the task explicitly
-includes them.
+their own conventions. Default to changing CGRA-SoC. Change a submodule only
+when the task belongs to that repository or the integration cannot be fixed at
+the top level.
 
 Preserve unrelated user changes in the working tree. Do not reset submodules or
-generated artifacts to clean the repository.
+generated artifacts to clean the repository. For a required submodule change,
+commit and validate the owning repository first, then update its submodule
+pointer and any integration code in CGRA-SoC.
 
 ## Sources of Truth
 
@@ -38,8 +43,8 @@ arguments from old plans or logs.
 ### CGRA
 
 Single-CGRA fast APIs support FIR, ReLU, GEMV, Histogram, and AXPY. GEMM and
-SAD are unsupported. GEMV skips `y[0]`, Histogram skips bin 0, and AXPY skips
-address 0 in current validation. ReLU validates every output address.
+SAD are unsupported. Track kernel bugs and validation limitations in GitHub
+Issues rather than recording them here.
 
 Multi-CGRA tests support homogeneous mesh, 2x2 and 4x4 systolic, scalar FIR,
 and vector FIR configurations. Their packet headers are fixed, preencoded test
@@ -83,6 +88,13 @@ generator ran most recently. Regenerate the intended design before rebuilding
 or testing. `.clang-format-ignore` is the authoritative list of generated C
 files excluded from formatting.
 
+Do not commit generated files by default, including outputs from scripts,
+PyMTL, Chisel, and directories such as `generated/`. Commit a generated output
+only when it is required for the repository to build or run, is an intentional
+versioned interface, or the user explicitly requests it. When it must be
+committed, include the source or generator change when applicable and keep the
+reason clear in the handoff.
+
 ## Editing and Formatting
 
 - Format root-owned C and headers with the root `.clang-format` (LLVM, LF).
@@ -94,9 +106,32 @@ files excluded from formatting.
 - Keep README user-facing and concise. Put implementation contracts here rather
   than expanding the README.
 
-Do not invent GitHub Issue numbers or links. Once GitHub access is configured,
-represent active blockers and TODOs with issue links instead of long
-explanations in the README.
+## GitHub Workflow
+
+- Create all issues in CGRA-SoC, including issues whose implementation belongs
+  to VectorCGRA or cgra-chipyard.
+- Do not create issues in the forked submodule repositories unless the user
+  explicitly requests it.
+- Identify the affected component in the CGRA-SoC issue so implementation work
+  can still be routed to the correct repository.
+- Keep bugs, known limitations, TODOs, and planned work in GitHub Issues rather
+  than README or AGENTS.md.
+- Use one CGRA-SoC issue to track cross-repository work instead of duplicating
+  the issue across repositories.
+- Do not invent Issue numbers or links before GitHub access is available.
+
+Direct commits are currently allowed. Do not create a pull request unless the
+user asks for one or the repository policy changes. If pull requests are
+introduced, merge the owning submodule change first and then update the
+CGRA-SoC submodule pointer through its integration pull request.
+
+Keep commits scoped and commit messages short and descriptive. Use the author's
+configured Git identity. Do not add Codex, Claude Code, another AI tool, or an
+AI-generated `Co-authored-by` trailer to the commit author, message, or body.
+
+Update AGENTS.md in the same change only when repository ownership, workflow,
+support boundaries, generated-file policy, or another durable instruction has
+actually changed. Do not update it for routine implementation details.
 
 ## Validation
 

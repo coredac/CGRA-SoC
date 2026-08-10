@@ -1,7 +1,7 @@
 # CGRA-SoC
 
-CGRA-SoC integrates VectorCGRA, OpenFPGA, Gemmini, and Chipyard for
-accelerator generation and bare-metal simulation.
+CGRA-SoC is the top-level integration and runtime repository for VectorCGRA,
+OpenFPGA, Gemmini, and Chipyard.
 
 ## Contents
 
@@ -53,8 +53,7 @@ systems share the same Chipyard test runner.
 
 #### Single CGRA
 
-- Supported: FIR, ReLU
-- Supported with known limitations: GEMV, Histogram, AXPY
+- Supported: FIR, ReLU, GEMV, Histogram, AXPY
 - Unsupported: GEMM, SAD
 
 Generate the RTL with `scripts/generate_single_cgra.py` and the kernel API with
