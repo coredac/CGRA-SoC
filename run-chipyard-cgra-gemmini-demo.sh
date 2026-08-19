@@ -5,10 +5,46 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
+EXTERNAL_SPAD_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_external_spad.py"
+EXTERNAL_SPAD_SCALA="$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpadGenerated.scala"
 CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
+
+uses_external_spad_contract() {
+  case "$CONFIG" in
+    CGRAMinimalGemminiRocketConfig | \
+      CGRAMinimalGemminiExternalSpadValidationRocketConfig)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+check_external_spad_simulator_freshness() {
+  local simulator="$CHIPYARD_DIR/sims/verilator/simulator-chipyard.harness-$CONFIG"
+  local source
+  local sources=(
+    "$EXTERNAL_SPAD_SCALA"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpad.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/DigitalTop.scala"
+  )
+
+  if [[ ! -x "$simulator" ]]; then
+    echo "error: simulator not found for $CONFIG; rerun with --rebuild" >&2
+    return 1
+  fi
+  for source in "${sources[@]}"; do
+    if [[ "$source" -nt "$simulator" ]]; then
+      echo "error: $CONFIG simulator predates $source; rerun with --rebuild" >&2
+      return 1
+    fi
+  done
+}
 
 usage() {
   echo "usage: $0 [--rebuild] [--fast] [test-source.c]" >&2
@@ -63,6 +99,17 @@ set -u
 
 # The prebuilt simulator needs the Conda C++ runtime ahead of the system one.
 export LD_LIBRARY_PATH="$CHIPYARD_DIR/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+
+if uses_external_spad_contract; then
+  if ((REBUILD)); then
+    echo "[contract] Generating Gemmini external-SPAD interfaces"
+    python3 "$EXTERNAL_SPAD_GENERATOR"
+  else
+    echo "[contract] Checking Gemmini external-SPAD interfaces and simulator"
+    python3 "$EXTERNAL_SPAD_GENERATOR" --check
+    check_external_spad_simulator_freshness
+  fi
+fi
 
 if ((REBUILD)); then
   echo "[1/3] Rebuilding $CONFIG simulator"

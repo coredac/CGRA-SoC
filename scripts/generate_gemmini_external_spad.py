@@ -1,0 +1,275 @@
+#!/usr/bin/env python3
+"""Generate the Gemmini external-SPAD hardware/software address contract."""
+
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Mapping
+
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
+DEFAULT_SCALA_OUT = (
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "chipyard"
+    / "src"
+    / "main"
+    / "scala"
+    / "example"
+    / "GemminiExternalSpadGenerated.scala"
+)
+DEFAULT_C_HEADER_OUT = ROOT / "tests" / "include" / "gemmini_external_spad.h"
+
+
+@dataclass(frozen=True)
+class ExternalSpadContract:
+    base_address: int
+    size_bytes: int
+    spad_row_bytes: int
+    full_width_row_stride: int
+    output_slot_count: int
+    output_slot_size_bytes: int
+
+    @property
+    def full_width_row_bytes(self) -> int:
+        return self.spad_row_bytes * self.full_width_row_stride
+
+    @property
+    def matrix_dimension(self) -> int:
+        return self.output_slot_size_bytes // self.full_width_row_bytes
+
+    @property
+    def output_reserved_bytes(self) -> int:
+        return self.output_slot_count * self.output_slot_size_bytes
+
+    @property
+    def output_reserved_base(self) -> int:
+        return self.base_address + self.size_bytes - self.output_reserved_bytes
+
+    def output_slot_base(self, index: int) -> int:
+        if index < 0 or index >= self.output_slot_count:
+            raise IndexError(f"output slot index out of range: {index}")
+        return self.output_reserved_base + index * self.output_slot_size_bytes
+
+    def output_slot_row(self, index: int) -> int:
+        return (self.output_slot_base(index) - self.base_address) // self.spad_row_bytes
+
+
+def is_power_of_two(value: int) -> bool:
+    return value > 0 and value & (value - 1) == 0
+
+
+def require_mapping(
+    mapping: Mapping[str, object], key: str, source: Path
+) -> Mapping[str, object]:
+    value = mapping.get(key)
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{source}: missing mapping '{key}'")
+    return value
+
+
+def require_int(mapping: Mapping[str, object], key: str, source: Path) -> int:
+    value = mapping.get(key)
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise ValueError(f"{source}: '{key}' must be an integer")
+    return value
+
+
+def validate_contract(contract: ExternalSpadContract, source: Path) -> None:
+    prefix = f"{source}: memory.gemmini_external_spad"
+    if contract.base_address < 0:
+        raise ValueError(f"{prefix}.base_address must be non-negative")
+    if not is_power_of_two(contract.size_bytes):
+        raise ValueError(f"{prefix}.size_bytes must be a positive power of two")
+    if contract.base_address % contract.size_bytes != 0:
+        raise ValueError(f"{prefix}.base_address must be size-aligned")
+    if not is_power_of_two(contract.spad_row_bytes):
+        raise ValueError(f"{prefix}.spad_row_bytes must be a positive power of two")
+    if not is_power_of_two(contract.full_width_row_stride):
+        raise ValueError(
+            f"{prefix}.full_width_row_stride must be a positive power of two"
+        )
+    if contract.output_slot_count != 2:
+        raise ValueError(f"{prefix}.output_slots.count must be exactly 2")
+    if not is_power_of_two(contract.output_slot_size_bytes):
+        raise ValueError(
+            f"{prefix}.output_slots.size_bytes must be a positive power of two"
+        )
+    if contract.output_slot_size_bytes % contract.full_width_row_bytes != 0:
+        raise ValueError(
+            f"{prefix}.output_slots.size_bytes must contain whole full-width rows"
+        )
+    if contract.matrix_dimension <= 0:
+        raise ValueError(f"{prefix} must describe a non-empty full-width matrix")
+    if contract.output_reserved_bytes > contract.size_bytes:
+        raise ValueError(f"{prefix}.output_slots exceed the external SPAD capacity")
+    if contract.output_reserved_base % contract.output_slot_size_bytes != 0:
+        raise ValueError(f"{prefix}.output_slots reservation must be slot-aligned")
+    if contract.size_bytes % contract.spad_row_bytes != 0:
+        raise ValueError(f"{prefix}.size_bytes must contain whole SPAD rows")
+    if contract.size_bytes // contract.spad_row_bytes >= 1 << 31:
+        raise ValueError(f"{prefix} has too many rows for the generated Scala Int")
+
+    previous_end = contract.output_reserved_base
+    for index in range(contract.output_slot_count):
+        slot_base = contract.output_slot_base(index)
+        slot_end = slot_base + contract.output_slot_size_bytes
+        if slot_base != previous_end:
+            raise ValueError(f"{prefix}.output_slots are not contiguous")
+        if slot_base % contract.output_slot_size_bytes != 0:
+            raise ValueError(f"{prefix}.output_slots[{index}] is not slot-aligned")
+        if (slot_base - contract.base_address) % contract.spad_row_bytes != 0:
+            raise ValueError(f"{prefix}.output_slots[{index}] is not row-aligned")
+        if slot_end > contract.base_address + contract.size_bytes:
+            raise ValueError(f"{prefix}.output_slots[{index}] exceeds capacity")
+        previous_end = slot_end
+
+
+def load_contract(path: Path) -> ExternalSpadContract:
+    with path.open("r", encoding="utf-8") as stream:
+        document = yaml.safe_load(stream)
+    if not isinstance(document, Mapping):
+        raise ValueError(f"{path}: YAML must contain a top-level mapping")
+
+    memory = require_mapping(document, "memory", path)
+    external_spad = require_mapping(memory, "gemmini_external_spad", path)
+    output_slots = require_mapping(external_spad, "output_slots", path)
+    contract = ExternalSpadContract(
+        base_address=require_int(external_spad, "base_address", path),
+        size_bytes=require_int(external_spad, "size_bytes", path),
+        spad_row_bytes=require_int(external_spad, "spad_row_bytes", path),
+        full_width_row_stride=require_int(external_spad, "full_width_row_stride", path),
+        output_slot_count=require_int(output_slots, "count", path),
+        output_slot_size_bytes=require_int(output_slots, "size_bytes", path),
+    )
+    validate_contract(contract, path)
+    return contract
+
+
+def generate_scala(contract: ExternalSpadContract, source: Path) -> str:
+    try:
+        source_label = source.relative_to(ROOT)
+    except ValueError:
+        source_label = source
+    slot_bases = ", ".join(
+        f'BigInt("{contract.output_slot_base(index):x}", 16)'
+        for index in range(contract.output_slot_count)
+    )
+    slot_rows = ", ".join(
+        str(contract.output_slot_row(index))
+        for index in range(contract.output_slot_count)
+    )
+    return f"""package chipyard.example
+
+// Auto-generated by scripts/generate_gemmini_external_spad.py from {source_label}.
+// This is an intentional versioned hardware/software interface; do not edit by hand.
+object GemminiExternalSpadGenerated {{
+  val baseAddress: BigInt = BigInt("{contract.base_address:x}", 16)
+  val sizeBytes: Int = {contract.size_bytes}
+  val spadRowBytes: Int = {contract.spad_row_bytes}
+  val fullWidthRowStride: Int = {contract.full_width_row_stride}
+  val fullWidthRowBytes: Int = {contract.full_width_row_bytes}
+  val matrixDimension: Int = {contract.matrix_dimension}
+  val outputSlotCount: Int = {contract.output_slot_count}
+  val outputSlotSizeBytes: Int = {contract.output_slot_size_bytes}
+  val outputReservedBytes: Int = {contract.output_reserved_bytes}
+  val outputReservedBase: BigInt = BigInt("{contract.output_reserved_base:x}", 16)
+  val outputSlotBases: Seq[BigInt] = Seq({slot_bases})
+  val outputSlotRows: Seq[Int] = Seq({slot_rows})
+
+  require(sizeBytes > 0 && (sizeBytes & (sizeBytes - 1)) == 0)
+  require((baseAddress & (sizeBytes - 1)) == 0)
+  require(outputReservedBytes == outputSlotCount * outputSlotSizeBytes)
+  require(outputReservedBase == baseAddress + sizeBytes - outputReservedBytes)
+  require(outputSlotBases.size == outputSlotCount)
+  require(outputSlotRows.size == outputSlotCount)
+  require(outputSlotBases.zipWithIndex.forall {{ case (address, index) =>
+    address == outputReservedBase + index * outputSlotSizeBytes
+  }})
+  require(outputSlotRows.zip(outputSlotBases).forall {{ case (row, address) =>
+    baseAddress + row * spadRowBytes == address
+  }})
+}}
+"""
+
+
+def generate_c_header(contract: ExternalSpadContract, source: Path) -> str:
+    try:
+        source_label = source.relative_to(ROOT)
+    except ValueError:
+        source_label = source
+    lines = [
+        "/*",
+        " * Auto-generated by scripts/generate_gemmini_external_spad.py.",
+        f" * Source: {source_label}",
+        " * This is an intentional versioned hardware/software interface.",
+        " * Do not edit by hand.",
+        " */",
+        "#ifndef GEMMINI_EXTERNAL_SPAD_H",
+        "#define GEMMINI_EXTERNAL_SPAD_H",
+        "",
+        "#include <stdint.h>",
+        "",
+        f"#define GEMMINI_EXTERNAL_SPAD_BASE UINT64_C(0x{contract.base_address:x})",
+        f"#define GEMMINI_EXTERNAL_SPAD_SIZE_BYTES {contract.size_bytes}",
+        f"#define GEMMINI_EXTERNAL_SPAD_ROW_BYTES {contract.spad_row_bytes}",
+        f"#define GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_STRIDE {contract.full_width_row_stride}",
+        f"#define GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_BYTES {contract.full_width_row_bytes}",
+        f"#define GEMMINI_EXTERNAL_SPAD_MATRIX_DIMENSION {contract.matrix_dimension}",
+        f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT_COUNT {contract.output_slot_count}",
+        f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT_SIZE_BYTES {contract.output_slot_size_bytes}",
+        f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_RESERVED_BYTES {contract.output_reserved_bytes}",
+        f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_RESERVED_BASE UINT64_C(0x{contract.output_reserved_base:x})",
+        "",
+    ]
+    for index in range(contract.output_slot_count):
+        lines.extend(
+            [
+                f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT{index}_BASE UINT64_C(0x{contract.output_slot_base(index):x})",
+                f"#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT{index}_ROW {contract.output_slot_row(index)}",
+            ]
+        )
+    lines.extend(["", "#endif", ""])
+    return "\n".join(lines)
+
+
+def write_or_check(path: Path, content: str, check: bool) -> None:
+    if check:
+        if not path.exists() or path.read_text(encoding="utf-8") != content:
+            raise ValueError(f"generated interface is stale: {path}")
+        return
+    if path.exists() and path.read_text(encoding="utf-8") == content:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--soc-yaml", type=Path, default=DEFAULT_SOC_YAML)
+    parser.add_argument("--scala-out", type=Path, default=DEFAULT_SCALA_OUT)
+    parser.add_argument("--c-header-out", type=Path, default=DEFAULT_C_HEADER_OUT)
+    parser.add_argument(
+        "--check", action="store_true", help="fail if committed outputs are stale"
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    source = args.soc_yaml.resolve()
+    contract = load_contract(source)
+    write_or_check(args.scala_out, generate_scala(contract, source), args.check)
+    write_or_check(args.c_header_out, generate_c_header(contract, source), args.check)
+    print(f"scala_out={args.scala_out}")
+    print(f"c_header_out={args.c_header_out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
