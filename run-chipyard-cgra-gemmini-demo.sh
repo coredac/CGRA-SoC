@@ -30,6 +30,8 @@ check_external_spad_simulator_freshness() {
   local sources=(
     "$EXTERNAL_SPAD_SCALA"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpad.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiSpadProducerAdapter.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/SpmTransferEndpoint.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/DigitalTop.scala"
   )
