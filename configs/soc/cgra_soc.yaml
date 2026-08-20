@@ -9,7 +9,7 @@ interface:
 memory:
   data_mem_size_global: 128
   data_mem_size_per_bank: 16
-  num_banks_per_cgra: 2
+  num_banks_per_cgra: 8
   num_registers_per_reg_bank: 8
   mem_access_is_combinational: true
   gemmini_external_spad:

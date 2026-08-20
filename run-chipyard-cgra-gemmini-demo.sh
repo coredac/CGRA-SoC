@@ -7,6 +7,10 @@ CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
 EXTERNAL_SPAD_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_external_spad.py"
 EXTERNAL_SPAD_SCALA="$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpadGenerated.scala"
+CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_soc.yaml"
+CGRA_GENERATED_SCALA="$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRAGenerated.scala"
+CGRA_GENERATED_RTL="$CHIPYARD_DIR/generators/chipyard/src/main/resources/vsrc/IntegratedCgraWithDmaRTL_single__pickled.v"
+CGRA_GENERATED_WRAPPER="$CHIPYARD_DIR/generators/chipyard/src/main/resources/vsrc/IntegratedCgraWithDmaRTL_single_wrapper.v"
 CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
@@ -24,13 +28,36 @@ uses_external_spad_contract() {
   esac
 }
 
+check_cgra_generated_artifacts() {
+  local artifact
+  local artifacts=(
+    "$CGRA_SOC_YAML"
+    "$CGRA_GENERATED_SCALA"
+    "$CGRA_GENERATED_RTL"
+    "$CGRA_GENERATED_WRAPPER"
+  )
+
+  for artifact in "${artifacts[@]}"; do
+    if [[ ! -f "$artifact" ]]; then
+      echo "error: required CGRA source or generated artifact not found: $artifact; run scripts/generate_single_cgra.py first" >&2
+      return 1
+    fi
+  done
+}
+
 check_external_spad_simulator_freshness() {
   local simulator="$CHIPYARD_DIR/sims/verilator/simulator-chipyard.harness-$CONFIG"
   local source
   local sources=(
+    "$CGRA_SOC_YAML"
+    "$CGRA_GENERATED_SCALA"
+    "$CGRA_GENERATED_RTL"
+    "$CGRA_GENERATED_WRAPPER"
     "$EXTERNAL_SPAD_SCALA"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpad.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiSpadProducerAdapter.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraConsumerPullAdapter.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRA.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/SpmTransferEndpoint.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/DigitalTop.scala"
@@ -40,7 +67,14 @@ check_external_spad_simulator_freshness() {
     echo "error: simulator not found for $CONFIG; rerun with --rebuild" >&2
     return 1
   fi
+  if ! check_cgra_generated_artifacts; then
+    return 1
+  fi
   for source in "${sources[@]}"; do
+    if [[ ! -f "$source" ]]; then
+      echo "error: required simulator source not found: $source; generate the single-CGRA design, then rerun with --rebuild" >&2
+      return 1
+    fi
     if [[ "$source" -nt "$simulator" ]]; then
       echo "error: $CONFIG simulator predates $source; rerun with --rebuild" >&2
       return 1
@@ -104,6 +138,7 @@ export LD_LIBRARY_PATH="$CHIPYARD_DIR/.conda-env/lib:${LD_LIBRARY_PATH:-}"
 
 if uses_external_spad_contract; then
   if ((REBUILD)); then
+    check_cgra_generated_artifacts
     echo "[contract] Generating Gemmini external-SPAD interfaces"
     python3 "$EXTERNAL_SPAD_GENERATOR"
   else
