@@ -31,6 +31,8 @@ enum {
   COMPLETION_CONSUMER_STATUS = 0x268,
   COMPLETION_PRODUCER_STATUS = 0x270,
   COMPLETION_COUNT = 0x278,
+  COMPLETION_SPM_WORD_ADDRESS = 0x328,
+  COMPLETION_REQUESTED_BYTES = 0x338,
   CONSUMER_ACTIVE = 0x2b0,
   CONSUMER_ERROR_COUNT = 0x2d0,
   CONSUMER_REQUEST_COUNT = 0x2e0,
@@ -159,11 +161,14 @@ static void submit_pull(uint32_t job, uint32_t slot, uint32_t bytes,
 }
 
 static int verify_stalled_completion(uint32_t job, uint32_t slot,
-                                     uint32_t bytes, uint32_t tag) {
+                                     uint32_t bytes, uint32_t spm_word,
+                                     uint32_t tag) {
   for (unsigned observation = 0; observation < 8; ++observation) {
     if (read32(COMPLETION_VALID) != 1 || read32(COMPLETION_JOB_ID) != job ||
         read32(COMPLETION_SLOT) != slot ||
+        read32(COMPLETION_REQUESTED_BYTES) != bytes ||
         read32(COMPLETION_ACTUAL_BYTES) != bytes ||
+        read32(COMPLETION_SPM_WORD_ADDRESS) != spm_word ||
         read32(COMPLETION_DMA_TAG) != tag ||
         read32(COMPLETION_CONSUMER_STATUS) != 0 ||
         read32(COMPLETION_PRODUCER_STATUS) != 0) {
@@ -287,7 +292,7 @@ static int run_pull(unsigned phase, uint32_t job, uint32_t slot, uint32_t bytes,
            read32(CONSUMER_RELEASE_COUNT));
     return 1;
   }
-  if (verify_stalled_completion(job, slot, bytes, auto_tag) != 0) {
+  if (verify_stalled_completion(job, slot, bytes, spm_word, auto_tag) != 0) {
     return 1;
   }
 

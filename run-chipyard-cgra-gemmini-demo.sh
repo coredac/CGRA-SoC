@@ -57,6 +57,7 @@ check_external_spad_simulator_freshness() {
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpad.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiSpadProducerAdapter.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraConsumerPullAdapter.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraComputeLaunchGate.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRA.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/SpmTransferEndpoint.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
