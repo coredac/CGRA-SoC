@@ -28,6 +28,18 @@ DEFAULT_CONTROL_HEADER_OUT = (
     ROOT / "tests" / "include" / "cgra_transfer_control_generated.h"
 )
 
+# These constants mirror the current fixed CGRAMinimalGemminiRocketConfig contract.
+# GemminiExternalSpadMemory checks the generated values against the elaborated
+# Gemmini configuration, so a future Gemmini shape or type change fails loudly.
+CONTROL_PAGE_SIZE_BYTES = 4096
+GEMMINI_ARRAY_DIMENSION = 16
+GEMMINI_INPUT_ELEMENT_BITS = 8
+GEMMINI_ACCUMULATOR_ELEMENT_BITS = 32
+GEMMINI_SPAD_ROW_BYTES = GEMMINI_ARRAY_DIMENSION * GEMMINI_INPUT_ELEMENT_BITS // 8
+GEMMINI_FULL_WIDTH_ROW_STRIDE = (
+    GEMMINI_ACCUMULATOR_ELEMENT_BITS // GEMMINI_INPUT_ELEMENT_BITS
+)
+
 CONTROL_REGISTERS = {
     "PULL_JOB_ID": 0x000,
     "PULL_SLOT": 0x008,
@@ -268,20 +280,19 @@ def load_contract(path: Path) -> ExternalSpadContract:
     memory = require_mapping(document, "memory", path)
     external_spad = require_mapping(memory, "gemmini_external_spad", path)
     output_slots = require_mapping(external_spad, "output_slots", path)
+    base_address = require_int(external_spad, "base_address", path)
+    size_bytes = require_int(external_spad, "size_bytes", path)
+    validation_telemetry_address = base_address + size_bytes
     contract = ExternalSpadContract(
-        base_address=require_int(external_spad, "base_address", path),
-        size_bytes=require_int(external_spad, "size_bytes", path),
-        production_control_address=require_int(
-            external_spad, "production_control_address", path
+        base_address=base_address,
+        size_bytes=size_bytes,
+        production_control_address=(
+            validation_telemetry_address + CONTROL_PAGE_SIZE_BYTES
         ),
-        validation_telemetry_address=require_int(
-            external_spad, "validation_telemetry_address", path
-        ),
-        control_page_size_bytes=require_int(
-            external_spad, "control_page_size_bytes", path
-        ),
-        spad_row_bytes=require_int(external_spad, "spad_row_bytes", path),
-        full_width_row_stride=require_int(external_spad, "full_width_row_stride", path),
+        validation_telemetry_address=validation_telemetry_address,
+        control_page_size_bytes=CONTROL_PAGE_SIZE_BYTES,
+        spad_row_bytes=GEMMINI_SPAD_ROW_BYTES,
+        full_width_row_stride=GEMMINI_FULL_WIDTH_ROW_STRIDE,
         output_slot_count=require_int(output_slots, "count", path),
         output_slot_size_bytes=require_int(output_slots, "size_bytes", path),
     )

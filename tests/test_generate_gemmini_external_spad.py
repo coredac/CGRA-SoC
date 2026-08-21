@@ -36,6 +36,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
         self.assertEqual(contract.output_slot_base(1), 0x6000FC00)
         self.assertEqual(contract.output_slot_row(0), 0x0F80)
         self.assertEqual(contract.output_slot_row(1), 0x0FC0)
+        self.assertEqual(contract.spad_row_bytes, 16)
         self.assertEqual(contract.full_width_row_stride, 4)
 
         scala = generate_scala(contract, DEFAULT_SOC_YAML)
@@ -204,20 +205,36 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
             DEFAULT_CONTROL_HEADER_OUT.read_bytes(), production_control_header
         )
 
-    def test_rejects_overlapping_or_misaligned_control_pages(self) -> None:
+    def test_derived_fields_do_not_require_legacy_yaml_keys(self) -> None:
         document = yaml.safe_load(DEFAULT_SOC_YAML.read_text(encoding="utf-8"))
         external_spad = document["memory"]["gemmini_external_spad"]
+        derived_keys = {
+            "production_control_address",
+            "validation_telemetry_address",
+            "control_page_size_bytes",
+            "spad_row_bytes",
+            "full_width_row_stride",
+        }
+        self.assertTrue(derived_keys.isdisjoint(external_spad))
+
+        with tempfile.TemporaryDirectory() as directory:
+            yaml_path = Path(directory) / "minimal-contract.yaml"
+            yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
+            contract = load_contract(yaml_path)
+
+        self.assertEqual(contract.validation_telemetry_address, 0x60010000)
+        self.assertEqual(contract.production_control_address, 0x60011000)
+        self.assertEqual(contract.control_page_size_bytes, 4096)
+        self.assertEqual(contract.spad_row_bytes, 16)
+        self.assertEqual(contract.full_width_row_stride, 4)
+
+    def test_rejects_misaligned_derived_control_pages(self) -> None:
+        document = yaml.safe_load(DEFAULT_SOC_YAML.read_text(encoding="utf-8"))
+        external_spad = document["memory"]["gemmini_external_spad"]
+        external_spad["size_bytes"] = 2048
+        external_spad["output_slots"]["size_bytes"] = 512
         with tempfile.TemporaryDirectory() as directory:
             yaml_path = Path(directory) / "invalid-control.yaml"
-
-            external_spad["production_control_address"] = external_spad[
-                "validation_telemetry_address"
-            ]
-            yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "control pages must be distinct"):
-                load_contract(yaml_path)
-
-            external_spad["production_control_address"] = 0x60011008
             yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
             with self.assertRaisesRegex(
                 ValueError, "control pages must be page-aligned"
