@@ -15,6 +15,9 @@ memory:
   gemmini_external_spad:
     base_address: 0x60000000
     size_bytes: 65536
+    production_control_address: 0x60011000
+    validation_telemetry_address: 0x60010000
+    control_page_size_bytes: 4096
     spad_row_bytes: 16
     full_width_row_stride: 4
     output_slots:

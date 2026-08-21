@@ -15,6 +15,11 @@ CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
+C_TEST_DEFINES=()
+
+if [[ "$CONFIG" == "CGRAMinimalGemminiExternalSpadValidationRocketConfig" ]]; then
+  C_TEST_DEFINES+=("-DCGRA_EXTERNAL_SPAD_VALIDATION_CONFIG=1")
+fi
 
 uses_external_spad_contract() {
   case "$CONFIG" in
@@ -58,6 +63,8 @@ check_external_spad_simulator_freshness() {
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiSpadProducerAdapter.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraConsumerPullAdapter.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraComputeLaunchGate.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraComputeCompletionTracker.scala"
+    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraTransferControl.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRA.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/SpmTransferEndpoint.scala"
     "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
@@ -162,6 +169,7 @@ fi
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 riscv64-unknown-elf-gcc \
   -std=gnu99 -O2 -Wall -Wextra -fno-common -fno-builtin-printf \
+  "${C_TEST_DEFINES[@]}" \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \

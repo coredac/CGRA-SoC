@@ -9,9 +9,11 @@ import yaml
 from scripts import generate_single_cgra
 from scripts.generate_gemmini_external_spad import (
     DEFAULT_C_HEADER_OUT,
+    DEFAULT_CONTROL_HEADER_OUT,
     DEFAULT_SCALA_OUT,
     DEFAULT_SOC_YAML,
     generate_c_header,
+    generate_control_c_header,
     generate_scala,
     load_contract,
     write_or_check,
@@ -24,6 +26,9 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
 
         self.assertEqual(contract.base_address, 0x60000000)
         self.assertEqual(contract.size_bytes, 0x10000)
+        self.assertEqual(contract.validation_telemetry_address, 0x60010000)
+        self.assertEqual(contract.production_control_address, 0x60011000)
+        self.assertEqual(contract.control_page_size_bytes, 4096)
         self.assertEqual(contract.output_slot_count, 2)
         self.assertEqual(contract.output_slot_size_bytes, 1024)
         self.assertEqual(contract.output_reserved_base, 0x6000F800)
@@ -35,6 +40,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
 
         scala = generate_scala(contract, DEFAULT_SOC_YAML)
         header = generate_c_header(contract, DEFAULT_SOC_YAML)
+        control_header = generate_control_c_header(contract, DEFAULT_SOC_YAML)
         self.assertIn('val baseAddress: BigInt = BigInt("60000000", 16)', scala)
         self.assertIn('val outputReservedBase: BigInt = BigInt("6000f800", 16)', scala)
         self.assertIn(
@@ -42,6 +48,14 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
             scala,
         )
         self.assertIn("val outputSlotRows: Seq[Int] = Seq(3968, 4032)", scala)
+        self.assertIn(
+            'val productionControlAddress: BigInt = BigInt("60011000", 16)',
+            scala,
+        )
+        self.assertIn(
+            'val validationTelemetryAddress: BigInt = BigInt("60010000", 16)',
+            scala,
+        )
         self.assertIn(
             "#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT0_BASE UINT64_C(0x6000f800)",
             header,
@@ -54,26 +68,55 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
         self.assertIn("#define GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT1_ROW 4032", header)
         self.assertNotIn("OUTPUT_SLOT_BASE(index)", header)
         self.assertNotIn("OUTPUT_SLOT_ROW(index)", header)
+        self.assertIn(
+            "#define CGRA_TRANSFER_CONTROL_BASE UINT64_C(0x60011000)",
+            control_header,
+        )
+        self.assertIn("#define CGRA_TRANSFER_COMPUTE_STATUS_SUCCESS 0u", control_header)
+        self.assertIn(
+            "#define CGRA_TRANSFER_LAUNCH_ERROR_REASON_IDENTITY_MISMATCH 3u",
+            control_header,
+        )
+        self.assertIn(
+            "#define CGRA_TRANSFER_LAUNCH_ERROR_OPERATION_PULL 3u",
+            control_header,
+        )
+        self.assertIn(
+            "#define CGRA_TRANSFER_LAUNCH_ERROR_REASON_FIELD_OUT_OF_RANGE 7u",
+            control_header,
+        )
+        self.assertIn(
+            "#define CGRA_TRANSFER_COMPUTE_ERROR_REASON_DUPLICATE_LAUNCH_RESULT 5u",
+            control_header,
+        )
 
         with tempfile.TemporaryDirectory() as directory:
             output_dir = Path(directory)
             scala_path = output_dir / "contract.scala"
             header_path = output_dir / "contract.h"
+            control_header_path = output_dir / "control.h"
             write_or_check(scala_path, scala, check=False)
             write_or_check(header_path, header, check=False)
+            write_or_check(control_header_path, control_header, check=False)
             first_scala = scala_path.read_bytes()
             first_header = header_path.read_bytes()
+            first_control_header = control_header_path.read_bytes()
             fixed_mtime_ns = 1_000_000_000
             os.utime(scala_path, ns=(fixed_mtime_ns, fixed_mtime_ns))
             os.utime(header_path, ns=(fixed_mtime_ns, fixed_mtime_ns))
+            os.utime(control_header_path, ns=(fixed_mtime_ns, fixed_mtime_ns))
             write_or_check(scala_path, scala, check=False)
             write_or_check(header_path, header, check=False)
+            write_or_check(control_header_path, control_header, check=False)
             self.assertEqual(scala_path.read_bytes(), first_scala)
             self.assertEqual(header_path.read_bytes(), first_header)
+            self.assertEqual(control_header_path.read_bytes(), first_control_header)
             self.assertEqual(scala_path.stat().st_mtime_ns, fixed_mtime_ns)
             self.assertEqual(header_path.stat().st_mtime_ns, fixed_mtime_ns)
+            self.assertEqual(control_header_path.stat().st_mtime_ns, fixed_mtime_ns)
             write_or_check(scala_path, scala, check=True)
             write_or_check(header_path, header, check=True)
+            write_or_check(control_header_path, control_header, check=True)
 
     def test_rejects_misaligned_or_oversized_contract(self) -> None:
         document = yaml.safe_load(DEFAULT_SOC_YAML.read_text(encoding="utf-8"))
@@ -100,6 +143,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
     def test_custom_single_cgra_yaml_does_not_touch_production_contract(self) -> None:
         production_scala = DEFAULT_SCALA_OUT.read_bytes()
         production_header = DEFAULT_C_HEADER_OUT.read_bytes()
+        production_control_header = DEFAULT_CONTROL_HEADER_OUT.read_bytes()
 
         with tempfile.TemporaryDirectory() as directory:
             input_dir = Path(directory)
@@ -156,6 +200,29 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
 
         self.assertEqual(DEFAULT_SCALA_OUT.read_bytes(), production_scala)
         self.assertEqual(DEFAULT_C_HEADER_OUT.read_bytes(), production_header)
+        self.assertEqual(
+            DEFAULT_CONTROL_HEADER_OUT.read_bytes(), production_control_header
+        )
+
+    def test_rejects_overlapping_or_misaligned_control_pages(self) -> None:
+        document = yaml.safe_load(DEFAULT_SOC_YAML.read_text(encoding="utf-8"))
+        external_spad = document["memory"]["gemmini_external_spad"]
+        with tempfile.TemporaryDirectory() as directory:
+            yaml_path = Path(directory) / "invalid-control.yaml"
+
+            external_spad["production_control_address"] = external_spad[
+                "validation_telemetry_address"
+            ]
+            yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "control pages must be distinct"):
+                load_contract(yaml_path)
+
+            external_spad["production_control_address"] = 0x60011008
+            yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
+            with self.assertRaisesRegex(
+                ValueError, "control pages must be page-aligned"
+            ):
+                load_contract(yaml_path)
 
 
 if __name__ == "__main__":
