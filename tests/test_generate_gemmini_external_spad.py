@@ -26,8 +26,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
 
         self.assertEqual(contract.base_address, 0x60000000)
         self.assertEqual(contract.size_bytes, 0x10000)
-        self.assertEqual(contract.validation_telemetry_address, 0x60010000)
-        self.assertEqual(contract.production_control_address, 0x60011000)
+        self.assertEqual(contract.production_control_address, 0x60010000)
         self.assertEqual(contract.control_page_size_bytes, 4096)
         self.assertEqual(contract.output_slot_count, 2)
         self.assertEqual(contract.output_slot_size_bytes, 1024)
@@ -50,11 +49,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
         )
         self.assertIn("val outputSlotRows: Seq[Int] = Seq(3968, 4032)", scala)
         self.assertIn(
-            'val productionControlAddress: BigInt = BigInt("60011000", 16)',
-            scala,
-        )
-        self.assertIn(
-            'val validationTelemetryAddress: BigInt = BigInt("60010000", 16)',
+            'val productionControlAddress: BigInt = BigInt("60010000", 16)',
             scala,
         )
         self.assertIn(
@@ -70,7 +65,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
         self.assertNotIn("OUTPUT_SLOT_BASE(index)", header)
         self.assertNotIn("OUTPUT_SLOT_ROW(index)", header)
         self.assertIn(
-            "#define CGRA_TRANSFER_CONTROL_BASE UINT64_C(0x60011000)",
+            "#define CGRA_TRANSFER_CONTROL_BASE UINT64_C(0x60010000)",
             control_header,
         )
         self.assertIn("#define CGRA_TRANSFER_COMPUTE_STATUS_SUCCESS 0u", control_header)
@@ -210,7 +205,6 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
         external_spad = document["memory"]["gemmini_external_spad"]
         derived_keys = {
             "production_control_address",
-            "validation_telemetry_address",
             "control_page_size_bytes",
             "spad_row_bytes",
             "full_width_row_stride",
@@ -222,13 +216,12 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
             yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
             contract = load_contract(yaml_path)
 
-        self.assertEqual(contract.validation_telemetry_address, 0x60010000)
-        self.assertEqual(contract.production_control_address, 0x60011000)
+        self.assertEqual(contract.production_control_address, 0x60010000)
         self.assertEqual(contract.control_page_size_bytes, 4096)
         self.assertEqual(contract.spad_row_bytes, 16)
         self.assertEqual(contract.full_width_row_stride, 4)
 
-    def test_rejects_misaligned_derived_control_pages(self) -> None:
+    def test_rejects_misaligned_derived_control_page(self) -> None:
         document = yaml.safe_load(DEFAULT_SOC_YAML.read_text(encoding="utf-8"))
         external_spad = document["memory"]["gemmini_external_spad"]
         external_spad["size_bytes"] = 2048
@@ -237,7 +230,7 @@ class GemminiExternalSpadGeneratorTest(unittest.TestCase):
             yaml_path = Path(directory) / "invalid-control.yaml"
             yaml_path.write_text(yaml.safe_dump(document), encoding="utf-8")
             with self.assertRaisesRegex(
-                ValueError, "control pages must be page-aligned"
+                ValueError, "control page must be page-aligned"
             ):
                 load_contract(yaml_path)
 

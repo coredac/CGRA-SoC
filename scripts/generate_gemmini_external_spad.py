@@ -153,7 +153,6 @@ class ExternalSpadContract:
     base_address: int
     size_bytes: int
     production_control_address: int
-    validation_telemetry_address: int
     control_page_size_bytes: int
     spad_row_bytes: int
     full_width_row_stride: int
@@ -218,17 +217,10 @@ def validate_contract(contract: ExternalSpadContract, source: Path) -> None:
             f"{prefix}.control_page_size_bytes must be a positive power of two"
         )
     external_spad_end = contract.base_address + contract.size_bytes
-    control_pages = (
-        contract.production_control_address,
-        contract.validation_telemetry_address,
-    )
-    if len(set(control_pages)) != len(control_pages):
-        raise ValueError(f"{prefix} control pages must be distinct")
-    for address in control_pages:
-        if address % contract.control_page_size_bytes != 0:
-            raise ValueError(f"{prefix} control pages must be page-aligned")
-        if address < external_spad_end:
-            raise ValueError(f"{prefix} control pages must not overlap the SPAD")
+    if contract.production_control_address % contract.control_page_size_bytes != 0:
+        raise ValueError(f"{prefix} control page must be page-aligned")
+    if contract.production_control_address < external_spad_end:
+        raise ValueError(f"{prefix} control page must not overlap the SPAD")
     if not is_power_of_two(contract.spad_row_bytes):
         raise ValueError(f"{prefix}.spad_row_bytes must be a positive power of two")
     if not is_power_of_two(contract.full_width_row_stride):
@@ -282,14 +274,10 @@ def load_contract(path: Path) -> ExternalSpadContract:
     output_slots = require_mapping(external_spad, "output_slots", path)
     base_address = require_int(external_spad, "base_address", path)
     size_bytes = require_int(external_spad, "size_bytes", path)
-    validation_telemetry_address = base_address + size_bytes
     contract = ExternalSpadContract(
         base_address=base_address,
         size_bytes=size_bytes,
-        production_control_address=(
-            validation_telemetry_address + CONTROL_PAGE_SIZE_BYTES
-        ),
-        validation_telemetry_address=validation_telemetry_address,
+        production_control_address=base_address + size_bytes,
         control_page_size_bytes=CONTROL_PAGE_SIZE_BYTES,
         spad_row_bytes=GEMMINI_SPAD_ROW_BYTES,
         full_width_row_stride=GEMMINI_FULL_WIDTH_ROW_STRIDE,
@@ -349,7 +337,6 @@ object GemminiExternalSpadGenerated {{
   val baseAddress: BigInt = BigInt("{contract.base_address:x}", 16)
   val sizeBytes: Int = {contract.size_bytes}
   val productionControlAddress: BigInt = BigInt("{contract.production_control_address:x}", 16)
-  val validationTelemetryAddress: BigInt = BigInt("{contract.validation_telemetry_address:x}", 16)
   val controlPageSizeBytes: Int = {contract.control_page_size_bytes}
   val spadRowBytes: Int = {contract.spad_row_bytes}
   val fullWidthRowStride: Int = {contract.full_width_row_stride}
@@ -367,10 +354,7 @@ object GemminiExternalSpadGenerated {{
   require(controlPageSizeBytes > 0 &&
     (controlPageSizeBytes & (controlPageSizeBytes - 1)) == 0)
   require((productionControlAddress & (controlPageSizeBytes - 1)) == 0)
-  require((validationTelemetryAddress & (controlPageSizeBytes - 1)) == 0)
-  require(productionControlAddress != validationTelemetryAddress)
   require(productionControlAddress >= baseAddress + sizeBytes)
-  require(validationTelemetryAddress >= baseAddress + sizeBytes)
   require(outputReservedBytes == outputSlotCount * outputSlotSizeBytes)
   require(outputReservedBase == baseAddress + sizeBytes - outputReservedBytes)
   require(outputSlotBases.size == outputSlotCount)
@@ -419,7 +403,6 @@ def generate_c_header(contract: ExternalSpadContract, source: Path) -> str:
         "",
         f"#define GEMMINI_EXTERNAL_SPAD_BASE UINT64_C(0x{contract.base_address:x})",
         f"#define GEMMINI_EXTERNAL_SPAD_SIZE_BYTES {contract.size_bytes}",
-        f"#define GEMMINI_EXTERNAL_SPAD_VALIDATION_TELEMETRY_BASE UINT64_C(0x{contract.validation_telemetry_address:x})",
         f"#define GEMMINI_EXTERNAL_SPAD_ROW_BYTES {contract.spad_row_bytes}",
         f"#define GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_STRIDE {contract.full_width_row_stride}",
         f"#define GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_BYTES {contract.full_width_row_bytes}",

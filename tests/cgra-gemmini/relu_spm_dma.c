@@ -9,7 +9,6 @@
 #include <stdio.h>
 
 enum {
-  VALIDATION_CONSUMER_ENABLE = 0x200,
   CGRA_WORD_COUNT = 32,
   CGRA_TRANSFER_BYTES = CGRA_WORD_COUNT * sizeof(acc_t),
   PUBLICATION_ROWS =
@@ -31,13 +30,6 @@ static const cgra_dma_desc_t OUTPUT_DESCRIPTOR = CGRA_DMA_DESC_CONST(
 static const uint32_t ACCUMULATOR_WRITE_ADDRESS = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACCUMULATOR_FULL_WIDTH_ADDRESS =
     ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
-
-#ifdef CGRA_EXTERNAL_SPAD_VALIDATION_CONFIG
-static void validation_write32(uintptr_t offset, uint32_t value) {
-  *(volatile uint32_t *)(GEMMINI_EXTERNAL_SPAD_VALIDATION_TELEMETRY_BASE +
-                         offset) = value;
-}
-#endif
 
 static void init_inputs(void) {
   for (int i = 0; i < DIM; ++i) {
@@ -167,10 +159,6 @@ static int run_spm_dma_relu(void) {
 int main(void) {
   init_inputs();
   run_gemmini_gemm();
-
-#ifdef CGRA_EXTERNAL_SPAD_VALIDATION_CONFIG
-  validation_write32(VALIDATION_CONSUMER_ENABLE, 1);
-#endif
 
   const int failures = run_spm_dma_relu();
   if (failures != 0) {
