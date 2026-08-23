@@ -5,18 +5,15 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
-EXTERNAL_SPAD_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_external_spad.py"
-EXTERNAL_SPAD_SCALA="$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpadGenerated.scala"
-CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_soc.yaml"
-CGRA_GENERATED_SCALA="$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRAGenerated.scala"
-CGRA_GENERATED_RTL="$CHIPYARD_DIR/generators/chipyard/src/main/resources/vsrc/IntegratedCgraWithDmaRTL_single__pickled.v"
-CGRA_GENERATED_WRAPPER="$CHIPYARD_DIR/generators/chipyard/src/main/resources/vsrc/IntegratedCgraWithDmaRTL_single_wrapper.v"
+CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_gemmini_soc.yaml"
+SHARED_SPM_GENERATOR="$ROOT_DIR/scripts/generate_shared_spm.py"
+CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_control.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
-uses_external_spad_contract() {
+uses_spm_dma() {
   case "$CONFIG" in
     CGRAMinimalGemminiRocketConfig)
       return 0
@@ -25,63 +22,6 @@ uses_external_spad_contract() {
       return 1
       ;;
   esac
-}
-
-check_cgra_generated_artifacts() {
-  local artifact
-  local artifacts=(
-    "$CGRA_SOC_YAML"
-    "$CGRA_GENERATED_SCALA"
-    "$CGRA_GENERATED_RTL"
-    "$CGRA_GENERATED_WRAPPER"
-  )
-
-  for artifact in "${artifacts[@]}"; do
-    if [[ ! -f "$artifact" ]]; then
-      echo "error: required CGRA source or generated artifact not found: $artifact; run scripts/generate_single_cgra.py first" >&2
-      return 1
-    fi
-  done
-}
-
-check_external_spad_simulator_freshness() {
-  local simulator="$CHIPYARD_DIR/sims/verilator/simulator-chipyard.harness-$CONFIG"
-  local source
-  local sources=(
-    "$CGRA_SOC_YAML"
-    "$CGRA_GENERATED_SCALA"
-    "$CGRA_GENERATED_RTL"
-    "$CGRA_GENERATED_WRAPPER"
-    "$EXTERNAL_SPAD_SCALA"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiExternalSpad.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/GemminiSpadProducerAdapter.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraConsumerPullAdapter.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraComputeLaunchGate.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraComputeCompletionTracker.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CgraTransferControl.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/CGRA.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/example/SpmTransferEndpoint.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/config/RoCCAcceleratorConfigs.scala"
-    "$CHIPYARD_DIR/generators/chipyard/src/main/scala/DigitalTop.scala"
-  )
-
-  if [[ ! -x "$simulator" ]]; then
-    echo "error: simulator not found for $CONFIG; rerun with --rebuild" >&2
-    return 1
-  fi
-  if ! check_cgra_generated_artifacts; then
-    return 1
-  fi
-  for source in "${sources[@]}"; do
-    if [[ ! -f "$source" ]]; then
-      echo "error: required simulator source not found: $source; generate the single-CGRA design, then rerun with --rebuild" >&2
-      return 1
-    fi
-    if [[ "$source" -nt "$simulator" ]]; then
-      echo "error: $CONFIG simulator predates $source; rerun with --rebuild" >&2
-      return 1
-    fi
-  done
 }
 
 usage() {
@@ -138,15 +78,15 @@ set -u
 # The prebuilt simulator needs the Conda C++ runtime ahead of the system one.
 export LD_LIBRARY_PATH="$CHIPYARD_DIR/.conda-env/lib:${LD_LIBRARY_PATH:-}"
 
-if uses_external_spad_contract; then
+if uses_spm_dma; then
   if ((REBUILD)); then
-    check_cgra_generated_artifacts
-    echo "[contract] Generating Gemmini external-SPAD interfaces"
-    python3 "$EXTERNAL_SPAD_GENERATOR"
+    echo "[generate] CGRA + Gemmini SPM DMA design"
+    python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML"
+    python3 "$SHARED_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+    python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
-    echo "[contract] Checking Gemmini external-SPAD interfaces and simulator"
-    python3 "$EXTERNAL_SPAD_GENERATOR" --check
-    check_external_spad_simulator_freshness
+    python3 "$SHARED_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+    python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 

@@ -1,9 +1,9 @@
 #include "cgra_dma.h"
 #include "cgra_protocol.h"
-#include "cgra_transfer_control.h"
+#include "cgra_spm_control.h"
 #include "gemmini.h"
-#include "gemmini_external_spad.h"
 #include "generated/cgra_relu4x4_fast_api.h"
+#include "shared_spm.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -11,8 +11,11 @@
 enum {
   CGRA_WORD_COUNT = 32,
   CGRA_TRANSFER_BYTES = CGRA_WORD_COUNT * sizeof(acc_t),
-  PUBLICATION_ROWS =
-      CGRA_TRANSFER_BYTES / GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_BYTES,
+  GEMMINI_FULL_WIDTH_ROW_BYTES = DIM * sizeof(acc_t),
+  GEMMINI_FULL_WIDTH_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
+  PUBLICATION_ROWS = CGRA_TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
+  PUBLICATION_ROW =
+      (SHARED_SPM_SLOT0_BASE - SHARED_SPM_BASE) / (DIM * sizeof(elem_t)),
   CGRA_SPM_WORD_ADDR = 0,
   CGRA_EXPECTED_COMPLETES = 1,
   JOB_ID = 0x701,
@@ -44,7 +47,7 @@ static void init_inputs(void) {
   }
 }
 
-static void run_gemmini_gemm(void) {
+static void run_gemmini(void) {
   const uint32_t A_addr = 0;
   const uint32_t B_addr = DIM;
 
@@ -56,38 +59,38 @@ static void run_gemmini_gemm(void) {
   gemmini_mvin(B, B_addr);
   gemmini_preload(B_addr, ACCUMULATOR_WRITE_ADDRESS);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
-  gemmini_fence();
+  gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE,
+                              ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM,
+                              PUBLICATION_ROWS);
 }
 
-static void submit_launch_sequence(cgra_transfer_launch_header_t header) {
-  cgra_transfer_submit_launch_header(header);
+static void configure_cgra(void) {
+  const cgra_spm_job_t job = {
+      .job_id = JOB_ID,
+      .slot = 0,
+      .bytes = CGRA_TRANSFER_BYTES,
+      .mode = CGRA_SPM_MODE_AUTO,
+      .spm_word_address = CGRA_SPM_WORD_ADDR,
+      .dma_tag = DMA_TAG,
+      .packet_count = RELU4X4_FAST_LAUNCH_PACKET_COUNT,
+  };
+
+  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
+  load_relu4x4_config_fast();
+  cgra_spm_set_job(job);
   for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_transfer_submit_launch_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
+    cgra_spm_add_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
   }
+  cgra_spm_start();
 }
 
-static int
-verify_transfer_results(cgra_transfer_launch_result_t launch_result,
-                        cgra_transfer_compute_result_t compute_result) {
-  if (launch_result.job_id != JOB_ID || launch_result.slot != 0 ||
-      launch_result.requested_bytes != CGRA_TRANSFER_BYTES ||
-      launch_result.actual_bytes != CGRA_TRANSFER_BYTES ||
-      launch_result.spm_word_address != CGRA_SPM_WORD_ADDR ||
-      launch_result.dma_tag != DMA_TAG ||
-      launch_result.packet_count != RELU4X4_FAST_LAUNCH_PACKET_COUNT ||
-      launch_result.status != CGRA_TRANSFER_LAUNCH_STATUS_LAUNCH_ACCEPTED) {
-    printf("CGRA launch result mismatch\n");
-    return 1;
-  }
-  if (compute_result.job_id != JOB_ID || compute_result.slot != 0 ||
-      compute_result.requested_bytes != CGRA_TRANSFER_BYTES ||
-      compute_result.actual_bytes != CGRA_TRANSFER_BYTES ||
-      compute_result.spm_word_address != CGRA_SPM_WORD_ADDR ||
-      compute_result.dma_tag != DMA_TAG ||
-      compute_result.packet_count != RELU4X4_FAST_LAUNCH_PACKET_COUNT ||
-      compute_result.complete_data != 0 ||
-      compute_result.status != CGRA_TRANSFER_COMPUTE_STATUS_SUCCESS) {
-    printf("CGRA compute result mismatch\n");
+static int verify_result(cgra_spm_result_t result) {
+  if (result.job_id != JOB_ID || result.slot != 0 ||
+      result.bytes != CGRA_TRANSFER_BYTES ||
+      result.stage != CGRA_SPM_STAGE_CONSUMER ||
+      result.status != CGRA_SPM_STATUS_SUCCESS || result.detail != 0 ||
+      result.data != 0) {
+    printf("CGRA SPM pipeline result mismatch\n");
     return 1;
   }
   return 0;
@@ -108,42 +111,8 @@ static int verify_cgra_relu_outputs(void) {
 }
 
 static int run_spm_dma_relu(void) {
-  const cgra_transfer_pull_descriptor_t pull = {
-      .job_id = JOB_ID,
-      .slot = 0,
-      .bytes = CGRA_TRANSFER_BYTES,
-      .spm_word_address = CGRA_SPM_WORD_ADDR,
-      .dma_tag = DMA_TAG,
-  };
-  const cgra_transfer_launch_header_t launch = {
-      .job_id = JOB_ID,
-      .slot = 0,
-      .bytes = CGRA_TRANSFER_BYTES,
-      .spm_word_address = CGRA_SPM_WORD_ADDR,
-      .dma_tag = DMA_TAG,
-      .packet_count = RELU4X4_FAST_LAUNCH_PACKET_COUNT,
-  };
-
-  cgra_transfer_submit_pull(pull);
-  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
-  load_relu4x4_config_fast();
-  submit_launch_sequence(launch);
-
-  gemmini_extended_mvout_spad(GEMMINI_EXTERNAL_SPAD_OUTPUT_SLOT0_ROW,
-                              GEMMINI_EXTERNAL_SPAD_FULL_WIDTH_ROW_STRIDE,
-                              ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM,
-                              PUBLICATION_ROWS);
-
-  const cgra_transfer_launch_result_t launch_result =
-      cgra_transfer_wait_launch_result();
-  const cgra_transfer_compute_result_t compute_result =
-      cgra_transfer_wait_compute_result();
-  if (verify_transfer_results(launch_result, compute_result) != 0) {
-    return 1;
-  }
-  if (cgra_transfer_read32(CGRA_TRANSFER_CONTROL_LAUNCH_ERROR_VALID) != 0 ||
-      cgra_transfer_read32(CGRA_TRANSFER_CONTROL_COMPUTE_ERROR_VALID) != 0) {
-    printf("CGRA transfer reported a protocol error\n");
+  const cgra_spm_result_t result = cgra_spm_wait();
+  if (verify_result(result) != 0) {
     return 1;
   }
 
@@ -158,7 +127,8 @@ static int run_spm_dma_relu(void) {
 
 int main(void) {
   init_inputs();
-  run_gemmini_gemm();
+  configure_cgra();
+  run_gemmini();
 
   const int failures = run_spm_dma_relu();
   if (failures != 0) {
