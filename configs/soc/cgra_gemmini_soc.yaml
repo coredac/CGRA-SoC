@@ -12,12 +12,9 @@ memory:
   num_banks_per_cgra: 8
   num_registers_per_reg_bank: 8
   mem_access_is_combinational: true
-  shared_spm:
+  gemmini_external_spm:
     base_address: 0x60000000
     size_bytes: 65536
-    slots:
-      count: 2
-      size_bytes: 1024
 
 communication:
   auto_links:

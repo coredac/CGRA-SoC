@@ -1,9 +1,8 @@
 #include "cgra_dma.h"
+#include "cgra_link.h"
 #include "cgra_protocol.h"
-#include "cgra_spm_control.h"
 #include "gemmini.h"
 #include "generated/cgra_relu4x4_fast_api.h"
-#include "shared_spm.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -15,9 +14,8 @@ enum {
   GEMMINI_FULL_WIDTH_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
   PUBLICATION_ROWS = CGRA_TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
   PUBLICATION_ROW =
-      (SHARED_SPM_SLOT0_BASE - SHARED_SPM_BASE) / (DIM * sizeof(elem_t)),
+      BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   CGRA_SPM_WORD_ADDR = 0,
-  DMA_TAG = 0x71,
   OUTPUT_DMA_TAG = 0x91,
 };
 
@@ -63,23 +61,17 @@ static void run_gemmini(void) {
 }
 
 static void configure_cgra(void) {
-  const cgra_spm_config_t config = {
-      .spm_word_address = CGRA_SPM_WORD_ADDR,
-      .dma_tag = DMA_TAG,
-      .packet_count = RELU4X4_FAST_LAUNCH_PACKET_COUNT,
-  };
-
   load_relu4x4_config_fast();
-  cgra_spm_configure(config);
+  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
   for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_spm_queue_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
+    cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[index]);
   }
 }
 
-static int verify_result(cgra_spm_result_t result) {
-  if (result.status != CGRA_SPM_STATUS_SUCCESS || result.detail != 0 ||
+static int verify_result(cgra_link_result_t result) {
+  if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 ||
       result.data != 0) {
-    printf("CGRA SPM pipeline result mismatch\n");
+    printf("AutoLink result mismatch\n");
     return 1;
   }
   return 0;
@@ -99,8 +91,8 @@ static int verify_cgra_relu_outputs(void) {
   return failures;
 }
 
-static int run_spm_dma_relu(void) {
-  const cgra_spm_result_t result = cgra_spm_wait();
+static int run_pipeline(void) {
+  const cgra_link_result_t result = cgra_link_wait();
   if (verify_result(result) != 0) {
     return 1;
   }
@@ -119,7 +111,7 @@ int main(void) {
   configure_cgra();
   run_gemmini();
 
-  const int failures = run_spm_dma_relu();
+  const int failures = run_pipeline();
   if (failures != 0) {
     printf("Gemmini + CGRA SPM DMA ReLU: FAIL (%d)\n", failures);
     return 1;
