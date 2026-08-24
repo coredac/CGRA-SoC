@@ -15,6 +15,8 @@
 #define CGRA_RAW_PKT_TOP(top) ROCC_INSTRUCTION_S(0, top, CGRA_FUNCT_RAW_PKT_TOP)
 #define CGRA_LOAD_RESULT(result)                                               \
   ROCC_INSTRUCTION_D(0, result, CGRA_FUNCT_LOAD_RESULT)
+#define CGRA_SPM_PKT_HI(hi) ROCC_INSTRUCTION_S(0, hi, CGRA_FUNCT_SPM_PKT_HI)
+#define CGRA_SPM_PKT_TOP(top) ROCC_INSTRUCTION_S(0, top, CGRA_FUNCT_SPM_PKT_TOP)
 
 enum {
   OPT_START = 0,

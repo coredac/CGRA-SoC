@@ -181,6 +181,8 @@ def load_rocc_functs(path: Path = ROCC_PROTOCOL) -> Dict[str, int]:
         "DMA_MVIN_ASYNC",
         "DMA_MVOUT_ASYNC",
         "DMA_WAIT",
+        "SPM_PKT_HI",
+        "SPM_PKT_TOP",
     }
     missing = required - functs.keys()
     if missing:

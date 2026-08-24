@@ -72,7 +72,7 @@ static void configure_cgra(void) {
   load_relu4x4_config_fast();
   cgra_spm_configure(config);
   for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_spm_add_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
+    cgra_spm_queue_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
   }
 }
 
