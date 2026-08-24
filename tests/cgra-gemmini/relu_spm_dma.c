@@ -17,8 +17,6 @@ enum {
   PUBLICATION_ROW =
       (SHARED_SPM_SLOT0_BASE - SHARED_SPM_BASE) / (DIM * sizeof(elem_t)),
   CGRA_SPM_WORD_ADDR = 0,
-  CGRA_EXPECTED_COMPLETES = 1,
-  JOB_ID = 0x701,
   DMA_TAG = 0x71,
   OUTPUT_DMA_TAG = 0x91,
 };
@@ -65,30 +63,21 @@ static void run_gemmini(void) {
 }
 
 static void configure_cgra(void) {
-  const cgra_spm_job_t job = {
-      .job_id = JOB_ID,
-      .slot = 0,
-      .bytes = CGRA_TRANSFER_BYTES,
-      .mode = CGRA_SPM_MODE_AUTO,
+  const cgra_spm_config_t config = {
       .spm_word_address = CGRA_SPM_WORD_ADDR,
       .dma_tag = DMA_TAG,
       .packet_count = RELU4X4_FAST_LAUNCH_PACKET_COUNT,
   };
 
-  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
   load_relu4x4_config_fast();
-  cgra_spm_set_job(job);
+  cgra_spm_configure(config);
   for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
     cgra_spm_add_packet(RELU4X4_FAST_LAUNCH_PACKETS[index]);
   }
-  cgra_spm_start();
 }
 
 static int verify_result(cgra_spm_result_t result) {
-  if (result.job_id != JOB_ID || result.slot != 0 ||
-      result.bytes != CGRA_TRANSFER_BYTES ||
-      result.stage != CGRA_SPM_STAGE_CONSUMER ||
-      result.status != CGRA_SPM_STATUS_SUCCESS || result.detail != 0 ||
+  if (result.status != CGRA_SPM_STATUS_SUCCESS || result.detail != 0 ||
       result.data != 0) {
     printf("CGRA SPM pipeline result mismatch\n");
     return 1;

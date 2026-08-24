@@ -8,14 +8,15 @@ GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
 CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_gemmini_soc.yaml"
 SHARED_SPM_GENERATOR="$ROOT_DIR/scripts/generate_shared_spm.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_control.py"
+AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_spm_links.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
-uses_spm_dma() {
+uses_auto_link() {
   case "$CONFIG" in
-    CGRAMinimalGemminiRocketConfig)
+    CGRAMinimalGemminiAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -78,15 +79,21 @@ set -u
 # The prebuilt simulator needs the Conda C++ runtime ahead of the system one.
 export LD_LIBRARY_PATH="$CHIPYARD_DIR/.conda-env/lib:${LD_LIBRARY_PATH:-}"
 
-if uses_spm_dma; then
+if ((REBUILD)); then
+  echo "[generate] CGRA design"
+  python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML"
+fi
+
+if uses_auto_link; then
   if ((REBUILD)); then
-    echo "[generate] CGRA + Gemmini SPM DMA design"
-    python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML"
+    echo "[generate] CGRA + Gemmini AutoLink"
     python3 "$SHARED_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
     python3 "$SHARED_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 

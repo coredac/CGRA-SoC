@@ -18,3 +18,8 @@ memory:
     slots:
       count: 2
       size_bytes: 1024
+
+communication:
+  auto_links:
+    - source: gemmini
+      destination: cgra

@@ -24,41 +24,30 @@ DEFAULT_HEADER = ROOT / "tests" / "include" / "cgra_spm_control_generated.h"
 PAGE_SIZE_BYTES = 4096
 
 REGISTERS = {
-    "JOB_ID": 0x000,
-    "SLOT": 0x008,
-    "BYTES": 0x010,
-    "MODE": 0x018,
-    "SPM_WORD_ADDRESS": 0x020,
-    "DMA_TAG": 0x028,
-    "PACKET_COUNT": 0x030,
-    "HEADER_SUBMIT": 0x038,
-    "PACKET_LO": 0x040,
-    "PACKET_MID": 0x048,
-    "PACKET_HI": 0x050,
-    "PACKET_TOP": 0x058,
-    "PACKET_SUBMIT": 0x060,
-    "JOB_SUBMIT": 0x068,
-    "STEP_SUBMIT": 0x070,
-    "RESULT_VALID": 0x080,
-    "RESULT_POP": 0x088,
-    "RESULT_JOB_ID": 0x090,
-    "RESULT_SLOT": 0x098,
-    "RESULT_BYTES": 0x0A0,
-    "RESULT_STAGE": 0x0A8,
-    "RESULT_STATUS": 0x0B0,
-    "RESULT_DETAIL": 0x0B8,
-    "RESULT_DATA": 0x0C0,
+    "SPM_WORD_ADDRESS": 0x000,
+    "DMA_TAG": 0x008,
+    "PACKET_COUNT": 0x010,
+    "HEADER_SUBMIT": 0x018,
+    "PACKET_LO": 0x020,
+    "PACKET_MID": 0x028,
+    "PACKET_HI": 0x030,
+    "PACKET_TOP": 0x038,
+    "PACKET_SUBMIT": 0x040,
+    "RESULT_VALID": 0x048,
+    "RESULT_POP": 0x050,
+    "RESULT_STATUS": 0x058,
+    "RESULT_DETAIL": 0x060,
+    "RESULT_DATA": 0x068,
 }
 
-MODES = {"AUTO": 0, "MANUAL": 1}
-STAGES = {"PRODUCER": 0, "TRANSFER": 1, "CONSUMER": 2}
 STATUSES = {
     "SUCCESS": 0,
-    "INVALID_JOB": 1,
-    "INVALID_SLOT": 2,
-    "INVALID_LENGTH": 3,
-    "IDENTITY_MISMATCH": 4,
-    "STAGE_FAILURE": 5,
+    "BAD_LINK": 1,
+    "BAD_SLOT": 2,
+    "BAD_LENGTH": 3,
+    "SOURCE_FAILURE": 4,
+    "SINK_FAILURE": 5,
+    "IDENTITY_MISMATCH": 6,
 }
 
 
@@ -94,12 +83,6 @@ def header_text(base_address: int) -> str:
         for name, offset in REGISTERS.items()
     )
     lines.append("")
-    lines.extend(
-        f"#define CGRA_SPM_MODE_{name} {value}u" for name, value in MODES.items()
-    )
-    lines.extend(
-        f"#define CGRA_SPM_STAGE_{name} {value}u" for name, value in STAGES.items()
-    )
     lines.extend(
         f"#define CGRA_SPM_STATUS_{name} {value}u" for name, value in STATUSES.items()
     )
