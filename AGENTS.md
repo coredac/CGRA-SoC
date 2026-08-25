@@ -1,5 +1,17 @@
 # CGRA-SoC Repository Instructions
 
+## Mandatory Style Rules
+
+These rules are mandatory for all agent output and hand-written code in this repository:
+
+- All agent-written prose must be concise and use plain language. This applies to chat messages, documentation, code comments, annotations, and GitHub Issue text.
+- Keep implementations simple and direct. Do not add fallback paths, compatibility branches, speculative abstractions, or defensive checks that are not required by the current contract. Avoid large `if`/`else` chains; split responsibilities, use early returns, or use a small dispatch structure when that makes the logic clearer.
+- Add only checks and tests that protect required behavior or reproduce a real regression. Do not add redundant checks, duplicate tests, or speculative edge-case tests. This rule does not permit skipping the validation required by the `Validation` section.
+- Use concise, descriptive names. Do not use long chains of underscore-separated words for variables, functions, directories, or files when a shorter name remains clear in context.
+- Preserve clear module boundaries. Keep each file and function focused, and do not collect unrelated functions in one file or build a single oversized function.
+- Do not add unnecessary blank lines. Use whitespace only to separate meaningful logical sections and follow the repository formatter where one applies.
+- Match the established style of the surrounding code before introducing a new pattern. Inspect nearby code and existing modules first; if the applicable convention or the simplest correct design is still unclear, ask the user before proceeding.
+
 ## Scope
 
 This repository is the top-level integration and runtime workspace for VectorCGRA, OpenFPGA, Gemmini, and Chipyard. It owns system configuration, integration scripts, tests, documentation, and future runtime development.
@@ -14,6 +26,7 @@ The single-CGRA configuration is layered:
 
 - `configs/arch/arch.yaml` owns CGRA structure and functional-unit choices.
 - `configs/soc/cgra_soc.yaml` owns the SoC interface and memory settings.
+- `configs/soc/cgra_gemmini_soc.yaml` owns the combined CGRA memory settings, Gemmini external SPM address range, and physical AutoLink connections.
 - `configs/kernels/kernel_*_4x4.yaml` owns kernel metadata and execution counts.
 
 Do not restore the deprecated mixed kernel schema or add fallback reads for its old fields. Keep multi-CGRA architecture and SoC settings in their matching files under `configs/arch/` and `configs/soc/`.
@@ -23,6 +36,9 @@ The main generation entry points are:
 - `scripts/generate_single_cgra.py`
 - `scripts/generate_multi_cgra.py`
 - `scripts/cgra_fast_api.py`
+- `scripts/generate_auto_links.py`
+- `scripts/generate_cgra_link_control.py`
+- `scripts/generate_gemmini_ext_spm.py`
 - `scripts/openfpga/generate.py`
 
 Use the scripts' `--help` output and the current YAML schema instead of copying arguments from old plans or logs.
@@ -45,7 +61,9 @@ The current OpenFPGA integration is a TileLink MMIO fabric flow. It supports AND
 
 `CGRAMinimalGemminiRocketConfig` combines CGRA and Gemmini. CGRA uses `custom0`; Gemmini uses `custom3`. Keep the opcodes distinct.
 
-The CPU-mediated Gemmini GEMM to CGRA ReLU demo is supported. The DMA test is a chunk-0 smoke test, not a complete multi-chunk workload. Do not assume a direct Gemmini-buffer-to-CGRA-memory connection.
+The CPU-mediated Gemmini GEMM to CGRA ReLU demo remains supported. Manual and automatic configurations use the same Gemmini external SPM. `CGRAMinimalGemminiAutoLinkRocketConfig` adds one automatic 128-byte transfer from that SPM to CGRA local SPM. The CGRA DMA reads the Gemmini SPM through TileLink and the system bus; there is no shared staging buffer or intermediate DRAM copy.
+
+AutoLink carries control only. TileLink carries payload data. The current route and copy task are fixed during elaboration in `AutoLinkExample`; runtime programming of routes, offsets, and lengths is unsupported. The end-to-end test covers one chunk and does not cover multiple chunks, multiple kernels, or concurrent producers.
 
 ## Generated and Frozen Files
 
@@ -104,12 +122,18 @@ The top-level runners are:
 
 Use `--rebuild` after generated RTL, Scala integration, the RoCC wrapper, or the Chipyard configuration changes. If only C test code changes and the matching simulator is current, a rebuild is unnecessary. The first Gemmini run after a configuration change requires a rebuild so elaboration regenerates matching Gemmini parameters.
 
+`run-chipyard-cgra-gemmini-demo.sh` defaults to `CGRAMinimalGemminiAutoLinkRocketConfig` and `relu_spm_auto.c`. Validate the automatic Gemmini-to-CGRA path with `./run-chipyard-cgra-gemmini-demo.sh --rebuild`.
+
 For documentation-only changes, check Markdown structure, links, and `git diff --check`; do not launch a simulator build.
 
 ## Interface Contracts
 
 - The CGRA is a RoCC accelerator and receives raw packets through `custom0`.
 - OpenFPGA is a TileLink MMIO peripheral, not a RoCC accelerator.
+- AutoLink supplements TileLink with dependency, copy, and compute control messages. It does not carry payload data.
+- The automatic Gemmini-to-CGRA path uses a CGRA TileLink DMA master to pull data from Gemmini's four-bank external SPM.
+- The system bus can read the Gemmini external SPM. System-side writes into it are unsupported.
+- `CgraLinkControl` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
 - Single- and multi-CGRA systems share the raw CPU/RoCC packet interface.
 - `tests/include/cgra_runtime.h` is the minimal direct packet-send layer.
 - Supported multi-CGRA hot paths send their preencoded packets directly.

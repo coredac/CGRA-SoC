@@ -87,11 +87,27 @@ $ CONFIG=<chipyard-config> ./run-chipyard-openfpga-demo.sh --rebuild <test-name>
 
 The combined configuration runs Gemmini and CGRA in the same Chipyard system.
 
-- Supported: Gemmini GEMM followed by CGRA ReLU
-- Supported: CGRA DMA ReLU chunk-0 smoke test
+- Supported: CPU-controlled Gemmini GEMM followed by CGRA ReLU through DRAM
+- Supported: CPU-controlled Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
+- Supported: automatic 128-byte Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
+- Unsupported: runtime programming of AutoLink routes and copy descriptors
 
-Generate the single-CGRA ReLU RTL and API, then run:
+The automatic path uses a static elaboration-time task table. AutoLink carries dependency and completion messages; payload data moves through TileLink without CPU copying or intermediate DRAM staging. See [docs/autolink.md](./docs/autolink.md) for the current architecture and limits.
+
+Generate the single-CGRA ReLU RTL and API, then run the automatic SPM transfer:
 
 ```shell
-$ ./run-chipyard-cgra-gemmini-demo.sh --rebuild [test-source.c]
+$ ./run-chipyard-cgra-gemmini-demo.sh --rebuild
+```
+
+Run the CPU-controlled DRAM path with:
+
+```shell
+$ CONFIG=CGRAMinimalGemminiRocketConfig ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_dma.c
+```
+
+Run the CPU-controlled External-SPM path with:
+
+```shell
+$ CONFIG=CGRAMinimalGemminiRocketConfig ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c
 ```

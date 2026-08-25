@@ -9,9 +9,9 @@ CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_gemmini_soc.yaml"
 EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
-CONFIG="${CONFIG:-CGRAMinimalGemminiRocketConfig}"
+CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 REBUILD=0
-TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_dma.c}"
+TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
@@ -84,14 +84,19 @@ if ((REBUILD)); then
   python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML"
 fi
 
+if ((REBUILD)); then
+  echo "[generate] Gemmini external SPM"
+  python3 "$EXTERNAL_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+else
+  python3 "$EXTERNAL_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+fi
+
 if uses_auto_link; then
   if ((REBUILD)); then
     echo "[generate] CGRA + Gemmini AutoLink"
-    python3 "$EXTERNAL_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
     python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
-    python3 "$EXTERNAL_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
     python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi

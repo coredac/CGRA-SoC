@@ -1,7 +1,8 @@
 #include "cgra_dma.h"
-#include "cgra_link.h"
 #include "cgra_protocol.h"
+#include "cgra_runtime.h"
 #include "gemmini.h"
+#include "gemmini_ext_spm.h"
 #include "generated/cgra_relu4x4_fast_api.h"
 
 #include <stdint.h>
@@ -16,13 +17,17 @@ enum {
   PUBLICATION_ROW =
       BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   CGRA_SPM_WORD_ADDR = 0,
-  OUTPUT_DMA_TAG = 0x91,
+  CGRA_EXPECTED_COMPLETES = 1,
+  INPUT_DMA_TAG = 0x10,
+  OUTPUT_DMA_TAG = 0x80,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
 static elem_t B[DIM][DIM] row_align(1);
 static acc_t cgra_output[CGRA_WORD_COUNT] __attribute__((aligned(16)));
 
+static const cgra_dma_desc_t INPUT_DESCRIPTOR =
+    CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_TRANSFER_BYTES, INPUT_DMA_TAG);
 static const cgra_dma_desc_t OUTPUT_DESCRIPTOR = CGRA_DMA_DESC_CONST(
     CGRA_SPM_WORD_ADDR, CGRA_TRANSFER_BYTES, OUTPUT_DMA_TAG);
 
@@ -58,26 +63,45 @@ static void run_gemmini(void) {
   gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE,
                               ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM,
                               PUBLICATION_ROWS);
+  gemmini_fence();
 }
 
-static void configure_cgra(void) {
+static int run_cgra(void) {
+  const uintptr_t input_address =
+      GEMMINI_EXT_SPM_BASE + GEMMINI_EXT_SPM_SIZE_BYTES - CGRA_TRANSFER_BYTES;
+  uint64_t wait_result = 0;
+  uint64_t status = 0;
+  uint64_t result = 0;
+
+  cgra_dma_mvin_async((const void *)input_address, INPUT_DESCRIPTOR);
+  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
   load_relu4x4_config_fast();
-  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
-  for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[index]);
-  }
-}
-
-static int verify_result(cgra_link_result_t result) {
-  if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 ||
-      result.data != 0) {
-    printf("AutoLink result mismatch\n");
+  if (cgra_dma_wait(INPUT_DMA_TAG) != INPUT_DMA_TAG) {
+    printf("CGRA DMA MVIN tag mismatch\n");
     return 1;
   }
+
+  launch_relu4x4_fast();
+  CGRA_WAIT(wait_result);
+  CGRA_STATUS(status);
+  CGRA_RESULT(result);
+  if (wait_result != 1 || (status & UINT64_C(1)) != 1 ||
+      ((status >> 1) & UINT64_C(0xffff)) != CGRA_EXPECTED_COMPLETES ||
+      result != 0) {
+    printf("CGRA completion failure\n");
+    return 1;
+  }
+
+  cgra_dma_mvout_async(cgra_output, OUTPUT_DESCRIPTOR);
+  if (cgra_dma_wait(OUTPUT_DMA_TAG) != OUTPUT_DMA_TAG) {
+    printf("CGRA DMA MVOUT tag mismatch\n");
+    return 1;
+  }
+  cgra_dma_memory_fence();
   return 0;
 }
 
-static int verify_cgra_relu_outputs(void) {
+static int verify_outputs(void) {
   int failures = 0;
   for (unsigned index = 0; index < CGRA_WORD_COUNT; ++index) {
     const int input = (int)A[index / DIM][index % DIM];
@@ -91,32 +115,21 @@ static int verify_cgra_relu_outputs(void) {
   return failures;
 }
 
-static int run_pipeline(void) {
-  const cgra_link_result_t result = cgra_link_wait();
-  if (verify_result(result) != 0) {
-    return 1;
-  }
-
-  cgra_dma_mvout_async(cgra_output, OUTPUT_DESCRIPTOR);
-  if (cgra_dma_wait(OUTPUT_DMA_TAG) != OUTPUT_DMA_TAG) {
-    printf("CGRA DMA MVOUT tag mismatch\n");
-    return 1;
-  }
-  cgra_dma_memory_fence();
-  return verify_cgra_relu_outputs();
-}
-
 int main(void) {
   init_inputs();
-  configure_cgra();
   run_gemmini();
 
-  const int failures = run_pipeline();
-  if (failures != 0) {
-    printf("Gemmini + CGRA SPM DMA ReLU: FAIL (%d)\n", failures);
+  if (run_cgra() != 0) {
+    printf("Gemmini + CGRA Manual SPM ReLU: FAIL\n");
     return 1;
   }
 
-  printf("Gemmini + CGRA SPM DMA ReLU: PASS\n");
+  const int failures = verify_outputs();
+  if (failures != 0) {
+    printf("Gemmini + CGRA Manual SPM ReLU: FAIL (%d)\n", failures);
+    return 1;
+  }
+
+  printf("Gemmini + CGRA Manual SPM ReLU: PASS\n");
   return 0;
 }
