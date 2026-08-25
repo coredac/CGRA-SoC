@@ -145,19 +145,16 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
-      - name: Run Gemmini and CGRA DMA ReLU demo
+      - name: Run automatic Gemmini to CGRA SPM test
         run: |
-          .venv/bin/python scripts/generate_single_cgra.py \
-            --kernel-yaml configs/kernels/kernel_relu4x4_4x4.yaml \
-            --arch-yaml configs/arch/arch.yaml \
-            --soc-yaml configs/soc/cgra_soc.yaml
-          .venv/bin/python scripts/cgra_fast_api.py \
-            --arch-yaml configs/arch/arch.yaml \
-            --soc-yaml configs/soc/cgra_soc.yaml \
-            configs/kernels/kernel_relu4x4_4x4.yaml \
-            --output-dir tests/generated
-          ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-demo.log
-          grep -q "Gemmini + CGRA DMA ReLU chunk 0 smoke test: PASS" cgra-gemmini-demo.log
+          ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
+          grep -q "Gemmini + CGRA Auto SPM ReLU: PASS" cgra-gemmini-auto.log
+
+      - name: Run manual Gemmini to CGRA SPM test
+        run: |
+          CONFIG=CGRAMinimalGemminiRocketConfig \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
+          grep -q "Gemmini + CGRA Manual SPM ReLU: PASS" cgra-gemmini-manual.log
 
       - name: Run OpenFPGA AND2 SoC test
         run: |
