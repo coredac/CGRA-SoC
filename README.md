@@ -92,7 +92,7 @@ The combined configuration runs Gemmini and CGRA in the same Chipyard system.
 - Supported: automatic 128-byte Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
 - Unsupported: runtime programming of AutoLink routes and copy descriptors
 
-The automatic path uses a static elaboration-time task table. AutoLink carries dependency and completion messages; payload data moves through TileLink without CPU copying or intermediate DRAM staging. See [docs/autolink.md](./docs/autolink.md) for the current architecture and limits.
+The automatic path uses an elaboration-time task table. Its control protocol carries dependency and completion messages, while the SoC memory interconnect carries payload data. See [docs/accelerator-modes.md](./docs/accelerator-modes.md) for the Manual and Automatic mode contracts.
 
 Generate the single-CGRA ReLU RTL and API, then run the automatic SPM transfer:
 

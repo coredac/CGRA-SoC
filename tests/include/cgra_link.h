@@ -12,17 +12,11 @@ typedef struct {
   uint32_t data;
 } cgra_link_result_t;
 
-static inline volatile uint32_t *cgra_link_reg(uintptr_t offset) {
-  return (volatile uint32_t *)(CGRA_LINK_CONTROL_BASE + offset);
-}
+static inline volatile uint32_t *cgra_link_reg(uintptr_t offset) { return (volatile uint32_t *)(CGRA_LINK_CONTROL_BASE + offset); }
 
-static inline uint32_t cgra_link_read(uintptr_t offset) {
-  return *cgra_link_reg(offset);
-}
+static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(offset); }
 
-static inline void cgra_link_write(uintptr_t offset, uint32_t value) {
-  *cgra_link_reg(offset) = value;
-}
+static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
 static inline void cgra_link_configure(uint32_t packet_count) {
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);

@@ -13,8 +13,7 @@ enum {
   GEMMINI_FULL_WIDTH_ROW_BYTES = DIM * sizeof(acc_t),
   GEMMINI_FULL_WIDTH_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
   PUBLICATION_ROWS = CGRA_TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
-  PUBLICATION_ROW =
-      BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
+  PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   CGRA_SPM_WORD_ADDR = 0,
   OUTPUT_DMA_TAG = 0x91,
 };
@@ -23,12 +22,10 @@ static elem_t A[DIM][DIM] row_align(1);
 static elem_t B[DIM][DIM] row_align(1);
 static acc_t cgra_output[CGRA_WORD_COUNT] __attribute__((aligned(16)));
 
-static const cgra_dma_desc_t OUTPUT_DESCRIPTOR = CGRA_DMA_DESC_CONST(
-    CGRA_SPM_WORD_ADDR, CGRA_TRANSFER_BYTES, OUTPUT_DMA_TAG);
+static const cgra_dma_desc_t OUTPUT_DESCRIPTOR = CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_TRANSFER_BYTES, OUTPUT_DMA_TAG);
 
 static const uint32_t ACCUMULATOR_WRITE_ADDRESS = (uint32_t)1 << (ADDR_LEN - 1);
-static const uint32_t ACCUMULATOR_FULL_WIDTH_ADDRESS =
-    ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
+static const uint32_t ACCUMULATOR_FULL_WIDTH_ADDRESS = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
 
 static void init_inputs(void) {
   for (int i = 0; i < DIM; ++i) {
@@ -55,9 +52,7 @@ static void run_gemmini(void) {
   gemmini_mvin(B, B_addr);
   gemmini_preload(B_addr, ACCUMULATOR_WRITE_ADDRESS);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
-  gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE,
-                              ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM,
-                              PUBLICATION_ROWS);
+  gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE, ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM, PUBLICATION_ROWS);
 }
 
 static void configure_cgra(void) {
@@ -69,8 +64,7 @@ static void configure_cgra(void) {
 }
 
 static int verify_result(cgra_link_result_t result) {
-  if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 ||
-      result.data != 0) {
+  if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 || result.data != 0) {
     printf("AutoLink result mismatch\n");
     return 1;
   }
@@ -83,8 +77,7 @@ static int verify_cgra_relu_outputs(void) {
     const int input = (int)A[index / DIM][index % DIM];
     const acc_t expected = input > 0 ? (acc_t)input : (acc_t)0;
     if (cgra_output[index] != expected) {
-      printf("CGRA ReLU mismatch index=%u actual=%d expected=%d\n", index,
-             (int)cgra_output[index], (int)expected);
+      printf("CGRA ReLU mismatch index=%u actual=%d expected=%d\n", index, (int)cgra_output[index], (int)expected);
       ++failures;
     }
   }
