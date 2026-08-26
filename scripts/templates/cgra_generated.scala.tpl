@@ -56,6 +56,12 @@ object CGRAGenerated {
       cmdDone = $dma_cmd_done,
       packetTemplates = Seq($dma_packet_templates)
     ),
+    spmRead = CGRASpmReadParams(
+      enabled = $spm_read_enabled,
+      addrWidth = $spm_read_addr_width,
+      dataWidth = $spm_read_data_width,
+      words = $spm_read_words
+    ),
     topModuleName = "$top_module",
     wrapperModuleName = "$wrapper_module",
     rtlResource = "$rtl_resource",
