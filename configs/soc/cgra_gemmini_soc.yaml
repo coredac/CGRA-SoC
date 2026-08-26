@@ -1,0 +1,22 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 128
+  data_mem_size_per_bank: 16
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+
+communication:
+  auto_links:
+    - source: gemmini
+      destination: cgra

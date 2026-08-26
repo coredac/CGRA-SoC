@@ -1,4 +1,5 @@
 ---
 BasedOnStyle: LLVM
+ColumnLimit: 200
 LineEnding: LF
 ...
