@@ -11,6 +11,7 @@ EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
+AES_JOB_GENERATOR="$ROOT_DIR/scripts/generate_aes_auto_job.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
@@ -18,7 +19,7 @@ TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAutoLinkRocketConfig)
+    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -27,8 +28,23 @@ uses_auto_link() {
   esac
 }
 
-uses_aes() {
+uses_cgra_spm() {
+  case "$CONFIG" in
+    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+uses_aes_manual() {
   [[ "$CONFIG" == CGRAMinimalGemminiAESRocketConfig ]]
+}
+
+uses_aes_auto() {
+  [[ "$CONFIG" == CGRAMinimalGemminiAESAutoLinkRocketConfig ]]
 }
 
 usage() {
@@ -108,12 +124,21 @@ if uses_auto_link; then
   fi
 fi
 
-if uses_aes; then
+if uses_cgra_spm; then
   if ((REBUILD)); then
     echo "[generate] CGRA SPM window"
     python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
     python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+  fi
+fi
+
+if uses_aes_auto; then
+  if ((REBUILD)); then
+    echo "[generate] AES automatic job"
+    python3 "$AES_JOB_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+  else
+    python3 "$AES_JOB_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 
@@ -129,7 +154,7 @@ fi
 
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 SOURCES=("$TEST_SRC")
-if uses_aes; then
+if uses_aes_manual; then
   SOURCES+=("$AES_SW/accellib.c")
 fi
 riscv64-unknown-elf-gcc \

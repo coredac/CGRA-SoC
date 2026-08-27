@@ -5,8 +5,16 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import Mapping
 
-from generate_gemmini_ext_spm import DEFAULT_SOC, load_contract, write
+import yaml
+
+from generate_gemmini_ext_spm import (
+    DEFAULT_SOC,
+    require_int,
+    require_mapping,
+    write,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCALA = (
@@ -39,6 +47,33 @@ STATUSES = {
     "SOURCE_FAILURE": 1,
     "SINK_FAILURE": 2,
 }
+
+SPM_NAMES = ("gemmini_external_spm", "cgra_spm_window")
+
+
+def align_up(value: int, alignment: int) -> int:
+    return (value + alignment - 1) // alignment * alignment
+
+
+def load_spm_ranges(path: Path) -> list[tuple[int, int]]:
+    document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(document, Mapping):
+        raise ValueError(f"{path}: expected a mapping")
+    memory = require_mapping(document, "memory", path)
+    ranges = []
+    for name in SPM_NAMES:
+        spm = require_mapping(memory, name, path)
+        base = require_int(spm, "base_address", path)
+        size = require_int(spm, "size_bytes", path)
+        if size <= 0:
+            raise ValueError(f"{path}: '{name}.size_bytes' must be positive")
+        ranges.append((base, size))
+    return ranges
+
+
+def control_address(path: Path) -> int:
+    end = max(base + size for base, size in load_spm_ranges(path))
+    return align_up(end, PAGE_SIZE_BYTES)
 
 
 def scala_text(base_address: int) -> str:
@@ -91,8 +126,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    contract = load_contract(args.soc_yaml.resolve())
-    base_address = contract.base_address + contract.size_bytes
+    base_address = control_address(args.soc_yaml.resolve())
     write(args.scala_out, scala_text(base_address), args.check)
     write(args.header_out, header_text(base_address), args.check)
     return 0
