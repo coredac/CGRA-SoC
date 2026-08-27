@@ -85,14 +85,16 @@ $ CONFIG=<chipyard-config> ./run-chipyard-openfpga-demo.sh --rebuild <test-name>
 
 ### CGRA + Gemmini
 
-The combined configuration runs Gemmini and CGRA in the same Chipyard system.
+The combined flow runs Gemmini and CGRA in the same Chipyard system and can also instantiate AES.
 
 - Supported: CPU-controlled Gemmini GEMM followed by CGRA ReLU through DRAM
 - Supported: CPU-controlled Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
 - Supported: automatic 128-byte Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
+- Supported: CPU-controlled and automatic 128-byte Gemmini to CGRA to AES pipelines
 - Unsupported: runtime programming of AutoLink routes and copy descriptors
+- Unsupported: Hybrid mode, overlap, and multiple chunks
 
-The automatic path uses an elaboration-time task table. Its control protocol carries dependency and completion messages, while the SoC memory interconnect carries payload data. See [docs/accelerator-modes.md](./docs/accelerator-modes.md) for the Manual and Automatic mode contracts.
+In the three-stage path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. AutoLink carries control and TileLink carries payload. The validated pipeline is fixed, sequential, and limited to one 128-byte chunk. See [docs/accelerator-modes.md](./docs/accelerator-modes.md) for the Manual and Automatic mode contracts.
 
 Generate the single-CGRA ReLU RTL and API, then run the automatic SPM transfer:
 
@@ -110,4 +112,16 @@ Run the CPU-controlled External-SPM path with:
 
 ```shell
 $ CONFIG=CGRAMinimalGemminiRocketConfig ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c
+```
+
+Run the CPU-controlled three-stage path with:
+
+```shell
+$ CONFIG=CGRAMinimalGemminiAESRocketConfig TEST_SRC=tests/cgra-gemmini/relu_spm_aes_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
+```
+
+Run the automatic three-stage path with:
+
+```shell
+$ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
 ```
