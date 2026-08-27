@@ -5,8 +5,10 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
+AES_SW="$CHIPYARD_DIR/generators/caliptra-aes-acc/software"
 CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_gemmini_soc.yaml"
 EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
+CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
@@ -23,6 +25,10 @@ uses_auto_link() {
       return 1
       ;;
   esac
+}
+
+uses_aes() {
+  [[ "$CONFIG" == CGRAMinimalGemminiAESRocketConfig ]]
 }
 
 usage() {
@@ -102,6 +108,15 @@ if uses_auto_link; then
   fi
 fi
 
+if uses_aes; then
+  if ((REBUILD)); then
+    echo "[generate] CGRA SPM window"
+    python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+  else
+    python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+  fi
+fi
+
 if ((REBUILD)); then
   echo "[1/3] Rebuilding $CONFIG simulator"
   make -C sims/verilator CONFIG="$CONFIG"
@@ -113,12 +128,17 @@ else
 fi
 
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
+SOURCES=("$TEST_SRC")
+if uses_aes; then
+  SOURCES+=("$AES_SW/accellib.c")
+fi
 riscv64-unknown-elf-gcc \
   -std=gnu99 -O2 -Wall -Wextra -fno-common -fno-builtin-printf \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \
   -I "$ROOT_DIR/tests/cgra-gemmini" \
+  -I "$AES_SW" \
   -I "$CHIPYARD_DIR/tests" \
   -I "$GEMMINI_SW" \
   -I "$GEMMINI_SW/include" \
@@ -127,7 +147,7 @@ riscv64-unknown-elf-gcc \
   -I "$GEMMINI_SW/riscv-tests/benchmarks/common" \
   -specs="$CHIPYARD_DIR/toolchains/libgloss/util/htif_nano.specs" \
   -static -T "$CHIPYARD_DIR/tests/htif.ld" \
-  "$TEST_SRC" \
+  "${SOURCES[@]}" \
   -o "$BIN_PATH"
 
 # The combined generated model requires more host stack than the common
