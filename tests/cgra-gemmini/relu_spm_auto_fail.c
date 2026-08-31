@@ -88,27 +88,10 @@ int main(void) {
 
   const cgra_link_result_t cgra = cgra_link_wait();
   const cgra_link_result_t aes = cgra_link_wait();
-  int failed = 0;
-  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0) {
-    printf("Three-IP Auto: CGRA did not report Gemmini BadAddress\n");
-    failed = 1;
-  }
-  if (result_mismatch(aes, 0) != 0) {
-    printf("Three-IP Auto: AES cancellation result mismatch\n");
-    failed = 1;
-  }
-  if (cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0) {
-    printf("Three-IP Auto: unexpected extra result\n");
-    failed = 1;
-  }
-  if (output_changed() != 0) {
-    printf("Three-IP Auto: AES output changed after Gemmini failure\n");
-    failed = 1;
-  }
-  if (failed != 0) {
-    printf("Three-IP Auto Gemmini BadAddress: FAIL\n");
+  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, 0) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
+    printf("Three-IP Automatic flow failure: FAIL\n");
     return 1;
   }
-  printf("Three-IP Auto Gemmini BadAddress: PASS\n");
+  printf("Three-IP Automatic flow failure: PASS\n");
   return 0;
 }
