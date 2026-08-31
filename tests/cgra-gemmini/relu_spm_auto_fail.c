@@ -15,6 +15,7 @@ enum {
   PUBLICATION_ROWS = TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   WRONG_PUBLICATION_ROW = PUBLICATION_ROW - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
+  GEMMINI_LINK_BAD_ADDRESS = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
@@ -40,7 +41,7 @@ static void init_inputs(void) {
   __asm__ volatile("fence rw, rw" ::: "memory");
 }
 
-static void run_gemmini(void) {
+static void run_bad_publication(void) {
   const uint32_t A_addr = 0;
   const uint32_t B_addr = DIM;
 
@@ -63,6 +64,8 @@ static void configure_cgra(void) {
   }
 }
 
+static int result_mismatch(cgra_link_result_t result, uint32_t detail) { return result.status != AUTO_LINK_STATUS_SOURCE_FAILURE || result.detail != detail || result.data != 0; }
+
 static int output_changed(void) {
   const volatile uint8_t *ciphertext = (const volatile uint8_t *)(uintptr_t)AES_AUTO_CIPHERTEXT_ADDRESS;
   const volatile uint32_t *completion = (const volatile uint32_t *)(uintptr_t)AES_AUTO_COMPLETION_ADDRESS;
@@ -81,14 +84,14 @@ static int output_changed(void) {
 int main(void) {
   init_inputs();
   configure_cgra();
-  run_gemmini();
+  run_bad_publication();
 
   const cgra_link_result_t cgra = cgra_link_wait();
   const cgra_link_result_t aes = cgra_link_wait();
-  if (cgra.status == AUTO_LINK_STATUS_SUCCESS || aes.status == AUTO_LINK_STATUS_SUCCESS || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
-    printf("Gemmini + CGRA + AES Auto failure: FAIL\n");
+  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, 0) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
+    printf("Three-IP Automatic flow failure: FAIL\n");
     return 1;
   }
-  printf("Gemmini + CGRA + AES Auto failure: PASS\n");
+  printf("Three-IP Automatic flow failure: PASS\n");
   return 0;
 }
