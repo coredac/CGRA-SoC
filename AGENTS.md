@@ -26,7 +26,8 @@ The single-CGRA configuration is layered:
 
 - `configs/arch/arch.yaml` owns CGRA structure and functional-unit choices.
 - `configs/soc/cgra_soc.yaml` owns the SoC interface and memory settings.
-- `configs/soc/cgra_gemmini_soc.yaml` owns the combined CGRA memory settings, Gemmini external SPM address range, CGRA SPM window, physical AutoLink connections, and AES automatic-job contract.
+- `configs/soc/autolink/gc.yaml` owns the two-IP CGRA and Gemmini SoC settings and automatic task.
+- `configs/soc/autolink/gca.yaml` owns the three-IP CGRA, Gemmini, and AES SoC settings and automatic tasks.
 - `configs/kernels/kernel_*_4x4.yaml` owns kernel metadata and execution counts.
 
 Do not restore the deprecated mixed kernel schema or add fallback reads for its old fields. Keep multi-CGRA architecture and SoC settings in their matching files under `configs/arch/` and `configs/soc/`.

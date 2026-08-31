@@ -11,9 +11,10 @@ from typing import Mapping
 import yaml
 
 from generate_cgra_link_control import PAGE_SIZE_BYTES, control_address, load_spm_ranges
-from generate_gemmini_ext_spm import DEFAULT_SOC, require_int, require_mapping, write
+from generate_gemmini_ext_spm import require_int, require_mapping, write
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SOC = ROOT / "configs" / "soc" / "autolink" / "gca.yaml"
 DEFAULT_SCALA = (
     ROOT
     / "chipyard"

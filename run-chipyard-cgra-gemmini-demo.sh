@@ -6,7 +6,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHIPYARD_DIR="$ROOT_DIR/chipyard"
 GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
 AES_SW="$CHIPYARD_DIR/generators/caliptra-aes-acc/software"
-CGRA_SOC_YAML="$ROOT_DIR/configs/soc/cgra_gemmini_soc.yaml"
+GC_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gc.yaml"
+GCA_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gca.yaml"
 EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
@@ -46,6 +47,11 @@ uses_aes_manual() {
 uses_aes_auto() {
   [[ "$CONFIG" == CGRAMinimalGemminiAESAutoLinkRocketConfig ]]
 }
+
+CGRA_SOC_YAML="$GC_SOC_YAML"
+if uses_cgra_spm; then
+  CGRA_SOC_YAML="$GCA_SOC_YAML"
+fi
 
 usage() {
   echo "usage: $0 [--rebuild] [--fast] [test-source.c]" >&2
@@ -117,10 +123,12 @@ if uses_auto_link; then
   if ((REBUILD)); then
     echo "[generate] CGRA + Gemmini AutoLink"
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GC_SOC_YAML"
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GCA_SOC_YAML"
   else
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GC_SOC_YAML" --check
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GCA_SOC_YAML" --check
   fi
 fi
 

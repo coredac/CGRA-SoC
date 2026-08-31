@@ -12,7 +12,6 @@ from typing import Mapping
 import yaml
 
 from generate_gemmini_ext_spm import (
-    DEFAULT_SOC,
     is_power_of_two,
     require_int,
     require_mapping,
@@ -20,6 +19,7 @@ from generate_gemmini_ext_spm import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SOC = ROOT / "configs" / "soc" / "autolink" / "gca.yaml"
 DEFAULT_CGRA_SCALA = (
     ROOT
     / "chipyard"

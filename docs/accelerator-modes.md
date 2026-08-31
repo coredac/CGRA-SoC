@@ -71,7 +71,7 @@ The fabric buffers copy descriptors only. It never buffers payload data and has 
 
 Manual configurations omit `AutoLinkKey` and the automatic adapters. Automatic configurations provide `AutoLinkParams` and attach each configured endpoint to `AutoLinkFabric`.
 
-The SoC YAML describes physical accelerator links. `scripts/generate_auto_links.py` emits those links for elaboration. The current task entries and endpoint parameters are still constructed in Scala. Runtime task programming is not implemented.
+The SoC YAML lists each automatic task's source, destination, and byte count. `scripts/generate_auto_links.py` infers the links, endpoints, offsets, and task table, then emits complete `AutoLinkParams` for elaboration. Runtime task programming is not implemented.
 
 The generic implementation is under `chipyard.socgen.link`. Accelerator-specific adapters live in their matching `chipyard.socgen` subpackage and contain only the translation between `AutoEndpointIO` and the IP's existing interfaces. Integration configuration instantiates and connects these pieces but must not duplicate protocol or routing logic.
 
