@@ -123,12 +123,10 @@ if uses_auto_link; then
   if ((REBUILD)); then
     echo "[generate] CGRA + Gemmini AutoLink"
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GC_SOC_YAML"
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GCA_SOC_YAML"
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GC_SOC_YAML" --check
-    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$GCA_SOC_YAML" --check
+    python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 

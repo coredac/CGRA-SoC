@@ -26,13 +26,11 @@ class AutoLinkGeneratorTest(unittest.TestCase):
     def load(self, name: str) -> tuple[generate.AutoLinkConfig, str]:
         path = ROOT / "configs" / "soc" / "autolink" / f"{name}.yaml"
         config = generate.load_config(path)
-        object_name, _ = generate.profile(path)
-        return config, generate.scala_text(config, object_name)
+        return config, generate.scala_text(config)
 
     def test_gc_inference(self):
         config, scala = self.load("gc")
         self.assertEqual(config.tasks, (generate.Task("gemmini", "cgra", 128),))
-        self.assertIn("object AutoLinkGcGenerated", scala)
         self.assertIn('AutoEndpointSpec(name = "cgra", buffer = None', scala)
         self.assertIn(
             "AutoCopySpec(route = 0, sourceOffset = 65408, destinationOffset = 0, bytes = 128)",
@@ -48,7 +46,6 @@ class AutoLinkGeneratorTest(unittest.TestCase):
                 generate.Task("cgra", "aes", 128),
             ),
         )
-        self.assertIn("object AutoLinkGcaGenerated", scala)
         self.assertIn(
             'AutoEndpointSpec(name = "cgra", buffer = Some(AutoBuffer(BigInt("60010000", 16), 512)',
             scala,
@@ -57,6 +54,14 @@ class AutoLinkGeneratorTest(unittest.TestCase):
             "AutoCopySpec(route = 1, sourceOffset = 0, destinationOffset = 0, bytes = 128)",
             scala,
         )
+
+    def test_configs_share_generated_interface(self):
+        _, gc_scala = self.load("gc")
+        _, gca_scala = self.load("gca")
+        self.assertIn("object AutoLinkGenerated", gc_scala)
+        self.assertIn("object AutoLinkGenerated", gca_scala)
+        self.assertNotEqual(gc_scala, gca_scala)
+        self.assertEqual(generate.DEFAULT_OUTPUT.name, "AutoLinkGenerated.scala")
 
     def test_source_capability_is_enforced(self):
         document = self.document("gc")
