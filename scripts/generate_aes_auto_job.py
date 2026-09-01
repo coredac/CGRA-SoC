@@ -10,7 +10,12 @@ from typing import Mapping
 
 import yaml
 
-from generate_cgra_link_control import PAGE_SIZE_BYTES, control_address, load_spm_ranges
+from generate_cgra_link_control import (
+    PAGE_COUNT,
+    PAGE_SIZE_BYTES,
+    control_address,
+    load_spm_ranges,
+)
 from generate_gemmini_ext_spm import require_int, require_mapping, write
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -81,7 +86,7 @@ def load_contract(path: Path) -> AesAutoJobContract:
         raise ValueError(f"{path}: AES ciphertext and completion ranges overlap")
 
     reserved = load_spm_ranges(path)
-    reserved.append((control_address(path), PAGE_SIZE_BYTES))
+    reserved.append((control_address(path), PAGE_COUNT * PAGE_SIZE_BYTES))
     if any(overlaps(output, region) or overlaps(flag, region) for region in reserved):
         raise ValueError(
             f"{path}: AES automatic-job range collides with an accelerator window"

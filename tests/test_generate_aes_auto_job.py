@@ -68,6 +68,10 @@ class AesAutoJobTest(unittest.TestCase):
                 lambda job: job.update(ciphertext_address=0x60010000),
                 "collides with an accelerator window",
             ),
+            "control-pages": (
+                lambda job: job.update(ciphertext_address=0x60013000),
+                "collides with an accelerator window",
+            ),
         }
         for name, (update, message) in cases.items():
             with self.subTest(name=name):

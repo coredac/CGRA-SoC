@@ -45,6 +45,20 @@ class CgraLinkControlTest(unittest.TestCase):
             address = generate.control_address(path)
         self.assertEqual(address, 0x60010000)
 
+    def test_generated_job_abi(self):
+        scala = generate.scala_text(0x60011000)
+        header = generate.header_text(0x60011000)
+        self.assertIn('gemminiJobAddress: BigInt = BigInt("60012000", 16)', scala)
+        self.assertIn('aesJobAddress: BigInt = BigInt("60013000", 16)', scala)
+        self.assertIn("#define GEMMINI_JOB_BASE UINT64_C(0x60012000)", header)
+        self.assertIn("#define AES_JOB_BASE UINT64_C(0x60013000)", header)
+        for name, offset in generate.GEMMINI_REGISTERS.items():
+            self.assertIn(f"val GEMMINI_{name}: Int = 0x{offset:03x}", scala)
+            self.assertIn(f"#define GEMMINI_JOB_{name} 0x{offset:03x}u", header)
+        for name, offset in generate.AES_REGISTERS.items():
+            self.assertIn(f"val AES_{name}: Int = 0x{offset:03x}", scala)
+            self.assertIn(f"#define AES_JOB_{name} 0x{offset:03x}u", header)
+
 
 if __name__ == "__main__":
     unittest.main()
