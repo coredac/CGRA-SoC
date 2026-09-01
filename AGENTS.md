@@ -142,7 +142,7 @@ For documentation-only changes, check Markdown structure, links, and `git diff -
 - The AES root job starts only after its output watch is armed and its destination and byte count match the watched range, then reports output only after output and completion writes drain.
 - The downstream AES job starts streaming on `requestCopy`, reports copy completion only after all input is read, treats `requestCompute` as a continuation barrier, and reports compute completion only after output and completion writes drain.
 - The system bus can read and write the Gemmini shared external SPM.
-- `CgraLinkControl` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
+- `CgraLinkEndpoint` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
 - Single- and multi-CGRA systems share the raw CPU/RoCC packet interface.
 - `tests/include/cgra_runtime.h` is the minimal direct packet-send layer.
 - Supported multi-CGRA hot paths send their preencoded packets directly.
