@@ -28,9 +28,9 @@ GENERATED_DIR = (
 )
 DEFAULT_OUTPUT = GENERATED_DIR / "AutoLinkGenerated.scala"
 CAPABILITIES = {
-    "gemmini": {"source"},
+    "gemmini": {"source", "destination"},
     "cgra": {"source", "destination"},
-    "aes": {"destination"},
+    "aes": {"source", "destination"},
 }
 TASK_KEYS = {"source", "destination", "size_bytes"}
 
@@ -134,7 +134,7 @@ def load_config(path: Path) -> AutoLinkConfig:
     gemmini = load_memory(memory, "gemmini_external_spm", path)
     cgra = load_memory(memory, "cgra_spm_window", path)
     for task in tasks:
-        source_size = gemmini.size if task.source == "gemmini" else cgra.size
+        source_size = cgra.size if task.source == "cgra" else gemmini.size
         if task.size > source_size:
             raise ValueError(
                 f"{path}: {task.source} -> {task.destination} exceeds source memory"
@@ -164,9 +164,14 @@ def endpoint_text(config: AutoLinkConfig, name: str) -> str:
             "CGRAGenerated.params.dataPayloadWidth / 8"
         )
         return f'      AutoEndpointSpec(name = "cgra", buffer = None, localBytes = {local_bytes})'
+    aes_source = next((task for task in config.tasks if task.source == "aes"), None)
+    buffer = "None"
+    if aes_source is not None:
+        output = Memory(config.gemmini.base, aes_source.size)
+        buffer = buffer_text(output)
     aes_bytes = next(task.size for task in config.tasks if task.destination == "aes")
     return (
-        f'      AutoEndpointSpec(name = "aes", buffer = None, localBytes = {aes_bytes})'
+        f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, localBytes = {aes_bytes})'
     )
 
 

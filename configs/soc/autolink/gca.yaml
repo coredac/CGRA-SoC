@@ -21,6 +21,9 @@ memory:
 
 communication:
   auto_tasks:
+    - source: aes
+      destination: gemmini
+      size_bytes: 256
     - source: gemmini
       destination: cgra
       size_bytes: 128

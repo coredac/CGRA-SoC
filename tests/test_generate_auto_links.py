@@ -42,16 +42,33 @@ class AutoLinkGeneratorTest(unittest.TestCase):
         self.assertEqual(
             config.tasks,
             (
+                generate.Task("aes", "gemmini", 256),
                 generate.Task("gemmini", "cgra", 128),
                 generate.Task("cgra", "aes", 128),
             ),
+        )
+        self.assertIn(
+            'AutoEndpointSpec(name = "aes", buffer = Some(AutoBuffer(BigInt("60000000", 16), 256)), localBytes = 128)',
+            scala,
+        )
+        self.assertIn(
+            'AutoEndpointSpec(name = "gemmini", buffer = Some(AutoBuffer(BigInt("60000000", 16), 65536)), localBytes = 65536)',
+            scala,
         )
         self.assertIn(
             'AutoEndpointSpec(name = "cgra", buffer = Some(AutoBuffer(BigInt("60010000", 16), 512)',
             scala,
         )
         self.assertIn(
-            "AutoCopySpec(route = 1, sourceOffset = 0, destinationOffset = 0, bytes = 128)",
+            "AutoCopySpec(route = 0, sourceOffset = 0, destinationOffset = 0, bytes = 256)",
+            scala,
+        )
+        self.assertIn(
+            "AutoCopySpec(route = 1, sourceOffset = 65408, destinationOffset = 0, bytes = 128)",
+            scala,
+        )
+        self.assertIn(
+            "AutoCopySpec(route = 2, sourceOffset = 0, destinationOffset = 0, bytes = 128)",
             scala,
         )
 
@@ -63,24 +80,24 @@ class AutoLinkGeneratorTest(unittest.TestCase):
         self.assertNotEqual(gc_scala, gca_scala)
         self.assertEqual(generate.DEFAULT_OUTPUT.name, "AutoLinkGenerated.scala")
 
-    def test_source_capability_is_enforced(self):
+    def test_endpoint_name_is_enforced(self):
         document = self.document("gc")
-        document["communication"]["auto_tasks"][0]["source"] = "aes"
-        self.reject(document, "AutoLink endpoint 'aes' cannot be a source")
+        document["communication"]["auto_tasks"][0]["source"] = "unknown"
+        self.reject(document, "unknown AutoLink source 'unknown'")
 
     def test_aes_size_is_enforced(self):
         document = self.document("gca")
-        document["communication"]["auto_tasks"][1]["size_bytes"] = 64
+        document["communication"]["auto_tasks"][2]["size_bytes"] = 64
         self.reject(document, "AES AutoLink task must be 128 bytes")
 
     def test_fan_in_and_fan_out_are_rejected(self):
         cases = {
             "fan-in": (
-                lambda tasks: tasks[0].update(destination="aes"),
-                "endpoint 'aes' has multiple incoming tasks",
+                lambda tasks: tasks[0].update(destination="cgra"),
+                "endpoint 'cgra' has multiple incoming tasks",
             ),
             "fan-out": (
-                lambda tasks: tasks[1].update(source="gemmini"),
+                lambda tasks: tasks[2].update(source="gemmini"),
                 "endpoint 'gemmini' has multiple outgoing tasks",
             ),
         }
@@ -94,7 +111,7 @@ class AutoLinkGeneratorTest(unittest.TestCase):
         document = self.document("gca")
         document["communication"]["auto_tasks"] = document["communication"][
             "auto_tasks"
-        ][1:]
+        ][2:]
         self.reject(document, "CGRA source task requires an incoming CGRA task")
 
 
