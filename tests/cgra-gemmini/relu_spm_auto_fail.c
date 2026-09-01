@@ -51,6 +51,7 @@ static void run_bad_publication(void) {
   gemmini_config_st(DIM * sizeof(acc_t));
   gemmini_mvin(A, A_addr);
   gemmini_mvin(B, B_addr);
+  gemmini_fence();
   gemmini_preload(B_addr, ACCUMULATOR_WRITE_ADDRESS);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
   gemmini_extended_mvout_spad(WRONG_PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE, ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM, PUBLICATION_ROWS);
