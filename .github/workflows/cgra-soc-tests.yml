@@ -156,6 +156,20 @@ jobs:
             ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
           grep -q "Gemmini + CGRA Manual SPM ReLU: PASS" cgra-gemmini-manual.log
 
+      - name: Run manual AES, Gemmini, and CGRA pipeline
+        run: |
+          CONFIG=CGRAMinimalGemminiAESRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee aes-gemmini-cgra-manual.log
+          grep -q "AES + Gemmini + CGRA + AES Manual: PASS" aes-gemmini-cgra-manual.log
+
+      - name: Run automatic AES, Gemmini, and CGRA pipeline
+        run: |
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
+          grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
+
       - name: Run OpenFPGA AND2 SoC test
         run: |
           .venv/bin/python scripts/openfpga/generate.py \
