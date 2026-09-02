@@ -31,6 +31,7 @@ CAPABILITIES = {
     "gemmini": {"source", "destination"},
     "cgra": {"source", "destination"},
     "aes": {"source", "destination"},
+    "pool": {"destination"},
 }
 TASK_KEYS = {"source", "destination", "size_bytes"}
 
@@ -170,14 +171,23 @@ def endpoint_text(config: AutoLinkConfig, name: str) -> str:
             "CGRAGenerated.params.dataPayloadWidth / 8"
         )
         return f'      AutoEndpointSpec(name = "cgra", buffer = None, localBytes = {local_bytes})'
-    aes_source = next((task for task in config.tasks if task.source == "aes"), None)
-    buffer = "None"
-    if aes_source is not None:
-        output = Memory(config.gemmini.base, aes_source.size)
-        buffer = buffer_text(output)
-    aes_bytes = next(task.size for task in config.tasks if task.destination == "aes")
+    if name == "aes":
+        aes_source = next((task for task in config.tasks if task.source == "aes"), None)
+        buffer = "None"
+        if aes_source is not None:
+            output = Memory(config.gemmini.base, aes_source.size)
+            buffer = buffer_text(output)
+        aes_bytes = next(
+            task.size for task in config.tasks if task.destination == "aes"
+        )
+        return (
+            f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, '
+            f"localBytes = {aes_bytes})"
+        )
+    pool_bytes = next(task.size for task in config.tasks if task.destination == "pool")
     return (
-        f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, localBytes = {aes_bytes})'
+        '      AutoEndpointSpec(name = "pool", buffer = None, '
+        f"localBytes = {pool_bytes})"
     )
 
 
