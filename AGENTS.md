@@ -66,6 +66,8 @@ The CPU-mediated Gemmini GEMM to CGRA ReLU demos remain supported. Manual and au
 
 The three-IP Manual and Automatic configurations validate one strict sequential pipeline: AES decrypts 256 bytes into the Gemmini shared external SPM, Gemmini runs GEMM with B preloaded by the CPU and publishes 128 bytes at the SPM tail, CGRA pulls the data into its local SPM and runs ReLU, and AES reads the CGRA read-only SPM window and encrypts 128 bytes to DRAM. Manual mode has the CPU start each IP in order. Automatic mode has the CPU preload B, capture the native Gemmini command sequence, and configure the CGRA and root AES jobs; AutoLink uses fixed `aes -> gemmini`, `gemmini -> cgra`, and `cgra -> aes` routes and returns Gemmini, CGRA, and AES destination results. The older Gemmini-to-CGRA and Gemmini-to-CGRA-to-AES demos remain supported.
 
+`CGRAMinimalGemminiPoolRocketConfig` and `CGRAMinimalGemminiPoolAutoLinkRocketConfig` add a `custom2` streaming Pool accelerator. The verified pipeline runs Gemmini INT8 Conv, CGRA INT32 ReLU, and INT32 MaxPool; Pool element width is selected at elaboration from 8, 16, or 32 bits, while mode, shape, kernel, stride, padding, and addresses are runtime fields. Average mode is reserved but unsupported.
+
 AutoLink carries control only. TileLink carries payload data. Routes and copy tasks are fixed during elaboration; runtime programming is unsupported. Hybrid mode, overlap, multiple chunks, multiple kernels, and concurrent producers are unsupported.
 
 ## Generated and Frozen Files
