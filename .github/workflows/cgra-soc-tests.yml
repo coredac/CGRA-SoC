@@ -145,29 +145,49 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
-      - name: Run automatic Gemmini to CGRA SPM test
+      - name: Run Gemmini and CGRA automatic E2E tests
         run: |
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
           grep -q "Gemmini + CGRA Auto SPM ReLU: PASS" cgra-gemmini-auto.log
 
-      - name: Run manual Gemmini to CGRA SPM test
+      - name: Run Gemmini and CGRA manual E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiRocketConfig \
             ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
           grep -q "Gemmini + CGRA Manual SPM ReLU: PASS" cgra-gemmini-manual.log
+          CONFIG=CGRAMinimalGemminiRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_dma.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-dma.log
+          grep -q "Gemmini + CGRA DMA ReLU chunk 0 smoke test: PASS" cgra-gemmini-dma.log
+          CONFIG=CGRAMinimalGemminiRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini.log
+          grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini.log
 
-      - name: Run manual AES, Gemmini, and CGRA pipeline
+      - name: Run AES, Gemmini, and CGRA manual E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiAESRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-manual.log
+          grep -q "Gemmini + CGRA + AES Manual: PASS" cgra-gemmini-aes-manual.log
+          CONFIG=CGRAMinimalGemminiAESRocketConfig \
             TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_manual.c \
-            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee aes-gemmini-cgra-manual.log
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-manual.log
           grep -q "AES + Gemmini + CGRA + AES Manual: PASS" aes-gemmini-cgra-manual.log
 
-      - name: Run automatic AES, Gemmini, and CGRA pipeline
+      - name: Run AES, Gemmini, and CGRA automatic E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
+          grep -q "Gemmini + CGRA + AES Auto: PASS" cgra-gemmini-aes-auto.log
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_auto_fail.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-aes-auto-fail.log
+          grep -q "Three-IP Automatic flow failure: PASS" cgra-gemmini-aes-auto-fail.log
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
             TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
-            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
 
       - name: Run OpenFPGA AND2 SoC test
