@@ -28,9 +28,6 @@ enum {
   INPUT_DMA_TAG = 0x10,
 };
 
-_Static_assert(DIM == 16 && sizeof(elem_t) == 1, "test requires 16x16 int8 Gemmini");
-_Static_assert(CGRA_BYTES == 128, "test requires a 128-byte CGRA transfer");
-
 static elem_t B[DIM][DIM] row_align(1);
 static uint8_t output[CGRA_BYTES] __attribute__((aligned(32)));
 

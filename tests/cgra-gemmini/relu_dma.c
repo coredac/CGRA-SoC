@@ -27,15 +27,6 @@ enum {
   CGRA_EXPECTED_RESULT = 0,
 };
 
-_Static_assert(CGRA_CHUNK_ELEMENTS <= MATRIX_ELEMENT_COUNT,
-               "the chunk 0 smoke test must fit in the matrix");
-_Static_assert(CGRA_CHUNK_ELEMENTS % 2 == 0,
-               "the smoke-test input must split evenly around zero");
-_Static_assert(CGRA_CHUNK_BYTES == 128,
-               "each CGRA chunk must contain exactly 128 bytes");
-_Static_assert(CGRA_CHUNK_BYTES % CGRA_DMA_BEAT_BYTES == 0,
-               "each CGRA chunk must contain complete DMA beats");
-
 static elem_t A[DIM][DIM] row_align(1);
 static elem_t B[DIM][DIM] row_align(1);
 static acc_t gemmini_output[DIM][DIM] row_align_acc(1);

@@ -11,6 +11,7 @@ These rules are mandatory for all agent output and hand-written code in this rep
 - Preserve clear module boundaries. Keep each file and function focused, and do not collect unrelated functions in one file or build a single oversized function.
 - Do not add unnecessary blank lines. Use whitespace only to separate meaningful logical sections and follow the repository formatter where one applies.
 - Match the established style of the surrounding code before introducing a new pattern. Inspect nearby code and existing modules first; if the applicable convention or the simplest correct design is still unclear, ask the user before proceeding.
+- No assert in C++ or python codes. No unnecessary raise error in Python.
 
 ## Scope
 

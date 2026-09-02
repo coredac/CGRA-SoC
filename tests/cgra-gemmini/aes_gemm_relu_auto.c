@@ -22,9 +22,6 @@ enum {
   B_ROW = DIM,
 };
 
-_Static_assert(DIM == 16 && sizeof(elem_t) == 1, "test requires 16x16 int8 Gemmini");
-_Static_assert(CGRA_BYTES == 128, "test requires a 128-byte CGRA transfer");
-
 static elem_t B[DIM][DIM] row_align(1);
 static volatile uint32_t root_completion __attribute__((aligned(8)));
 static const uint64_t ROOT_KEY[4] = {0, 0, 0, 0};

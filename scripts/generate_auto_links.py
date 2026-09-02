@@ -184,11 +184,15 @@ def endpoint_text(config: AutoLinkConfig, name: str) -> str:
             f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, '
             f"localBytes = {aes_bytes})"
         )
-    pool_bytes = next(task.size for task in config.tasks if task.destination == "pool")
-    return (
-        '      AutoEndpointSpec(name = "pool", buffer = None, '
-        f"localBytes = {pool_bytes})"
-    )
+    if name == "pool":
+        pool_bytes = next(
+            task.size for task in config.tasks if task.destination == "pool"
+        )
+        return (
+            '      AutoEndpointSpec(name = "pool", buffer = None, '
+            f"localBytes = {pool_bytes})"
+        )
+    raise ValueError(f"unknown AutoLink endpoint '{name}'")
 
 
 def task_text(config: AutoLinkConfig, index: int, task: Task) -> str:
