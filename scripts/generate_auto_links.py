@@ -133,11 +133,17 @@ def load_config(path: Path) -> AutoLinkConfig:
 
     gemmini = load_memory(memory, "gemmini_external_spm", path)
     cgra = load_memory(memory, "cgra_spm_window", path)
+    memories = {"gemmini": gemmini, "cgra": cgra}
     for task in tasks:
-        source_size = cgra.size if task.source == "cgra" else gemmini.size
-        if task.size > source_size:
+        source = memories.get(task.source)
+        if source is not None and task.size > source.size:
             raise ValueError(
                 f"{path}: {task.source} -> {task.destination} exceeds source memory"
+            )
+        destination = memories.get(task.destination)
+        if destination is not None and task.size > destination.size:
+            raise ValueError(
+                f"{path}: {task.source} -> {task.destination} exceeds destination memory"
             )
     return AutoLinkConfig(gemmini, cgra, tuple(tasks))
 
