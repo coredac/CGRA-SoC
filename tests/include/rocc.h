@@ -26,6 +26,9 @@
 #define ROCC_INSTRUCTION_S(X, rs1, funct)                                      \
   ROCC_INSTRUCTION_I_R_I(X, 0, rs1, 0, funct, 11)
 
+#define ROCC_INSTRUCTION_SS(X, rs1, rs2, funct)                                \
+  ROCC_INSTRUCTION_I_R_R(X, 0, rs1, rs2, funct, 11, 12)
+
 #define ROCC_INSTRUCTION_R_I_I(X, rd, rs1, rs2, funct, rd_n)                   \
   {                                                                            \
     register uint64_t rd_ asm("x" #rd_n);                                      \
@@ -42,6 +45,15 @@
                                       funct)) "\n\t" ::[_rs1] "r"(rs1_));      \
   }
 
+#define ROCC_INSTRUCTION_I_R_R(X, rd, rs1, rs2, funct, rs1_n, rs2_n)           \
+  {                                                                            \
+    register uint64_t rs1_ asm("x" #rs1_n) = (uint64_t)rs1;                    \
+    register uint64_t rs2_ asm("x" #rs2_n) = (uint64_t)rs2;                    \
+    asm volatile(".word " STR(CUSTOMX(X, 0, 1, 1, rd, rs1_n, rs2_n,            \
+                                      funct)) "\n\t" ::[_rs1] "r"(rs1_),      \
+                 [_rs2] "r"(rs2_));                                           \
+  }
+
 #else
 
 #define ROCC_INSTRUCTION_D(X, rd, funct)                                       \
@@ -54,6 +66,13 @@
   do {                                                                         \
     (void)(X);                                                                 \
     (void)(rs1);                                                               \
+    (void)(funct);                                                             \
+  } while (0)
+#define ROCC_INSTRUCTION_SS(X, rs1, rs2, funct)                                \
+  do {                                                                         \
+    (void)(X);                                                                 \
+    (void)(rs1);                                                               \
+    (void)(rs2);                                                               \
     (void)(funct);                                                             \
   } while (0)
 
