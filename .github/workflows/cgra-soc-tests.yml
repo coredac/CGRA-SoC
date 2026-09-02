@@ -18,8 +18,8 @@ defaults:
     shell: bash -leo pipefail {0}
 
 jobs:
-  cpu-cgra:
-    name: CPU and CGRA Verilator tests
+  cgra-tests:
+    name: CGRA Verilator tests
     runs-on: ubuntu-22.04
     timeout-minutes: 360
 
@@ -145,6 +145,33 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cgra-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+            tests/generated/*.h
+          if-no-files-found: ignore
+
+  gemmini-tests:
+    name: CGRA and Gemmini E2E tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
       - name: Run Gemmini and CGRA automatic E2E tests
         run: |
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
@@ -190,6 +217,32 @@ jobs:
             ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
 
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemmini-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  openfpga-tests:
+    name: OpenFPGA Verilator tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
       - name: Run OpenFPGA AND2 SoC test
         run: |
           .venv/bin/python scripts/openfpga/generate.py \
@@ -224,10 +277,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cgra-soc-test-logs
+          name: openfpga-test-logs
           path: |
             *.log
             chipyard/build-setup.log
-            tests/generated/*.h
             build/openfpga/*/*.json
           if-no-files-found: ignore
