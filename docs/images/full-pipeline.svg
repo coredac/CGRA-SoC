@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="850" viewBox="0 0 1800 850" role="img" aria-labelledby="title desc">
+  <title id="title">Manual and automatic AES, Gemmini, and CGRA pipeline</title>
+  <desc id="desc">AutoLink is the control plane and TileLink is the payload plane for an AES, Gemmini, and CGRA pipeline. The same AES accelerator decrypts the input and later encrypts the CGRA output.</desc>
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #111111; }
+      .group-title { font-family: Arial, sans-serif; font-size: 27px; font-weight: 500; fill: #111111; }
+      .module { font-family: Arial, sans-serif; font-size: 22px; font-weight: 500; fill: #111111; }
+      .label { font-family: Arial, sans-serif; font-size: 18px; font-weight: 400; fill: #111111; }
+      .soc { fill: #f5f5f5; stroke: #666666; stroke-width: 4; }
+      .ip { fill: #dce9f8; stroke: #7093c3; stroke-width: 4; }
+      .block { fill: #ffe4c4; stroke: #d79700; stroke-width: 4; }
+      .fabric { fill: #dcefd7; stroke: #82b66b; stroke-width: 4; }
+      .cpu-box { fill: #f5f5f5; stroke: #666666; stroke-width: 4; }
+      .line { fill: none; stroke: #111111; stroke-width: 4; }
+      .dependency { fill: none; stroke: #a46700; stroke-width: 6; }
+      .step { fill: #555555; stroke: none; }
+      .step-text { font-family: Arial, sans-serif; font-size: 17px; font-weight: 700; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="850" fill="#ffffff"/>
+
+  <rect x="25" y="360" width="200" height="180" class="cpu-box"/>
+  <text x="125" y="435" text-anchor="middle" class="module">CPU</text>
+  <text x="125" y="470" text-anchor="middle" class="label">configuration</text>
+  <text x="125" y="500" text-anchor="middle" class="label">root launch</text>
+
+  <rect x="265" y="25" width="1500" height="800" class="soc"/>
+  <text x="295" y="73" class="title">Manual and automatic three-IP pipeline</text>
+
+  <text x="315" y="118" class="label">Control and data planes</text>
+  <rect x="315" y="140" width="690" height="80" class="fabric"/>
+  <text x="660" y="178" text-anchor="middle" class="module">AutoLink Fabric</text>
+  <text x="660" y="204" text-anchor="middle" class="label">control channel</text>
+
+  <rect x="1025" y="140" width="690" height="80" class="fabric"/>
+  <text x="1370" y="178" text-anchor="middle" class="module">TileLink System Bus</text>
+  <text x="1370" y="204" text-anchor="middle" class="label">payload channel</text>
+
+  <path d="M225 450 H245" class="line"/>
+  <polygon points="265,450 245,438 245,462" fill="#111111"/>
+
+  <rect x="305" y="275" width="440" height="410" class="ip"/>
+  <text x="330" y="315" class="group-title">AES</text>
+  <text x="710" y="315" text-anchor="end" class="label">1 decrypt / 4 encrypt</text>
+
+  <rect x="335" y="345" width="380" height="60" class="block"/>
+  <text x="525" y="383" text-anchor="middle" class="module">AesLinkEndpoint</text>
+
+  <rect x="335" y="430" width="380" height="60" class="block"/>
+  <text x="525" y="468" text-anchor="middle" class="module">AesLinkAdapter</text>
+
+  <rect x="335" y="525" width="175" height="105" class="block"/>
+  <text x="422" y="570" text-anchor="middle" class="module">AES256ECB</text>
+  <text x="422" y="600" text-anchor="middle" class="module">Accel</text>
+
+  <rect x="540" y="525" width="175" height="105" class="fabric"/>
+  <text x="627" y="570" text-anchor="middle" class="module">AES DMA</text>
+  <text x="627" y="600" text-anchor="middle" class="label">MemStreamer</text>
+
+  <rect x="795" y="275" width="440" height="410" class="ip"/>
+  <text x="820" y="315" class="group-title">Gemmini</text>
+  <text x="1200" y="315" text-anchor="end" class="label">2 GEMM</text>
+
+  <rect x="825" y="345" width="380" height="60" class="block"/>
+  <text x="1015" y="383" text-anchor="middle" class="module">GemminiLinkEndpoint</text>
+
+  <rect x="825" y="430" width="380" height="60" class="block"/>
+  <text x="1015" y="468" text-anchor="middle" class="module">GemminiLinkAdapter</text>
+
+  <rect x="825" y="525" width="150" height="105" class="block"/>
+  <text x="900" y="570" text-anchor="middle" class="module">Gemmini</text>
+  <text x="900" y="600" text-anchor="middle" class="label">Core</text>
+
+  <rect x="995" y="525" width="100" height="105" class="fabric"/>
+  <text x="1045" y="570" text-anchor="middle" class="label">Gemmini</text>
+  <text x="1045" y="600" text-anchor="middle" class="label">DMA</text>
+
+  <rect x="1115" y="525" width="90" height="105" class="block"/>
+  <text x="1160" y="570" text-anchor="middle" class="label">External</text>
+  <text x="1160" y="600" text-anchor="middle" class="label">SPM</text>
+
+  <rect x="1285" y="275" width="440" height="410" class="ip"/>
+  <text x="1310" y="315" class="group-title">CGRA</text>
+  <text x="1690" y="315" text-anchor="end" class="label">3 ReLU</text>
+
+  <rect x="1315" y="345" width="380" height="60" class="block"/>
+  <text x="1505" y="383" text-anchor="middle" class="module">CgraLinkEndpoint</text>
+
+  <rect x="1315" y="430" width="380" height="60" class="block"/>
+  <text x="1505" y="468" text-anchor="middle" class="module">CgraLinkAdapter</text>
+
+  <rect x="1315" y="525" width="150" height="105" class="block"/>
+  <text x="1390" y="570" text-anchor="middle" class="module">CGRA</text>
+  <text x="1390" y="600" text-anchor="middle" class="label">Core</text>
+
+  <rect x="1485" y="525" width="100" height="105" class="fabric"/>
+  <text x="1535" y="570" text-anchor="middle" class="label">CGRA</text>
+  <text x="1535" y="600" text-anchor="middle" class="label">DMA</text>
+
+  <rect x="1605" y="525" width="90" height="105" class="block"/>
+  <text x="1650" y="570" text-anchor="middle" class="label">CGRA</text>
+  <text x="1650" y="600" text-anchor="middle" class="label">SPM</text>
+
+  <path d="M745 650 H775" class="dependency"/>
+  <polygon points="795,650 775,638 775,662" fill="#a46700"/>
+  <circle cx="770" cy="650" r="19" class="step"/>
+  <text x="770" y="656" text-anchor="middle" class="step-text">1</text>
+
+  <path d="M1235 650 H1265" class="dependency"/>
+  <polygon points="1285,650 1265,638 1265,662" fill="#a46700"/>
+  <circle cx="1260" cy="650" r="19" class="step"/>
+  <text x="1260" y="656" text-anchor="middle" class="step-text">2</text>
+
+  <path d="M1505 685 V765 H525 V705" class="dependency"/>
+  <polygon points="525,685 513,705 537,705" fill="#a46700"/>
+  <circle cx="1015" cy="765" r="19" class="step"/>
+  <text x="1015" y="771" text-anchor="middle" class="step-text">3</text>
+</svg>
