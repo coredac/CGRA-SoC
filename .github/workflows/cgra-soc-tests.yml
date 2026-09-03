@@ -172,6 +172,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: .github/scripts/setup-cgra-soc-env.sh
 
+      - name: Generate ReLU fast C API header
+        run: |
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml \
+            configs/kernels/kernel_relu4x4_4x4.yaml \
+            --output-dir tests/generated
+
       - name: Run Gemmini and CGRA automatic E2E tests
         run: |
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
@@ -242,6 +250,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate canonical 4x4 CGRA RTL
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml
 
       - name: Run OpenFPGA AND2 SoC test
         run: |
