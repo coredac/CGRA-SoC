@@ -83,6 +83,7 @@ int main(void) {
 
   gemmini_mvin(A, A_addr);
   gemmini_mvin(B, B_addr);
+  gemmini_fence();
   gemmini_preload(B_addr, accumulator_write_addr);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
   gemmini_mvout(gemmini_output, full_width_mvout_addr);

@@ -37,6 +37,7 @@ static int run_gemmini_gemm(void) {
 
   gemmini_mvin(A, A_addr);
   gemmini_mvin(B, B_addr);
+  gemmini_fence();
 
   gemmini_preload(B_addr, C_addr_acc);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);

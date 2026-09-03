@@ -94,6 +94,16 @@ class DmaMetadata:
 
 
 @dataclass(frozen=True)
+class SpmReadMetadata:
+    enabled: bool
+    req_type: str = ""
+    resp_type: str = ""
+    addr_width: int = 0
+    data_width: int = 0
+    words: int = 0
+
+
+@dataclass(frozen=True)
 class CgraMetadata:
     top_module: str
     wrapper_module: str
@@ -132,6 +142,7 @@ class CgraMetadata:
     pkt_opaque_lsb: int
     pkt_dst_tile_lsb: int
     dma: DmaMetadata
+    spm_read: SpmReadMetadata
 
 
 def load_command_ids(path: Path = CMD_TYPE_SOURCE) -> Dict[str, int]:
@@ -807,6 +818,61 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
             packet_templates=packet_templates,
         )
 
+    spm_read_port_names = (
+        "recv_from_ext_spm_rd_req__val",
+        "recv_from_ext_spm_rd_req__msg",
+        "recv_from_ext_spm_rd_req__rdy",
+        "send_to_ext_spm_rd_resp__val",
+        "send_to_ext_spm_rd_resp__msg",
+        "send_to_ext_spm_rd_resp__rdy",
+    )
+    present_spm_read_ports = [
+        name for name in spm_read_port_names if name in ports
+    ]
+    if present_spm_read_ports and len(present_spm_read_ports) != len(
+        spm_read_port_names
+    ):
+        missing = sorted(set(spm_read_port_names) - set(present_spm_read_ports))
+        raise ValueError(
+            f"top module has a partial external SPM read interface; missing {missing}"
+        )
+
+    spm_read_meta = SpmReadMetadata(enabled=False)
+    if present_spm_read_ports:
+        expected_directions = {
+            "recv_from_ext_spm_rd_req__val": "input",
+            "recv_from_ext_spm_rd_req__msg": "input",
+            "recv_from_ext_spm_rd_req__rdy": "output",
+            "send_to_ext_spm_rd_resp__val": "output",
+            "send_to_ext_spm_rd_resp__msg": "output",
+            "send_to_ext_spm_rd_resp__rdy": "input",
+        }
+        for port_name, direction in expected_directions.items():
+            if ports[port_name].direction != direction:
+                raise ValueError(
+                    f"external SPM read port {port_name} is "
+                    f"{ports[port_name].direction}, expected {direction}"
+                )
+
+        req = require_port(ports, "recv_from_ext_spm_rd_req__msg")
+        resp = require_port(ports, "send_to_ext_spm_rd_resp__msg")
+        if req.sv_type is None or resp.sv_type is None:
+            raise ValueError(
+                "external SPM read messages must use generated struct typedefs"
+            )
+        addr_width = field_width(req.sv_type, "addr", typedefs, memo)
+        spm_data_width = field_width(resp.sv_type, "data", typedefs, memo)
+        if req.width != addr_width or resp.width != spm_data_width:
+            raise ValueError("external SPM read message types must contain one field")
+        spm_read_meta = SpmReadMetadata(
+            enabled=True,
+            req_type=req.sv_type,
+            resp_type=resp.sv_type,
+            addr_width=addr_width,
+            data_width=spm_data_width,
+            words=address_hi + 1,
+        )
+
     has_boundary_ports = "recv_data_on_boundary_south__msg" in ports
     if has_boundary_ports:
         side_counts = {}
@@ -866,6 +932,7 @@ def infer_metadata(text: str, rtl_name: str, top_module: Optional[str]) -> CgraM
         pkt_opaque_lsb=pkt_opaque_lsb,
         pkt_dst_tile_lsb=pkt_dst_tile_lsb,
         dma=dma_meta,
+        spm_read=spm_read_meta,
     )
 
 
@@ -908,6 +975,18 @@ def wrapper_ports(meta: CgraMetadata) -> List[str]:
                 "input  logic        recv_from_dram_wr_resp_val",
                 "input  logic        recv_from_dram_wr_resp_msg",
                 "output logic        recv_from_dram_wr_resp_rdy",
+            ]
+        )
+
+    if meta.spm_read.enabled:
+        ports.extend(
+            [
+                "input  logic        recv_from_ext_spm_rd_req_val",
+                f"input  logic{flat_range(meta.spm_read.addr_width)} recv_from_ext_spm_rd_req_addr",
+                "output logic        recv_from_ext_spm_rd_req_rdy",
+                "output logic        send_to_ext_spm_rd_resp_val",
+                f"output logic{flat_range(meta.spm_read.data_width)} send_to_ext_spm_rd_resp_data",
+                "input  logic        send_to_ext_spm_rd_resp_rdy",
             ]
         )
 
@@ -1017,6 +1096,28 @@ def gen_dma_assigns(meta: CgraMetadata) -> str:
     )
 
 
+def gen_spm_read_wires(meta: CgraMetadata) -> str:
+    if not meta.spm_read.enabled:
+        return ""
+    return "\n".join(
+        [
+            f"  {meta.spm_read.req_type} w_recv_from_ext_spm_rd_req_msg;",
+            f"  {meta.spm_read.resp_type} w_send_to_ext_spm_rd_resp_msg;",
+        ]
+    )
+
+
+def gen_spm_read_assigns(meta: CgraMetadata) -> str:
+    if not meta.spm_read.enabled:
+        return ""
+    return "\n".join(
+        [
+            "  assign w_recv_from_ext_spm_rd_req_msg.addr = recv_from_ext_spm_rd_req_addr;",
+            "  assign send_to_ext_spm_rd_resp_data = w_send_to_ext_spm_rd_resp_msg.data;",
+        ]
+    )
+
+
 def render_template(template_name: str, **values: object) -> str:
     template_path = DEFAULT_TEMPLATE_DIR / template_name
     template = Template(template_path.read_text(encoding="utf-8"))
@@ -1067,6 +1168,17 @@ def gen_wrapper(meta: CgraMetadata) -> str:
                 ".recv_from_dram_wr_resp__rdy       ( recv_from_dram_wr_resp_rdy )",
             ]
         )
+    if meta.spm_read.enabled:
+        inst_ports.extend(
+            [
+                ".recv_from_ext_spm_rd_req__val    ( recv_from_ext_spm_rd_req_val )",
+                ".recv_from_ext_spm_rd_req__msg    ( w_recv_from_ext_spm_rd_req_msg )",
+                ".recv_from_ext_spm_rd_req__rdy    ( recv_from_ext_spm_rd_req_rdy )",
+                ".send_to_ext_spm_rd_resp__val     ( send_to_ext_spm_rd_resp_val )",
+                ".send_to_ext_spm_rd_resp__msg     ( w_send_to_ext_spm_rd_resp_msg )",
+                ".send_to_ext_spm_rd_resp__rdy     ( send_to_ext_spm_rd_resp_rdy )",
+            ]
+        )
     if meta.has_inter_cgra_noc_ports:
         inst_ports.extend(
             [
@@ -1109,6 +1221,8 @@ def gen_wrapper(meta: CgraMetadata) -> str:
         inter_type=meta.inter_type,
         dma_wires=gen_dma_wires(meta),
         dma_assigns=gen_dma_assigns(meta),
+        spm_read_wires=gen_spm_read_wires(meta),
+        spm_read_assigns=gen_spm_read_assigns(meta),
         boundary_wires=boundary_wires,
         boundary_assigns=boundary_assigns,
         tieoff_assigns=gen_tieoff_assigns(meta),
@@ -1190,6 +1304,10 @@ def gen_scala(meta: CgraMetadata) -> str:
         dma_cmd_mvout=meta.dma.cmd_mvout,
         dma_cmd_done=meta.dma.cmd_done,
         dma_packet_templates=dma_templates,
+        spm_read_enabled=str(meta.spm_read.enabled).lower(),
+        spm_read_addr_width=meta.spm_read.addr_width,
+        spm_read_data_width=meta.spm_read.data_width,
+        spm_read_words=meta.spm_read.words,
         wrapper_module=meta.wrapper_module,
         rtl_resource=meta.rtl_resource,
         wrapper_resource=meta.wrapper_resource,
@@ -1446,6 +1564,12 @@ def main() -> int:
     print(
         f"dma_spm_addr_width={meta.dma.spm_addr_width} nbytes_width={meta.dma.nbytes_width} "
         f"tag_width={meta.dma.tag_width} descriptor_width={meta.dma.descriptor_width}"
+    )
+    print(
+        f"has_spm_read={meta.spm_read.enabled} "
+        f"spm_read_addr_width={meta.spm_read.addr_width} "
+        f"spm_read_data_width={meta.spm_read.data_width} "
+        f"spm_read_words={meta.spm_read.words}"
     )
     print(f"scala_out={args.scala_out}")
     print(f"c_layout_out={args.c_layout_out}")

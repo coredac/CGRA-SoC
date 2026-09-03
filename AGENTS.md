@@ -26,7 +26,8 @@ The single-CGRA configuration is layered:
 
 - `configs/arch/arch.yaml` owns CGRA structure and functional-unit choices.
 - `configs/soc/cgra_soc.yaml` owns the SoC interface and memory settings.
-- `configs/soc/cgra_gemmini_soc.yaml` owns the combined CGRA memory settings, Gemmini external SPM address range, and physical AutoLink connections.
+- `configs/soc/autolink/gc.yaml` owns the two-IP CGRA and Gemmini SoC settings and automatic task.
+- `configs/soc/autolink/gca.yaml` owns the three-IP CGRA, Gemmini, and AES SoC settings and automatic tasks.
 - `configs/kernels/kernel_*_4x4.yaml` owns kernel metadata and execution counts.
 
 Do not restore the deprecated mixed kernel schema or add fallback reads for its old fields. Keep multi-CGRA architecture and SoC settings in their matching files under `configs/arch/` and `configs/soc/`.
@@ -59,11 +60,13 @@ The current OpenFPGA integration is a TileLink MMIO fabric flow. It supports AND
 
 ### CGRA + Gemmini
 
-`CGRAMinimalGemminiRocketConfig` combines CGRA and Gemmini. CGRA uses `custom0`; Gemmini uses `custom3`. Keep the opcodes distinct.
+`CGRAMinimalGemminiRocketConfig` combines CGRA and Gemmini. `CGRAMinimalGemminiAESRocketConfig` and `CGRAMinimalGemminiAESAutoLinkRocketConfig` also add AES. CGRA uses `custom0`, AES uses `custom1`, and Gemmini uses `custom3`. Keep the opcodes distinct.
 
-The CPU-mediated Gemmini GEMM to CGRA ReLU demo remains supported. Manual and automatic configurations use the same Gemmini external SPM. `CGRAMinimalGemminiAutoLinkRocketConfig` adds one automatic 128-byte transfer from that SPM to CGRA local SPM. The CGRA DMA reads the Gemmini SPM through TileLink and the system bus; there is no shared staging buffer or intermediate DRAM copy.
+The CPU-mediated Gemmini GEMM to CGRA ReLU demos remain supported. Manual and automatic configurations use the same Gemmini external SPM. `CGRAMinimalGemminiAutoLinkRocketConfig` adds one automatic 128-byte transfer from that SPM to CGRA local SPM. The CGRA DMA reads the Gemmini SPM through TileLink and the system bus; there is no shared staging buffer or intermediate DRAM copy.
 
-AutoLink carries control only. TileLink carries payload data. The current route and copy task are fixed during elaboration in `AutoLinkExample`; runtime programming of routes, offsets, and lengths is unsupported. The end-to-end test covers one chunk and does not cover multiple chunks, multiple kernels, or concurrent producers.
+The three-IP Manual and Automatic configurations validate one strict sequential pipeline: AES decrypts 256 bytes into the Gemmini shared external SPM, Gemmini runs GEMM with B preloaded by the CPU and publishes 128 bytes at the SPM tail, CGRA pulls the data into its local SPM and runs ReLU, and AES reads the CGRA read-only SPM window and encrypts 128 bytes to DRAM. Manual mode has the CPU start each IP in order. Automatic mode has the CPU preload B, capture the native Gemmini command sequence, and configure the CGRA and root AES jobs; AutoLink uses fixed `aes -> gemmini`, `gemmini -> cgra`, and `cgra -> aes` routes and returns Gemmini, CGRA, and AES destination results. The older Gemmini-to-CGRA and Gemmini-to-CGRA-to-AES demos remain supported.
+
+AutoLink carries control only. TileLink carries payload data. Routes and copy tasks are fixed during elaboration; runtime programming is unsupported. Hybrid mode, overlap, multiple chunks, multiple kernels, and concurrent producers are unsupported.
 
 ## Generated and Frozen Files
 
@@ -124,6 +127,10 @@ Use `--rebuild` after generated RTL, Scala integration, the RoCC wrapper, or the
 
 `run-chipyard-cgra-gemmini-demo.sh` defaults to `CGRAMinimalGemminiAutoLinkRocketConfig` and `relu_spm_auto.c`. Validate the automatic Gemmini-to-CGRA path with `./run-chipyard-cgra-gemmini-demo.sh --rebuild`.
 
+Validate the CPU-controlled three-IP path with `CONFIG=CGRAMinimalGemminiAESRocketConfig TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild`.
+
+Validate the automatic three-IP path with `CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild`.
+
 For documentation-only changes, check Markdown structure, links, and `git diff --check`; do not launch a simulator build.
 
 ## Interface Contracts
@@ -132,8 +139,11 @@ For documentation-only changes, check Markdown structure, links, and `git diff -
 - OpenFPGA is a TileLink MMIO peripheral, not a RoCC accelerator.
 - AutoLink supplements TileLink with dependency, copy, and compute control messages. It does not carry payload data.
 - The automatic Gemmini-to-CGRA path uses a CGRA TileLink DMA master to pull data from Gemmini's four-bank external SPM.
-- The system bus can read the Gemmini external SPM. System-side writes into it are unsupported.
-- `CgraLinkControl` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
+- The automatic Gemmini path captures CPU-issued native RoCC commands in a parameterized wrapper buffer and replays them after `requestCompute`; it does not synthesize a fixed Gemmini job or modify the Gemmini IP.
+- The AES root job starts only after its output watch is armed and its destination and byte count match the watched range, then reports output only after output and completion writes drain.
+- The downstream AES job starts streaming on `requestCopy`, reports copy completion only after all input is read, treats `requestCompute` as a continuation barrier, and reports compute completion only after output and completion writes drain.
+- The system bus can read and write the Gemmini shared external SPM.
+- `CgraLinkEndpoint` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
 - Single- and multi-CGRA systems share the raw CPU/RoCC packet interface.
 - `tests/include/cgra_runtime.h` is the minimal direct packet-send layer.
 - Supported multi-CGRA hot paths send their preencoded packets directly.

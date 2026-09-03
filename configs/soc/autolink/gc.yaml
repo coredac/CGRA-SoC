@@ -15,8 +15,12 @@ memory:
   gemmini_external_spm:
     base_address: 0x60000000
     size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60010000
+    size_bytes: 512
 
 communication:
-  auto_links:
+  auto_tasks:
     - source: gemmini
       destination: cgra
+      size_bytes: 128

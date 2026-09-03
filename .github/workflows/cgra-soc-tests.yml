@@ -18,8 +18,8 @@ defaults:
     shell: bash -leo pipefail {0}
 
 jobs:
-  cpu-cgra:
-    name: CPU and CGRA Verilator tests
+  cgra-tests:
+    name: CGRA Verilator tests
     runs-on: ubuntu-22.04
     timeout-minutes: 360
 
@@ -145,16 +145,117 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
-      - name: Run automatic Gemmini to CGRA SPM test
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cgra-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+            tests/generated/*.h
+          if-no-files-found: ignore
+
+  gemmini-tests:
+    name: CGRA and Gemmini E2E tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate ReLU fast C API header
+        run: |
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml \
+            configs/kernels/kernel_relu4x4_4x4.yaml \
+            --output-dir tests/generated
+
+      - name: Run Gemmini and CGRA automatic E2E tests
         run: |
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
           grep -q "Gemmini + CGRA Auto SPM ReLU: PASS" cgra-gemmini-auto.log
 
-      - name: Run manual Gemmini to CGRA SPM test
+      - name: Run Gemmini and CGRA manual E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiRocketConfig \
             ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
           grep -q "Gemmini + CGRA Manual SPM ReLU: PASS" cgra-gemmini-manual.log
+          CONFIG=CGRAMinimalGemminiRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_dma.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-dma.log
+          grep -q "Gemmini + CGRA DMA ReLU chunk 0 smoke test: PASS" cgra-gemmini-dma.log
+          CONFIG=CGRAMinimalGemminiRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini.log
+          grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini.log
+
+      - name: Run AES, Gemmini, and CGRA manual E2E tests
+        run: |
+          CONFIG=CGRAMinimalGemminiAESRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-manual.log
+          grep -q "Gemmini + CGRA + AES Manual: PASS" cgra-gemmini-aes-manual.log
+          CONFIG=CGRAMinimalGemminiAESRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-manual.log
+          grep -q "AES + Gemmini + CGRA + AES Manual: PASS" aes-gemmini-cgra-manual.log
+
+      - name: Run AES, Gemmini, and CGRA automatic E2E tests
+        run: |
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
+          grep -q "Gemmini + CGRA + AES Auto: PASS" cgra-gemmini-aes-auto.log
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/relu_spm_auto_fail.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-aes-auto-fail.log
+          grep -q "Three-IP Automatic flow failure: PASS" cgra-gemmini-aes-auto-fail.log
+          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-auto.log
+          grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemmini-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  openfpga-tests:
+    name: OpenFPGA Verilator tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate canonical 4x4 CGRA RTL
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml
 
       - name: Run OpenFPGA AND2 SoC test
         run: |
@@ -190,10 +291,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cgra-soc-test-logs
+          name: openfpga-test-logs
           path: |
             *.log
             chipyard/build-setup.log
-            tests/generated/*.h
             build/openfpga/*/*.json
           if-no-files-found: ignore

@@ -71,13 +71,29 @@ The fabric buffers copy descriptors only. It never buffers payload data and has 
 
 Manual configurations omit `AutoLinkKey` and the automatic adapters. Automatic configurations provide `AutoLinkParams` and attach each configured endpoint to `AutoLinkFabric`.
 
-The SoC YAML describes physical accelerator links. `scripts/generate_auto_links.py` emits those links for elaboration. The current task entries and endpoint parameters are still constructed in Scala. Runtime task programming is not implemented.
+The SoC YAML lists each automatic task's source, destination, and byte count. `scripts/generate_auto_links.py` infers the links, endpoints, offsets, and task table, then emits complete `AutoLinkParams` for elaboration. Runtime task programming is not implemented.
 
 The generic implementation is under `chipyard.socgen.link`. Accelerator-specific adapters live in their matching `chipyard.socgen` subpackage and contain only the translation between `AutoEndpointIO` and the IP's existing interfaces. Integration configuration instantiates and connects these pieces but must not duplicate protocol or routing logic.
+
+Each IP keeps its native configuration interface. Its adapter maps only the control behavior required by the selected mode.
+
+### AES streaming behavior
+
+AES starts reading when its adapter accepts `requestCopy`. The adapter holds `reportCopy` until AES has read all input data. The later `requestCompute` is a continuation barrier rather than a second launch, and `reportCompute` waits until the running job has completed and its ciphertext and completion writes have drained.
+
+Payload moves directly over TileLink. AutoLink has no payload staging buffer.
+
+## Current validation
+
+- Two-IP Manual: the CPU runs Gemmini, starts the CGRA transfer, and launches CGRA.
+- Two-IP Automatic: AutoLink coordinates one 128-byte Gemmini external SPM to CGRA SPM transfer and CGRA launch.
+- Three-IP Manual: the CPU runs Gemmini, CGRA, and AES in order for one 128-byte chunk.
+- Three-IP Automatic: AutoLink coordinates the fixed sequential Gemmini to CGRA to AES pipeline for one 128-byte chunk.
 
 ## TODO
 
 - Generate endpoint attachment parameters from the SoC configuration.
 - Add runtime task programming when its software contract is defined.
-- Support multiple publication ranges, chunks, kernels, and concurrent task graphs.
+- Add Hybrid execution.
+- Support overlap, multiple publication ranges, chunks, kernels, and concurrent task graphs.
 - Add adapters for more accelerators and transfer directions.

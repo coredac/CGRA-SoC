@@ -1,0 +1,40 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 128
+  data_mem_size_per_bank: 16
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60010000
+    size_bytes: 512
+
+communication:
+  auto_tasks:
+    - source: aes
+      destination: gemmini
+      size_bytes: 256
+    - source: gemmini
+      destination: cgra
+      size_bytes: 128
+    - source: cgra
+      destination: aes
+      size_bytes: 128
+
+accelerators:
+  aes:
+    auto_job:
+      ciphertext_address: 0x81000000
+      completion_address: 0x81000080
+      key: 0x603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4
+      mode: encrypt

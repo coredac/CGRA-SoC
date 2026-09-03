@@ -11,7 +11,7 @@ from typing import Mapping
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOC = ROOT / "configs" / "soc" / "cgra_gemmini_soc.yaml"
+DEFAULT_SOC = ROOT / "configs" / "soc" / "autolink" / "gc.yaml"
 DEFAULT_SCALA = (
     ROOT
     / "chipyard"
