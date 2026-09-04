@@ -133,21 +133,9 @@ static void configure_cgra(void) {
 }
 
 static void configure_pool(void) {
-  const pool_job_t job = {
-      .mode = POOL_MODE_MAX,
-      .source = CGRA_SPM_WINDOW_BASE,
-      .destination = (uintptr_t)output,
-      .input_height = CONV_H,
-      .input_width = CONV_W,
-      .channels = OUTPUT_CHANNELS,
-      .kernel_height = 2,
-      .kernel_width = 2,
-      .stride_height = 2,
-      .stride_width = 2,
-      .pad_height = 0,
-      .pad_width = 0,
-  };
-  pool_configure(&job);
+  pool_config_input(CGRA_SPM_WINDOW_BASE, CONV_H, CONV_W, OUTPUT_CHANNELS);
+  pool_config_output((uintptr_t)output);
+  pool_config_window(POOL_MODE_MAX, 2, 2, 2, 2, 0, 0);
 }
 
 static int verify_result(const char *name, cgra_link_result_t result) {

@@ -11,21 +11,6 @@ enum {
   POOL_STATUS_SUCCESS = 0,
 };
 
-typedef struct {
-  uint32_t mode;
-  uintptr_t source;
-  uintptr_t destination;
-  uint32_t input_height;
-  uint32_t input_width;
-  uint32_t channels;
-  uint32_t kernel_height;
-  uint32_t kernel_width;
-  uint32_t stride_height;
-  uint32_t stride_width;
-  uint32_t pad_height;
-  uint32_t pad_width;
-} pool_job_t;
-
 #define POOL_CMD_SOURCE 0
 #define POOL_CMD_DESTINATION 1
 #define POOL_CMD_SHAPE 2
@@ -37,15 +22,19 @@ typedef struct {
 #define POOL_CMD_WAIT 8
 #define POOL_CMD_MODE 9
 
-static inline void pool_configure(const pool_job_t *job) {
-  ROCC_INSTRUCTION_S(2, job->source, POOL_CMD_SOURCE);
-  ROCC_INSTRUCTION_S(2, job->destination, POOL_CMD_DESTINATION);
-  ROCC_INSTRUCTION_SS(2, job->input_height, job->input_width, POOL_CMD_SHAPE);
-  ROCC_INSTRUCTION_S(2, job->channels, POOL_CMD_CHANNELS);
-  ROCC_INSTRUCTION_SS(2, job->kernel_height, job->kernel_width, POOL_CMD_KERNEL);
-  ROCC_INSTRUCTION_SS(2, job->stride_height, job->stride_width, POOL_CMD_STRIDE);
-  ROCC_INSTRUCTION_SS(2, job->pad_height, job->pad_width, POOL_CMD_PADDING);
-  ROCC_INSTRUCTION_S(2, job->mode, POOL_CMD_MODE);
+static inline void pool_config_input(uintptr_t source, uint32_t height, uint32_t width, uint32_t channels) {
+  ROCC_INSTRUCTION_S(2, source, POOL_CMD_SOURCE);
+  ROCC_INSTRUCTION_SS(2, height, width, POOL_CMD_SHAPE);
+  ROCC_INSTRUCTION_S(2, channels, POOL_CMD_CHANNELS);
+}
+
+static inline void pool_config_output(uintptr_t destination) { ROCC_INSTRUCTION_S(2, destination, POOL_CMD_DESTINATION); }
+
+static inline void pool_config_window(uint32_t mode, uint32_t kernel_height, uint32_t kernel_width, uint32_t stride_height, uint32_t stride_width, uint32_t pad_height, uint32_t pad_width) {
+  ROCC_INSTRUCTION_SS(2, kernel_height, kernel_width, POOL_CMD_KERNEL);
+  ROCC_INSTRUCTION_SS(2, stride_height, stride_width, POOL_CMD_STRIDE);
+  ROCC_INSTRUCTION_SS(2, pad_height, pad_width, POOL_CMD_PADDING);
+  ROCC_INSTRUCTION_S(2, mode, POOL_CMD_MODE);
 }
 
 static inline void pool_start(void) { ROCC_INSTRUCTION_S(2, 0, POOL_CMD_START); }
