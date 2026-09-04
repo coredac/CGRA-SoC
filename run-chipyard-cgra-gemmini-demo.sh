@@ -9,6 +9,7 @@ AES_SW="$CHIPYARD_DIR/generators/caliptra-aes-acc/software"
 GC_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gc.yaml"
 GCA_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gca.yaml"
 GCP_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gcp.yaml"
+RES_SOC_YAML="$ROOT_DIR/configs/soc/autolink/res.yaml"
 EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
@@ -21,7 +22,7 @@ TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig)
+    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -32,7 +33,7 @@ uses_auto_link() {
 
 uses_cgra_spm() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig)
+    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -56,6 +57,9 @@ case "$CONFIG" in
     ;;
   CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig)
     CGRA_SOC_YAML="$GCP_SOC_YAML"
+    ;;
+  CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
+    CGRA_SOC_YAML="$RES_SOC_YAML"
     ;;
 esac
 

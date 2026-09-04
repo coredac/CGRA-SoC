@@ -18,6 +18,7 @@ enum {
   PUBLICATION_ROWS = CGRA_BYTES / GEMMINI_ROW_BYTES,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_ROW_STRIDE,
   GEMMINI_COMMAND_COUNT = 5,
+  CGRA_EXPECTED_COMPLETES = 1,
   A_ROW = 0,
   B_ROW = DIM,
 };
@@ -70,8 +71,10 @@ static void preload_b(void) {
 }
 
 static void configure_cgra(void) {
-  load_relu4x4_config_fast();
-  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
+  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
+  for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
+    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
+  }
   for (unsigned i = 0; i < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++i) {
     cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[i]);
   }

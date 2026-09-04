@@ -69,7 +69,9 @@ The three-IP Manual and Automatic configurations validate one strict sequential 
 
 `CGRAMinimalGemminiPoolRocketConfig` and `CGRAMinimalGemminiPoolAutoLinkRocketConfig` add a `custom2` streaming Pool accelerator. The verified pipeline runs Gemmini INT8 Conv, CGRA INT32 ReLU, and INT32 MaxPool; Pool element width is selected at elaboration from 8, 16, or 32 bits, while mode, shape, kernel, stride, padding, and addresses are runtime fields. Average mode is reserved but unsupported.
 
-AutoLink carries control only. TileLink carries payload data. Routes and copy tasks are fixed during elaboration; runtime programming is unsupported. Hybrid mode, overlap, multiple chunks, multiple kernels, and concurrent producers are unsupported.
+`CGRAMinimalGemminiResidualRocketConfig` and `CGRAMinimalGemminiResidualAutoLinkRocketConfig` validate one residual block with two Gemmini jobs and two CGRA jobs. AutoLink models logical stages with fan-out and a two-input join. Each cached CGRA job contains its complete configuration and launch packets. The wrapper resets CGRA execution state between jobs while preserving its data SPM; this is a workaround for missing native VectorCGRA task switching.
+
+AutoLink carries control only. TileLink carries payload data. Routes and copy tasks are fixed during elaboration; runtime programming is unsupported. Hybrid mode, overlap, multiple chunks, arbitrary runtime graphs, and concurrent producers are unsupported.
 
 ## Generated and Frozen Files
 

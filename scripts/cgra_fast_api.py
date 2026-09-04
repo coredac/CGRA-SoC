@@ -117,6 +117,7 @@ class KernelConfig:
     num_cgra_rows: int
     compiled_ii: int
     loop_times: int
+    expected_completes: int | None
 
 
 @dataclass(frozen=True)
@@ -209,6 +210,12 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
             raise ValueError(
                 f"{path}: binding '{symbol}' is outside {local_words} local words"
             )
+    expected_completes = execution.get("expected_completes")
+    if expected_completes is not None:
+        if type(expected_completes) is not int:
+            raise TypeError(f"{path}: 'expected_completes' must be an integer")
+        if expected_completes <= 0:
+            raise ValueError(f"{path}: 'expected_completes' must be positive")
 
     return KernelConfig(
         name=name,
@@ -233,6 +240,7 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         num_registers_per_reg_bank=soc_cfg.num_registers_per_reg_bank,
         compiled_ii=require_int(execution, "compiled_ii", path),
         loop_times=require_int(execution, "loop_times", path),
+        expected_completes=expected_completes,
     )
 
 
@@ -734,7 +742,6 @@ def render_fast_api_section(
     encoded = encode_packets(cfg, packets, types)
     config_packets = [pkt for pkt in encoded if not pkt.is_launch]
     launch_packets = [pkt for pkt in encoded if pkt.is_launch]
-
     lines = [
         "",
         "// Fast API: local single-CGRA packets precomputed by scripts/cgra_fast_api.py.",
@@ -826,6 +833,10 @@ def write_header(
         f"#define {guard_kernel}_CTRL_COUNT_PER_ITER {cfg.compiled_ii}",
         f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
     ]
+    if cfg.expected_completes is not None:
+        lines.append(
+            f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}"
+        )
 
     lines.extend(render_fast_api_section(cfg, packets, types))
 

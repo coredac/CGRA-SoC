@@ -1,0 +1,52 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 128
+  data_mem_size_per_bank: 16
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60010000
+    size_bytes: 512
+
+communication:
+  stages:
+    - name: conv1
+      endpoint: gemmini
+    - name: relu1
+      endpoint: cgra
+    - name: conv2
+      endpoint: gemmini
+    - name: add_relu
+      endpoint: cgra
+  dependencies:
+    - source: input_ready
+      destination: conv1
+    - source: conv1
+      destination: relu1
+      source_offset: 65280
+      destination_offset: 384
+      size_bytes: 128
+    - source: relu1
+      destination: conv2
+      source_offset: 384
+      size_bytes: 32
+      format: int8
+    - source: input_ready
+      destination: add_relu
+    - source: conv2
+      destination: add_relu
+      source_offset: 65408
+      destination_offset: 128
+      size_bytes: 128
+      format: int8

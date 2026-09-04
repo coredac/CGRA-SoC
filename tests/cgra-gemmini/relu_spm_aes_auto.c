@@ -14,6 +14,7 @@ enum {
   GEMMINI_FULL_WIDTH_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
   PUBLICATION_ROWS = TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
+  CGRA_EXPECTED_COMPLETES = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
@@ -62,8 +63,10 @@ static void run_gemmini(void) {
 }
 
 static void configure_cgra(void) {
-  load_relu4x4_config_fast();
-  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
+  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
+  for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
+    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
+  }
   for (unsigned i = 0; i < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++i) {
     cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[i]);
   }

@@ -16,6 +16,7 @@ enum {
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   CGRA_SPM_WORD_ADDR = 0,
   OUTPUT_DMA_TAG = 0x91,
+  CGRA_EXPECTED_COMPLETES = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
@@ -57,8 +58,10 @@ static void run_gemmini(void) {
 }
 
 static void configure_cgra(void) {
-  load_relu4x4_config_fast();
-  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
+  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
+  for (unsigned index = 0; index < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++index) {
+    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[index]);
+  }
   for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
     cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[index]);
   }

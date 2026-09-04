@@ -19,14 +19,15 @@ static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(
 
 static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
-static inline void cgra_link_configure_job(uint32_t job, uint32_t packet_count) {
+static inline void cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) {
   cgra_link_write(CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
+  cgra_link_write(CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
   cgra_link_write(CGRA_LINK_CONTROL_CONFIG_SUBMIT, 1);
   __asm__ volatile("fence iorw, iorw" ::: "memory");
 }
 
-static inline void cgra_link_configure(uint32_t packet_count) { cgra_link_configure_job(0, packet_count); }
+static inline void cgra_link_configure(uint32_t packet_count, uint32_t expected_completes) { cgra_link_configure_job(0, packet_count, expected_completes); }
 
 static inline void cgra_link_queue(cgra_packet_t packet) {
   CGRA_RAW_PKT_LO(packet.lo);
