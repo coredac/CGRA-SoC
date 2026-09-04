@@ -49,7 +49,7 @@ Use the scripts' `--help` output and the current YAML schema instead of copying 
 
 ### CGRA
 
-Single-CGRA fast APIs support FIR, ReLU, GEMV, Histogram, and AXPY. GEMM and SAD are unsupported. Track kernel bugs and validation limitations in GitHub Issues rather than recording them here.
+Single-CGRA fast APIs support FIR, ReLU, Add+ReLU, GEMV, Histogram, and AXPY. GEMM and SAD are unsupported. Track kernel bugs and validation limitations in GitHub Issues rather than recording them here.
 
 Multi-CGRA tests support homogeneous mesh, 2x2 and 4x4 systolic, scalar FIR, and vector FIR configurations. Their packet headers are fixed, preencoded test inputs. Automatic multi-CGRA control-packet generation is unsupported; do not replace those headers with an ad hoc generator.
 

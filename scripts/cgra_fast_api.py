@@ -20,15 +20,25 @@ VECTOR_ROOT = ROOT / "VectorCGRA"
 DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
 DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 DEFAULT_OUTPUT_DIR = ROOT / "tests" / "generated"
-SUPPORTED_CONFIGS = (
+DEFAULT_CONFIGS = (
     ROOT / "configs" / "kernels" / "kernel_fir4x4_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_relu4x4_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_gemv_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_histogram_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_axpy_4x4.yaml",
 )
+SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
+    ROOT / "configs" / "kernels" / "kernel_add_relu_4x4.yaml",
+)
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
-SUPPORTED_KERNEL_NAMES = {"fir4x4", "relu4x4", "gemv", "histogram", "axpy"}
+SUPPORTED_KERNEL_NAMES = {
+    "fir4x4",
+    "relu4x4",
+    "gemv",
+    "histogram",
+    "axpy",
+    "add_relu",
+}
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
     if str(path) not in sys.path:
@@ -178,6 +188,13 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
     arch_parser = ArchParser(str(arch_yaml))
     param_cgra = arch_parser.get_simplest_cgra_param()
     soc_cfg = load_soc_config(soc_yaml)
+    required_words = require_int(kernel, "required_words", path, default=0)
+    local_words = soc_cfg.data_mem_size_per_bank * soc_cfg.num_banks_per_cgra
+    if local_words < required_words:
+        raise ValueError(
+            f"{path}: kernel '{name}' requires {required_words} local words, "
+            f"but the selected SoC provides {local_words}"
+        )
 
     return KernelConfig(
         name=name,
@@ -812,8 +829,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "configs",
         nargs="*",
-        default=[str(path) for path in SUPPORTED_CONFIGS],
-        help="Supported per-kernel config YAMLs to process.",
+        default=[str(path) for path in DEFAULT_CONFIGS],
+        help="Per-kernel config YAMLs to process.",
     )
     parser.add_argument(
         "--arch-yaml",
