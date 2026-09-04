@@ -29,6 +29,28 @@ GENERATED_DIR = (
 )
 DEFAULT_OUTPUT = GENERATED_DIR / "AutoLinkGenerated.scala"
 DEFAULT_HEADER = ROOT / "tests" / "include" / "auto_link_generated.h"
+DEFAULT_CGRA_SCALA = (
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "chipyard"
+    / "src"
+    / "main"
+    / "scala"
+    / "example"
+    / "CGRAGenerated.scala"
+)
+DEFAULT_CACHE_BLOCK_SCALA = (
+    ROOT
+    / "chipyard"
+    / "generators"
+    / "rocket-chip"
+    / "src"
+    / "main"
+    / "scala"
+    / "subsystem"
+    / "BankedCoherenceParams.scala"
+)
 INPUT_READY = "input_ready"
 STAGE_NAME = re.compile(r"[a-z][a-z0-9_]{0,31}\Z")
 CAPABILITIES = {
@@ -44,7 +66,10 @@ DEPENDENCY_KEYS = {
     "size_bytes",
     "source_offset",
     "destination_offset",
+    "format",
 }
+INT8_FORMAT = "int8"
+CGRA_WORD_BYTES = 4
 
 
 @dataclass(frozen=True)
@@ -65,6 +90,7 @@ class Copy:
     source_offset: int
     destination_offset: int
     size: int
+    format: str | None
 
 
 @dataclass(frozen=True)
@@ -75,11 +101,61 @@ class Dependency:
 
 
 @dataclass(frozen=True)
+class CgraHardware:
+    dma_beat_bytes: int
+    cache_block_bytes: int
+
+
+@dataclass(frozen=True)
+class CgraBridge:
+    packed_base: int
+    packed_bytes: int
+    packed_window_bytes: int
+    outbound_word: int
+    outbound_words: int
+    inbound_word: int
+    inbound_words: int
+
+
+@dataclass(frozen=True)
 class AutoLinkConfig:
     gemmini: Memory
     cgra: Memory
     stages: tuple[Stage, ...]
     dependencies: tuple[Dependency, ...]
+    bridge: CgraBridge | None
+
+
+def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
+    cgra_text = cgra_path.read_text(encoding="utf-8")
+    dma = re.search(r"dma\s*=\s*CGRADMAParams\((?P<body>.*?)\n\s*\)", cgra_text, re.S)
+    if dma is None:
+        raise ValueError(f"{cgra_path}: missing generated CGRA DMA metadata")
+    data_width = re.search(r"dramDataWidth\s*=\s*(\d+)", dma.group("body"))
+    if (
+        data_width is None
+        or int(data_width.group(1)) <= 0
+        or int(data_width.group(1)) % 8 != 0
+    ):
+        raise ValueError(f"{cgra_path}: invalid generated CGRA DMA data width")
+    dma_beat_bytes = int(data_width.group(1)) // 8
+    if dma_beat_bytes & (dma_beat_bytes - 1):
+        raise ValueError(f"{cgra_path}: CGRA DMA beat size must be a power of two")
+
+    cache_text = cache_block_path.read_text(encoding="utf-8")
+    cache_block = re.search(
+        r"case object CacheBlockBytes extends Field\[Int\]\((\d+)\)", cache_text
+    )
+    if cache_block is None:
+        raise ValueError(f"{cache_block_path}: missing cache-block size")
+    cache_block_bytes = int(cache_block.group(1))
+    if cache_block_bytes <= 0 or cache_block_bytes & (cache_block_bytes - 1):
+        raise ValueError(f"{cache_block_path}: cache-block size must be a power of two")
+    return CgraHardware(dma_beat_bytes, cache_block_bytes)
+
+
+def next_power_of_two(value: int) -> int:
+    return 1 << (value - 1).bit_length()
 
 
 def load_memory(data: Mapping[str, object], key: str, path: Path) -> Memory:
@@ -178,10 +254,19 @@ def load_dependencies(
             value.get("destination_offset"), "destination_offset", path, index
         )
         size = value.get("size_bytes")
+        tensor_format = value.get("format")
+        if tensor_format is not None and tensor_format != INT8_FORMAT:
+            raise ValueError(
+                f"{path}: dependencies[{index}].format must be '{INT8_FORMAT}'"
+            )
         if size is None:
-            if source_offset is not None or destination_offset is not None:
+            if (
+                source_offset is not None
+                or destination_offset is not None
+                or tensor_format is not None
+            ):
                 raise ValueError(
-                    f"{path}: dependencies[{index}] offsets require size_bytes"
+                    f"{path}: dependencies[{index}] copy fields require size_bytes"
                 )
             copy = None
         else:
@@ -211,11 +296,111 @@ def load_dependencies(
                 raise ValueError(
                     f"{path}: AES dependency must be {AES_JOB_BYTES} bytes"
                 )
-            copy = Copy(source_offset, destination_offset, size)
+            copy = Copy(source_offset, destination_offset, size, tensor_format)
         dependencies.append(
             Dependency(None if source == INPUT_READY else source, destination, copy)
         )
     return tuple(dependencies)
+
+
+def infer_bridge(
+    stages: tuple[Stage, ...],
+    dependencies: tuple[Dependency, ...],
+    cgra: Memory,
+    gemmini: Memory,
+    hardware: CgraHardware,
+    path: Path,
+) -> CgraBridge | None:
+    stage_map = {stage.name: stage for stage in stages}
+    transformed = [
+        dependency
+        for dependency in dependencies
+        if dependency.copy is not None and dependency.copy.format == INT8_FORMAT
+    ]
+    if not transformed:
+        return None
+    outbound = [
+        dependency
+        for dependency in transformed
+        if dependency.source is not None
+        and stage_map[dependency.source].endpoint == "cgra"
+        and stage_map[dependency.destination].endpoint != "cgra"
+    ]
+    inbound = [
+        dependency
+        for dependency in transformed
+        if dependency.source is not None
+        and stage_map[dependency.source].endpoint != "cgra"
+        and stage_map[dependency.destination].endpoint == "cgra"
+    ]
+    if len(transformed) != 2 or len(outbound) != 1 or len(inbound) != 1:
+        raise ValueError(
+            f"{path}: int8 bridge needs one CGRA input and one CGRA output"
+        )
+
+    out_copy = outbound[0].copy
+    in_copy = inbound[0].copy
+    if out_copy.source_offset % CGRA_WORD_BYTES != 0:
+        raise ValueError(f"{path}: int8 output source offset must be word aligned")
+    if in_copy.destination_offset % CGRA_WORD_BYTES != 0:
+        raise ValueError(f"{path}: int8 input destination offset must be word aligned")
+    if in_copy.size % CGRA_WORD_BYTES != 0:
+        raise ValueError(f"{path}: int8 input size must contain whole INT32 words")
+
+    outbound_word = out_copy.source_offset // CGRA_WORD_BYTES
+    outbound_words = out_copy.size
+    inbound_word = in_copy.destination_offset // CGRA_WORD_BYTES
+    inbound_words = in_copy.size // CGRA_WORD_BYTES
+    if (outbound_word + outbound_words) * CGRA_WORD_BYTES > cgra.size:
+        raise ValueError(f"{path}: int8 output exceeds CGRA SPM")
+    if (inbound_word + inbound_words) * CGRA_WORD_BYTES > cgra.size:
+        raise ValueError(f"{path}: int8 input exceeds CGRA SPM")
+    if (
+        outbound_word < inbound_word + inbound_words
+        and inbound_word < outbound_word + outbound_words
+    ):
+        raise ValueError(f"{path}: int8 input and output SPM ranges overlap")
+
+    packed_base = cgra.base + cgra.size
+    packed_bytes = outbound_words
+    packed_window_bytes = next_power_of_two(
+        max(packed_bytes, hardware.cache_block_bytes)
+    )
+    if packed_base % packed_window_bytes != 0:
+        raise ValueError(f"{path}: packed CGRA alias base is not window aligned")
+    if (
+        packed_base < gemmini.base + gemmini.size
+        and gemmini.base < packed_base + packed_window_bytes
+    ):
+        raise ValueError(f"{path}: packed CGRA alias overlaps Gemmini SPM")
+    return CgraBridge(
+        packed_base,
+        packed_bytes,
+        packed_window_bytes,
+        outbound_word,
+        outbound_words,
+        inbound_word,
+        inbound_words,
+    )
+
+
+def validate_copy_alignment(
+    dependencies: tuple[Dependency, ...], beat_bytes: int, path: Path
+) -> None:
+    for index, dependency in enumerate(dependencies):
+        if dependency.copy is None:
+            continue
+        copy = dependency.copy
+        fields = {
+            "source_offset": copy.source_offset,
+            "destination_offset": copy.destination_offset,
+            "size_bytes": copy.size,
+        }
+        for name, value in fields.items():
+            if value % beat_bytes != 0:
+                raise ValueError(
+                    f"{path}: dependencies[{index}].{name} must align to the {beat_bytes}-byte CGRA DMA beat"
+                )
 
 
 def validate_graph(
@@ -307,7 +492,12 @@ def validate_memory(config: AutoLinkConfig, path: Path) -> None:
             )
 
 
-def load_config(path: Path) -> AutoLinkConfig:
+def load_config(
+    path: Path,
+    cgra_path: Path = DEFAULT_CGRA_SCALA,
+    cache_block_path: Path = DEFAULT_CACHE_BLOCK_SCALA,
+) -> AutoLinkConfig:
+    hardware = load_cgra_hardware(cgra_path, cache_block_path)
     document = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(document, Mapping):
         raise ValueError(f"{path}: expected a mapping")
@@ -320,9 +510,11 @@ def load_config(path: Path) -> AutoLinkConfig:
     dependencies = load_dependencies(
         communication.get("dependencies"), stages, memories, path
     )
+    validate_copy_alignment(dependencies, hardware.dma_beat_bytes, path)
     validate_graph(stages, dependencies, path)
     validate_destinations(stages, dependencies, path)
-    config = AutoLinkConfig(gemmini, cgra, stages, dependencies)
+    bridge = infer_bridge(stages, dependencies, cgra, gemmini, hardware, path)
+    config = AutoLinkConfig(gemmini, cgra, stages, dependencies, bridge)
     validate_memory(config, path)
     return config
 
@@ -354,9 +546,12 @@ def cgra_endpoint(config: AutoLinkConfig) -> str:
         for dependency in copies
     )
     if is_source:
+        size = config.cgra.size + (
+            config.bridge.packed_window_bytes if config.bridge is not None else 0
+        )
         return (
             '      AutoEndpointSpec(name = "cgra", buffer = '
-            f"{buffer_text(config.cgra)}, localBytes = {config.cgra.size})"
+            f"{buffer_text(Memory(config.cgra.base, size))}, localBytes = {config.cgra.size})"
         )
     local_bytes = (
         "CGRAGenerated.params.dma.spmWords * "
@@ -410,12 +605,18 @@ def endpoint_text(config: AutoLinkConfig, name: str) -> str:
     return ENDPOINT_TEXT[name](config)
 
 
-def copy_text(copy: Copy | None) -> str:
+def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
+    copy = dependency.copy
     if copy is None:
         return "None"
+    source_offset = copy.source_offset
+    if copy.format == INT8_FORMAT:
+        source = stage_map(config)[dependency.source]
+        if source.endpoint == "cgra":
+            source_offset = config.bridge.packed_base - config.cgra.base
     return (
         "Some(AutoCopySpec("
-        f"sourceOffset = {copy.source_offset}, destinationOffset = {copy.destination_offset}, "
+        f"sourceOffset = {source_offset}, destinationOffset = {copy.destination_offset}, "
         f"bytes = {copy.size}))"
     )
 
@@ -433,7 +634,7 @@ def scala_text(config: AutoLinkConfig) -> str:
     dependencies = ",\n".join(
         "      AutoDependencySpec("
         f"source = {'None' if dependency.source is None else f'Some({stage_index[dependency.source]})'}, "
-        f"destination = {stage_index[dependency.destination]}, copy = {copy_text(dependency.copy)})"
+        f"destination = {stage_index[dependency.destination]}, copy = {copy_text(config, dependency)})"
         for dependency in config.dependencies
     )
     endpoints = ",\n".join(endpoint_text(config, name) for name in names)
@@ -476,6 +677,10 @@ def header_text(config: AutoLinkConfig) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--soc-yaml", type=Path, default=DEFAULT_SOC)
+    parser.add_argument("--cgra-scala", type=Path, default=DEFAULT_CGRA_SCALA)
+    parser.add_argument(
+        "--cache-block-scala", type=Path, default=DEFAULT_CACHE_BLOCK_SCALA
+    )
     parser.add_argument("--scala-out", type=Path)
     parser.add_argument("--header-out", type=Path)
     parser.add_argument("--check", action="store_true")
@@ -485,7 +690,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     path = args.soc_yaml.resolve()
-    config = load_config(path)
+    config = load_config(
+        path, args.cgra_scala.resolve(), args.cache_block_scala.resolve()
+    )
     write(args.scala_out or DEFAULT_OUTPUT, scala_text(config), args.check)
     if args.header_out is not None or args.scala_out is None:
         write(args.header_out or DEFAULT_HEADER, header_text(config), args.check)
