@@ -29,6 +29,7 @@ DEFAULT_CONFIGS = (
 )
 SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_add_relu_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_relu_tail_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -38,6 +39,7 @@ SUPPORTED_KERNEL_NAMES = {
     "histogram",
     "axpy",
     "add_relu",
+    "relu_tail",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -96,6 +98,7 @@ class KernelConfig:
     name: str
     source_path: Path
     kernel_yaml: Path
+    bindings: Mapping[str, int]
     x_tiles: int
     y_tiles: int
     num_tiles: int
@@ -189,17 +192,29 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
     param_cgra = arch_parser.get_simplest_cgra_param()
     soc_cfg = load_soc_config(soc_yaml)
     required_words = require_int(kernel, "required_words", path, default=0)
+    bindings = require_mapping(kernel, "bindings", path, default={})
+    for symbol, value in bindings.items():
+        if not isinstance(symbol, str) or not symbol:
+            raise ValueError(f"{path}: binding names must be non-empty strings")
+        if type(value) is not int:
+            raise TypeError(f"{path}: binding '{symbol}' must be an integer")
     local_words = soc_cfg.data_mem_size_per_bank * soc_cfg.num_banks_per_cgra
     if local_words < required_words:
         raise ValueError(
             f"{path}: kernel '{name}' requires {required_words} local words, "
             f"but the selected SoC provides {local_words}"
         )
+    for symbol, value in bindings.items():
+        if value < 0 or value >= local_words:
+            raise ValueError(
+                f"{path}: binding '{symbol}' is outside {local_words} local words"
+            )
 
     return KernelConfig(
         name=name,
         source_path=path,
         kernel_yaml=kernel_yaml,
+        bindings=dict(bindings),
         x_tiles=param_cgra.columns,
         y_tiles=param_cgra.rows,
         num_tiles=len(param_cgra.getValidTiles()),
@@ -281,6 +296,7 @@ def make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
         CtrlAddrType=types["CtrlAddrType"],
         DataAddrType=types["DataAddrType"],
         num_registers_per_reg_bank=cfg.num_registers_per_reg_bank,
+        bindings=cfg.bindings,
     )
 
     with contextlib.redirect_stdout(io.StringIO()):
