@@ -20,8 +20,17 @@ memory:
     size_bytes: 512
 
 communication:
-  auto_tasks:
-    - source: aes
+  stages:
+    - name: decrypt
+      endpoint: aes
+    - name: gemmini
+      endpoint: gemmini
+    - name: cgra
+      endpoint: cgra
+    - name: aes
+      endpoint: aes
+  dependencies:
+    - source: decrypt
       destination: gemmini
       size_bytes: 256
     - source: gemmini
