@@ -18,12 +18,56 @@ defaults:
     shell: bash -leo pipefail {0}
 
 jobs:
+  changes:
+    name: Classify changes
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    outputs:
+      hardware: ${{ steps.paths.outputs.hardware }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Check diff and select validation
+        id: paths
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+
+          event = os.environ["EVENT_NAME"]
+          base = os.environ["BASE_SHA"]
+          head = os.environ["HEAD_SHA"]
+          hardware = True
+          if event != "workflow_dispatch" and base != "0" * 40:
+              separator = "..." if event == "pull_request" else ".."
+              revision = f"{base}{separator}{head}"
+              subprocess.run(["git", "diff", "--check", revision], check=True)
+              paths = subprocess.check_output(["git", "diff", "--no-renames", "--name-only", "-z", revision]).split(b"\0")
+              hardware = any(path and not path.endswith(b".md") for path in paths)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"hardware={str(hardware).lower()}\n")
+          PY
+
   cpu-cgra:
     name: CPU and CGRA Verilator tests
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
     runs-on: ubuntu-22.04
     timeout-minutes: 360
 
     steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
       - name: Checkout
         uses: actions/checkout@v4
         with:

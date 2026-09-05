@@ -1,5 +1,6 @@
-# Local agent and editor state
-.agents/
+# Shared skills; other agent and editor state stays local
+.agents/*
+!.agents/skills/
 .codex/
 .claude/
 .vscode/
