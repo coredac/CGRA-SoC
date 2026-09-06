@@ -1,5 +1,5 @@
-#include "aes_auto_job.h"
 #include "aes_job.h"
+#include "auto_link_generated.h"
 #include "cgra_link.h"
 #include "gemmini.h"
 #include "gemmini_ext_spm.h"
@@ -24,8 +24,11 @@ enum {
 };
 
 static elem_t B[DIM][DIM] row_align(1);
+static uint8_t output[CGRA_BYTES] __attribute__((aligned(32)));
+static volatile uint32_t completion __attribute__((aligned(8)));
 static volatile uint32_t root_completion __attribute__((aligned(8)));
 static const uint64_t ROOT_KEY[4] = {0, 0, 0, 0};
+static const uint64_t KEY[4] = {UINT64_C(0x2d9810a30914dff4), UINT64_C(0x1f352c073b6108d7), UINT64_C(0x2b73aef0857d7781), UINT64_C(0x603deb1015ca71be)};
 static const uint32_t ACC_WRITE_ADDR = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACC_FULL_WIDTH_ADDR = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
 
@@ -48,8 +51,6 @@ static const uint8_t EXPECTED[CGRA_BYTES] = {
 };
 
 static void init_test(void) {
-  volatile uint8_t *output = (volatile uint8_t *)(uintptr_t)AES_AUTO_CIPHERTEXT_ADDRESS;
-  volatile uint32_t *completion = (volatile uint32_t *)(uintptr_t)AES_AUTO_COMPLETION_ADDRESS;
   for (int i = 0; i < DIM; ++i) {
     for (int j = 0; j < DIM; ++j) {
       B[i][j] = i == j ? (elem_t)1 : (elem_t)0;
@@ -59,7 +60,7 @@ static void init_test(void) {
     output[i] = 0;
   }
   root_completion = 0;
-  *completion = 0;
+  completion = 0;
   __asm__ volatile("fence rw, rw" ::: "memory");
 }
 
@@ -95,10 +96,8 @@ static int configure_gemmini(void) {
 static int verify_result(cgra_link_result_t result) { return result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 || result.data != 0; }
 
 static int verify_output(void) {
-  const volatile uint8_t *output = (const volatile uint8_t *)(uintptr_t)AES_AUTO_CIPHERTEXT_ADDRESS;
-  const volatile uint32_t *completion = (const volatile uint32_t *)(uintptr_t)AES_AUTO_COMPLETION_ADDRESS;
   __asm__ volatile("fence rw, rw" ::: "memory");
-  if (root_completion != 1 || *completion != 1) {
+  if (root_completion != 1 || completion != 1) {
     return 1;
   }
   for (unsigned i = 0; i < CGRA_BYTES; ++i) {
@@ -112,12 +111,13 @@ static int verify_output(void) {
 int main(void) {
   init_test();
   preload_b();
+  aes_job_configure(AUTO_LINK_JOB_AES, output, &completion, KEY, true);
   configure_cgra();
   if (configure_gemmini() != 0) {
     printf("AES + Gemmini + CGRA + AES Auto: FAIL\n");
     return 1;
   }
-  aes_job_submit(ENCRYPTED_A, AES_INPUT_BYTES, (void *)(uintptr_t)GEMMINI_EXT_SPM_BASE, &root_completion, ROOT_KEY, false);
+  aes_job_submit(AUTO_LINK_JOB_DECRYPT, ENCRYPTED_A, AES_INPUT_BYTES, (void *)(uintptr_t)GEMMINI_EXT_SPM_BASE, &root_completion, ROOT_KEY, false);
 
   const cgra_link_result_t gemmini = cgra_link_wait();
   const cgra_link_result_t cgra = cgra_link_wait();

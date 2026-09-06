@@ -7,4 +7,9 @@
 #define AUTO_LINK_STAGE_CONV2 2u
 #define AUTO_LINK_STAGE_ADD_RELU 3u
 
+#define AUTO_LINK_JOB_CONV1 0u
+#define AUTO_LINK_JOB_RELU1 0u
+#define AUTO_LINK_JOB_CONV2 1u
+#define AUTO_LINK_JOB_ADD_RELU 1u
+
 #endif

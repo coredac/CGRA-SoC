@@ -26,7 +26,6 @@ The main generation entry points are:
 - `scripts/generate_cgra_link_control.py`
 - `scripts/generate_gemmini_ext_spm.py`
 - `scripts/generate_cgra_spm_window.py`
-- `scripts/generate_aes_auto_job.py`
 - `scripts/openfpga/generate.py`
 
 Use the scripts' `--help` output and the current YAML schema instead of copying arguments from old plans or logs.
@@ -51,7 +50,7 @@ The current OpenFPGA integration is a TileLink MMIO fabric flow. It supports AND
 
 The CPU-mediated Gemmini GEMM to CGRA ReLU demos remain supported. Manual and automatic configurations use the same Gemmini external SPM. `CGRAMinimalGemminiAutoLinkRocketConfig` adds one automatic 128-byte transfer from that SPM to CGRA local SPM. The CGRA DMA reads the Gemmini SPM through TileLink and the system bus; there is no shared staging buffer or intermediate DRAM copy.
 
-The three-IP Manual and Automatic configurations validate one strict sequential pipeline: AES decrypts 256 bytes into the Gemmini shared external SPM, Gemmini runs GEMM with B preloaded by the CPU and publishes 128 bytes at the SPM tail, CGRA pulls the data into its local SPM and runs ReLU, and AES reads the CGRA read-only SPM window and encrypts 128 bytes to DRAM. Manual mode has the CPU start each IP in order. Automatic mode has the CPU preload B, capture the native Gemmini command sequence, and configure the CGRA and root AES jobs; AutoLink uses fixed `aes -> gemmini`, `gemmini -> cgra`, and `cgra -> aes` routes and returns Gemmini, CGRA, and AES destination results. The older Gemmini-to-CGRA and Gemmini-to-CGRA-to-AES demos remain supported.
+The three-IP Manual and Automatic configurations validate one strict sequential pipeline: AES decrypts 256 bytes into the Gemmini shared external SPM, Gemmini runs GEMM with B preloaded by the CPU and publishes 128 bytes at the SPM tail, CGRA pulls the data into its local SPM and runs ReLU, and AES reads the CGRA read-only SPM window and encrypts 128 bytes to DRAM. Manual mode has the CPU start each IP in order. Automatic mode has the CPU preload B, capture the native Gemmini command sequence, and configure the CGRA and both AES jobs; AutoLink uses fixed `aes -> gemmini`, `gemmini -> cgra`, and `cgra -> aes` routes and returns Gemmini, CGRA, and AES destination results. The older Gemmini-to-CGRA and Gemmini-to-CGRA-to-AES demos remain supported.
 
 `CGRAMinimalGemminiPoolRocketConfig` and `CGRAMinimalGemminiPoolAutoLinkRocketConfig` add a `custom2` streaming Pool accelerator. The verified pipeline runs Gemmini INT8 Conv, CGRA INT32 ReLU, and INT32 MaxPool; Pool element width is selected at elaboration from 8, 16, or 32 bits, while mode, shape, kernel, stride, padding, and addresses are runtime fields. Average mode is reserved but unsupported.
 
@@ -64,7 +63,10 @@ AutoLink carries control only. TileLink carries payload data. Routes and copy ta
 - Single- and multi-CGRA systems share the raw CPU/RoCC packet interface through `custom0`. `tests/include/cgra_runtime.h` is the minimal packet-send layer; multi-CGRA hot paths send their preencoded packets directly.
 - The system bus can read and write Gemmini's four-bank shared external SPM. CGRA's TileLink DMA master pulls from it into CGRA local SPM.
 - Automatic Gemmini execution captures CPU-issued native RoCC commands in a parameterized wrapper buffer and replays them after `requestCompute`; it does not synthesize a fixed job or modify Gemmini.
-- The AES root job starts only after its output watch is armed and its destination and byte count match the watched range. It reports output only after output and completion writes drain.
+- AES uses MMIO to select a job and atomically submit its complete descriptor to the adapter cache. Cache depth follows the number of AES stages. Keys, modes, output addresses, and completion addresses are runtime values, not generated hardware constants. Configure jobs before releasing upstream; execution is sequential and active configurations must not be overwritten.
+- `AES_SUBMIT` bit 0 commits the selected descriptor; bit 1 also requests root launch. Cache-only configuration does not start AES. The root job starts only after its matching output watch is armed and its destination and byte count match the watched range. It reports output only after output and completion writes drain.
+- AES submission returns configuration acceptance status through the same MMIO status fields without an extra `end()` operation. Its complete descriptor sets ready and done together; these fields do not indicate execution completion. The root API combines configuration and launch in one call.
+- Downstream AES selects cached configuration by `requestCopy.job`; source address and length come from that request. Generated `AUTO_LINK_JOB_*` constants identify per-IP jobs, distinct from global `AUTO_LINK_STAGE_*` indices.
 - Downstream AES starts streaming on `requestCopy`, reports copy completion after all input is read, treats `requestCompute` as a continuation barrier, and reports compute completion after output and completion writes drain.
 - `CgraLinkEndpoint` uses MMIO for AutoLink configuration and results. CGRA launch packet contents use RoCC.
 - Regenerate after switching between scalar and vector layouts; packet width depends on the layout.
