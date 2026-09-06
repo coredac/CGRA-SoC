@@ -169,10 +169,10 @@ static void run_conv2(void) {
 static int run_add_relu(void) {
   const uintptr_t source = GEMMINI_EXT_SPM_BASE + CONV2_SPM_OFFSET;
   cgra_dma_mvin_async((const void *)source, CONV2_DMA);
+  load_add_relu_config_fast();
   if (cgra_dma_wait(CONV2_DMA_TAG) != CONV2_DMA_TAG) {
     return 1;
   }
-  load_add_relu_config_fast();
   CGRA_SET_EXPECTED_COMPLETES(ADD_RELU_EXPECTED_COMPLETES);
   launch_add_relu_fast();
   return wait_cgra(ADD_RELU_EXPECTED_COMPLETES);

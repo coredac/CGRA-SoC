@@ -223,15 +223,15 @@ jobs:
         run: |
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
             TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c \
-            ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
           grep -q "Gemmini + CGRA + AES Auto: PASS" cgra-gemmini-aes-auto.log
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
             TEST_SRC=tests/cgra-gemmini/relu_spm_auto_fail.c \
-            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-aes-auto-fail.log
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml 2>&1 | tee cgra-gemmini-aes-auto-fail.log
           grep -q "Three-IP Automatic flow failure: PASS" cgra-gemmini-aes-auto-fail.log
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
             TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
-            ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-auto.log
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca.yaml --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
 
       - name: Run OpenFPGA AND2 SoC test

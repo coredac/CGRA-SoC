@@ -64,7 +64,7 @@ case "$CONFIG" in
 esac
 
 usage() {
-  echo "usage: $0 [--rebuild] [--fast] [test-source.c]" >&2
+  echo "usage: $0 [--rebuild] [--fast] [--soc-yaml path] [test-source.c]" >&2
   echo "       CONFIG=$CONFIG TEST_SRC=$TEST_SRC $0 --rebuild" >&2
 }
 
@@ -75,6 +75,15 @@ while (($# > 0)); do
       ;;
     --fast)
       # Fast simulation is the only supported mode.
+      ;;
+    --soc-yaml)
+      if (($# < 2)); then
+        echo "error: --soc-yaml requires a path" >&2
+        usage
+        exit 1
+      fi
+      CGRA_SOC_YAML="$2"
+      shift
       ;;
     -h|--help)
       usage
@@ -99,6 +108,13 @@ if [[ ! -f "$TEST_SRC" ]]; then
   exit 1
 fi
 TEST_SRC="$(realpath "$TEST_SRC")"
+
+if [[ ! -f "$CGRA_SOC_YAML" ]]; then
+  echo "error: SoC YAML not found: $CGRA_SOC_YAML" >&2
+  usage
+  exit 1
+fi
+CGRA_SOC_YAML="$(realpath "$CGRA_SOC_YAML")"
 
 if (( ! REBUILD )); then
   echo "note: first run should use --rebuild so elaboration regenerates matching gemmini_params.h" >&2

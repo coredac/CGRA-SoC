@@ -169,7 +169,7 @@ static int verify_results(void) {
     const cgra_link_result_t result = cgra_link_wait();
     const uint32_t bit = result.stage < 32 ? UINT32_C(1) << result.stage : 0;
     if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 || result.data != 0 || (expected & bit) == 0 || (seen & bit) != 0) {
-      printf("AutoLink result mismatch stage=%u status=%u detail=%u data=%u\n", result.stage, result.status, result.detail, result.data);
+      printf("AutoLink result mismatch stage=%u job=%u status=%u detail=%u data=%u\n", result.stage, result.job, result.status, result.detail, result.data);
       ++failures;
     }
     seen |= bit;

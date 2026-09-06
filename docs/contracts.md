@@ -10,6 +10,7 @@ The single-CGRA configuration is layered:
 - `configs/soc/cgra_soc.yaml` owns the SoC interface and memory settings.
 - `configs/soc/autolink/gc.yaml` owns the two-IP CGRA and Gemmini SoC settings and automatic task.
 - `configs/soc/autolink/gca.yaml` owns the three-IP CGRA, Gemmini, and AES SoC settings and automatic tasks.
+- `configs/soc/autolink/gca_short.yaml` owns the shorter Gemmini → CGRA → AES automatic graph.
 - `configs/soc/autolink/gcp.yaml` owns the Gemmini, CGRA, and Pool settings.
 - `configs/soc/autolink/res.yaml` owns the residual block settings and automatic graph.
 - `configs/kernels/kernel_*_4x4.yaml` owns kernel metadata and execution counts.

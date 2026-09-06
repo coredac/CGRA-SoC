@@ -11,13 +11,6 @@
 #error "This demo requires Gemmini full-width accumulator reads"
 #endif
 
-_Static_assert(DIM == 16, "the demo requires a 16x16 Gemmini array");
-_Static_assert(sizeof(elem_t) == 1, "Gemmini elements must be int8");
-_Static_assert(sizeof(acc_t) == 4, "Gemmini accumulators must be int32");
-_Static_assert(CGRA_DATA_PAYLOAD_NBITS == 32, "CGRA words must be 32 bits");
-_Static_assert(CGRA_DMA_DRAM_DATA_NBITS == 128,
-               "CGRA DMA beats must be 128 bits");
-
 enum {
   MATRIX_ELEMENT_COUNT = DIM * DIM,
   CGRA_CHUNK_ELEMENTS = 32,

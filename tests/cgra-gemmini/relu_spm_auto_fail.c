@@ -92,7 +92,7 @@ int main(void) {
 
   const cgra_link_result_t cgra = cgra_link_wait();
   const cgra_link_result_t aes = cgra_link_wait();
-  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, 0) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
+  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, GEMMINI_LINK_BAD_ADDRESS) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
     printf("Three-IP Automatic flow failure: FAIL\n");
     return 1;
   }

@@ -11,6 +11,7 @@ typedef struct {
   uint32_t detail;
   uint32_t data;
   uint32_t stage;
+  uint32_t job;
 } cgra_link_result_t;
 
 static inline volatile uint32_t *cgra_link_reg(uintptr_t offset) { return (volatile uint32_t *)(CGRA_LINK_CONTROL_BASE + offset); }
@@ -46,6 +47,7 @@ static inline cgra_link_result_t cgra_link_wait(void) {
       .detail = cgra_link_read(CGRA_LINK_CONTROL_RESULT_DETAIL),
       .data = cgra_link_read(CGRA_LINK_CONTROL_RESULT_DATA),
       .stage = cgra_link_read(CGRA_LINK_CONTROL_RESULT_STAGE),
+      .job = cgra_link_read(CGRA_LINK_CONTROL_RESULT_JOB),
   };
 }
 
