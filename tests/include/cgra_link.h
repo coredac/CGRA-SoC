@@ -20,15 +20,26 @@ static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(
 
 static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
-static inline void cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) {
+static inline int cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) {
   cgra_link_write(CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
   cgra_link_write(CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
   cgra_link_write(CGRA_LINK_CONTROL_CONFIG_SUBMIT, 1);
-  __asm__ volatile("fence iorw, iorw" ::: "memory");
+  __asm__ volatile("" ::: "memory");
+  while (cgra_link_read(CGRA_LINK_CONTROL_CONFIG_READY) == 0) {
+  }
+  return cgra_link_read(CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
 }
 
-static inline void cgra_link_configure(uint32_t packet_count, uint32_t expected_completes) { cgra_link_configure_job(0, packet_count, expected_completes); }
+static inline int cgra_link_configure(uint32_t packet_count, uint32_t expected_completes) { return cgra_link_configure_job(0, packet_count, expected_completes); }
+
+static inline int cgra_link_config_end(void) {
+  // Capture acknowledgement must not wait for Rocket's RoCC busy fence.
+  __asm__ volatile("" ::: "memory");
+  while (cgra_link_read(CGRA_LINK_CONTROL_CONFIG_DONE) == 0) {
+  }
+  return cgra_link_read(CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
+}
 
 static inline void cgra_link_queue(cgra_packet_t packet) {
   CGRA_RAW_PKT_LO(packet.lo);

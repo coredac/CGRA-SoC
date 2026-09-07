@@ -61,4 +61,6 @@ Track bugs, known limitations, TODOs, and planned work in CGRA-SoC Issues. Use o
 
 Direct commits are allowed. Keep commits scoped, use short messages and the configured author identity, and omit AI attribution or AI-generated co-author trailers. Create a PR only when requested. For cross-repository PRs, merge the owning submodule change before the integration pointer update.
 
+Commit validated Chipyard changes in scoped steps. CGRA-SoC does not need a matching commit for each Chipyard commit; defer its submodule pointer update until related root-owned changes or a small feature are ready to commit together.
+
 Update these instructions and linked contracts only for durable changes in ownership, workflow, support, interfaces, or generated-file policy. Keep reusable repository skills in `.agents/skills/<name>/SKILL.md`; keep local agent state untracked.

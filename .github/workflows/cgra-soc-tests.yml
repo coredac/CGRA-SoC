@@ -234,6 +234,43 @@ jobs:
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca.yaml --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
 
+      - name: Run Gemmini, CGRA, and Pool manual E2E test
+        run: |
+          CONFIG=CGRAMinimalGemminiPoolRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/conv_relu_pool_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gcp.yaml --rebuild 2>&1 | tee cgra-gemmini-pool-manual.log
+          grep -q "Gemmini Conv + CGRA ReLU + Pool Manual: PASS" cgra-gemmini-pool-manual.log
+
+      - name: Run Gemmini, CGRA, and Pool automatic E2E test
+        run: |
+          CONFIG=CGRAMinimalGemminiPoolAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/conv_relu_pool_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gcp.yaml --rebuild 2>&1 | tee cgra-gemmini-pool-auto.log
+          grep -q "Gemmini Conv + CGRA ReLU + Pool Auto: PASS" cgra-gemmini-pool-auto.log
+
+      - name: Generate residual CGRA fast API headers
+        run: |
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/autolink/res.yaml \
+            configs/kernels/kernel_relu_tail_4x4.yaml \
+            configs/kernels/kernel_add_relu_4x4.yaml \
+            --output-dir tests/generated
+
+      - name: Run Gemmini and CGRA residual manual E2E test
+        run: |
+          CONFIG=CGRAMinimalGemminiResidualRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/residual_manual.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-manual.log
+          grep -q "Gemmini + CGRA Residual Manual: PASS" cgra-gemmini-residual-manual.log
+
+      - name: Run Gemmini and CGRA residual automatic E2E test
+        run: |
+          CONFIG=CGRAMinimalGemminiResidualAutoLinkRocketConfig \
+            TEST_SRC=tests/cgra-gemmini/residual_auto.c \
+            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-auto.log
+          grep -q "Gemmini + CGRA Residual Auto: PASS" cgra-gemmini-residual-auto.log
+
       - name: Run OpenFPGA AND2 SoC test
         run: |
           .venv/bin/python scripts/openfpga/generate.py \
