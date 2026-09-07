@@ -56,8 +56,8 @@ jobs:
               output.write(f"hardware={str(hardware).lower()}\n")
           PY
 
-  cpu-cgra:
-    name: CPU and CGRA Verilator tests
+  cgra-tests:
+    name: CGRA Verilator tests
     needs: changes
     if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
     runs-on: ubuntu-22.04
@@ -189,6 +189,47 @@ jobs:
           ./run-chipyard-cgra-test.sh --rebuild multi-cgra/fir/cgra-multi-fir-vector 2>&1 | tee cgra-multi-fir-vector.log
           grep -q "CGRA RoCC multi FIR vector 4x4: PASS" cgra-multi-fir-vector.log
 
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cgra-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+            tests/generated/*.h
+          if-no-files-found: ignore
+
+  gemmini-tests:
+    name: CGRA and Gemmini E2E tests
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate ReLU fast C API header
+        run: |
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml \
+            configs/kernels/kernel_relu4x4_4x4.yaml \
+            --output-dir tests/generated
+
       - name: Run Gemmini and CGRA automatic E2E tests
         run: |
           ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-auto.log
@@ -271,6 +312,44 @@ jobs:
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-auto.log
           grep -q "Gemmini + CGRA Residual Auto: PASS" cgra-gemmini-residual-auto.log
 
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemmini-test-logs
+          path: |
+            *.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  openfpga-tests:
+    name: OpenFPGA Verilator tests
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Generate canonical 4x4 CGRA RTL
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py \
+            --arch-yaml configs/arch/arch.yaml \
+            --soc-yaml configs/soc/cgra_soc.yaml
+
       - name: Run OpenFPGA AND2 SoC test
         run: |
           .venv/bin/python scripts/openfpga/generate.py \
@@ -305,10 +384,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cgra-soc-test-logs
+          name: openfpga-test-logs
           path: |
             *.log
             chipyard/build-setup.log
-            tests/generated/*.h
             build/openfpga/*/*.json
           if-no-files-found: ignore
