@@ -151,7 +151,7 @@ static int configure_gemmini(void) {
     return 1;
   }
   gemmini_config_ld(GEMMINI_ROW_BYTES);
-  gemmini_extended_mvin((const void *)(uintptr_t)CGRA_SPM_PACKED_BASE, A2_ROW, DIM, GEMMINI_ROWS);
+  gemmini_extended_mvin((const void *)(uintptr_t)CGRA_SPM_WINDOW_BASE, A2_ROW, DIM, GEMMINI_ROWS);
   gemmini_config_ex(WEIGHT_STATIONARY, NO_ACTIVATION, 0);
   gemmini_config_st(GEMMINI_ACC_ROW_BYTES);
   gemmini_extended_preload(W2_ROW, CONV2_ACC_WRITE, DIM, DIM, DIM, GEMMINI_ROWS);

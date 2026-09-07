@@ -107,9 +107,7 @@ class CgraHardware:
 
 @dataclass(frozen=True)
 class CgraBridge:
-    packed_base: int
-    packed_bytes: int
-    packed_window_bytes: int
+    window_bytes: int
     outbound_word: int
     outbound_words: int
     inbound_word: int
@@ -356,22 +354,27 @@ def infer_bridge(
     ):
         raise ValueError(f"{path}: int8 input and output SPM ranges overlap")
 
-    packed_base = cgra.base + cgra.size
-    packed_bytes = outbound_words
-    packed_window_bytes = next_power_of_two(
-        max(packed_bytes, hardware.cache_block_bytes)
-    )
-    if packed_base % packed_window_bytes != 0:
-        raise ValueError(f"{path}: packed CGRA alias base is not window aligned")
-    if (
-        packed_base < gemmini.base + gemmini.size
-        and gemmini.base < packed_base + packed_window_bytes
+    if any(
+        dependency.source is not None
+        and stage_map[dependency.source].endpoint == "cgra"
+        and dependency.copy is not None
+        and dependency.copy.format != INT8_FORMAT
+        for dependency in dependencies
     ):
-        raise ValueError(f"{path}: packed CGRA alias overlaps Gemmini SPM")
+        raise ValueError(
+            f"{path}: CGRA has one output window; int8 and raw outputs cannot be mixed"
+        )
+
+    window_bytes = next_power_of_two(max(outbound_words, hardware.cache_block_bytes))
+    if cgra.base % window_bytes != 0:
+        raise ValueError(f"{path}: CGRA window base is not window aligned")
+    if (
+        cgra.base < gemmini.base + gemmini.size
+        and gemmini.base < cgra.base + window_bytes
+    ):
+        raise ValueError(f"{path}: CGRA window overlaps Gemmini SPM")
     return CgraBridge(
-        packed_base,
-        packed_bytes,
-        packed_window_bytes,
+        window_bytes,
         outbound_word,
         outbound_words,
         inbound_word,
@@ -541,8 +544,10 @@ def cgra_endpoint(config: AutoLinkConfig) -> str:
         for dependency in copies
     )
     if is_source:
-        size = config.cgra.size + (
-            config.bridge.packed_window_bytes if config.bridge is not None else 0
+        size = (
+            config.bridge.window_bytes
+            if config.bridge is not None
+            else config.cgra.size
         )
         return (
             '      AutoEndpointSpec(name = "cgra", buffer = '
@@ -608,7 +613,7 @@ def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
     if copy.format == INT8_FORMAT:
         source = stage_map(config)[dependency.source]
         if source.endpoint == "cgra":
-            source_offset = config.bridge.packed_base - config.cgra.base
+            source_offset = 0
     return (
         "Some(AutoCopySpec("
         f"sourceOffset = {source_offset}, destinationOffset = {copy.destination_offset}, "
