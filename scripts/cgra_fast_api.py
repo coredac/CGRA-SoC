@@ -9,8 +9,9 @@ import argparse
 import contextlib
 import glob
 import io
+import re
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Mapping, Sequence
 
@@ -30,6 +31,8 @@ DEFAULT_CONFIGS = (
 SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_add_relu_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_relu_tail_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_relu_runtime_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_add_relu_runtime_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -40,6 +43,8 @@ SUPPORTED_KERNEL_NAMES = {
     "axpy",
     "add_relu",
     "relu_tail",
+    "relu_runtime",
+    "add_relu_runtime",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -94,6 +99,30 @@ _MASK64 = (1 << 64) - 1
 
 
 @dataclass(frozen=True)
+class RuntimeSymbol:
+    symbol: str
+    kind: str
+    role: str
+
+
+@dataclass(frozen=True)
+class RuntimeCount:
+    symbol: str
+    scale: int
+    offset: int
+
+
+@dataclass(frozen=True)
+class Relocation:
+    packet_index: int
+    bit_offset: int
+    bit_width: int
+    symbol_index: int
+    scale: int
+    offset: int
+
+
+@dataclass(frozen=True)
 class KernelConfig:
     name: str
     source_path: Path
@@ -118,6 +147,8 @@ class KernelConfig:
     compiled_ii: int
     loop_times: int
     expected_completes: int | None
+    runtime_symbols: tuple[RuntimeSymbol, ...]
+    runtime_count: RuntimeCount | None
 
 
 @dataclass(frozen=True)
@@ -170,6 +201,54 @@ def rel_to_root(path: Path) -> str:
         return path.as_posix()
 
 
+def load_runtime(data: Mapping, path: Path, bindings: Mapping):
+    if "runtime" not in data:
+        return (), None
+    runtime = require_mapping(data, "runtime", path)
+    entries = runtime.get("symbols")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError(f"{path}: runtime.symbols must be a non-empty list")
+    symbols = tuple(
+        RuntimeSymbol(
+            *(require_str(entry, key, path) for key in ("symbol", "kind", "role"))
+        )
+        for entry in entries
+    )
+    if len({item.symbol for item in symbols}) != len(symbols) or {
+        item.symbol for item in symbols
+    } != set(bindings):
+        raise ValueError(f"{path}: runtime symbols must name each binding exactly once")
+    roles = set()
+    for item in symbols:
+        input_role = re.fullmatch(r"input[0-9]+", item.role)
+        if item.kind not in ("spm_word", "count") or (
+            item.role not in ("output", "elements") and not input_role
+        ):
+            raise ValueError(f"{path}: unsupported runtime symbol kind or role")
+        if (item.kind == "count") != (item.role == "elements") or item.role in roles:
+            raise ValueError(
+                f"{path}: runtime roles must be unique and elements must be a count"
+            )
+        roles.add(item.role)
+    count_data = require_mapping(
+        require_mapping(data, "execution", path), "runtime_count", path
+    )
+    count = RuntimeCount(
+        require_str(count_data, "symbol", path),
+        require_int(count_data, "scale", path),
+        require_int(count_data, "offset", path),
+    )
+    if [item.symbol for item in symbols if item.kind == "count"] != [count.symbol]:
+        raise ValueError(
+            f"{path}: execution.runtime_count must name the elements symbol"
+        )
+    if bindings[count.symbol] <= 0 or count.scale <= 0 or count.offset < 0:
+        raise ValueError(
+            f"{path}: runtime count and scale must be positive, offset nonnegative"
+        )
+    return symbols, count
+
+
 def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelConfig:
     data = load_yaml_mapping(path)
     kernel = require_mapping(data, "kernel", path)
@@ -205,17 +284,29 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
             f"{path}: kernel '{name}' requires {required_words} local words, "
             f"but the selected SoC provides {local_words}"
         )
+    runtime_symbols, runtime_count = load_runtime(data, path, bindings)
+    scalar_symbols = {item.symbol for item in runtime_symbols if item.kind == "count"}
     for symbol, value in bindings.items():
-        if value < 0 or value >= local_words:
-            raise ValueError(
-                f"{path}: binding '{symbol}' is outside {local_words} local words"
-            )
+        limit = 1 << soc_cfg.data_nbits if symbol in scalar_symbols else local_words
+        if value < 0 or value >= limit:
+            raise ValueError(f"{path}: binding '{symbol}' must be in [0, {limit})")
     expected_completes = execution.get("expected_completes")
     if expected_completes is not None:
         if type(expected_completes) is not int:
             raise TypeError(f"{path}: 'expected_completes' must be an integer")
         if expected_completes <= 0:
             raise ValueError(f"{path}: 'expected_completes' must be positive")
+    loop_times = require_int(execution, "loop_times", path)
+    if runtime_count is not None and not 0 < loop_times < (1 << soc_cfg.data_nbits):
+        raise ValueError(f"{path}: runtime execution count must fit the data payload")
+    if (
+        runtime_count is not None
+        and loop_times
+        != runtime_count.scale * bindings[runtime_count.symbol] + runtime_count.offset
+    ):
+        raise ValueError(
+            f"{path}: loop_times must match the initial runtime count formula"
+        )
 
     return KernelConfig(
         name=name,
@@ -239,8 +330,10 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         num_banks_per_cgra=soc_cfg.num_banks_per_cgra,
         num_registers_per_reg_bank=soc_cfg.num_registers_per_reg_bank,
         compiled_ii=require_int(execution, "compiled_ii", path),
-        loop_times=require_int(execution, "loop_times", path),
+        loop_times=loop_times,
         expected_completes=expected_completes,
+        runtime_symbols=runtime_symbols,
+        runtime_count=runtime_count,
     )
 
 
@@ -278,7 +371,7 @@ def build_packet_types(cfg: KernelConfig) -> Mapping[str, object]:
     }
 
 
-def make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
+def _make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
     factory = ScriptFactory(
         path=str(cfg.kernel_yaml),
         CtrlType=types["CtrlType"],
@@ -309,6 +402,24 @@ def make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
 
     with contextlib.redirect_stdout(io.StringIO()):
         return factory.makeVectorCGRAPkts()
+
+
+def make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
+    if not cfg.runtime_symbols:
+        return _make_vector_cgra_packets(cfg, types)
+    # ScriptFactory treats bindings as addresses. Resolve typed runtime values in
+    # root-owned payload relocations; native generation sees only zero/one probes.
+    baseline = replace(cfg, bindings={symbol: 0 for symbol in cfg.bindings})
+    packets = ordered_packets(cfg, _make_vector_cgra_packets(baseline, types))
+    for item in build_relocations(cfg, packets, types):
+        packet = packets[item.packet_index][1]
+        symbol = cfg.runtime_symbols[item.symbol_index].symbol
+        value = cfg.bindings[symbol] * item.scale + item.offset
+        packet.payload.data.payload = type(packet.payload.data.payload)(value)
+    grouped = {}
+    for coord, packet in packets:
+        grouped.setdefault(coord, []).append(packet)
+    return grouped
 
 
 def ordered_packets(
@@ -494,6 +605,154 @@ def encode_packets(
             )
         )
     return encoded
+
+
+def build_relocations(
+    cfg: KernelConfig,
+    packets: Sequence[tuple[tuple[int, int], object]],
+    types: Mapping[str, object],
+) -> list[Relocation]:
+    if not cfg.runtime_symbols:
+        return []
+    template = build_basic_packet_template(
+        cfg, types, CMD_CONST, predicate=1, data_payload_is_variable=True
+    )
+    bit_offset = _template_field_lsb(template.data_payload_segments)
+    field_mask = ((1 << cfg.data_nbits) - 1) << bit_offset
+    relocations = []
+    for symbol_index, symbol in enumerate(cfg.runtime_symbols):
+        variants = []
+        for value in (0, 1):
+            bindings = {name: 0 for name in cfg.bindings}
+            bindings[symbol.symbol] = value
+            bound = replace(cfg, bindings=bindings)
+            variants.append(
+                ordered_packets(bound, _make_vector_cgra_packets(bound, types))
+            )
+        if any(len(variant) != len(packets) for variant in variants):
+            raise ValueError(f"{cfg.source_path}: symbol binding changed packet count")
+        found = False
+        for index, ((coord0, packet0), (coord1, packet1)) in enumerate(zip(*variants)):
+            difference = _packet_to_int(packet0) ^ _packet_to_int(packet1)
+            if coord0 != coord1 or difference & ~field_mask:
+                raise ValueError(
+                    f"{cfg.source_path}: symbol binding changed non-payload fields"
+                )
+            if not difference:
+                continue
+            if int(packet0.payload.cmd) != CMD_CONST or difference != 1 << bit_offset:
+                raise ValueError(
+                    f"{cfg.source_path}: runtime symbols must lower to direct constants"
+                )
+            found = True
+            relocations.append(
+                Relocation(index, bit_offset, cfg.data_nbits, symbol_index, 1, 0)
+            )
+        if not found:
+            raise ValueError(
+                f"{cfg.source_path}: no packet relocation for {symbol.symbol}"
+            )
+    count = cfg.runtime_count
+    count_index = next(
+        index
+        for index, symbol in enumerate(cfg.runtime_symbols)
+        if symbol.symbol == count.symbol
+    )
+    relocations.extend(
+        Relocation(
+            index, bit_offset, cfg.data_nbits, count_index, count.scale, count.offset
+        )
+        for index, (_, packet) in enumerate(packets)
+        if int(packet.payload.cmd) == CMD_CONFIG_TOTAL_CTRL_COUNT
+    )
+    return sorted(relocations, key=lambda relocation: relocation.packet_index)
+
+
+def _render_initializer(name: str, rows: Sequence[str]) -> list[str]:
+    return [f"#define {name} {{ \\"] + [f"  {row}, \\" for row in rows] + ["}"]
+
+
+def render_runtime_section(cfg: KernelConfig, packets, types) -> list[str]:
+    if not cfg.runtime_symbols:
+        return []
+    prefix = cfg.name.upper()
+    relocations = build_relocations(cfg, packets, types)
+    lines = [
+        "",
+        "// Relocations index CONFIG_PACKETS followed by LAUNCH_PACKETS.",
+        "// Fields: packet_index, bit_offset, bit_width, symbol_index, scale, offset.",
+        f"#define {prefix}_SYMBOL_COUNT {len(cfg.runtime_symbols)}",
+        f"#define {prefix}_RELOCATION_COUNT {len(relocations)}",
+    ]
+    for index, symbol in enumerate(cfg.runtime_symbols):
+        lines.append(f"#define {prefix}_SYMBOL_{symbol.role.upper()} {index}")
+    lines.extend(
+        _render_initializer(
+            f"{prefix}_SYMBOLS",
+            [
+                f'{{ "{symbol.symbol}", "{symbol.kind}", "{symbol.role}" }}'
+                for symbol in cfg.runtime_symbols
+            ],
+        )
+    )
+    lines.extend(
+        _render_initializer(
+            f"{prefix}_RELOCATIONS",
+            [
+                f"{{ {item.packet_index}, {item.bit_offset}, {item.bit_width}, {item.symbol_index}, {item.scale}, {item.offset} }}"
+                for item in relocations
+            ],
+        )
+    )
+    lines.extend(
+        [
+            "",
+            "// SPM bases are word addresses; elements must be positive and fit the tensor regions.",
+            f"static inline cgra_packet_t {cfg.name}_packet_bound_fast(unsigned index, const uint32_t symbols[{prefix}_SYMBOL_COUNT]) {{",
+            f"  cgra_packet_t packet = index < {prefix}_FAST_CONFIG_PACKET_COUNT",
+            f"    ? {prefix}_FAST_CONFIG_PACKETS[index]",
+            f"    : {prefix}_FAST_LAUNCH_PACKETS[index - {prefix}_FAST_CONFIG_PACKET_COUNT];",
+            "  switch (index) {",
+        ]
+    )
+    by_packet = {}
+    for relocation in relocations:
+        by_packet.setdefault(relocation.packet_index, []).append(relocation)
+    for packet_index, items in by_packet.items():
+        lines.append(f"  case {packet_index}:")
+        for item in items:
+            mask = ((1 << item.bit_width) - 1) << item.bit_offset
+            value = f"((uint64_t)symbols[{item.symbol_index}] * {item.scale} + {item.offset})"
+            for segment in _mask_segments(mask):
+                field = _chunk_suffix(segment.chunk).lower()
+                clear_mask = _segment_mask(segment) << segment.chunk_lsb
+                insert = f"(({value} >> {segment.value_lsb}) & {_uint64_c(_segment_mask(segment))}) << {segment.chunk_lsb}"
+                lines.append(
+                    f"    packet.{field} = (packet.{field} & ~{_uint64_c(clear_mask)}) | ({insert});"
+                )
+        lines.append("    break;")
+    lines.extend(
+        [
+            "  default:",
+            "    break;",
+            "  }",
+            "  return packet;",
+            "}",
+            "",
+            f"static inline void load_{cfg.name}_bound_config_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
+            f"  const uint32_t symbols[] = {{ {', '.join(symbol.symbol for symbol in cfg.runtime_symbols)} }};",
+            f"  for (unsigned index = 0; index < {prefix}_FAST_CONFIG_PACKET_COUNT; ++index) {{",
+            f"    cgra_send_packet_fast({cfg.name}_packet_bound_fast(index, symbols));",
+            "  }",
+            "}",
+            "",
+            f"static inline void configure_{cfg.name}_bound_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
+            f"  load_{cfg.name}_bound_config_fast({', '.join(symbol.symbol for symbol in cfg.runtime_symbols)});",
+            f"  launch_{cfg.name}_fast();",
+            "}",
+        ]
+    )
+    return lines
 
 
 def _uint64_c(value: int) -> str:
@@ -839,6 +1098,7 @@ def write_header(
         )
 
     lines.extend(render_fast_api_section(cfg, packets, types))
+    lines.extend(render_runtime_section(cfg, packets, types))
 
     lines.extend(
         [

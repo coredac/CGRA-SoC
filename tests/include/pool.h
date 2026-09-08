@@ -21,6 +21,7 @@ enum {
 #define POOL_CMD_START 7
 #define POOL_CMD_WAIT 8
 #define POOL_CMD_MODE 9
+#define POOL_CMD_TEMPLATE 10
 
 static inline void pool_config_input(uintptr_t source, uint32_t height, uint32_t width, uint32_t channels) {
   ROCC_INSTRUCTION_S(2, source, POOL_CMD_SOURCE);
@@ -28,7 +29,9 @@ static inline void pool_config_input(uintptr_t source, uint32_t height, uint32_t
   ROCC_INSTRUCTION_S(2, channels, POOL_CMD_CHANNELS);
 }
 
-static inline void pool_config_output(uintptr_t destination) { ROCC_INSTRUCTION_S(2, destination, POOL_CMD_DESTINATION); }
+static inline void pool_config_output_stride(uintptr_t destination, uintptr_t row_stride) { ROCC_INSTRUCTION_SS(2, destination, row_stride, POOL_CMD_DESTINATION); }
+
+static inline void pool_config_output(uintptr_t destination) { pool_config_output_stride(destination, 0); }
 
 static inline void pool_config_window(uint32_t mode, uint32_t kernel_height, uint32_t kernel_width, uint32_t stride_height, uint32_t stride_width, uint32_t pad_height, uint32_t pad_width) {
   ROCC_INSTRUCTION_SS(2, kernel_height, kernel_width, POOL_CMD_KERNEL);
@@ -38,6 +41,8 @@ static inline void pool_config_window(uint32_t mode, uint32_t kernel_height, uin
 }
 
 static inline void pool_start(void) { ROCC_INSTRUCTION_S(2, 0, POOL_CMD_START); }
+
+static inline void pool_config_tiled(unsigned enabled) { ROCC_INSTRUCTION_S(2, enabled, POOL_CMD_TEMPLATE); }
 
 static inline uint32_t pool_wait(void) {
   uint64_t status;

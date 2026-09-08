@@ -85,16 +85,17 @@ $ CONFIG=<chipyard-config> ./run-chipyard-openfpga-demo.sh --rebuild <test-name>
 
 ### CGRA + Gemmini
 
-The combined flow runs Gemmini and CGRA in the same Chipyard system and can also instantiate AES.
+The combined flow runs Gemmini and CGRA in the same Chipyard system and can also instantiate AES or Pool.
 
 - Supported: CPU-controlled Gemmini GEMM followed by CGRA ReLU through DRAM
 - Supported: CPU-controlled Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
 - Supported: automatic 128-byte Gemmini external SPM to CGRA SPM transfer followed by CGRA ReLU
 - Supported: CPU-controlled and automatic 128-byte Gemmini to CGRA to AES pipelines
-- Unsupported: runtime programming of AutoLink routes and copy descriptors
-- Unsupported: Hybrid mode, overlap, and multiple chunks
+- Supported: tiled Conv → ReLU → Pool and residual pipelines, with cached jobs and cross-IP overlap
+- Supported: runtime tile shapes, transfer offsets and buffer-slot strides within the generated graph
+- Unsupported: runtime graph changes and same-IP copy/compute overlap
 
-In the three-stage path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. AutoLink carries control and TileLink carries payload. The validated pipeline is fixed, sequential, and limited to one 128-byte chunk. See [docs/accelerator-modes.md](./docs/accelerator-modes.md) for the Manual and Automatic mode contracts.
+In the three-stage AES path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. That demo remains sequential with one 128-byte chunk. AutoLink carries control and TileLink carries payload; tiled CNN demos reuse cached jobs across multiple chunks. See [hardware contracts](./docs/contracts.md) for supported interfaces.
 
 Generate the single-CGRA ReLU RTL and API, then run the automatic SPM transfer:
 
@@ -127,3 +128,12 @@ $ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/r
 ```
 
 Use `--soc-yaml` to select the graph; changing YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+
+Run the tiled residual demo after generating its runtime kernel APIs:
+
+```shell
+$ python3 scripts/cgra_fast_api.py configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml --soc-yaml configs/soc/autolink/res_tiles.yaml
+$ MAKEFLAGS='-j8 TIMEOUT_CYCLES=600000 LOADMEM=1' CONFIG=CgraResidualTileRocketConfig TEST_SRC=tests/cgra-gemmini/residual_tiles.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
+```
+
+The demo runs Conv1 → ReLU → Conv2 → Add+ReLU, with a skip dependency from the input to Add+ReLU. It verifies two tile partitions without recapturing jobs, preloads skip tiles before each run, and writes the complete INT8 NHWC result to DRAM automatically. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3); all other elements and output guards are checked. The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.

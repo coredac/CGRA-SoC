@@ -1,0 +1,29 @@
+kernel:
+  name: relu_runtime
+  kernel_yaml: runtime/relu.yaml
+  required_words: 128
+  bindings:
+    arg0: 0
+    arg1: 0
+    arg2: 1
+
+runtime:
+  symbols:
+    - symbol: arg0
+      kind: spm_word
+      role: input0
+    - symbol: arg1
+      kind: spm_word
+      role: output
+    - symbol: arg2
+      kind: count
+      role: elements
+
+execution:
+  compiled_ii: 5
+  loop_times: 15
+  expected_completes: 6
+  runtime_count:
+    symbol: arg2
+    scale: 5
+    offset: 10
