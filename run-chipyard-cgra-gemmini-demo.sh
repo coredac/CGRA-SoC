@@ -8,11 +8,12 @@ GEMMINI_SW="$CHIPYARD_DIR/generators/gemmini/software/gemmini-rocc-tests"
 AES_SW="$CHIPYARD_DIR/generators/caliptra-aes-acc/software"
 GC_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gc.yaml"
 GCA_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gca.yaml"
+GCP_SOC_YAML="$ROOT_DIR/configs/soc/autolink/gcp.yaml"
+RES_SOC_YAML="$ROOT_DIR/configs/soc/autolink/res.yaml"
 EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
-AES_JOB_GENERATOR="$ROOT_DIR/scripts/generate_aes_auto_job.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
@@ -20,7 +21,7 @@ TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig)
+    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -31,7 +32,7 @@ uses_auto_link() {
 
 uses_cgra_spm() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig)
+    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
       return 0
       ;;
     *)
@@ -44,17 +45,21 @@ uses_aes_manual() {
   [[ "$CONFIG" == CGRAMinimalGemminiAESRocketConfig ]]
 }
 
-uses_aes_auto() {
-  [[ "$CONFIG" == CGRAMinimalGemminiAESAutoLinkRocketConfig ]]
-}
-
 CGRA_SOC_YAML="$GC_SOC_YAML"
-if uses_cgra_spm; then
-  CGRA_SOC_YAML="$GCA_SOC_YAML"
-fi
+case "$CONFIG" in
+  CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig)
+    CGRA_SOC_YAML="$GCA_SOC_YAML"
+    ;;
+  CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig)
+    CGRA_SOC_YAML="$GCP_SOC_YAML"
+    ;;
+  CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig)
+    CGRA_SOC_YAML="$RES_SOC_YAML"
+    ;;
+esac
 
 usage() {
-  echo "usage: $0 [--rebuild] [--fast] [test-source.c]" >&2
+  echo "usage: $0 [--rebuild] [--fast] [--soc-yaml path] [test-source.c]" >&2
   echo "       CONFIG=$CONFIG TEST_SRC=$TEST_SRC $0 --rebuild" >&2
 }
 
@@ -65,6 +70,15 @@ while (($# > 0)); do
       ;;
     --fast)
       # Fast simulation is the only supported mode.
+      ;;
+    --soc-yaml)
+      if (($# < 2)); then
+        echo "error: --soc-yaml requires a path" >&2
+        usage
+        exit 1
+      fi
+      CGRA_SOC_YAML="$2"
+      shift
       ;;
     -h|--help)
       usage
@@ -89,6 +103,13 @@ if [[ ! -f "$TEST_SRC" ]]; then
   exit 1
 fi
 TEST_SRC="$(realpath "$TEST_SRC")"
+
+if [[ ! -f "$CGRA_SOC_YAML" ]]; then
+  echo "error: SoC YAML not found: $CGRA_SOC_YAML" >&2
+  usage
+  exit 1
+fi
+CGRA_SOC_YAML="$(realpath "$CGRA_SOC_YAML")"
 
 if (( ! REBUILD )); then
   echo "note: first run should use --rebuild so elaboration regenerates matching gemmini_params.h" >&2
@@ -136,15 +157,6 @@ if uses_cgra_spm; then
     python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
     python3 "$CGRA_SPM_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
-  fi
-fi
-
-if uses_aes_auto; then
-  if ((REBUILD)); then
-    echo "[generate] AES automatic job"
-    python3 "$AES_JOB_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
-  else
-    python3 "$AES_JOB_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 

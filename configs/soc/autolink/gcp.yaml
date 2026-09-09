@@ -21,21 +21,16 @@ memory:
 
 communication:
   stages:
-    - name: decrypt
-      endpoint: aes
     - name: gemmini
       endpoint: gemmini
     - name: cgra
       endpoint: cgra
-    - name: aes
-      endpoint: aes
+    - name: pool
+      endpoint: pool
   dependencies:
-    - source: decrypt
-      destination: gemmini
-      size_bytes: 256
     - source: gemmini
       destination: cgra
       size_bytes: 128
     - source: cgra
-      destination: aes
+      destination: pool
       size_bytes: 128

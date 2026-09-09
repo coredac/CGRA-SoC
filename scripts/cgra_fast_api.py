@@ -20,15 +20,27 @@ VECTOR_ROOT = ROOT / "VectorCGRA"
 DEFAULT_ARCH_YAML = ROOT / "configs" / "arch" / "arch.yaml"
 DEFAULT_SOC_YAML = ROOT / "configs" / "soc" / "cgra_soc.yaml"
 DEFAULT_OUTPUT_DIR = ROOT / "tests" / "generated"
-SUPPORTED_CONFIGS = (
+DEFAULT_CONFIGS = (
     ROOT / "configs" / "kernels" / "kernel_fir4x4_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_relu4x4_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_gemv_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_histogram_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_axpy_4x4.yaml",
 )
+SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
+    ROOT / "configs" / "kernels" / "kernel_add_relu_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_relu_tail_4x4.yaml",
+)
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
-SUPPORTED_KERNEL_NAMES = {"fir4x4", "relu4x4", "gemv", "histogram", "axpy"}
+SUPPORTED_KERNEL_NAMES = {
+    "fir4x4",
+    "relu4x4",
+    "gemv",
+    "histogram",
+    "axpy",
+    "add_relu",
+    "relu_tail",
+}
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
     if str(path) not in sys.path:
@@ -86,6 +98,7 @@ class KernelConfig:
     name: str
     source_path: Path
     kernel_yaml: Path
+    bindings: Mapping[str, int]
     x_tiles: int
     y_tiles: int
     num_tiles: int
@@ -104,6 +117,7 @@ class KernelConfig:
     num_cgra_rows: int
     compiled_ii: int
     loop_times: int
+    expected_completes: int | None
 
 
 @dataclass(frozen=True)
@@ -178,11 +192,36 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
     arch_parser = ArchParser(str(arch_yaml))
     param_cgra = arch_parser.get_simplest_cgra_param()
     soc_cfg = load_soc_config(soc_yaml)
+    required_words = require_int(kernel, "required_words", path, default=0)
+    bindings = require_mapping(kernel, "bindings", path, default={})
+    for symbol, value in bindings.items():
+        if not isinstance(symbol, str) or not symbol:
+            raise ValueError(f"{path}: binding names must be non-empty strings")
+        if type(value) is not int:
+            raise TypeError(f"{path}: binding '{symbol}' must be an integer")
+    local_words = soc_cfg.data_mem_size_per_bank * soc_cfg.num_banks_per_cgra
+    if local_words < required_words:
+        raise ValueError(
+            f"{path}: kernel '{name}' requires {required_words} local words, "
+            f"but the selected SoC provides {local_words}"
+        )
+    for symbol, value in bindings.items():
+        if value < 0 or value >= local_words:
+            raise ValueError(
+                f"{path}: binding '{symbol}' is outside {local_words} local words"
+            )
+    expected_completes = execution.get("expected_completes")
+    if expected_completes is not None:
+        if type(expected_completes) is not int:
+            raise TypeError(f"{path}: 'expected_completes' must be an integer")
+        if expected_completes <= 0:
+            raise ValueError(f"{path}: 'expected_completes' must be positive")
 
     return KernelConfig(
         name=name,
         source_path=path,
         kernel_yaml=kernel_yaml,
+        bindings=dict(bindings),
         x_tiles=param_cgra.columns,
         y_tiles=param_cgra.rows,
         num_tiles=len(param_cgra.getValidTiles()),
@@ -201,6 +240,7 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         num_registers_per_reg_bank=soc_cfg.num_registers_per_reg_bank,
         compiled_ii=require_int(execution, "compiled_ii", path),
         loop_times=require_int(execution, "loop_times", path),
+        expected_completes=expected_completes,
     )
 
 
@@ -264,6 +304,7 @@ def make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
         CtrlAddrType=types["CtrlAddrType"],
         DataAddrType=types["DataAddrType"],
         num_registers_per_reg_bank=cfg.num_registers_per_reg_bank,
+        bindings=cfg.bindings,
     )
 
     with contextlib.redirect_stdout(io.StringIO()):
@@ -701,7 +742,6 @@ def render_fast_api_section(
     encoded = encode_packets(cfg, packets, types)
     config_packets = [pkt for pkt in encoded if not pkt.is_launch]
     launch_packets = [pkt for pkt in encoded if pkt.is_launch]
-
     lines = [
         "",
         "// Fast API: local single-CGRA packets precomputed by scripts/cgra_fast_api.py.",
@@ -793,6 +833,10 @@ def write_header(
         f"#define {guard_kernel}_CTRL_COUNT_PER_ITER {cfg.compiled_ii}",
         f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
     ]
+    if cfg.expected_completes is not None:
+        lines.append(
+            f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}"
+        )
 
     lines.extend(render_fast_api_section(cfg, packets, types))
 
@@ -812,8 +856,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "configs",
         nargs="*",
-        default=[str(path) for path in SUPPORTED_CONFIGS],
-        help="Supported per-kernel config YAMLs to process.",
+        default=[str(path) for path in DEFAULT_CONFIGS],
+        help="Per-kernel config YAMLs to process.",
     )
     parser.add_argument(
         "--arch-yaml",

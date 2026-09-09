@@ -1,0 +1,11 @@
+kernel:
+  name: relu_tail
+  kernel_yaml: VectorCGRA/validation/test/relu_tail.yaml
+  required_words: 128
+  bindings:
+    arg0: 96
+
+execution:
+  compiled_ii: 5
+  loop_times: 170
+  expected_completes: 1

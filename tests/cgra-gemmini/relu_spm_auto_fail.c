@@ -1,4 +1,5 @@
-#include "aes_auto_job.h"
+#include "aes_job.h"
+#include "auto_link_generated.h"
 #include "cgra_link.h"
 #include "cgra_protocol.h"
 #include "gemmini.h"
@@ -16,17 +17,19 @@ enum {
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   WRONG_PUBLICATION_ROW = PUBLICATION_ROW - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
   GEMMINI_LINK_BAD_ADDRESS = 1,
+  CGRA_EXPECTED_COMPLETES = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
 static elem_t B[DIM][DIM] row_align(1);
+static uint8_t ciphertext[TRANSFER_BYTES] __attribute__((aligned(32)));
+static volatile uint32_t completion __attribute__((aligned(8)));
 
+static const uint64_t KEY[4] = {UINT64_C(0x2d9810a30914dff4), UINT64_C(0x1f352c073b6108d7), UINT64_C(0x2b73aef0857d7781), UINT64_C(0x603deb1015ca71be)};
 static const uint32_t ACCUMULATOR_WRITE_ADDRESS = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACCUMULATOR_FULL_WIDTH_ADDRESS = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
 
 static void init_inputs(void) {
-  volatile uint8_t *ciphertext = (volatile uint8_t *)(uintptr_t)AES_AUTO_CIPHERTEXT_ADDRESS;
-  volatile uint32_t *completion = (volatile uint32_t *)(uintptr_t)AES_AUTO_COMPLETION_ADDRESS;
   for (int i = 0; i < DIM; ++i) {
     for (int j = 0; j < DIM; ++j) {
       const int index = i * DIM + j;
@@ -37,7 +40,7 @@ static void init_inputs(void) {
   for (unsigned i = 0; i < TRANSFER_BYTES; ++i) {
     ciphertext[i] = 0;
   }
-  *completion = 0;
+  completion = 0;
   __asm__ volatile("fence rw, rw" ::: "memory");
 }
 
@@ -58,8 +61,10 @@ static void run_bad_publication(void) {
 }
 
 static void configure_cgra(void) {
-  load_relu4x4_config_fast();
-  cgra_link_configure(RELU4X4_FAST_LAUNCH_PACKET_COUNT);
+  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
+  for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
+    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
+  }
   for (unsigned i = 0; i < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++i) {
     cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[i]);
   }
@@ -68,10 +73,8 @@ static void configure_cgra(void) {
 static int result_mismatch(cgra_link_result_t result, uint32_t detail) { return result.status != AUTO_LINK_STATUS_SOURCE_FAILURE || result.detail != detail || result.data != 0; }
 
 static int output_changed(void) {
-  const volatile uint8_t *ciphertext = (const volatile uint8_t *)(uintptr_t)AES_AUTO_CIPHERTEXT_ADDRESS;
-  const volatile uint32_t *completion = (const volatile uint32_t *)(uintptr_t)AES_AUTO_COMPLETION_ADDRESS;
   __asm__ volatile("fence rw, rw" ::: "memory");
-  if (*completion != 0) {
+  if (completion != 0) {
     return 1;
   }
   for (unsigned i = 0; i < TRANSFER_BYTES; ++i) {
@@ -84,12 +87,13 @@ static int output_changed(void) {
 
 int main(void) {
   init_inputs();
+  aes_job_configure(AUTO_LINK_JOB_AES, ciphertext, &completion, KEY, true);
   configure_cgra();
   run_bad_publication();
 
   const cgra_link_result_t cgra = cgra_link_wait();
   const cgra_link_result_t aes = cgra_link_wait();
-  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, 0) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
+  if (result_mismatch(cgra, GEMMINI_LINK_BAD_ADDRESS) != 0 || result_mismatch(aes, GEMMINI_LINK_BAD_ADDRESS) != 0 || cgra_link_read(CGRA_LINK_CONTROL_RESULT_VALID) != 0 || output_changed() != 0) {
     printf("Three-IP Automatic flow failure: FAIL\n");
     return 1;
   }

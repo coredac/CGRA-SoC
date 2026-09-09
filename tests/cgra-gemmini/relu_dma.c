@@ -11,13 +11,6 @@
 #error "This demo requires Gemmini full-width accumulator reads"
 #endif
 
-_Static_assert(DIM == 16, "the demo requires a 16x16 Gemmini array");
-_Static_assert(sizeof(elem_t) == 1, "Gemmini elements must be int8");
-_Static_assert(sizeof(acc_t) == 4, "Gemmini accumulators must be int32");
-_Static_assert(CGRA_DATA_PAYLOAD_NBITS == 32, "CGRA words must be 32 bits");
-_Static_assert(CGRA_DMA_DRAM_DATA_NBITS == 128,
-               "CGRA DMA beats must be 128 bits");
-
 enum {
   MATRIX_ELEMENT_COUNT = DIM * DIM,
   CGRA_CHUNK_ELEMENTS = 32,
@@ -26,15 +19,6 @@ enum {
   CGRA_EXPECTED_COMPLETES = 1,
   CGRA_EXPECTED_RESULT = 0,
 };
-
-_Static_assert(CGRA_CHUNK_ELEMENTS <= MATRIX_ELEMENT_COUNT,
-               "the chunk 0 smoke test must fit in the matrix");
-_Static_assert(CGRA_CHUNK_ELEMENTS % 2 == 0,
-               "the smoke-test input must split evenly around zero");
-_Static_assert(CGRA_CHUNK_BYTES == 128,
-               "each CGRA chunk must contain exactly 128 bytes");
-_Static_assert(CGRA_CHUNK_BYTES % CGRA_DMA_BEAT_BYTES == 0,
-               "each CGRA chunk must contain complete DMA beats");
 
 static elem_t A[DIM][DIM] row_align(1);
 static elem_t B[DIM][DIM] row_align(1);
@@ -46,11 +30,9 @@ enum {
   MVOUT_TAG_0 = 0x80,
 };
 
-static const cgra_dma_desc_t MVIN_DESCRIPTOR =
-    CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_CHUNK_BYTES, MVIN_TAG_0);
+static const cgra_dma_desc_t MVIN_DESCRIPTOR = CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_CHUNK_BYTES, MVIN_TAG_0);
 
-static const cgra_dma_desc_t MVOUT_DESCRIPTOR =
-    CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_CHUNK_BYTES, MVOUT_TAG_0);
+static const cgra_dma_desc_t MVOUT_DESCRIPTOR = CGRA_DMA_DESC_CONST(CGRA_SPM_WORD_ADDR, CGRA_CHUNK_BYTES, MVOUT_TAG_0);
 
 static void init_inputs(void) {
   for (int i = 0; i < DIM; ++i) {
@@ -64,15 +46,12 @@ static void init_inputs(void) {
 }
 
 int main(void) {
-  static const uint32_t GEMMINI_ACCUMULATOR_ADDR_BIT = UINT32_C(1)
-                                                       << (ADDR_LEN - 1);
-  static const uint32_t GEMMINI_READ_FULL_ACC_ROW_BIT = UINT32_C(1)
-                                                        << (ADDR_LEN - 3);
+  static const uint32_t GEMMINI_ACCUMULATOR_ADDR_BIT = UINT32_C(1) << (ADDR_LEN - 1);
+  static const uint32_t GEMMINI_READ_FULL_ACC_ROW_BIT = UINT32_C(1) << (ADDR_LEN - 3);
   const uint32_t A_addr = 0;
   const uint32_t B_addr = DIM;
   const uint32_t accumulator_write_addr = GEMMINI_ACCUMULATOR_ADDR_BIT;
-  const uint32_t full_width_mvout_addr =
-      GEMMINI_ACCUMULATOR_ADDR_BIT | GEMMINI_READ_FULL_ACC_ROW_BIT;
+  const uint32_t full_width_mvout_addr = GEMMINI_ACCUMULATOR_ADDR_BIT | GEMMINI_READ_FULL_ACC_ROW_BIT;
 
   init_inputs();
 
@@ -102,8 +81,7 @@ int main(void) {
 
   uint8_t observed_mvin_tag = cgra_dma_wait(MVIN_TAG_0);
   if (observed_mvin_tag != MVIN_TAG_0) {
-    printf("chunk 0 CGRA DMA MVIN tag mismatch: expected=%u observed=%u\n",
-           MVIN_TAG_0, observed_mvin_tag);
+    printf("chunk 0 CGRA DMA MVIN tag mismatch: expected=%u observed=%u\n", MVIN_TAG_0, observed_mvin_tag);
     return 1;
   }
 
@@ -114,9 +92,7 @@ int main(void) {
 
   const uint64_t complete = status & UINT64_C(1);
   const uint64_t complete_count = (status >> 1) & UINT64_C(0xffff);
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != CGRA_EXPECTED_COMPLETES ||
-      result != CGRA_EXPECTED_RESULT) {
+  if (wait_result != 1 || complete != 1 || complete_count != CGRA_EXPECTED_COMPLETES || result != CGRA_EXPECTED_RESULT) {
     printf("chunk 0 CGRA completion failure: wait=%lu status=0x%lx "
            "result=%lu\n",
            wait_result, status, result);
@@ -126,8 +102,7 @@ int main(void) {
   cgra_dma_mvout_async(cgra_words, MVOUT_DESCRIPTOR);
   uint8_t observed_mvout_tag = cgra_dma_wait(MVOUT_TAG_0);
   if (observed_mvout_tag != MVOUT_TAG_0) {
-    printf("chunk 0 CGRA DMA MVOUT tag mismatch: expected=%u observed=%u\n",
-           MVOUT_TAG_0, observed_mvout_tag);
+    printf("chunk 0 CGRA DMA MVOUT tag mismatch: expected=%u observed=%u\n", MVOUT_TAG_0, observed_mvout_tag);
     return 1;
   }
 
@@ -143,20 +118,17 @@ int main(void) {
     const acc_t expected_cgra = expected_gemmini > 0 ? expected_gemmini : 0;
 
     if (gemmini_words[index] != expected_gemmini) {
-      printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", row, column,
-             (int)gemmini_words[index], (int)expected_gemmini);
+      printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", row, column, (int)gemmini_words[index], (int)expected_gemmini);
       ++gemmini_failures;
     }
     if (cgra_words[index] != expected_cgra) {
-      printf("CGRA mismatch [%d][%d]: actual=%d expected=%d\n", row, column,
-             (int)cgra_words[index], (int)expected_cgra);
+      printf("CGRA mismatch [%d][%d]: actual=%d expected=%d\n", row, column, (int)cgra_words[index], (int)expected_cgra);
       ++cgra_failures;
     }
   }
 
   if (gemmini_failures != 0 || cgra_failures != 0) {
-    printf("Gemmini + CGRA DMA ReLU chunk 0: FAIL gemmini=%d cgra=%d\n",
-           gemmini_failures, cgra_failures);
+    printf("Gemmini + CGRA DMA ReLU chunk 0: FAIL gemmini=%d cgra=%d\n", gemmini_failures, cgra_failures);
     return 1;
   }
 

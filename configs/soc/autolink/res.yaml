@@ -21,21 +21,32 @@ memory:
 
 communication:
   stages:
-    - name: decrypt
-      endpoint: aes
-    - name: gemmini
+    - name: conv1
       endpoint: gemmini
-    - name: cgra
+    - name: relu1
       endpoint: cgra
-    - name: aes
-      endpoint: aes
+    - name: conv2
+      endpoint: gemmini
+    - name: add_relu
+      endpoint: cgra
   dependencies:
-    - source: decrypt
-      destination: gemmini
-      size_bytes: 256
-    - source: gemmini
-      destination: cgra
+    - source: input_ready
+      destination: conv1
+    - source: conv1
+      destination: relu1
+      source_offset: 65280
+      destination_offset: 384
       size_bytes: 128
-    - source: cgra
-      destination: aes
+    - source: relu1
+      destination: conv2
+      source_offset: 384
+      size_bytes: 32
+      format: int8
+    - source: input_ready
+      destination: add_relu
+    - source: conv2
+      destination: add_relu
+      source_offset: 65408
+      destination_offset: 128
       size_bytes: 128
+      format: int8
