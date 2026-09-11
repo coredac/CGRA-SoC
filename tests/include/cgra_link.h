@@ -85,6 +85,20 @@ static inline int cgra_link_configure_template(uint32_t job, uint32_t packet_cou
   return 0;
 }
 
+static inline int cgra_link_configure_resident(uint32_t job, uint32_t packet_count, uint32_t expected_completes, const cgra_link_symbol_t *symbols, uint32_t symbol_count,
+                                               const cgra_link_patch_t *patches, uint32_t patch_count, const uint32_t *repeats, uint32_t repeat_count) {
+  cgra_link_write(CGRA_LINK_CONTROL_REPEAT_COUNT, repeat_count);
+  if (cgra_link_configure_template(job, packet_count, expected_completes, symbols, symbol_count, patches, patch_count) != 0) {
+    return 1;
+  }
+  for (uint32_t index = 0; index < repeat_count; ++index) {
+    cgra_link_write(CGRA_LINK_CONTROL_REPEAT_PACKET, repeats[index]);
+    cgra_link_write(CGRA_LINK_CONTROL_REPEAT_PUSH, 1);
+  }
+  __asm__ volatile("" ::: "memory");
+  return 0;
+}
+
 static inline int cgra_link_configure(uint32_t packet_count, uint32_t expected_completes) { return cgra_link_configure_job(0, packet_count, expected_completes); }
 
 static inline int cgra_link_config_end(void) {

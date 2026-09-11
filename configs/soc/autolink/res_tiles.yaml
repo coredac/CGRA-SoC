@@ -21,7 +21,9 @@ memory:
     packed_words: 512
 
 communication:
-  buffer_slots: 2
+  buffer_slots:
+    gemmini: 2
+    cgra: 2
   stages:
     - name: conv1
       endpoint: gemmini

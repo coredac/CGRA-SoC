@@ -127,7 +127,7 @@ class AutoLinkConfig:
     stages: tuple[Stage, ...]
     dependencies: tuple[Dependency, ...]
     bridge: CgraBridge | None
-    buffer_slots: int = 1
+    buffer_slots: dict[str, int]
 
 
 def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
@@ -464,11 +464,19 @@ def validate_copy_alignment(
 def validate_graph(
     stages: tuple[Stage, ...], dependencies: tuple[Dependency, ...], path: Path
 ) -> None:
+    endpoints = {stage.name: stage.endpoint for stage in stages}
     incoming = {stage.name: [] for stage in stages}
     outgoing = {stage.name: [] for stage in stages}
     for dependency in dependencies:
         incoming[dependency.destination].append(dependency.source)
         if dependency.source is not None:
+            if (
+                dependency.copy is not None
+                and endpoints[dependency.source] == endpoints[dependency.destination]
+            ):
+                raise ValueError(
+                    f"{path}: data dependencies between stages on the same physical endpoint are unsupported"
+                )
             outgoing[dependency.source].append(dependency)
 
     external = [stage.name for stage in stages if not incoming[stage.name]]
@@ -562,13 +570,9 @@ def load_config(
         raise ValueError(f"{path}: expected a mapping")
     memory = require_mapping(document, "memory", path)
     communication = require_mapping(document, "communication", path)
-    buffer_slots = (
-        require_int(communication, "buffer_slots", path)
-        if "buffer_slots" in communication
-        else 1
-    )
-    if buffer_slots <= 0:
-        raise ValueError(f"{path}: buffer_slots must be positive")
+    buffer_slots = communication.get("buffer_slots", {})
+    if not isinstance(buffer_slots, Mapping):
+        raise ValueError(f"{path}: buffer_slots must map endpoint names to counts")
     gemmini = load_memory(memory, "gemmini_external_spm", path)
     cgra = load_memory(memory, "cgra_spm_window", path)
     window = require_mapping(memory, "cgra_spm_window", path)
@@ -578,6 +582,11 @@ def load_config(
     if packed_words is not None and packed_words <= 0:
         raise ValueError(f"{path}: packed_words must be positive")
     stages = load_stages(communication.get("stages"), path)
+    endpoint_names = {stage.endpoint for stage in stages}
+    if any(name not in endpoint_names for name in buffer_slots):
+        raise ValueError(f"{path}: buffer_slots names an unknown endpoint")
+    if any(not isinstance(count, int) or count <= 0 for count in buffer_slots.values()):
+        raise ValueError(f"{path}: buffer slot counts must be positive integers")
     memories = {"gemmini": gemmini, "cgra": cgra}
     dependencies = load_dependencies(
         communication.get("dependencies"), stages, memories, path
@@ -608,7 +617,8 @@ def stage_map(config: AutoLinkConfig) -> dict[str, Stage]:
 def gemmini_endpoint(config: AutoLinkConfig) -> str:
     return (
         '      AutoEndpointSpec(name = "gemmini", buffer = '
-        f"{buffer_text(config.gemmini)}, localBytes = {config.gemmini.size})"
+        f"{buffer_text(config.gemmini)}, localBytes = {config.gemmini.size}, "
+        f"bufferSlots = {config.buffer_slots.get('gemmini', 1)})"
     )
 
 
@@ -628,7 +638,8 @@ def cgra_endpoint(config: AutoLinkConfig) -> str:
         return (
             '      AutoEndpointSpec(name = "cgra", buffer = '
             f"{buffer_text(Memory(config.cgra.base, size))}, localBytes = {config.cgra.size}, "
-            "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8)"
+            "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
+            f"bufferSlots = {config.buffer_slots.get('cgra', 1)}, releaseOnCopy = true)"
         )
     local_bytes = (
         "CGRAGenerated.params.dma.spmWords * "
@@ -636,7 +647,8 @@ def cgra_endpoint(config: AutoLinkConfig) -> str:
     )
     return (
         f'      AutoEndpointSpec(name = "cgra", buffer = None, localBytes = {local_bytes}, '
-        "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8)"
+        "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
+        f"bufferSlots = {config.buffer_slots.get('cgra', 1)}, releaseOnCopy = true)"
     )
 
 
@@ -659,7 +671,10 @@ def aes_endpoint(config: AutoLinkConfig) -> str:
         else "None"
     )
     local_bytes = max(input_sizes, default=0)
-    return f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, localBytes = {local_bytes})'
+    return (
+        f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, localBytes = {local_bytes}, '
+        f"bufferSlots = {config.buffer_slots.get('aes', 1)}, releaseOnCopy = true)"
+    )
 
 
 def pool_endpoint(config: AutoLinkConfig) -> str:
@@ -670,7 +685,7 @@ def pool_endpoint(config: AutoLinkConfig) -> str:
         for dependency in copies
         if stages[dependency.destination].endpoint == "pool"
     ]
-    return f'      AutoEndpointSpec(name = "pool", buffer = None, localBytes = {max(sizes)})'
+    return f'      AutoEndpointSpec(name = "pool", buffer = None, localBytes = {max(sizes)}, releaseOnCopy = true)'
 
 
 ENDPOINT_TEXT = {
@@ -738,7 +753,6 @@ object AutoLinkGenerated {{
     endpoints = Seq(
 {endpoints}),
     beatBytes = CGRAGenerated.params.dma.dramDataWidth / 8,
-    bufferSlots = {config.buffer_slots},
     controlAddress = CgraLinkControlGenerated.autoLinkAddress,
     controlBytes = CgraLinkControlGenerated.pageSizeBytes)
 }}
@@ -746,6 +760,10 @@ object AutoLinkGenerated {{
 
 
 def header_text(config: AutoLinkConfig) -> str:
+    slots = "\n".join(
+        f"#define AUTO_LINK_{name.upper()}_BUFFER_SLOTS {config.buffer_slots.get(name, 1)}u"
+        for name in dict.fromkeys(stage.endpoint for stage in config.stages)
+    )
     constants = "\n".join(
         f"#define AUTO_LINK_STAGE_{stage.name.upper()} {index}u"
         for index, stage in enumerate(config.stages)
@@ -763,7 +781,7 @@ def header_text(config: AutoLinkConfig) -> str:
 #ifndef AUTO_LINK_GENERATED_H
 #define AUTO_LINK_GENERATED_H
 
-#define AUTO_LINK_BUFFER_SLOTS {config.buffer_slots}u
+{slots}
 
 {constants}
 

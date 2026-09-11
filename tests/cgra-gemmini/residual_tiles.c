@@ -2,8 +2,8 @@
 #include "cgra_link.h"
 #include "cgra_spm_window.h"
 #include "gemmini.h"
+#include "gemmini_conv.h"
 #include "gemmini_ext_spm.h"
-#include "gemmini_job.h"
 #include "generated/cgra_add_relu_runtime_fast_api.h"
 #include "generated/cgra_relu_runtime_fast_api.h"
 
@@ -30,11 +30,11 @@ enum {
   NEXT_HALO_PIXELS = NEXT_HALO_H * NEXT_HALO_W,
   CORE_ELEMENTS = (FIRST_PIXELS > NEXT_PIXELS ? FIRST_PIXELS : NEXT_PIXELS) * CHANNELS,
   HALO_ELEMENTS = (FIRST_HALO_PIXELS > NEXT_HALO_PIXELS ? FIRST_HALO_PIXELS : NEXT_HALO_PIXELS) * CHANNELS,
-  ADD_WORD = AUTO_LINK_BUFFER_SLOTS * HALO_ELEMENTS,
-  OUTPUT_WORD = ADD_WORD + AUTO_LINK_BUFFER_SLOTS * CORE_ELEMENTS,
-  SKIP_WORD = OUTPUT_WORD + AUTO_LINK_BUFFER_SLOTS * CORE_ELEMENTS,
-  FIRST_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_BUFFER_SLOTS * (HALO_ELEMENTS + CORE_ELEMENTS) * sizeof(elem_t),
-  SECOND_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_BUFFER_SLOTS * CORE_ELEMENTS * sizeof(elem_t),
+  ADD_WORD = AUTO_LINK_CGRA_BUFFER_SLOTS * HALO_ELEMENTS,
+  OUTPUT_WORD = ADD_WORD + AUTO_LINK_CGRA_BUFFER_SLOTS * CORE_ELEMENTS,
+  SKIP_WORD = OUTPUT_WORD + AUTO_LINK_CGRA_BUFFER_SLOTS * CORE_ELEMENTS,
+  FIRST_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_GEMMINI_BUFFER_SLOTS * (HALO_ELEMENTS + CORE_ELEMENTS) * sizeof(elem_t),
+  SECOND_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_GEMMINI_BUFFER_SLOTS * CORE_ELEMENTS * sizeof(elem_t),
   ELEMENTS = HEIGHT * WIDTH * CHANNELS,
   SENTINEL = -85,
   STAGE_COUNT = 4,
@@ -171,16 +171,9 @@ static int configure_add(void) {
 }
 
 static int configure_conv(unsigned job, const elem_t *source, uintptr_t publication) {
-  if (gemmini_conv_begin(job, 9) != 0) {
-    return 1;
-  }
   elem_t *destination = (elem_t *)(GEMMINI_EXT_SPM_BASE + publication);
-  gemmini_extended_config_st(CHANNELS * sizeof(elem_t), NO_ACTIVATION, ACC_SCALE_IDENTITY);
-  gemmini_extended3_config_ex(WEIGHT_STATIONARY, 0, 0, 0, 1, 1, false, false, false);
-  sp_tiled_conv(1, HEIGHT, WIDTH, CHANNELS, CHANNELS, 1, 1, 1, 1, 1, PADDING, KERNEL, 1, CHANNELS, CHANNELS, CHANNELS, 1, 1, 0, 1, 1, 1, CHANNELS, KERNEL, KERNEL, CHANNELS, PADDING, 0, PADDING, 0, 0,
-                0, 0, 0, source, &weights[job][0][0][0][0], destination, (const acc_t *)(uintptr_t)1, NO_ACTIVATION, ACC_SCALE_IDENTITY, false, false, false, false, false, true, true, false, false,
-                false, 1, 1);
-  return gemmini_job_end();
+  return gemmini_capture_conv(job, HEIGHT, WIDTH, CHANNELS, CHANNELS, KERNEL, 1, PADDING, 1, FIRST_ROWS, FIRST_COLUMNS, source, &weights[job][0][0][0][0], NULL, destination, NO_ACTIVATION,
+                              ACC_SCALE_IDENTITY);
 }
 
 static int preload_skip(unsigned rows, unsigned columns) {

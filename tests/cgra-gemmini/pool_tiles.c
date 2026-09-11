@@ -1,8 +1,8 @@
 #include "auto_link.h"
 #include "cgra_link.h"
 #include "gemmini.h"
+#include "gemmini_conv.h"
 #include "gemmini_ext_spm.h"
-#include "gemmini_job.h"
 #include "generated/cgra_relu_runtime_fast_api.h"
 #include "pool.h"
 
@@ -23,7 +23,7 @@ enum {
   TILE_PIXELS = 2,
   SLOT_ELEMENTS = TILE_PIXELS * POOL_STRIDE * POOL_STRIDE * CHANNELS,
   SLOT_BYTES = SLOT_ELEMENTS * sizeof(elem_t),
-  PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_BUFFER_SLOTS * SLOT_BYTES,
+  PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_GEMMINI_BUFFER_SLOTS * SLOT_BYTES,
   OUTPUT_ELEMENTS = OUTPUT_H * OUTPUT_W * CHANNELS,
   SENTINEL = -85,
 };
@@ -65,8 +65,9 @@ static int configure_relu(void) {
       [RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
   };
   static const cgra_link_patch_t patches[] = RELU_RUNTIME_RELOCATIONS;
-  if (cgra_link_configure_template(AUTO_LINK_JOB_CGRA, RELU_RUNTIME_FAST_PACKET_COUNT, RELU_RUNTIME_EXPECTED_COMPLETES, symbols, RELU_RUNTIME_SYMBOL_COUNT, patches, RELU_RUNTIME_RELOCATION_COUNT) !=
-      0) {
+  static const uint32_t repeats[] = RELU_RUNTIME_REPEAT_PACKETS;
+  if (cgra_link_configure_resident(AUTO_LINK_JOB_CGRA, RELU_RUNTIME_FAST_PACKET_COUNT, RELU_RUNTIME_EXPECTED_COMPLETES, symbols, RELU_RUNTIME_SYMBOL_COUNT, patches, RELU_RUNTIME_RELOCATION_COUNT,
+                                   repeats, RELU_RUNTIME_REPEAT_COUNT) != 0) {
     return 1;
   }
   for (unsigned index = 0; index < RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT; ++index) {
@@ -79,16 +80,9 @@ static int configure_relu(void) {
 }
 
 static int configure_conv(void) {
-  if (gemmini_conv_begin(AUTO_LINK_JOB_GEMMINI, 9) != 0) {
-    return 1;
-  }
   elem_t *destination = (elem_t *)(uintptr_t)(GEMMINI_EXT_SPM_BASE + PUBLICATION);
-  gemmini_extended_config_st(CHANNELS * sizeof(elem_t), NO_ACTIVATION, ACC_SCALE_IDENTITY);
-  gemmini_extended3_config_ex(WEIGHT_STATIONARY, 0, 0, 0, 1, 1, false, false, false);
-  sp_tiled_conv(1, INPUT_H, INPUT_W, INPUT_CHANNELS, CHANNELS, 1, 1, 1, 1, 1, PADDING, KERNEL, 1, INPUT_CHANNELS, CHANNELS, CHANNELS, 1, 1, 0, 1, 1, 1, CHANNELS, KERNEL, KERNEL, INPUT_CHANNELS,
-                PADDING, 0, PADDING, 0, 0, 0, 0, 0, &input[0][0][0], &weights[0][0][0][0], destination, (const acc_t *)(uintptr_t)1, NO_ACTIVATION, ACC_SCALE_IDENTITY, false, false, false, false,
-                false, true, true, false, false, false, 1, 1);
-  return gemmini_job_end();
+  return gemmini_capture_conv(AUTO_LINK_JOB_GEMMINI, INPUT_H, INPUT_W, INPUT_CHANNELS, CHANNELS, KERNEL, 1, PADDING, 1, TILE_PIXELS * POOL_STRIDE, TILE_PIXELS * POOL_STRIDE, &input[0][0][0],
+                              &weights[0][0][0][0], NULL, destination, NO_ACTIVATION, ACC_SCALE_IDENTITY);
 }
 
 static void configure_pool(void) {
@@ -176,9 +170,14 @@ static int run_tiles(unsigned rows, unsigned columns) {
   }
   __asm__ volatile("fence rw, rw" ::: "memory");
   const unsigned long overlap = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_OVERLAP);
-  printf("Pool tile shape=%ux%u cycles=%lu overlap=%lu\n", rows, columns, cycles() - begin, overlap);
+  const unsigned long peak = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_PEAK_ACTIVE);
+  printf("Pool tile shape=%ux%u cycles=%lu overlap=%lu peak=%lu\n", rows, columns, cycles() - begin, overlap, peak);
   if (overlap == 0) {
     printf("Pool tiles did not overlap across IPs\n");
+    ++failures;
+  }
+  if (peak < 3) {
+    printf("Pool tiles did not overlap across all three IPs\n");
     ++failures;
   }
   return failures + verify_output();

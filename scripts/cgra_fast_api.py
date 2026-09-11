@@ -677,13 +677,26 @@ def render_runtime_section(cfg: KernelConfig, packets, types) -> list[str]:
         return []
     prefix = cfg.name.upper()
     relocations = build_relocations(cfg, packets, types)
+    dynamic_packets = {item.packet_index for item in relocations}
+    repeat_commands = {CMD_CONST, CMD_CONFIG_PROLOGUE_FU, CMD_LAUNCH}
+    repeats = [
+        index
+        for index, (_, packet) in enumerate(packets)
+        if int(packet.payload.cmd) in repeat_commands or index in dynamic_packets
+    ]
     lines = [
         "",
         "// Relocations index CONFIG_PACKETS followed by LAUNCH_PACKETS.",
         "// Fields: packet_index, bit_offset, bit_width, symbol_index, scale, offset.",
         f"#define {prefix}_SYMBOL_COUNT {len(cfg.runtime_symbols)}",
         f"#define {prefix}_RELOCATION_COUNT {len(relocations)}",
+        f"#define {prefix}_REPEAT_COUNT {len(repeats)}",
     ]
+    lines.extend(
+        _render_initializer(
+            f"{prefix}_REPEAT_PACKETS", [str(index) for index in repeats]
+        )
+    )
     for index, symbol in enumerate(cfg.runtime_symbols):
         lines.append(f"#define {prefix}_SYMBOL_{symbol.role.upper()} {index}")
     lines.extend(
