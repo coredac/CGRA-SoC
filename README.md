@@ -129,11 +129,4 @@ $ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/r
 
 Use `--soc-yaml` to select the graph; changing YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
 
-Run the tiled residual demo after generating its runtime kernel APIs:
-
-```shell
-$ python3 scripts/cgra_fast_api.py configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml --soc-yaml configs/soc/autolink/res_tiles.yaml
-$ MAKEFLAGS='-j8 TIMEOUT_CYCLES=600000 LOADMEM=1' CONFIG=CgraResidualTileRocketConfig TEST_SRC=tests/cgra-gemmini/residual_tiles.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
-```
-
-The demo runs Conv1 → ReLU → Conv2 → Add+ReLU, with a skip dependency from the input to Add+ReLU. It verifies two tile partitions without recapturing jobs, preloads skip tiles before each run, and writes the complete INT8 NHWC result to DRAM automatically. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3); all other elements and output guards are checked. The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.
+The tiled residual test (`residual_tiles.c`, `res_tiles.yaml`) is retained but currently deferred; repeated-IP tiled execution is outside the supported validation scope. It describes Conv1 → ReLU → Conv2 → Add+ReLU with a skip dependency, two tile partitions and preloaded skip data. Final output stays in separate per-tile SPM regions for CPU validation through the INT8 window after the run. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3). The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.

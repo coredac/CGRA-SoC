@@ -22,6 +22,9 @@ enum {
   NEXT_COLUMNS = 3,
   FIRST_PIXELS = FIRST_ROWS * FIRST_COLUMNS,
   NEXT_PIXELS = NEXT_ROWS * NEXT_COLUMNS,
+  FIRST_TILES = ((HEIGHT + FIRST_ROWS - 1) / FIRST_ROWS) * ((WIDTH + FIRST_COLUMNS - 1) / FIRST_COLUMNS),
+  NEXT_TILES = ((HEIGHT + NEXT_ROWS - 1) / NEXT_ROWS) * ((WIDTH + NEXT_COLUMNS - 1) / NEXT_COLUMNS),
+  MAX_TILES = FIRST_TILES > NEXT_TILES ? FIRST_TILES : NEXT_TILES,
   FIRST_HALO_H = FIRST_ROWS + 2 * PADDING < HEIGHT ? FIRST_ROWS + 2 * PADDING : HEIGHT,
   FIRST_HALO_W = FIRST_COLUMNS + 2 * PADDING < WIDTH ? FIRST_COLUMNS + 2 * PADDING : WIDTH,
   NEXT_HALO_H = NEXT_ROWS + 2 * PADDING < HEIGHT ? NEXT_ROWS + 2 * PADDING : HEIGHT,
@@ -32,7 +35,7 @@ enum {
   HALO_ELEMENTS = (FIRST_HALO_PIXELS > NEXT_HALO_PIXELS ? FIRST_HALO_PIXELS : NEXT_HALO_PIXELS) * CHANNELS,
   ADD_WORD = AUTO_LINK_CGRA_BUFFER_SLOTS * HALO_ELEMENTS,
   OUTPUT_WORD = ADD_WORD + AUTO_LINK_CGRA_BUFFER_SLOTS * CORE_ELEMENTS,
-  SKIP_WORD = OUTPUT_WORD + AUTO_LINK_CGRA_BUFFER_SLOTS * CORE_ELEMENTS,
+  SKIP_WORD = OUTPUT_WORD + MAX_TILES * CORE_ELEMENTS,
   FIRST_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_GEMMINI_BUFFER_SLOTS * (HALO_ELEMENTS + CORE_ELEMENTS) * sizeof(elem_t),
   SECOND_PUBLICATION = GEMMINI_EXT_SPM_SIZE_BYTES - AUTO_LINK_GEMMINI_BUFFER_SLOTS * CORE_ELEMENTS * sizeof(elem_t),
   ELEMENTS = HEIGHT * WIDTH * CHANNELS,
@@ -44,7 +47,6 @@ static elem_t input[HEIGHT][WIDTH][CHANNELS] row_align(1);
 static elem_t weights[2][KERNEL][KERNEL][CHANNELS][CHANNELS] row_align(1);
 static elem_t intermediate[HEIGHT][WIDTH][CHANNELS];
 static elem_t expected[HEIGHT][WIDTH][CHANNELS];
-static elem_t output[ELEMENTS + 2] __attribute__((aligned(32)));
 
 static unsigned long cycles(void) {
   unsigned long value;
@@ -152,11 +154,10 @@ static int configure_add(void) {
   static const cgra_link_symbol_t symbols[ADD_RELU_RUNTIME_SYMBOL_COUNT] = {
       [ADD_RELU_RUNTIME_SYMBOL_INPUT0] = {SKIP_WORD, CORE_ELEMENTS, CGRA_LINK_TILE_ID},
       [ADD_RELU_RUNTIME_SYMBOL_INPUT1] = {ADD_WORD, CORE_ELEMENTS, CGRA_LINK_SLOT},
-      [ADD_RELU_RUNTIME_SYMBOL_OUTPUT] = {OUTPUT_WORD, CORE_ELEMENTS, CGRA_LINK_SLOT},
+      [ADD_RELU_RUNTIME_SYMBOL_OUTPUT] = {OUTPUT_WORD, CORE_ELEMENTS, CGRA_LINK_TILE_ID},
       [ADD_RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
   };
   static const cgra_link_patch_t patches[] = ADD_RELU_RUNTIME_RELOCATIONS;
-  cgra_link_output((uintptr_t)&output[1], OUTPUT_WORD, CORE_ELEMENTS, CHANNELS, WIDTH * CHANNELS * sizeof(elem_t));
   if (cgra_link_configure_template(AUTO_LINK_JOB_ADD_RELU, ADD_RELU_RUNTIME_FAST_PACKET_COUNT, ADD_RELU_RUNTIME_EXPECTED_COMPLETES, symbols, ADD_RELU_RUNTIME_SYMBOL_COUNT, patches,
                                    ADD_RELU_RUNTIME_RELOCATION_COUNT) != 0) {
     return 1;
@@ -218,35 +219,40 @@ static int verify_results(void) {
 }
 
 static int verify_output(unsigned rows, unsigned columns) {
+  const volatile int8_t *output = (const volatile int8_t *)(uintptr_t)(CGRA_SPM_WINDOW_BASE + OUTPUT_WORD - CGRA_SPM_OUTBOUND_WORD);
   int failures = 0;
   unsigned skipped = 0;
-  for (unsigned row = 0; row < HEIGHT; ++row) {
-    for (unsigned column = 0; column < WIDTH; ++column) {
-      for (unsigned channel = 0; channel < CHANNELS; ++channel) {
-        // Issue #3: an invalid CGRA store can overwrite each tile's first element.
-        if (row % rows == 0 && column % columns == 0 && channel == 0) {
-          ++skipped;
-          continue;
-        }
-        const unsigned index = (row * WIDTH + column) * CHANNELS + channel;
-        if (output[index + 1] != expected[row][column][channel]) {
-          printf("Residual tile mismatch index=%u actual=%d expected=%d\n", index, (int)output[index + 1], (int)expected[row][column][channel]);
-          ++failures;
+  unsigned tile = 0;
+  for (unsigned row = 0; row < HEIGHT; row += rows) {
+    for (unsigned column = 0; column < WIDTH; column += columns) {
+      unsigned word = tile * CORE_ELEMENTS;
+      for (unsigned y = row; y < row + rows && y < HEIGHT; ++y) {
+        for (unsigned x = column; x < column + columns && x < WIDTH; ++x) {
+          for (unsigned channel = 0; channel < CHANNELS; ++channel) {
+            const int8_t actual = output[word++];
+            // Issue #3: an invalid CGRA store can overwrite each tile's first element.
+            if (y == row && x == column && channel == 0) {
+              ++skipped;
+              continue;
+            }
+            const unsigned index = (y * WIDTH + x) * CHANNELS + channel;
+            if (actual != expected[y][x][channel]) {
+              printf("Residual tile mismatch index=%u actual=%d expected=%d\n", index, (int)actual, (int)expected[y][x][channel]);
+              ++failures;
+            }
+          }
         }
       }
+      ++tile;
     }
   }
   printf("Residual tile output: checked=%u skipped=%u (known VectorCGRA issue #3)\n", ELEMENTS - skipped, skipped);
-  if (output[0] != SENTINEL || output[ELEMENTS + 1] != SENTINEL) {
-    printf("Residual tile output guard changed\n");
-    ++failures;
-  }
   return failures;
 }
 
 static int run_tiles(unsigned rows, unsigned columns) {
-  for (unsigned index = 0; index < ELEMENTS + 2; ++index) {
-    output[index] = SENTINEL;
+  for (unsigned index = 0; index < MAX_TILES * CORE_ELEMENTS; ++index) {
+    add_relu_runtime_store_fast(OUTPUT_WORD + index, (uint32_t)(int32_t)SENTINEL);
   }
   if (preload_skip(rows, columns) != 0) {
     printf("Residual tile skip preload: FAIL\n");

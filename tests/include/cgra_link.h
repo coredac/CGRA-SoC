@@ -37,16 +37,6 @@ static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(
 
 static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
-// Captured by the next begin; other jobs keep writeback disabled.
-static inline void cgra_link_output(uintptr_t address, uint32_t word, uint32_t slot_stride, uint32_t channels, uint32_t row_stride) {
-  *(volatile uint64_t *)(CGRA_LINK_CONTROL_BASE + CGRA_LINK_CONTROL_OUT_ADDRESS) = address;
-  cgra_link_write(CGRA_LINK_CONTROL_OUT_WORD, word);
-  cgra_link_write(CGRA_LINK_CONTROL_OUT_SLOT_STRIDE, slot_stride);
-  cgra_link_write(CGRA_LINK_CONTROL_OUT_CHANNELS, channels);
-  cgra_link_write(CGRA_LINK_CONTROL_OUT_ROW_STRIDE, row_stride);
-  cgra_link_write(CGRA_LINK_CONTROL_OUT_ENABLE, 1);
-}
-
 static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count) {
   cgra_link_write(CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
