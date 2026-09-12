@@ -48,7 +48,7 @@ static inline int gemmini_job_begin_id(uint32_t job, uint32_t command_count) { r
 static inline int gemmini_job_begin(uint32_t command_count) { return gemmini_job_begin_id(0, command_count); }
 
 static inline int gemmini_job_end(void) {
-  // Capture acknowledgement must not wait for Rocket's RoCC busy fence.
+  // Poll counted capture completion without Rocket's RoCC busy fence.
   __asm__ volatile("" ::: "memory");
   while (gemmini_job_read(GEMMINI_JOB_CONFIG_DONE) == 0) {
   }

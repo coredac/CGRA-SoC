@@ -47,11 +47,10 @@ static inline void cgra_link_output(uintptr_t address, uint32_t word, uint32_t s
   cgra_link_write(CGRA_LINK_CONTROL_OUT_ENABLE, 1);
 }
 
-static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t symbol_count, uint32_t patch_count) {
+static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count) {
   cgra_link_write(CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
   cgra_link_write(CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
-  cgra_link_write(CGRA_LINK_CONTROL_SYMBOL_COUNT, symbol_count);
   cgra_link_write(CGRA_LINK_CONTROL_PATCH_COUNT, patch_count);
   cgra_link_write(CGRA_LINK_CONTROL_CONFIG_SUBMIT, 1);
   __asm__ volatile("" ::: "memory");
@@ -60,25 +59,25 @@ static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t 
   return cgra_link_read(CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
 }
 
-static inline int cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) { return cgra_link_begin(job, packet_count, expected_completes, 0, 0); }
+static inline int cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) { return cgra_link_begin(job, packet_count, expected_completes, 0); }
 
 static inline int cgra_link_configure_template(uint32_t job, uint32_t packet_count, uint32_t expected_completes, const cgra_link_symbol_t *symbols, uint32_t symbol_count,
                                                const cgra_link_patch_t *patches, uint32_t patch_count) {
-  if (cgra_link_begin(job, packet_count, expected_completes, symbol_count, patch_count) != 0) {
+  (void)symbol_count;
+  if (cgra_link_begin(job, packet_count, expected_completes, patch_count) != 0) {
     return 1;
   }
-  for (uint32_t index = 0; index < symbol_count; ++index) {
-    cgra_link_write(CGRA_LINK_CONTROL_SYMBOL_BASE, symbols[index].base);
-    cgra_link_write(CGRA_LINK_CONTROL_SYMBOL_STRIDE, symbols[index].stride);
-    cgra_link_write(CGRA_LINK_CONTROL_SYMBOL_SOURCE, symbols[index].source);
-    cgra_link_write(CGRA_LINK_CONTROL_SYMBOL_PUSH, 1);
-  }
   for (uint32_t index = 0; index < patch_count; ++index) {
-    // The generator emits only native data-payload relocations.
-    cgra_link_write(CGRA_LINK_CONTROL_PATCH_PACKET, patches[index].packet_index);
-    cgra_link_write(CGRA_LINK_CONTROL_PATCH_SYMBOL, patches[index].symbol_index);
-    cgra_link_write(CGRA_LINK_CONTROL_PATCH_SCALE, patches[index].scale);
-    cgra_link_write(CGRA_LINK_CONTROL_PATCH_OFFSET, patches[index].offset);
+    const cgra_link_patch_t *patch = &patches[index];
+    const cgra_link_symbol_t *symbol = &symbols[patch->symbol_index];
+    const int elements = symbol->source == CGRA_LINK_ELEMENTS;
+    // Fold the payload affine expression with native uint32_t wraparound.
+    const uint32_t coefficient = elements ? patch->scale : symbol->stride * patch->scale;
+    const uint32_t bias = elements ? patch->offset : symbol->base * patch->scale + patch->offset;
+    cgra_link_write(CGRA_LINK_CONTROL_PATCH_PACKET, patch->packet_index);
+    cgra_link_write(CGRA_LINK_CONTROL_PATCH_SOURCE, symbol->source);
+    cgra_link_write(CGRA_LINK_CONTROL_PATCH_COEFFICIENT, coefficient);
+    cgra_link_write(CGRA_LINK_CONTROL_PATCH_BIAS, bias);
     cgra_link_write(CGRA_LINK_CONTROL_PATCH_PUSH, 1);
   }
   __asm__ volatile("" ::: "memory");
