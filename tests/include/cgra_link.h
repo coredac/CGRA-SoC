@@ -38,6 +38,10 @@ static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(
 static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
 static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count) {
+  uint64_t ready = 0;
+  // Drain native static configuration before subsequent RoCC packets enter capture.
+  CGRA_WAIT(ready);
+  (void)ready;
   cgra_link_write(CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
   cgra_link_write(CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
@@ -69,20 +73,6 @@ static inline int cgra_link_configure_template(uint32_t job, uint32_t packet_cou
     cgra_link_write(CGRA_LINK_CONTROL_PATCH_COEFFICIENT, coefficient);
     cgra_link_write(CGRA_LINK_CONTROL_PATCH_BIAS, bias);
     cgra_link_write(CGRA_LINK_CONTROL_PATCH_PUSH, 1);
-  }
-  __asm__ volatile("" ::: "memory");
-  return 0;
-}
-
-static inline int cgra_link_configure_resident(uint32_t job, uint32_t packet_count, uint32_t expected_completes, const cgra_link_symbol_t *symbols, uint32_t symbol_count,
-                                               const cgra_link_patch_t *patches, uint32_t patch_count, const uint32_t *repeats, uint32_t repeat_count) {
-  cgra_link_write(CGRA_LINK_CONTROL_REPEAT_COUNT, repeat_count);
-  if (cgra_link_configure_template(job, packet_count, expected_completes, symbols, symbol_count, patches, patch_count) != 0) {
-    return 1;
-  }
-  for (uint32_t index = 0; index < repeat_count; ++index) {
-    cgra_link_write(CGRA_LINK_CONTROL_REPEAT_PACKET, repeats[index]);
-    cgra_link_write(CGRA_LINK_CONTROL_REPEAT_PUSH, 1);
   }
   __asm__ volatile("" ::: "memory");
   return 0;

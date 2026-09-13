@@ -4,6 +4,7 @@ kernel:
   required_words: 96
 
 execution:
+  ctrl_base: 5
   compiled_ii: 5
   loop_times: 170
-  expected_completes: 1
+  expected_completes: 11

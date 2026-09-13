@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import copy
 import glob
 import io
 import re
@@ -74,6 +75,7 @@ from util.schema import (  # noqa: E402
 from VectorCGRA.lib.cmd_type import (
     CMD_CONFIG,
     CMD_CONFIG_COUNT_PER_ITER,
+    CMD_CONFIG_CTRL_LOWER_BOUND,
     CMD_CONFIG_PROLOGUE_FU,
     CMD_CONFIG_PROLOGUE_FU_CROSSBAR,
     CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR,
@@ -81,6 +83,7 @@ from VectorCGRA.lib.cmd_type import (
     CMD_CONST,
     CMD_LAUNCH,
     CMD_LOAD_REQUEST,
+    CMD_REARM,
     CMD_STORE_REQUEST,
 )
 from VectorCGRA.lib.messages import (  # noqa: E402
@@ -131,6 +134,7 @@ class KernelConfig:
     x_tiles: int
     y_tiles: int
     num_tiles: int
+    tile_targets: tuple[tuple[int, int, int], ...]
     num_tile_inports: int
     num_tile_outports: int
     num_fu_inports: int
@@ -145,6 +149,7 @@ class KernelConfig:
     num_cgra_columns: int
     num_cgra_rows: int
     compiled_ii: int
+    ctrl_base: int
     loop_times: int
     expected_completes: int | None
     runtime_symbols: tuple[RuntimeSymbol, ...]
@@ -316,6 +321,11 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         x_tiles=param_cgra.columns,
         y_tiles=param_cgra.rows,
         num_tiles=len(param_cgra.getValidTiles()),
+        tile_targets=tuple(
+            (index, tile.dimX, tile.dimY)
+            for index, tile in enumerate(param_cgra.getValidTiles())
+            if not tile.disabled
+        ),
         num_cgra_columns=arch_parser.cgra_columns,
         num_cgra_rows=arch_parser.cgra_rows,
         config_mem_size=param_cgra.configMemSize,
@@ -330,6 +340,7 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         num_banks_per_cgra=soc_cfg.num_banks_per_cgra,
         num_registers_per_reg_bank=soc_cfg.num_registers_per_reg_bank,
         compiled_ii=require_int(execution, "compiled_ii", path),
+        ctrl_base=require_int(execution, "ctrl_base", path, default=0),
         loop_times=loop_times,
         expected_completes=expected_completes,
         runtime_symbols=runtime_symbols,
@@ -672,31 +683,66 @@ def _render_initializer(name: str, rows: Sequence[str]) -> list[str]:
     return [f"#define {name} {{ \\"] + [f"  {row}, \\" for row in rows] + ["}"]
 
 
-def render_runtime_section(cfg: KernelConfig, packets, types) -> list[str]:
+def split_packets(cfg: KernelConfig, packets, types):
+    static_commands = {
+        CMD_CONFIG,
+        CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR,
+        CMD_CONFIG_PROLOGUE_FU_CROSSBAR,
+    }
+    indexed_commands = static_commands | {CMD_CONFIG_PROLOGUE_FU}
+    PacketType = types["IntraCgraPktType"]
+    PayloadType = types["CgraPayloadType"]
+    DataType = types["DataType"]
+    runtime = [
+        ((x, y), PacketType(0, target, payload=PayloadType(CMD_REARM)))
+        for target, x, y in cfg.tile_targets
+    ]
+    runtime.extend(
+        (
+            coord,
+            PacketType(
+                0,
+                packet.dst,
+                payload=PayloadType(
+                    CMD_CONFIG_CTRL_LOWER_BOUND, data=DataType(cfg.ctrl_base, 1)
+                ),
+            ),
+        )
+        for coord, packet in packets
+        if int(packet.payload.cmd) == CMD_LAUNCH
+    )
+    static = []
+    indices = {}
+    for index, (coord, original) in enumerate(packets):
+        packet = copy.deepcopy(original)
+        command = int(packet.payload.cmd)
+        if command in indexed_commands:
+            packet.payload.ctrl_addr = types["CtrlAddrType"](
+                int(packet.payload.ctrl_addr) + cfg.ctrl_base
+            )
+        if command in static_commands:
+            static.append((coord, packet))
+            continue
+        indices[index] = len(runtime)
+        runtime.append((coord, packet))
+    relocations = [
+        replace(item, packet_index=indices[item.packet_index])
+        for item in build_relocations(cfg, packets, types)
+    ]
+    return static, runtime, relocations
+
+
+def render_runtime_section(cfg: KernelConfig, relocations) -> list[str]:
     if not cfg.runtime_symbols:
         return []
     prefix = cfg.name.upper()
-    relocations = build_relocations(cfg, packets, types)
-    dynamic_packets = {item.packet_index for item in relocations}
-    repeat_commands = {CMD_CONST, CMD_CONFIG_PROLOGUE_FU, CMD_LAUNCH}
-    repeats = [
-        index
-        for index, (_, packet) in enumerate(packets)
-        if int(packet.payload.cmd) in repeat_commands or index in dynamic_packets
-    ]
     lines = [
         "",
         "// Relocations index CONFIG_PACKETS followed by LAUNCH_PACKETS.",
         "// Fields: packet_index, bit_offset, bit_width, symbol_index, scale, offset.",
         f"#define {prefix}_SYMBOL_COUNT {len(cfg.runtime_symbols)}",
         f"#define {prefix}_RELOCATION_COUNT {len(relocations)}",
-        f"#define {prefix}_REPEAT_COUNT {len(repeats)}",
     ]
-    lines.extend(
-        _render_initializer(
-            f"{prefix}_REPEAT_PACKETS", [str(index) for index in repeats]
-        )
-    )
     for index, symbol in enumerate(cfg.runtime_symbols):
         lines.append(f"#define {prefix}_SYMBOL_{symbol.role.upper()} {index}")
     lines.extend(
@@ -752,11 +798,16 @@ def render_runtime_section(cfg: KernelConfig, packets, types) -> list[str]:
             "  return packet;",
             "}",
             "",
-            f"static inline void load_{cfg.name}_bound_config_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
+            f"static inline void load_{cfg.name}_bound_run_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
             f"  const uint32_t symbols[] = {{ {', '.join(symbol.symbol for symbol in cfg.runtime_symbols)} }};",
             f"  for (unsigned index = 0; index < {prefix}_FAST_CONFIG_PACKET_COUNT; ++index) {{",
             f"    cgra_send_packet_fast({cfg.name}_packet_bound_fast(index, symbols));",
             "  }",
+            "}",
+            "",
+            f"static inline void load_{cfg.name}_bound_config_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
+            f"  load_{cfg.name}_static_fast();",
+            f"  load_{cfg.name}_bound_run_fast({', '.join(symbol.symbol for symbol in cfg.runtime_symbols)});",
             "}",
             "",
             f"static inline void configure_{cfg.name}_bound_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
@@ -1003,6 +1054,7 @@ def _render_basic_template_section(
 
 def render_fast_api_section(
     cfg: object,
+    static: Sequence[tuple[tuple[int, int], object]],
     packets: Sequence[tuple[tuple[int, int], object]],
     types: Mapping[str, object],
 ) -> list[str]:
@@ -1011,6 +1063,7 @@ def render_fast_api_section(
     kernel = cfg.name
     guard_kernel = kernel.upper()
     header_name = f"cgra_{kernel}_fast_api.h"
+    static_packets = encode_packets(cfg, static, types)
     encoded = encode_packets(cfg, packets, types)
     config_packets = [pkt for pkt in encoded if not pkt.is_launch]
     launch_packets = [pkt for pkt in encoded if pkt.is_launch]
@@ -1018,7 +1071,9 @@ def render_fast_api_section(
         "",
         "// Fast API: local single-CGRA packets precomputed by scripts/cgra_fast_api.py.",
         "// Fast API is precomputed for cgra_target_local().",
+        "// Static packets stay in control memory; CONFIG contains per-run initialization.",
         "",
+        f"#define {guard_kernel}_FAST_STATIC_PACKET_COUNT {len(static_packets)}",
         f"#define {guard_kernel}_FAST_CONFIG_PACKET_COUNT {len(config_packets)}",
         f"#define {guard_kernel}_FAST_LAUNCH_PACKET_COUNT {len(launch_packets)}",
         f"#define {guard_kernel}_FAST_PACKET_COUNT {len(encoded)}",
@@ -1055,6 +1110,10 @@ def render_fast_api_section(
     lines.append("")
 
     lines.extend(
+        _render_packet_array(f"{guard_kernel}_FAST_STATIC_PACKETS", static_packets)
+    )
+    lines.append("")
+    lines.extend(
         _render_packet_array(f"{guard_kernel}_FAST_CONFIG_PACKETS", config_packets)
     )
     lines.append("")
@@ -1064,9 +1123,19 @@ def render_fast_api_section(
     lines.extend(
         [
             "",
-            f"static inline void load_{kernel}_config_fast(void) {{",
+            f"static inline void load_{kernel}_static_fast(void) {{",
+            f"  cgra_send_packets_fast({guard_kernel}_FAST_STATIC_PACKETS,",
+            f"                         {guard_kernel}_FAST_STATIC_PACKET_COUNT);",
+            "}",
+            "",
+            f"static inline void load_{kernel}_run_fast(void) {{",
             f"  cgra_send_packets_fast({guard_kernel}_FAST_CONFIG_PACKETS,",
             f"                         {guard_kernel}_FAST_CONFIG_PACKET_COUNT);",
+            "}",
+            "",
+            f"static inline void load_{kernel}_config_fast(void) {{",
+            f"  load_{kernel}_static_fast();",
+            f"  load_{kernel}_run_fast();",
             "}",
             "",
             f"static inline void launch_{kernel}_fast(void) {{",
@@ -1092,6 +1161,7 @@ def write_header(
 ) -> None:
     guard_kernel = cfg.name.upper()
     guard = f"CGRA_{guard_kernel}_FAST_API_H"
+    static, runtime, relocations = split_packets(cfg, packets, types)
 
     lines = [
         f"#ifndef {guard}",
@@ -1103,6 +1173,7 @@ def write_header(
         f"// Config: {rel_to_root(cfg.source_path)}",
         "",
         f"#define {guard_kernel}_CTRL_COUNT_PER_ITER {cfg.compiled_ii}",
+        f"#define {guard_kernel}_CTRL_BASE {cfg.ctrl_base}",
         f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
     ]
     if cfg.expected_completes is not None:
@@ -1110,8 +1181,8 @@ def write_header(
             f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}"
         )
 
-    lines.extend(render_fast_api_section(cfg, packets, types))
-    lines.extend(render_runtime_section(cfg, packets, types))
+    lines.extend(render_fast_api_section(cfg, static, runtime, types))
+    lines.extend(render_runtime_section(cfg, relocations))
 
     lines.extend(
         [
@@ -1169,7 +1240,7 @@ def main() -> int:
         packets = ordered_packets(cfg, pkts_by_coord)
         output = output_dir / f"cgra_{cfg.name}_fast_api.h"
         write_header(cfg, packets, types, output)
-        print(f"wrote {rel_to_root(output)} ({len(packets)} packets)")
+        print(f"wrote {rel_to_root(output)}")
     return 0
 
 

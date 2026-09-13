@@ -149,7 +149,7 @@ static int run_relu1(void) {
   if (cgra_dma_wait(RELU1_DMA_TAG) != RELU1_DMA_TAG) {
     return 1;
   }
-  load_relu_tail_config_fast();
+  load_relu_tail_run_fast();
   CGRA_SET_EXPECTED_COMPLETES(RELU_TAIL_EXPECTED_COMPLETES);
   launch_relu_tail_fast();
   return wait_cgra(RELU_TAIL_EXPECTED_COMPLETES);
@@ -169,7 +169,7 @@ static void run_conv2(void) {
 static int run_add_relu(void) {
   const uintptr_t source = GEMMINI_EXT_SPM_BASE + CONV2_SPM_OFFSET;
   cgra_dma_mvin_async((const void *)source, CONV2_DMA);
-  load_add_relu_config_fast();
+  load_add_relu_run_fast();
   if (cgra_dma_wait(CONV2_DMA_TAG) != CONV2_DMA_TAG) {
     return 1;
   }
@@ -219,25 +219,29 @@ static int verify_output(void) {
 int main(void) {
   init_inputs();
   preload_gemmini();
+  load_relu_tail_static_fast();
+  load_add_relu_static_fast();
   if (preload_skip() != 0) {
     printf("Gemmini + CGRA Residual Manual: FAIL\n");
     return 1;
   }
-  run_conv1();
-  if (run_relu1() != 0) {
-    printf("Gemmini + CGRA Residual Manual: FAIL\n");
-    return 1;
-  }
-  run_conv2();
-  if (run_add_relu() != 0) {
-    printf("Gemmini + CGRA Residual Manual: FAIL\n");
-    return 1;
-  }
-
-  const int failures = verify_output();
-  if (failures != 0) {
-    printf("Gemmini + CGRA Residual Manual: FAIL (%d)\n", failures);
-    return 1;
+  // Revisit both resident kernels without reloading their static configuration.
+  for (unsigned run = 0; run < 2; ++run) {
+    run_conv1();
+    if (run_relu1() != 0) {
+      printf("Gemmini + CGRA Residual Manual: FAIL\n");
+      return 1;
+    }
+    run_conv2();
+    if (run_add_relu() != 0) {
+      printf("Gemmini + CGRA Residual Manual: FAIL\n");
+      return 1;
+    }
+    const int failures = verify_output();
+    if (failures != 0) {
+      printf("Gemmini + CGRA Residual Manual: FAIL (%d)\n", failures);
+      return 1;
+    }
   }
   printf("Gemmini + CGRA Residual Manual: PASS\n");
   return 0;

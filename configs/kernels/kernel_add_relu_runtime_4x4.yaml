@@ -24,6 +24,7 @@ runtime:
       role: elements
 
 execution:
+  ctrl_base: 5
   compiled_ii: 5
   loop_times: 15
   expected_completes: 11

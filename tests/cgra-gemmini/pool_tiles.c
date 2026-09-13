@@ -65,9 +65,9 @@ static int configure_relu(void) {
       [RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
   };
   static const cgra_link_patch_t patches[] = RELU_RUNTIME_RELOCATIONS;
-  static const uint32_t repeats[] = RELU_RUNTIME_REPEAT_PACKETS;
-  if (cgra_link_configure_resident(AUTO_LINK_JOB_CGRA, RELU_RUNTIME_FAST_PACKET_COUNT, RELU_RUNTIME_EXPECTED_COMPLETES, symbols, RELU_RUNTIME_SYMBOL_COUNT, patches, RELU_RUNTIME_RELOCATION_COUNT,
-                                   repeats, RELU_RUNTIME_REPEAT_COUNT) != 0) {
+  load_relu_runtime_static_fast();
+  if (cgra_link_configure_template(AUTO_LINK_JOB_CGRA, RELU_RUNTIME_FAST_PACKET_COUNT, RELU_RUNTIME_EXPECTED_COMPLETES, symbols, RELU_RUNTIME_SYMBOL_COUNT, patches, RELU_RUNTIME_RELOCATION_COUNT) !=
+      0) {
     return 1;
   }
   for (unsigned index = 0; index < RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT; ++index) {

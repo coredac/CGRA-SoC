@@ -61,6 +61,7 @@ static void run_bad_publication(void) {
 }
 
 static void configure_cgra(void) {
+  load_relu4x4_static_fast();
   cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
   for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
     cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
