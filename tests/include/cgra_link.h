@@ -22,15 +22,6 @@ typedef struct {
   uint32_t source;
 } cgra_link_symbol_t;
 
-typedef struct {
-  uint32_t packet_index;
-  uint32_t bit_offset;
-  uint32_t bit_width;
-  uint32_t symbol_index;
-  uint32_t scale;
-  uint32_t offset;
-} cgra_link_patch_t;
-
 static inline volatile uint32_t *cgra_link_reg(uintptr_t offset) { return (volatile uint32_t *)(CGRA_LINK_CONTROL_BASE + offset); }
 
 static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(offset); }
@@ -53,16 +44,9 @@ static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t 
   return cgra_link_read(CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
 }
 
-static inline int cgra_link_configure_job(uint32_t job, uint32_t packet_count, uint32_t expected_completes) { return cgra_link_begin(job, packet_count, expected_completes, 0); }
-
-static inline int cgra_link_configure_template(uint32_t job, uint32_t packet_count, uint32_t expected_completes, const cgra_link_symbol_t *symbols, uint32_t symbol_count,
-                                               const cgra_link_patch_t *patches, uint32_t patch_count) {
-  (void)symbol_count;
-  if (cgra_link_begin(job, packet_count, expected_completes, patch_count) != 0) {
-    return 1;
-  }
-  for (uint32_t index = 0; index < patch_count; ++index) {
-    const cgra_link_patch_t *patch = &patches[index];
+static inline void cgra_link_patches(const cgra_kernel_t *kernel, const cgra_link_symbol_t *symbols, uint32_t count) {
+  for (uint32_t index = 0; index < count; ++index) {
+    const cgra_patch_t *patch = &kernel->patches[index];
     const cgra_link_symbol_t *symbol = &symbols[patch->symbol_index];
     const int elements = symbol->source == CGRA_LINK_ELEMENTS;
     // Fold the payload affine expression with native uint32_t wraparound.
@@ -75,17 +59,6 @@ static inline int cgra_link_configure_template(uint32_t job, uint32_t packet_cou
     cgra_link_write(CGRA_LINK_CONTROL_PATCH_PUSH, 1);
   }
   __asm__ volatile("" ::: "memory");
-  return 0;
-}
-
-static inline int cgra_link_configure(uint32_t packet_count, uint32_t expected_completes) { return cgra_link_configure_job(0, packet_count, expected_completes); }
-
-static inline int cgra_link_config_end(void) {
-  // Capture acknowledgement must not wait for Rocket's RoCC busy fence.
-  __asm__ volatile("" ::: "memory");
-  while (cgra_link_read(CGRA_LINK_CONTROL_CONFIG_DONE) == 0) {
-  }
-  return cgra_link_read(CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
 }
 
 static inline void cgra_link_queue(cgra_packet_t packet) {
@@ -95,6 +68,23 @@ static inline void cgra_link_queue(cgra_packet_t packet) {
 #if CGRA_INTRA_PKT_NBITS > 192
   CGRA_SPM_PKT_TOP(packet.top);
 #endif
+}
+
+// Configure before releasing dependencies; AutoLink later starts the captured job.
+static inline int cgra_job_config(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) {
+  cgra_send_packets_fast(kernel->static_packets, kernel->static_count);
+  const uint32_t patch_count = bindings == NULL ? 0 : kernel->patch_count;
+  if (cgra_link_begin(job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count) != 0) {
+    return 1;
+  }
+  cgra_link_patches(kernel, bindings, patch_count);
+  for (uint32_t index = 0; index < kernel->config_count; ++index) {
+    cgra_link_queue(kernel->config_packets[index]);
+  }
+  for (uint32_t index = 0; index < kernel->launch_count; ++index) {
+    cgra_link_queue(kernel->launch_packets[index]);
+  }
+  return 0;
 }
 
 static inline cgra_link_result_t cgra_link_wait(void) {

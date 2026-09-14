@@ -136,19 +136,7 @@ static int configure_relu(void) {
       [RELU_RUNTIME_SYMBOL_OUTPUT] = {0, HALO_ELEMENTS, CGRA_LINK_SLOT},
       [RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
   };
-  static const cgra_link_patch_t patches[] = RELU_RUNTIME_RELOCATIONS;
-  load_relu_runtime_static_fast();
-  if (cgra_link_configure_template(AUTO_LINK_JOB_RELU1, RELU_RUNTIME_FAST_PACKET_COUNT, RELU_RUNTIME_EXPECTED_COMPLETES, symbols, RELU_RUNTIME_SYMBOL_COUNT, patches, RELU_RUNTIME_RELOCATION_COUNT) !=
-      0) {
-    return 1;
-  }
-  for (unsigned index = 0; index < RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT; ++index) {
-    cgra_link_queue(RELU_RUNTIME_FAST_CONFIG_PACKETS[index]);
-  }
-  for (unsigned index = 0; index < RELU_RUNTIME_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_link_queue(RELU_RUNTIME_FAST_LAUNCH_PACKETS[index]);
-  }
-  return 0;
+  return cgra_job_config(AUTO_LINK_JOB_RELU1, &RELU_RUNTIME, symbols);
 }
 
 static int configure_add(void) {
@@ -158,19 +146,7 @@ static int configure_add(void) {
       [ADD_RELU_RUNTIME_SYMBOL_OUTPUT] = {OUTPUT_WORD, CORE_ELEMENTS, CGRA_LINK_TILE_ID},
       [ADD_RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
   };
-  static const cgra_link_patch_t patches[] = ADD_RELU_RUNTIME_RELOCATIONS;
-  load_add_relu_runtime_static_fast();
-  if (cgra_link_configure_template(AUTO_LINK_JOB_ADD_RELU, ADD_RELU_RUNTIME_FAST_PACKET_COUNT, ADD_RELU_RUNTIME_EXPECTED_COMPLETES, symbols, ADD_RELU_RUNTIME_SYMBOL_COUNT, patches,
-                                   ADD_RELU_RUNTIME_RELOCATION_COUNT) != 0) {
-    return 1;
-  }
-  for (unsigned index = 0; index < ADD_RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT; ++index) {
-    cgra_link_queue(ADD_RELU_RUNTIME_FAST_CONFIG_PACKETS[index]);
-  }
-  for (unsigned index = 0; index < ADD_RELU_RUNTIME_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_link_queue(ADD_RELU_RUNTIME_FAST_LAUNCH_PACKETS[index]);
-  }
-  return 0;
+  return cgra_job_config(AUTO_LINK_JOB_ADD_RELU, &ADD_RELU_RUNTIME, symbols);
 }
 
 static int configure_conv(unsigned job, const elem_t *source, uintptr_t publication) {

@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 enum {
-  HISTOGRAM_EXPECTED_COMPLETES = 1,
   HISTOGRAM_EXPECTED_RESULT = 0,
   HISTOGRAM_INPUT_COUNT = 20,
   HISTOGRAM_BIN_BASE = 20,
@@ -46,8 +45,7 @@ static int verify_histogram_data(void) {
     uint8_t addr = HISTOGRAM_BIN_BASE + bin;
     uint32_t actual = histogram_read_mem_fast(addr);
     uint32_t expected = 5;
-    printf("Readback bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin, addr,
-           actual, expected);
+    printf("Readback bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin, addr, actual, expected);
     if (addr == HISTOGRAM_BIN_BASE) {
       // Known VectorCGRA issue: histogram from_yaml with the default
       // ExclusiveDivRTL(latency=4) plus OPT_DIV_CONST leaves addr20 incorrect
@@ -58,8 +56,7 @@ static int verify_histogram_data(void) {
       continue;
     }
     if (actual != expected) {
-      printf("Mismatch bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin,
-             addr, actual, expected);
+      printf("Mismatch bin=%u addr=%u actual=0x%08x expected=0x%08x\n", bin, addr, actual, expected);
       ++failures;
     }
   }
@@ -77,14 +74,13 @@ int main(void) {
   CGRA_STATUS(status);
   printf("Initial status: 0x%lx\n", status);
 
-  CGRA_SET_EXPECTED_COMPLETES(HISTOGRAM_EXPECTED_COMPLETES);
-
   printf("Preloading histogram data memory...\n");
   preload_histogram_data();
   fence_histogram_preload();
 
   printf("Configuring and launching histogram...\n");
-  configure_histogram_fast();
+  cgra_config(&HISTOGRAM);
+  cgra_start(&HISTOGRAM);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);
@@ -99,9 +95,7 @@ int main(void) {
   uint64_t complete_count = (status >> 1) & 0xFFFFULL;
   int data_failures = verify_histogram_data();
 
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != HISTOGRAM_EXPECTED_COMPLETES ||
-      result != HISTOGRAM_EXPECTED_RESULT || data_failures != 0) {
+  if (wait_result != 1 || complete != 1 || complete_count != HISTOGRAM_EXPECTED_COMPLETES || result != HISTOGRAM_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC Histogram 4x4: FAIL\n");
     return 1;
   }

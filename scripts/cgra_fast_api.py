@@ -118,8 +118,6 @@ class RuntimeCount:
 @dataclass(frozen=True)
 class Relocation:
     packet_index: int
-    bit_offset: int
-    bit_width: int
     symbol_index: int
     scale: int
     offset: int
@@ -151,7 +149,7 @@ class KernelConfig:
     compiled_ii: int
     ctrl_base: int
     loop_times: int
-    expected_completes: int | None
+    expected_completes: int
     runtime_symbols: tuple[RuntimeSymbol, ...]
     runtime_count: RuntimeCount | None
 
@@ -295,12 +293,7 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
         limit = 1 << soc_cfg.data_nbits if symbol in scalar_symbols else local_words
         if value < 0 or value >= limit:
             raise ValueError(f"{path}: binding '{symbol}' must be in [0, {limit})")
-    expected_completes = execution.get("expected_completes")
-    if expected_completes is not None:
-        if type(expected_completes) is not int:
-            raise TypeError(f"{path}: 'expected_completes' must be an integer")
-        if expected_completes <= 0:
-            raise ValueError(f"{path}: 'expected_completes' must be positive")
+    expected_completes = require_int(execution, "expected_completes", path)
     loop_times = require_int(execution, "loop_times", path)
     if runtime_count is not None and not 0 < loop_times < (1 << soc_cfg.data_nbits):
         raise ValueError(f"{path}: runtime execution count must fit the data payload")
@@ -656,9 +649,7 @@ def build_relocations(
                     f"{cfg.source_path}: runtime symbols must lower to direct constants"
                 )
             found = True
-            relocations.append(
-                Relocation(index, bit_offset, cfg.data_nbits, symbol_index, 1, 0)
-            )
+            relocations.append(Relocation(index, symbol_index, 1, 0))
         if not found:
             raise ValueError(
                 f"{cfg.source_path}: no packet relocation for {symbol.symbol}"
@@ -670,17 +661,11 @@ def build_relocations(
         if symbol.symbol == count.symbol
     )
     relocations.extend(
-        Relocation(
-            index, bit_offset, cfg.data_nbits, count_index, count.scale, count.offset
-        )
+        Relocation(index, count_index, count.scale, count.offset)
         for index, (_, packet) in enumerate(packets)
         if int(packet.payload.cmd) == CMD_CONFIG_TOTAL_CTRL_COUNT
     )
     return sorted(relocations, key=lambda relocation: relocation.packet_index)
-
-
-def _render_initializer(name: str, rows: Sequence[str]) -> list[str]:
-    return [f"#define {name} {{ \\"] + [f"  {row}, \\" for row in rows] + ["}"]
 
 
 def split_packets(cfg: KernelConfig, packets, types):
@@ -739,84 +724,38 @@ def render_runtime_section(cfg: KernelConfig, relocations) -> list[str]:
     lines = [
         "",
         "// Relocations index CONFIG_PACKETS followed by LAUNCH_PACKETS.",
-        "// Fields: packet_index, bit_offset, bit_width, symbol_index, scale, offset.",
+        "// Fields: packet_index, symbol_index, scale, offset.",
         f"#define {prefix}_SYMBOL_COUNT {len(cfg.runtime_symbols)}",
-        f"#define {prefix}_RELOCATION_COUNT {len(relocations)}",
     ]
     for index, symbol in enumerate(cfg.runtime_symbols):
         lines.append(f"#define {prefix}_SYMBOL_{symbol.role.upper()} {index}")
+    lines.extend(["", f"static const cgra_patch_t {prefix}_PATCHES[] = {{"])
     lines.extend(
-        _render_initializer(
-            f"{prefix}_SYMBOLS",
-            [
-                f'{{ "{symbol.symbol}", "{symbol.kind}", "{symbol.role}" }}'
-                for symbol in cfg.runtime_symbols
-            ],
-        )
+        f"  {{ {item.packet_index}, {item.symbol_index}, {item.scale}, {item.offset} }},"
+        for item in relocations
     )
-    lines.extend(
-        _render_initializer(
-            f"{prefix}_RELOCATIONS",
-            [
-                f"{{ {item.packet_index}, {item.bit_offset}, {item.bit_width}, {item.symbol_index}, {item.scale}, {item.offset} }}"
-                for item in relocations
-            ],
-        )
-    )
-    lines.extend(
-        [
-            "",
-            "// SPM bases are word addresses; elements must be positive and fit the tensor regions.",
-            f"static inline cgra_packet_t {cfg.name}_packet_bound_fast(unsigned index, const uint32_t symbols[{prefix}_SYMBOL_COUNT]) {{",
-            f"  cgra_packet_t packet = index < {prefix}_FAST_CONFIG_PACKET_COUNT",
-            f"    ? {prefix}_FAST_CONFIG_PACKETS[index]",
-            f"    : {prefix}_FAST_LAUNCH_PACKETS[index - {prefix}_FAST_CONFIG_PACKET_COUNT];",
-            "  switch (index) {",
-        ]
-    )
-    by_packet = {}
-    for relocation in relocations:
-        by_packet.setdefault(relocation.packet_index, []).append(relocation)
-    for packet_index, items in by_packet.items():
-        lines.append(f"  case {packet_index}:")
-        for item in items:
-            mask = ((1 << item.bit_width) - 1) << item.bit_offset
-            value = f"((uint64_t)symbols[{item.symbol_index}] * {item.scale} + {item.offset})"
-            for segment in _mask_segments(mask):
-                field = _chunk_suffix(segment.chunk).lower()
-                clear_mask = _segment_mask(segment) << segment.chunk_lsb
-                insert = f"(({value} >> {segment.value_lsb}) & {_uint64_c(_segment_mask(segment))}) << {segment.chunk_lsb}"
-                lines.append(
-                    f"    packet.{field} = (packet.{field} & ~{_uint64_c(clear_mask)}) | ({insert});"
-                )
-        lines.append("    break;")
-    lines.extend(
-        [
-            "  default:",
-            "    break;",
-            "  }",
-            "  return packet;",
-            "}",
-            "",
-            f"static inline void load_{cfg.name}_bound_run_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
-            f"  const uint32_t symbols[] = {{ {', '.join(symbol.symbol for symbol in cfg.runtime_symbols)} }};",
-            f"  for (unsigned index = 0; index < {prefix}_FAST_CONFIG_PACKET_COUNT; ++index) {{",
-            f"    cgra_send_packet_fast({cfg.name}_packet_bound_fast(index, symbols));",
-            "  }",
-            "}",
-            "",
-            f"static inline void load_{cfg.name}_bound_config_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
-            f"  load_{cfg.name}_static_fast();",
-            f"  load_{cfg.name}_bound_run_fast({', '.join(symbol.symbol for symbol in cfg.runtime_symbols)});",
-            "}",
-            "",
-            f"static inline void configure_{cfg.name}_bound_fast({', '.join(f'uint32_t {symbol.symbol}' for symbol in cfg.runtime_symbols)}) {{",
-            f"  load_{cfg.name}_bound_config_fast({', '.join(symbol.symbol for symbol in cfg.runtime_symbols)});",
-            f"  launch_{cfg.name}_fast();",
-            "}",
-        ]
-    )
+    lines.append("};")
     return lines
+
+
+def render_kernel(cfg: KernelConfig, relocations) -> list[str]:
+    prefix = cfg.name.upper()
+    patches = f"{prefix}_PATCHES" if relocations else "0"
+    return [
+        "",
+        f"static const cgra_kernel_t {prefix} = {{",
+        f"  .static_packets = {prefix}_FAST_STATIC_PACKETS,",
+        f"  .static_count = {prefix}_FAST_STATIC_PACKET_COUNT,",
+        f"  .config_packets = {prefix}_FAST_CONFIG_PACKETS,",
+        f"  .config_count = {prefix}_FAST_CONFIG_PACKET_COUNT,",
+        f"  .launch_packets = {prefix}_FAST_LAUNCH_PACKETS,",
+        f"  .launch_count = {prefix}_FAST_LAUNCH_PACKET_COUNT,",
+        f"  .expected_completes = {prefix}_EXPECTED_COMPLETES,",
+        f"  .patches = {patches},",
+        f"  .patch_count = {len(relocations)},",
+        "};",
+        "",
+    ]
 
 
 def _uint64_c(value: int) -> str:
@@ -1076,7 +1015,6 @@ def render_fast_api_section(
         f"#define {guard_kernel}_FAST_STATIC_PACKET_COUNT {len(static_packets)}",
         f"#define {guard_kernel}_FAST_CONFIG_PACKET_COUNT {len(config_packets)}",
         f"#define {guard_kernel}_FAST_LAUNCH_PACKET_COUNT {len(launch_packets)}",
-        f"#define {guard_kernel}_FAST_PACKET_COUNT {len(encoded)}",
         "",
     ]
 
@@ -1120,36 +1058,6 @@ def render_fast_api_section(
     lines.extend(
         _render_packet_array(f"{guard_kernel}_FAST_LAUNCH_PACKETS", launch_packets)
     )
-    lines.extend(
-        [
-            "",
-            f"static inline void load_{kernel}_static_fast(void) {{",
-            f"  cgra_send_packets_fast({guard_kernel}_FAST_STATIC_PACKETS,",
-            f"                         {guard_kernel}_FAST_STATIC_PACKET_COUNT);",
-            "}",
-            "",
-            f"static inline void load_{kernel}_run_fast(void) {{",
-            f"  cgra_send_packets_fast({guard_kernel}_FAST_CONFIG_PACKETS,",
-            f"                         {guard_kernel}_FAST_CONFIG_PACKET_COUNT);",
-            "}",
-            "",
-            f"static inline void load_{kernel}_config_fast(void) {{",
-            f"  load_{kernel}_static_fast();",
-            f"  load_{kernel}_run_fast();",
-            "}",
-            "",
-            f"static inline void launch_{kernel}_fast(void) {{",
-            f"  cgra_send_packets_fast({guard_kernel}_FAST_LAUNCH_PACKETS,",
-            f"                         {guard_kernel}_FAST_LAUNCH_PACKET_COUNT);",
-            "}",
-            "",
-            f"static inline void configure_{kernel}_fast(void) {{",
-            f"  load_{kernel}_config_fast();",
-            f"  launch_{kernel}_fast();",
-            "}",
-        ]
-    )
-
     return lines
 
 
@@ -1175,14 +1083,12 @@ def write_header(
         f"#define {guard_kernel}_CTRL_COUNT_PER_ITER {cfg.compiled_ii}",
         f"#define {guard_kernel}_CTRL_BASE {cfg.ctrl_base}",
         f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
+        f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}",
     ]
-    if cfg.expected_completes is not None:
-        lines.append(
-            f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}"
-        )
 
     lines.extend(render_fast_api_section(cfg, static, runtime, types))
     lines.extend(render_runtime_section(cfg, relocations))
+    lines.extend(render_kernel(cfg, relocations))
 
     lines.extend(
         [

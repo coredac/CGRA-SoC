@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 enum {
-  FIR4X4_EXPECTED_COMPLETES = 1,
   FIR4X4_EXPECTED_RESULT = 23536,
   FIR4X4_INPUT_COUNT = 32,
   FIR4X4_INPUT_BASE_VALUE = 10,
@@ -29,13 +28,12 @@ int main(void) {
   CGRA_STATUS(status);
   printf("Initial status: 0x%lx\n", status);
 
-  CGRA_SET_EXPECTED_COMPLETES(FIR4X4_EXPECTED_COMPLETES);
-
   printf("Preloading FIR4x4 data memory...\n");
   preload_fir4x4_data();
 
   printf("Configuring and launching FIR4x4...\n");
-  configure_fir4x4_fast();
+  cgra_config(&FIR4X4);
+  cgra_start(&FIR4X4);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);
@@ -49,9 +47,7 @@ int main(void) {
   uint64_t complete = status & 0x1ULL;
   uint64_t complete_count = (status >> 1) & 0xFFFFULL;
 
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != FIR4X4_EXPECTED_COMPLETES ||
-      result != FIR4X4_EXPECTED_RESULT) {
+  if (wait_result != 1 || complete != 1 || complete_count != FIR4X4_EXPECTED_COMPLETES || result != FIR4X4_EXPECTED_RESULT) {
     printf("CGRA RoCC FIR YAML 4x4: FAIL\n");
     return 1;
   }

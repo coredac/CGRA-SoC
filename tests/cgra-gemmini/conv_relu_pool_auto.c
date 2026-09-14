@@ -23,7 +23,6 @@ enum {
   ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
   PUBLICATION_ROWS = 2,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * ROW_STRIDE,
-  CGRA_EXPECTED_COMPLETES = 1,
   A_ROW = 0,
   B_ROW = DIM,
 };
@@ -125,17 +124,6 @@ static int verify_output(void) {
   return failures;
 }
 
-static void configure_cgra(void) {
-  load_relu4x4_static_fast();
-  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
-  for (unsigned index = 0; index < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++index) {
-    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[index]);
-  }
-  for (unsigned index = 0; index < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++index) {
-    cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[index]);
-  }
-}
-
 static void configure_pool(void) {
   pool_config_input(CGRA_SPM_WINDOW_BASE, CONV_H, CONV_W, OUTPUT_CHANNELS);
   pool_config_output((uintptr_t)output);
@@ -152,7 +140,7 @@ static int verify_result(const char *name, cgra_link_result_t result) {
 
 int main(void) {
   init_inputs();
-  configure_cgra();
+  cgra_job_config(0, &RELU4X4, NULL);
   configure_pool();
   load_gemmini();
   launch_gemmini();

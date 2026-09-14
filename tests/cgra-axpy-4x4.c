@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 enum {
-  AXPY_EXPECTED_COMPLETES = 1,
   AXPY_EXPECTED_RESULT = 0,
   AXPY_INPUT_COUNT = 16,
   AXPY_INPUT_BASE_VALUE = 10,
@@ -19,9 +18,7 @@ static void preload_axpy_data(void) {
   }
 }
 
-static uint32_t axpy_expected(uint8_t addr) {
-  return (uint32_t)(4 * (AXPY_INPUT_BASE_VALUE + addr));
-}
+static uint32_t axpy_expected(uint8_t addr) { return (uint32_t)(4 * (AXPY_INPUT_BASE_VALUE + addr)); }
 
 static int verify_axpy_data(void) {
   int failures = 0;
@@ -37,8 +34,7 @@ static int verify_axpy_data(void) {
     uint32_t actual = axpy_read_mem_fast(addr);
     uint32_t expected = axpy_expected(addr);
     if (actual != expected) {
-      printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual,
-             expected);
+      printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual, expected);
       ++failures;
     }
   }
@@ -56,13 +52,12 @@ int main(void) {
   CGRA_STATUS(status);
   printf("Initial status: 0x%lx\n", status);
 
-  CGRA_SET_EXPECTED_COMPLETES(AXPY_EXPECTED_COMPLETES);
-
   printf("Preloading AXPY data memory...\n");
   preload_axpy_data();
 
   printf("Configuring and launching AXPY...\n");
-  configure_axpy_fast();
+  cgra_config(&AXPY);
+  cgra_start(&AXPY);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);
@@ -77,9 +72,7 @@ int main(void) {
   uint64_t complete_count = (status >> 1) & 0xFFFFULL;
   int data_failures = verify_axpy_data();
 
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != AXPY_EXPECTED_COMPLETES ||
-      result != AXPY_EXPECTED_RESULT || data_failures != 0) {
+  if (wait_result != 1 || complete != 1 || complete_count != AXPY_EXPECTED_COMPLETES || result != AXPY_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC AXPY 4x4: FAIL\n");
     return 1;
   }

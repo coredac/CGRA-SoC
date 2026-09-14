@@ -5,3 +5,4 @@ kernel:
 execution:
   compiled_ii: 6
   loop_times: 130
+  expected_completes: 1
