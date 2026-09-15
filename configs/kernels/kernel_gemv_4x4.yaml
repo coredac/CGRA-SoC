@@ -1,6 +1,6 @@
 kernel:
   name: gemv
-  kernel_yaml: VectorCGRA/validation/test/gemv/gemv.yaml
+  kernel_yaml: VectorCGRA/validation/test/gemv.yaml
 
 execution:
   compiled_ii: 11
