@@ -148,7 +148,7 @@ accel_commands(GEMMINI0, {
 
 Use separate, non-nested command blocks for different instances. MMIO configuration uses the matching descriptor's `.control` address. In this demo, CGRA0's MMIO endpoint collects all AutoLink results.
 
-The manual test checks both Gemmini/CGRA pairs and Pool; the automatic test runs `gemmini0 → cgra0 → pool` alongside `gemmini1 → cgra1`, without CPU dispatch between stages. Both use the same hardware:
+Both tests run `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights, and both tests check intermediate and final results. Manual mode starts each stage from the CPU; automatic mode needs only one input-ready event after configuration, with no CPU dispatch or intermediate DRAM copy. Both use the same hardware:
 
 ```shell
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild

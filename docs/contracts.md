@@ -73,7 +73,7 @@ All members share `RoCCGroup` for CPU commands, with separate SPM, DMA and endpo
 
 MMIO helpers with an `_at` suffix take the matching descriptor's control base; they do not select a RoCC target. CGRA job configuration includes native packets and therefore belongs inside its target's command block. AutoLink connects the named endpoints directly, independent of CPU selection. The first declared CGRA endpoint collects the entire graph's result stream; other CGRA endpoints expose their own configuration pages without duplicate result queues.
 
-The five-IP demo has two independent single-CGRA copies, two Gemmini instances and one Pool, not a VectorCGRA mesh. Both manual and automatic tests use the same hardware. The automatic graph runs `gemmini0 → cgra0 → pool` and `gemmini1 → cgra1` after one CPU input-ready event. This validates instance routing and SPM isolation, not a tiled residual block. Existing direct-RoCC configurations and AES attachment remain unchanged.
+The five-IP demo has two independent single-CGRA copies, two Gemmini instances and one Pool, not a VectorCGRA mesh. Both manual and automatic tests use the same hardware and serial dataflow: `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Each GEMM produces 32 INT32 values; CGRA0's wrapper exposes 32 packed INT8 bytes for Gemmini1's native `mvin`, while CGRA1's window stays raw INT32 for Pool. The CPU preloads both weight matrices and only Gemmini0's input. Automatic mode captures Gemmini1's `mvin` with its compute/publication commands and releases only the first stage through input-ready. This validates cross-instance data dependencies and SPM isolation, not a tiled residual block. Existing direct-RoCC configurations and AES attachment remain unchanged.
 
 ## Interface contracts
 

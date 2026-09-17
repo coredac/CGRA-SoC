@@ -36,23 +36,25 @@ communication:
       endpoint: gemmini0
     - name: cgra0
       endpoint: cgra0
-    - name: pool
-      endpoint: pool
     - name: gemmini1
       endpoint: gemmini1
     - name: cgra1
       endpoint: cgra1
+    - name: pool
+      endpoint: pool
   dependencies:
     - source: input_ready
       destination: gemmini0
-    - source: input_ready
-      destination: gemmini1
     - source: gemmini0
       destination: cgra0
       size_bytes: 128
     - source: cgra0
-      destination: pool
-      size_bytes: 128
+      destination: gemmini1
+      size_bytes: 32
+      format: int8
     - source: gemmini1
       destination: cgra1
+      size_bytes: 128
+    - source: cgra1
+      destination: pool
       size_bytes: 128

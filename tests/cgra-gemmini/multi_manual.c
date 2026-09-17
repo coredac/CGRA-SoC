@@ -25,9 +25,11 @@ enum {
   TAG_BASE = 0x20,
 };
 
-static elem_t A[INSTANCES][DIM][DIM] row_align(1);
-static elem_t B[DIM][DIM] row_align(1);
-static acc_t output[INSTANCES][CHANNELS] __attribute__((aligned(32)));
+static elem_t A[PUBLICATION_ROWS][DIM] row_align(1);
+static elem_t B[INSTANCES][DIM][DIM] row_align(1);
+static acc_t gemmini_expected[INSTANCES][WORDS];
+static acc_t relu_expected[INSTANCES][WORDS];
+static acc_t output[CHANNELS] __attribute__((aligned(32)));
 
 static const uint32_t ACC_WRITE = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACC_READ = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
@@ -37,17 +39,34 @@ static const cgra_dma_desc_t INPUT[INSTANCES] = {
 };
 
 static void init_inputs(void) {
-  for (unsigned row = 0; row < DIM; ++row) {
+  for (unsigned row = 0; row < PUBLICATION_ROWS; ++row) {
     for (unsigned column = 0; column < DIM; ++column) {
-      const int value = (int)((row * DIM + column) % WORDS) - WORDS / 2;
-      A[0][row][column] = (elem_t)value;
-      A[1][row][column] = (elem_t)(-value - 1);
-      B[row][column] = row == column ? (elem_t)1 : (elem_t)0;
+      A[row][column] = (elem_t)((int)(row * DIM + column) - WORDS / 2);
     }
   }
+  for (unsigned row = 0; row < DIM; ++row) {
+    for (unsigned column = 0; column < DIM; ++column) {
+      B[0][row][column] = row == column ? (elem_t)1 : (elem_t)0;
+      B[1][row][column] = row == column ? (elem_t)(column % 2 == 0 ? 2 : -1) : (elem_t)0;
+    }
+  }
+  for (unsigned channel = 0; channel < CHANNELS; ++channel) {
+    output[channel] = (acc_t)0x5a5a5a5a;
+  }
+}
+
+static void init_expected(void) {
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
-    for (unsigned channel = 0; channel < CHANNELS; ++channel) {
-      output[instance][channel] = (acc_t)0x5a5a5a5a;
+    for (unsigned row = 0; row < PUBLICATION_ROWS; ++row) {
+      for (unsigned column = 0; column < DIM; ++column) {
+        acc_t sum = 0;
+        for (unsigned input = 0; input < DIM; ++input) {
+          const acc_t value = instance == 0 ? A[row][input] : relu_expected[instance - 1][row * DIM + input];
+          sum += value * B[instance][input][column];
+        }
+        gemmini_expected[instance][row * DIM + column] = sum;
+        relu_expected[instance][row * DIM + column] = sum > 0 ? sum : 0;
+      }
     }
   }
 }
@@ -58,16 +77,15 @@ static void load_gemmini(accel_t device, unsigned instance) {
     gemmini_config_ld(ROW_BYTES);
     gemmini_config_ex(WEIGHT_STATIONARY, NO_ACTIVATION, 0);
     gemmini_config_st(ACC_ROW_BYTES);
-    gemmini_mvin(A[instance], A_ROW);
-    gemmini_mvin(B, B_ROW);
+    gemmini_mvin(B[instance], B_ROW);
   });
 }
 
 static void start_gemmini(accel_t device) {
   const uint32_t publication = device.spm_bytes / ROW_BYTES - PUBLICATION_ROWS * ACC_ROW_STRIDE;
   accel_commands(device, {
-    gemmini_preload(B_ROW, ACC_WRITE);
-    gemmini_compute_preloaded(A_ROW, GARBAGE_ADDR);
+    gemmini_extended_preload(B_ROW, ACC_WRITE, DIM, DIM, DIM, PUBLICATION_ROWS);
+    gemmini_extended_compute_preloaded(A_ROW, GARBAGE_ADDR, DIM, PUBLICATION_ROWS, DIM, PUBLICATION_ROWS);
     gemmini_extended_mvout_spad(publication, ACC_ROW_STRIDE, ACC_READ, DIM, PUBLICATION_ROWS);
   });
 }
@@ -76,7 +94,7 @@ static int verify_gemmini(accel_t device, unsigned instance) {
   const volatile acc_t *actual = (const volatile acc_t *)(device.spm + device.spm_bytes - BYTES);
   int failures = 0;
   for (unsigned index = 0; index < WORDS; ++index) {
-    const acc_t expected = A[instance][index / DIM][index % DIM];
+    const acc_t expected = gemmini_expected[instance][index];
     const acc_t value = actual[index];
     if (value != expected) {
       printf("Gemmini%u mismatch index=%u actual=%d expected=%d\n", instance, index, (int)value, (int)expected);
@@ -123,17 +141,11 @@ static int wait_cgra(accel_t device, unsigned instance) {
   return 0;
 }
 
-static acc_t expected_relu(unsigned instance, unsigned index) {
-  const acc_t value = A[instance][index / DIM][index % DIM];
-  return value > 0 ? value : 0;
-}
-
 static int verify_cgra(accel_t device, unsigned instance) {
-  const volatile acc_t *actual = (const volatile acc_t *)device.spm;
   int failures = 0;
   for (unsigned index = 0; index < WORDS; ++index) {
-    const acc_t expected = expected_relu(instance, index);
-    const acc_t value = actual[index];
+    const acc_t expected = relu_expected[instance][index];
+    const acc_t value = instance == 0 ? ((const volatile int8_t *)device.spm)[index] : ((const volatile acc_t *)device.spm)[index];
     if (value != expected) {
       printf("CGRA%u mismatch index=%u actual=%d expected=%d\n", instance, index, (int)value, (int)expected);
       ++failures;
@@ -142,34 +154,34 @@ static int verify_cgra(accel_t device, unsigned instance) {
   return failures;
 }
 
-static int run_pool(accel_t source, unsigned instance) {
+static int run_pool(void) {
   uint32_t status = 0;
   accel_commands(POOL, {
-    pool_config_input(source.spm, POOL_HEIGHT, POOL_WIDTH, CHANNELS);
-    pool_config_output((uintptr_t)output[instance]);
+    pool_config_input(CGRA1.spm, POOL_HEIGHT, POOL_WIDTH, CHANNELS);
+    pool_config_output((uintptr_t)output);
     pool_config_window(POOL_MODE_MAX, POOL_HEIGHT, POOL_WIDTH, POOL_HEIGHT, POOL_WIDTH, 0, 0);
     pool_start();
     status = pool_wait();
   });
   if (status != POOL_STATUS_SUCCESS) {
-    printf("Pool completion mismatch input=%u status=%u\n", instance, status);
+    printf("Pool completion mismatch status=%u\n", status);
     return 1;
   }
   return 0;
 }
 
-static int verify_pool(unsigned instance) {
+static int verify_pool(void) {
   int failures = 0;
   for (unsigned channel = 0; channel < CHANNELS; ++channel) {
-    acc_t expected = expected_relu(instance, channel);
+    acc_t expected = relu_expected[INSTANCES - 1][channel];
     for (unsigned pixel = 1; pixel < POOL_HEIGHT * POOL_WIDTH; ++pixel) {
-      const acc_t value = expected_relu(instance, pixel * CHANNELS + channel);
+      const acc_t value = relu_expected[INSTANCES - 1][pixel * CHANNELS + channel];
       if (value > expected) {
         expected = value;
       }
     }
-    if (output[instance][channel] != expected) {
-      printf("Pool mismatch input=%u channel=%u actual=%d expected=%d\n", instance, channel, (int)output[instance][channel], (int)expected);
+    if (output[channel] != expected) {
+      printf("Pool mismatch channel=%u actual=%d expected=%d\n", channel, (int)output[channel], (int)expected);
       ++failures;
     }
   }
@@ -182,30 +194,29 @@ int main(void) {
   int failures = 0;
 
   init_inputs();
+  init_expected();
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
     load_gemmini(gemmini[instance], instance);
   }
-  gemmini_fence();
+  accel_commands(GEMMINI0, { gemmini_extended_mvin(A, A_ROW, DIM, PUBLICATION_ROWS); });
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
+    if (instance != 0) {
+      accel_commands(gemmini[instance], { gemmini_extended_mvin((const void *)cgra[instance - 1].spm, A_ROW, DIM, PUBLICATION_ROWS); });
+    }
+    gemmini_fence();
     start_gemmini(gemmini[instance]);
+    gemmini_fence();
+    configure_cgra(cgra[instance], gemmini[instance], instance);
+    failures += start_cgra(cgra[instance], instance);
+    failures += wait_cgra(cgra[instance], instance);
+    cgra_dma_memory_fence();
   }
-  gemmini_fence();
+  failures += run_pool();
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
     failures += verify_gemmini(gemmini[instance], instance);
-    configure_cgra(cgra[instance], gemmini[instance], instance);
-  }
-  for (unsigned instance = 0; instance < INSTANCES; ++instance) {
-    failures += start_cgra(cgra[instance], instance);
-  }
-  for (unsigned instance = 0; instance < INSTANCES; ++instance) {
-    failures += wait_cgra(cgra[instance], instance);
-  }
-  cgra_dma_memory_fence();
-  for (unsigned instance = 0; instance < INSTANCES; ++instance) {
     failures += verify_cgra(cgra[instance], instance);
-    failures += run_pool(cgra[instance], instance);
-    failures += verify_pool(instance);
   }
+  failures += verify_pool();
 
   if (failures != 0) {
     printf("Multi-IP Manual: FAIL (%d)\n", failures);
