@@ -15,6 +15,7 @@ EXTERNAL_SPM_GENERATOR="$ROOT_DIR/scripts/generate_gemmini_ext_spm.py"
 CGRA_SPM_GENERATOR="$ROOT_DIR/scripts/generate_cgra_spm_window.py"
 CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
+ACCEL_GENERATOR="$ROOT_DIR/scripts/generate_accels.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 REBUILD=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
@@ -22,7 +23,7 @@ TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig|CgraConvRocketConfig|CgraPoolTileRocketConfig|CgraResidualTileRocketConfig)
+    CGRAMinimalGemminiAutoLinkRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig|CgraConvRocketConfig|CgraPoolTileRocketConfig|CgraResidualTileRocketConfig|MultiAccelRocketConfig)
       return 0
       ;;
     *)
@@ -33,7 +34,7 @@ uses_auto_link() {
 
 uses_cgra_spm() {
   case "$CONFIG" in
-    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig|CgraPoolTileRocketConfig|CgraResidualTileRocketConfig)
+    CGRAMinimalGemminiAESRocketConfig|CGRAMinimalGemminiAESAutoLinkRocketConfig|CGRAMinimalGemminiPoolRocketConfig|CGRAMinimalGemminiPoolAutoLinkRocketConfig|CGRAMinimalGemminiResidualRocketConfig|CGRAMinimalGemminiResidualAutoLinkRocketConfig|CgraPoolTileRocketConfig|CgraResidualTileRocketConfig|MultiAccelRocketConfig)
       return 0
       ;;
     *)
@@ -48,6 +49,9 @@ uses_aes_manual() {
 
 CGRA_SOC_YAML="$GC_SOC_YAML"
 case "$CONFIG" in
+  MultiAccelRocketConfig)
+    CGRA_SOC_YAML="$ROOT_DIR/configs/soc/autolink/multi.yaml"
+    ;;
   CgraPoolTileRocketConfig)
     CGRA_SOC_YAML="$ROOT_DIR/configs/soc/autolink/tiles.yaml"
     ;;
@@ -155,9 +159,11 @@ if uses_auto_link; then
     echo "[generate] CGRA + Gemmini AutoLink"
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
     python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
+    python3 "$ACCEL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML"
   else
     python3 "$CONTROL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
     python3 "$AUTO_LINK_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
+    python3 "$ACCEL_GENERATOR" --soc-yaml "$CGRA_SOC_YAML" --check
   fi
 fi
 

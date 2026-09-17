@@ -16,6 +16,7 @@ The single-CGRA configuration is layered:
 - `configs/soc/autolink/res.yaml` owns the residual block settings and automatic graph.
 - `configs/soc/autolink/tiles.yaml` owns the native Conv → ReLU → Pool tiled graph and two buffer regions per buffered IP.
 - `configs/soc/autolink/res_tiles.yaml` owns the native tiled residual graph with preloaded skip tiles.
+- `configs/soc/autolink/multi.yaml` owns the five-instance Gemmini/CGRA/Pool access demo.
 - `configs/kernels/kernel_*_4x4.yaml` owns kernel metadata and execution counts.
 
 Do not restore the deprecated mixed kernel schema or add fallback reads for its old fields. Keep multi-CGRA architecture and SoC settings in their matching files under `configs/arch/` and `configs/soc/`.
@@ -26,6 +27,7 @@ The main generation entry points are:
 - `scripts/generate_multi_cgra.py`
 - `scripts/cgra_fast_api.py`
 - `scripts/generate_auto_links.py`
+- `scripts/generate_accels.py`
 - `scripts/generate_cgra_link_control.py`
 - `scripts/generate_gemmini_ext_spm.py`
 - `scripts/generate_cgra_spm_window.py`
@@ -49,7 +51,7 @@ The current OpenFPGA integration is a TileLink MMIO fabric flow. It supports AND
 
 ### CGRA + Gemmini
 
-`CGRAMinimalGemminiRocketConfig` combines CGRA and Gemmini. `CGRAMinimalGemminiAESRocketConfig` and `CGRAMinimalGemminiAESAutoLinkRocketConfig` also add AES. CGRA uses `custom0`, AES uses `custom1`, and Gemmini uses `custom3`. Keep the opcodes distinct.
+`CGRAMinimalGemminiRocketConfig` combines CGRA and Gemmini. `CGRAMinimalGemminiAESRocketConfig` and `CGRAMinimalGemminiAESAutoLinkRocketConfig` also add AES. These direct-RoCC configurations keep distinct opcodes: CGRA uses `custom0`, AES uses `custom1`, and Gemmini uses `custom3`.
 
 The CPU-mediated Gemmini GEMM to CGRA ReLU demos remain supported. Manual and automatic configurations use the same Gemmini external SPM. `CGRAMinimalGemminiAutoLinkRocketConfig` adds one automatic 128-byte transfer from that SPM to CGRA local SPM. The CGRA DMA reads the Gemmini SPM through TileLink and the system bus; there is no shared staging buffer or intermediate DRAM copy.
 
@@ -62,6 +64,16 @@ The three-IP Manual and Automatic configurations validate one strict sequential 
 `CGRAMinimalGemminiResidualRocketConfig` and `CGRAMinimalGemminiResidualAutoLinkRocketConfig` validate one residual block with two Gemmini jobs and two CGRA jobs. AutoLink models logical stages with fan-out and a two-input join. CGRA uses `TileWithContextSwitchRTL`; static kernel configurations reside in disjoint native control-memory ranges selected by `execution.ctrl_base` in kernel metadata (default zero). The adapter caches only native per-run initialization and launch packets. Both tests repeat the block without reloading static CGRA configuration; automatic mode also reuses the captured jobs.
 
 AutoLink carries control only. TileLink carries payload data. Logical routes and maximum copy sizes are fixed during elaboration; CPU-rooted graphs can snapshot runtime tile geometry, transfer offsets/slot strides and stage regions before a run. Each endpoint executes one computation at a time. Buffered input preparation can overlap execution using a different free SPM slot; streaming endpoints retain watch-before-copy ordering. External producers without a root tile cursor retain coordinated one-round rearming. Runtime graph changes remain unsupported.
+
+### Multiple accelerator instances
+
+`MultiAccelRocketConfig` instantiates the Gemmini, CGRA and Pool instances declared by `communication.instances`. Each entry names an instance and its `type`; stage endpoints refer to that instance name. Same-type SPMs inherit the type's configured size and receive consecutive non-overlapping ranges, unless an entry supplies `base_address`. Control pages follow the highest SPM range, in instance order. The generator emits matching Scala parameters and `accel_t` software descriptors. Address ranges must fit the hardware and remain disjoint.
+
+All members share `RoCCGroup` for CPU commands, with separate SPM, DMA and endpoint connections. `accel_commands(device, { native_calls; })` emits a `custom0/funct127` selection prefix carrying `device.id` in `rs1`; subsequent commands reach that instance unchanged. Prefixes and commands share Rocket's ordered command path. Selecting another target does not wait for IP execution to finish; responses arbitrate independently and preserve their destination registers. These command blocks are single-hart and non-nested, and an interrupt must not change the target during a block. Every native command sequence must select its target; there is no implicit initial target. Native FPU, custom CSR and RoCC DCache access are not provided by this group.
+
+MMIO helpers with an `_at` suffix take the matching descriptor's control base; they do not select a RoCC target. CGRA job configuration includes native packets and therefore belongs inside its target's command block. AutoLink connects the named endpoints directly, independent of CPU selection. The first declared CGRA endpoint collects the entire graph's result stream; other CGRA endpoints expose their own configuration pages without duplicate result queues.
+
+The five-IP demo has two independent single-CGRA copies, two Gemmini instances and one Pool, not a VectorCGRA mesh. Both manual and automatic tests use the same hardware. The automatic graph runs `gemmini0 → cgra0 → pool` and `gemmini1 → cgra1` after one CPU input-ready event. This validates instance routing and SPM isolation, not a tiled residual block. Existing direct-RoCC configurations and AES attachment remain unchanged.
 
 ## Interface contracts
 

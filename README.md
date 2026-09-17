@@ -97,6 +97,7 @@ The combined flow runs Gemmini and CGRA in the same Chipyard system and can also
 - Supported: non-tiled residual blocks that reuse two Gemmini jobs and two resident CGRA kernels
 - Supported: runtime tile shapes, transfer offsets and buffer-slot strides within the generated graph
 - Supported: CGRA input-copy/compute overlap using separate SPM slots
+- Supported: two Gemmini, two independent CGRA instances and Pool through one shared CPU command interface
 - Unsupported: runtime graph changes and concurrent kernels on one IP
 
 In the three-stage AES path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. That demo remains sequential with one 128-byte chunk. AutoLink carries control and TileLink carries payload; tiled CNN demos reuse cached jobs across multiple chunks. See [hardware contracts](./docs/contracts.md) for supported interfaces.
@@ -134,6 +135,25 @@ $ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/r
 ```
 
 Use `--soc-yaml` to select the graph; changing YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+
+#### Multiple accelerator instances
+
+`multi.yaml` names each instance separately. The generated descriptors select the target while retaining native IP APIs:
+
+```c
+accel_commands(GEMMINI0, {
+  gemmini_mvin(input, 0);
+});
+```
+
+Use separate, non-nested command blocks for different instances. MMIO configuration uses the matching descriptor's `.control` address. In this demo, CGRA0's MMIO endpoint collects all AutoLink results.
+
+The manual test checks both Gemmini/CGRA pairs and Pool; the automatic test runs `gemmini0 → cgra0 → pool` alongside `gemmini1 → cgra1`, without CPU dispatch between stages. Both use the same hardware:
+
+```shell
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_auto.c ./run-chipyard-cgra-gemmini-demo.sh
+```
 
 #### Tiled Conv → ReLU → Pool
 

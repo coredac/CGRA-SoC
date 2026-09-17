@@ -11,6 +11,7 @@ from typing import Mapping
 
 import yaml
 
+from generate_accels import Accel, instance_layout
 from generate_gemmini_ext_spm import require_int, require_mapping, write
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +129,8 @@ class AutoLinkConfig:
     dependencies: tuple[Dependency, ...]
     bridge: CgraBridge | None
     buffer_slots: dict[str, int]
+    instances: dict[str, Accel]
+    bridges: dict[str, CgraBridge | None]
 
 
 def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
@@ -173,7 +176,9 @@ def load_memory(data: Mapping[str, object], key: str, path: Path) -> Memory:
     return memory
 
 
-def load_stages(values: object, path: Path) -> tuple[Stage, ...]:
+def load_stages(
+    values: object, instances: Mapping[str, Accel], path: Path
+) -> tuple[Stage, ...]:
     if not isinstance(values, list) or not values:
         raise ValueError(f"{path}: 'stages' must be a non-empty list")
     stages = []
@@ -192,7 +197,7 @@ def load_stages(values: object, path: Path) -> tuple[Stage, ...]:
             or name == INPUT_READY
         ):
             raise ValueError(f"{path}: stages[{index}].name is invalid")
-        if not isinstance(endpoint, str) or endpoint not in CAPABILITIES:
+        if not isinstance(endpoint, str) or endpoint not in instances:
             raise ValueError(f"{path}: stages[{index}] has an unknown endpoint")
         if name in names:
             raise ValueError(f"{path}: duplicate stage '{name}'")
@@ -215,6 +220,7 @@ def load_dependencies(
     values: object,
     stages: tuple[Stage, ...],
     memories: Mapping[str, Memory],
+    instances: Mapping[str, Accel],
     path: Path,
 ) -> tuple[Dependency, ...]:
     if not isinstance(values, list) or not values:
@@ -246,7 +252,10 @@ def load_dependencies(
             raise ValueError(f"{path}: duplicate dependency {source} -> {destination}")
         edges.add(edge)
         destination_stage = stage_map[destination]
-        if "destination" not in CAPABILITIES[destination_stage.endpoint]:
+        if (
+            "destination"
+            not in CAPABILITIES[instances[destination_stage.endpoint].kind]
+        ):
             raise ValueError(
                 f"{path}: endpoint '{destination_stage.endpoint}' cannot be a destination"
             )
@@ -269,7 +278,7 @@ def load_dependencies(
                 raise ValueError(
                     f"{path}: dependencies[{index}].source_format must be '{INT8_FORMAT}'"
                 )
-            if destination_stage.endpoint != "cgra":
+            if instances[destination_stage.endpoint].kind != "cgra":
                 raise ValueError(
                     f"{path}: dependencies[{index}].source_format requires a CGRA destination"
                 )
@@ -296,7 +305,7 @@ def load_dependencies(
                     f"{path}: dependencies[{index}].size_bytes must be positive"
                 )
             source_stage = stage_map[source]
-            if "source" not in CAPABILITIES[source_stage.endpoint]:
+            if "source" not in CAPABILITIES[instances[source_stage.endpoint].kind]:
                 raise ValueError(
                     f"{path}: endpoint '{source_stage.endpoint}' cannot be a source"
                 )
@@ -304,7 +313,7 @@ def load_dependencies(
             if source_offset is None:
                 source_offset = (
                     source_memory.size - size
-                    if source_stage.endpoint == "gemmini"
+                    if instances[source_stage.endpoint].kind == "gemmini"
                     else 0
                 )
             if source_offset < 0:
@@ -324,16 +333,23 @@ def infer_bridge(
     stages: tuple[Stage, ...],
     dependencies: tuple[Dependency, ...],
     cgra: Memory,
-    gemmini: Memory,
+    memories: Mapping[str, Memory],
     hardware: CgraHardware,
     path: Path,
     packed_words: int | None = None,
+    name: str = "cgra",
 ) -> CgraBridge | None:
     stage_map = {stage.name: stage for stage in stages}
     transformed = [
         dependency
         for dependency in dependencies
-        if dependency.copy is not None and dependency.copy.format == INT8_FORMAT
+        if dependency.copy is not None
+        and dependency.copy.format == INT8_FORMAT
+        and (
+            stage_map[dependency.destination].endpoint == name
+            or dependency.source is not None
+            and stage_map[dependency.source].endpoint == name
+        )
     ]
     if not transformed:
         if packed_words is not None:
@@ -343,15 +359,15 @@ def infer_bridge(
         dependency
         for dependency in transformed
         if dependency.source is not None
-        and stage_map[dependency.source].endpoint == "cgra"
-        and stage_map[dependency.destination].endpoint != "cgra"
+        and stage_map[dependency.source].endpoint == name
+        and stage_map[dependency.destination].endpoint != name
     ]
     inbound = [
         dependency
         for dependency in transformed
         if dependency.source is not None
-        and stage_map[dependency.source].endpoint != "cgra"
-        and stage_map[dependency.destination].endpoint == "cgra"
+        and stage_map[dependency.source].endpoint != name
+        and stage_map[dependency.destination].endpoint == name
     ]
     if not outbound or len(transformed) != len(outbound) + len(inbound):
         raise ValueError(
@@ -401,7 +417,7 @@ def infer_bridge(
 
     if any(
         dependency.source is not None
-        and stage_map[dependency.source].endpoint == "cgra"
+        and stage_map[dependency.source].endpoint == name
         and dependency.copy is not None
         and dependency.copy.format != INT8_FORMAT
         for dependency in dependencies
@@ -413,11 +429,13 @@ def infer_bridge(
     window_bytes = next_power_of_two(max(outbound_words, hardware.cache_block_bytes))
     if cgra.base % window_bytes != 0:
         raise ValueError(f"{path}: CGRA window base is not window aligned")
-    if (
-        cgra.base < gemmini.base + gemmini.size
-        and gemmini.base < cgra.base + window_bytes
-    ):
-        raise ValueError(f"{path}: CGRA window overlaps Gemmini SPM")
+    for other, memory in memories.items():
+        if (
+            other != name
+            and cgra.base < memory.base + memory.size
+            and memory.base < cgra.base + window_bytes
+        ):
+            raise ValueError(f"{path}: CGRA window overlaps {other} SPM")
     return CgraBridge(
         window_bytes,
         outbound_word,
@@ -431,6 +449,7 @@ def validate_copy_alignment(
     stages: tuple[Stage, ...],
     dependencies: tuple[Dependency, ...],
     beat_bytes: int,
+    instances: Mapping[str, Accel],
     path: Path,
 ) -> None:
     stage_map = {stage.name: stage for stage in stages}
@@ -440,7 +459,7 @@ def validate_copy_alignment(
         copy = dependency.copy
         if (
             copy.format == INT8_FORMAT
-            and stage_map[dependency.source].endpoint == "cgra"
+            and instances[stage_map[dependency.source].endpoint].kind == "cgra"
         ):
             continue
         if copy.source_format == INT8_FORMAT:
@@ -532,7 +551,11 @@ def validate_destinations(
 
 
 def validate_memory(config: AutoLinkConfig, path: Path) -> None:
-    memories = {"gemmini": config.gemmini, "cgra": config.cgra}
+    memories = {
+        name: Memory(accel.base, accel.size)
+        for name, accel in config.instances.items()
+        if accel.size
+    }
     stage_map = {stage.name: stage for stage in config.stages}
     for dependency in config.dependencies:
         if dependency.copy is None or dependency.source is None:
@@ -581,23 +604,44 @@ def load_config(
     )
     if packed_words is not None and packed_words <= 0:
         raise ValueError(f"{path}: packed_words must be positive")
-    stages = load_stages(communication.get("stages"), path)
+    instances = {accel.name: accel for accel in instance_layout(document).instances}
+    stages = load_stages(communication.get("stages"), instances, path)
     endpoint_names = {stage.endpoint for stage in stages}
     if any(name not in endpoint_names for name in buffer_slots):
         raise ValueError(f"{path}: buffer_slots names an unknown endpoint")
     if any(not isinstance(count, int) or count <= 0 for count in buffer_slots.values()):
         raise ValueError(f"{path}: buffer slot counts must be positive integers")
-    memories = {"gemmini": gemmini, "cgra": cgra}
+    memories = {
+        name: Memory(accel.base, accel.size)
+        for name, accel in instances.items()
+        if accel.size
+    }
     dependencies = load_dependencies(
-        communication.get("dependencies"), stages, memories, path
+        communication.get("dependencies"), stages, memories, instances, path
     )
-    validate_copy_alignment(stages, dependencies, hardware.dma_beat_bytes, path)
+    validate_copy_alignment(
+        stages, dependencies, hardware.dma_beat_bytes, instances, path
+    )
     validate_graph(stages, dependencies, path)
     validate_destinations(stages, dependencies, path)
-    bridge = infer_bridge(
-        stages, dependencies, cgra, gemmini, hardware, path, packed_words
+    bridges = {
+        name: infer_bridge(
+            stages,
+            dependencies,
+            memories[name],
+            memories,
+            hardware,
+            path,
+            packed_words,
+            name,
+        )
+        for name, accel in instances.items()
+        if accel.kind == "cgra"
+    }
+    bridge = next(iter(bridges.values()), None)
+    config = AutoLinkConfig(
+        gemmini, cgra, stages, dependencies, bridge, buffer_slots, instances, bridges
     )
-    config = AutoLinkConfig(gemmini, cgra, stages, dependencies, bridge, buffer_slots)
     validate_memory(config, path)
     return config
 
@@ -614,56 +658,55 @@ def stage_map(config: AutoLinkConfig) -> dict[str, Stage]:
     return {stage.name: stage for stage in config.stages}
 
 
-def gemmini_endpoint(config: AutoLinkConfig) -> str:
+def gemmini_endpoint(config: AutoLinkConfig, name: str) -> str:
+    accel = config.instances[name]
     return (
-        '      AutoEndpointSpec(name = "gemmini", buffer = '
-        f"{buffer_text(config.gemmini)}, localBytes = {config.gemmini.size}, "
-        f"bufferSlots = {config.buffer_slots.get('gemmini', 1)})"
+        f'      AutoEndpointSpec(name = "{name}", buffer = '
+        f"{buffer_text(Memory(accel.base, accel.size))}, localBytes = {accel.size}, "
+        f"bufferSlots = {config.buffer_slots.get(name, 1)})"
     )
 
 
-def cgra_endpoint(config: AutoLinkConfig) -> str:
+def cgra_endpoint(config: AutoLinkConfig, name: str) -> str:
+    accel = config.instances[name]
+    bridge = config.bridges[name]
     copies = [dependency for dependency in config.dependencies if dependency.copy]
     stages = stage_map(config)
     is_source = any(
-        dependency.source is not None and stages[dependency.source].endpoint == "cgra"
+        dependency.source is not None and stages[dependency.source].endpoint == name
         for dependency in copies
     )
     if is_source:
-        size = (
-            config.bridge.window_bytes
-            if config.bridge is not None
-            else config.cgra.size
-        )
+        size = bridge.window_bytes if bridge is not None else accel.size
         return (
-            '      AutoEndpointSpec(name = "cgra", buffer = '
-            f"{buffer_text(Memory(config.cgra.base, size))}, localBytes = {config.cgra.size}, "
+            f'      AutoEndpointSpec(name = "{name}", buffer = '
+            f"{buffer_text(Memory(accel.base, size))}, localBytes = {accel.size}, "
             "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
-            f"bufferSlots = {config.buffer_slots.get('cgra', 1)}, releaseOnCopy = true)"
+            f"bufferSlots = {config.buffer_slots.get(name, 1)}, releaseOnCopy = true)"
         )
     local_bytes = (
         "CGRAGenerated.params.dma.spmWords * "
         "CGRAGenerated.params.dataPayloadWidth / 8"
     )
     return (
-        f'      AutoEndpointSpec(name = "cgra", buffer = None, localBytes = {local_bytes}, '
+        f'      AutoEndpointSpec(name = "{name}", buffer = None, localBytes = {local_bytes}, '
         "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
-        f"bufferSlots = {config.buffer_slots.get('cgra', 1)}, releaseOnCopy = true)"
+        f"bufferSlots = {config.buffer_slots.get(name, 1)}, releaseOnCopy = true)"
     )
 
 
-def aes_endpoint(config: AutoLinkConfig) -> str:
+def aes_endpoint(config: AutoLinkConfig, name: str) -> str:
     copies = copied_dependencies(config)
     stages = stage_map(config)
     source_spans = [
         dependency.copy.source_offset + dependency.copy.size
         for dependency in copies
-        if dependency.source is not None and stages[dependency.source].endpoint == "aes"
+        if dependency.source is not None and stages[dependency.source].endpoint == name
     ]
     input_sizes = [
         dependency.copy.destination_offset + dependency.copy.size
         for dependency in copies
-        if stages[dependency.destination].endpoint == "aes"
+        if stages[dependency.destination].endpoint == name
     ]
     buffer = (
         buffer_text(Memory(config.gemmini.base, max(source_spans)))
@@ -672,20 +715,20 @@ def aes_endpoint(config: AutoLinkConfig) -> str:
     )
     local_bytes = max(input_sizes, default=0)
     return (
-        f'      AutoEndpointSpec(name = "aes", buffer = {buffer}, localBytes = {local_bytes}, '
-        f"bufferSlots = {config.buffer_slots.get('aes', 1)}, releaseOnCopy = true)"
+        f'      AutoEndpointSpec(name = "{name}", buffer = {buffer}, localBytes = {local_bytes}, '
+        f"bufferSlots = {config.buffer_slots.get(name, 1)}, releaseOnCopy = true)"
     )
 
 
-def pool_endpoint(config: AutoLinkConfig) -> str:
+def pool_endpoint(config: AutoLinkConfig, name: str) -> str:
     copies = copied_dependencies(config)
     stages = stage_map(config)
     sizes = [
         dependency.copy.destination_offset + dependency.copy.size
         for dependency in copies
-        if stages[dependency.destination].endpoint == "pool"
+        if stages[dependency.destination].endpoint == name
     ]
-    return f'      AutoEndpointSpec(name = "pool", buffer = None, localBytes = {max(sizes)}, releaseOnCopy = true)'
+    return f'      AutoEndpointSpec(name = "{name}", buffer = None, localBytes = {max(sizes)}, releaseOnCopy = true)'
 
 
 ENDPOINT_TEXT = {
@@ -697,7 +740,7 @@ ENDPOINT_TEXT = {
 
 
 def endpoint_text(config: AutoLinkConfig, name: str) -> str:
-    return ENDPOINT_TEXT[name](config)
+    return ENDPOINT_TEXT[config.instances[name].kind](config, name)
 
 
 def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
@@ -707,9 +750,10 @@ def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
     source_offset = copy.source_offset
     if copy.format == INT8_FORMAT:
         source = stage_map(config)[dependency.source]
-        if source.endpoint == "cgra":
+        if config.instances[source.endpoint].kind == "cgra":
             source_offset = (
-                copy.source_offset // CGRA_WORD_BYTES - config.bridge.outbound_word
+                copy.source_offset // CGRA_WORD_BYTES
+                - config.bridges[source.endpoint].outbound_word
             )
     expansion = (
         f", expansion = {CGRA_WORD_BYTES}" if copy.source_format == INT8_FORMAT else ""
