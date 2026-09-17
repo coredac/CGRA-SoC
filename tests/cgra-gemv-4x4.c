@@ -67,7 +67,7 @@ int main(void) {
   preload_gemv_data();
 
   printf("Configuring and launching GEMV...\n");
-  cgra_config(&GEMV);
+  cgra_config(&GEMV, CGRA_COLD);
   cgra_start(&GEMV);
 
   CGRA_WAIT(wait_result);

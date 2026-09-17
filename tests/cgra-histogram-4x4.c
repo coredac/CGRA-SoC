@@ -79,7 +79,7 @@ int main(void) {
   fence_histogram_preload();
 
   printf("Configuring and launching histogram...\n");
-  cgra_config(&HISTOGRAM);
+  cgra_config(&HISTOGRAM, CGRA_COLD);
   cgra_start(&HISTOGRAM);
 
   CGRA_WAIT(wait_result);

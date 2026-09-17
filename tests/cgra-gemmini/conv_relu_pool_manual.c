@@ -139,7 +139,7 @@ static int run_cgra(void) {
   uint64_t result = 0;
 
   cgra_dma_mvin_async((const void *)source, CGRA_INPUT);
-  cgra_config(&RELU4X4);
+  cgra_config(&RELU4X4, CGRA_COLD);
   if (cgra_dma_wait(CGRA_INPUT_TAG) != CGRA_INPUT_TAG) {
     return 1;
   }

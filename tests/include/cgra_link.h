@@ -28,7 +28,7 @@ static inline uint32_t cgra_link_read(uintptr_t offset) { return *cgra_link_reg(
 
 static inline void cgra_link_write(uintptr_t offset, uint32_t value) { *cgra_link_reg(offset) = value; }
 
-static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count) {
+static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count, uint32_t rearm_count, uint32_t setup_count) {
   uint64_t ready = 0;
   // Drain native static configuration before subsequent RoCC packets enter capture.
   CGRA_WAIT(ready);
@@ -37,6 +37,8 @@ static inline int cgra_link_begin(uint32_t job, uint32_t packet_count, uint32_t 
   cgra_link_write(CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
   cgra_link_write(CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
   cgra_link_write(CGRA_LINK_CONTROL_PATCH_COUNT, patch_count);
+  cgra_link_write(CGRA_LINK_CONTROL_REARM_COUNT, rearm_count);
+  cgra_link_write(CGRA_LINK_CONTROL_SETUP_COUNT, setup_count);
   cgra_link_write(CGRA_LINK_CONTROL_CONFIG_SUBMIT, 1);
   __asm__ volatile("" ::: "memory");
   while (cgra_link_read(CGRA_LINK_CONTROL_CONFIG_READY) == 0) {
@@ -74,7 +76,7 @@ static inline void cgra_link_queue(cgra_packet_t packet) {
 static inline int cgra_job_config(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) {
   cgra_send_packets_fast(kernel->static_packets, kernel->static_count);
   const uint32_t patch_count = bindings == NULL ? 0 : kernel->patch_count;
-  if (cgra_link_begin(job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count) != 0) {
+  if (cgra_link_begin(job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count, kernel->rearm_count, kernel->setup_count) != 0) {
     return 1;
   }
   cgra_link_patches(kernel, bindings, patch_count);

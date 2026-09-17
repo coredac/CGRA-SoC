@@ -67,7 +67,7 @@ static int run_cgra(void) {
   uint64_t result = 0;
 
   cgra_dma_mvin_async((const void *)input_address, INPUT_DESCRIPTOR);
-  cgra_config(&RELU4X4);
+  cgra_config(&RELU4X4, CGRA_COLD);
   if (cgra_dma_wait(INPUT_DMA_TAG) != INPUT_DMA_TAG) {
     printf("CGRA DMA MVIN tag mismatch\n");
     return 1;

@@ -150,9 +150,9 @@ static int run_relu1(unsigned run) {
     return 1;
   }
   if (run == 0) {
-    cgra_config(&RELU_TAIL);
+    cgra_config(&RELU_TAIL, CGRA_COLD);
   } else {
-    cgra_prepare(&RELU_TAIL);
+    cgra_prepare(&RELU_TAIL, CGRA_SWITCH);
   }
   cgra_start(&RELU_TAIL);
   return wait_cgra(RELU_TAIL_EXPECTED_COMPLETES);
@@ -173,9 +173,9 @@ static int run_add_relu(unsigned run) {
   const uintptr_t source = GEMMINI_EXT_SPM_BASE + CONV2_SPM_OFFSET;
   cgra_dma_mvin_async((const void *)source, CONV2_DMA);
   if (run == 0) {
-    cgra_config(&ADD_RELU);
+    cgra_config(&ADD_RELU, CGRA_SWITCH);
   } else {
-    cgra_prepare(&ADD_RELU);
+    cgra_prepare(&ADD_RELU, CGRA_SWITCH);
   }
   if (cgra_dma_wait(CONV2_DMA_TAG) != CONV2_DMA_TAG) {
     return 1;

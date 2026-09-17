@@ -58,7 +58,7 @@ $ ./run-chipyard-cgra-test.sh --rebuild <test-name>
 
 The rebuild flag can be omitted when the generated RTL is unchanged.
 
-Generated headers expose kernel descriptors such as `RELU4X4`. Manual execution uses `cgra_config(&RELU4X4)` followed by `cgra_start(&RELU4X4)` after input DMA completes. For another run of an already resident kernel, use `cgra_prepare(&RELU4X4)` instead of `cgra_config`; it retains the static configuration. Manage DMA and completion separately.
+Generated headers expose kernel descriptors such as `RELU4X4`. After hardware reset, manual execution uses `cgra_config(&RELU4X4, CGRA_COLD)` followed by `cgra_start(&RELU4X4)` after input DMA completes. Repeat the same resident kernel with `cgra_prepare(&RELU4X4, CGRA_REPEAT)`. Use `CGRA_SWITCH` when another kernel has executed, including the first use of a newly loaded kernel: `cgra_config` loads its static configuration, while `cgra_prepare` reuses an already resident configuration. Manage DMA and completion separately.
 
 #### Multi-CGRA
 

@@ -95,7 +95,7 @@ static int run_cgra_relu(void) {
 
   preload_cgra_relu_inputs();
 
-  cgra_config(&RELU4X4);
+  cgra_config(&RELU4X4, CGRA_COLD);
   cgra_start(&RELU4X4);
 
   CGRA_WAIT(wait_result);

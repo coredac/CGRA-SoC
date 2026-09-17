@@ -34,7 +34,7 @@ int main(void) {
   cgra_dma_memory_fence();
 
   cgra_dma_mvin_async(input, MVIN_DESC);
-  cgra_config(&RELU4X4);
+  cgra_config(&RELU4X4, CGRA_COLD);
   uint8_t observed_mvin_tag = cgra_dma_wait(RELU4X4_MVIN_TAG);
   if (observed_mvin_tag != RELU4X4_MVIN_TAG) {
     printf("CGRA DMA ReLU4x4: MVIN tag mismatch expected=%u observed=%u\n", RELU4X4_MVIN_TAG, observed_mvin_tag);

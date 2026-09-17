@@ -46,23 +46,29 @@ int main(void) {
   uint64_t wait_result = 0;
   uint64_t result = 0;
 
-  preload_relu4x4_data();
-  cgra_config(&RELU4X4);
-  cgra_start(&RELU4X4);
-  CGRA_WAIT(wait_result);
-
-  CGRA_STATUS(status);
-  CGRA_RESULT(result);
-  uint64_t complete = status & 0x1ULL;
-  uint64_t complete_count = (status >> 1) & 0xFFFFULL;
-  int data_failures = verify_relu4x4_data(0);
-
-  if (wait_result != 1 || complete != 1 || complete_count != RELU4X4_EXPECTED_COMPLETES || result != RELU4X4_EXPECTED_RESULT || data_failures != 0) {
-    if (data_failures != 0) {
-      verify_relu4x4_data(1);
+  for (unsigned run = 0; run < 2; ++run) {
+    preload_relu4x4_data();
+    if (run == 0) {
+      cgra_config(&RELU4X4, CGRA_COLD);
+    } else {
+      cgra_prepare(&RELU4X4, CGRA_REPEAT);
     }
-    printf("CGRA RoCC ReLU4x4 fast API: FAIL\n");
-    return 1;
+    cgra_start(&RELU4X4);
+    CGRA_WAIT(wait_result);
+
+    CGRA_STATUS(status);
+    CGRA_RESULT(result);
+    uint64_t complete = status & 0x1ULL;
+    uint64_t complete_count = (status >> 1) & 0xFFFFULL;
+    int data_failures = verify_relu4x4_data(0);
+
+    if (wait_result != 1 || complete != 1 || complete_count != RELU4X4_EXPECTED_COMPLETES || result != RELU4X4_EXPECTED_RESULT || data_failures != 0) {
+      if (data_failures != 0) {
+        verify_relu4x4_data(1);
+      }
+      printf("CGRA RoCC ReLU4x4 fast API: FAIL\n");
+      return 1;
+    }
   }
 
   printf("CGRA RoCC ReLU4x4 fast API: PASS\n");

@@ -674,15 +674,22 @@ def split_packets(cfg: KernelConfig, packets, types):
         CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR,
         CMD_CONFIG_PROLOGUE_FU_CROSSBAR,
     }
+    setup_commands = {
+        CMD_CONFIG_CTRL_LOWER_BOUND,
+        CMD_CONFIG_COUNT_PER_ITER,
+        CMD_CONFIG_TOTAL_CTRL_COUNT,
+    }
     indexed_commands = static_commands | {CMD_CONFIG_PROLOGUE_FU}
+    relocations = build_relocations(cfg, packets, types)
+    patched = {item.packet_index for item in relocations}
     PacketType = types["IntraCgraPktType"]
     PayloadType = types["CgraPayloadType"]
     DataType = types["DataType"]
-    runtime = [
+    rearm = [
         ((x, y), PacketType(0, target, payload=PayloadType(CMD_REARM)))
         for target, x, y in cfg.tile_targets
     ]
-    runtime.extend(
+    setup = [
         (
             coord,
             PacketType(
@@ -695,8 +702,9 @@ def split_packets(cfg: KernelConfig, packets, types):
         )
         for coord, packet in packets
         if int(packet.payload.cmd) == CMD_LAUNCH
-    )
+    ]
     static = []
+    runtime = []
     indices = {}
     for index, (coord, original) in enumerate(packets):
         packet = copy.deepcopy(original)
@@ -708,13 +716,17 @@ def split_packets(cfg: KernelConfig, packets, types):
         if command in static_commands:
             static.append((coord, packet))
             continue
+        if command in setup_commands and index not in patched:
+            setup.append((coord, packet))
+            continue
         indices[index] = len(runtime)
         runtime.append((coord, packet))
+    prefix_count = len(rearm) + len(setup)
     relocations = [
-        replace(item, packet_index=indices[item.packet_index])
-        for item in build_relocations(cfg, packets, types)
+        replace(item, packet_index=prefix_count + indices[item.packet_index])
+        for item in relocations
     ]
-    return static, runtime, relocations
+    return static, rearm + setup + runtime, relocations, len(rearm), len(setup)
 
 
 def render_runtime_section(cfg: KernelConfig, relocations) -> list[str]:
@@ -748,6 +760,8 @@ def render_kernel(cfg: KernelConfig, relocations) -> list[str]:
         f"  .static_count = {prefix}_FAST_STATIC_PACKET_COUNT,",
         f"  .config_packets = {prefix}_FAST_CONFIG_PACKETS,",
         f"  .config_count = {prefix}_FAST_CONFIG_PACKET_COUNT,",
+        f"  .rearm_count = {prefix}_FAST_REARM_PACKET_COUNT,",
+        f"  .setup_count = {prefix}_FAST_SETUP_PACKET_COUNT,",
         f"  .launch_packets = {prefix}_FAST_LAUNCH_PACKETS,",
         f"  .launch_count = {prefix}_FAST_LAUNCH_PACKET_COUNT,",
         f"  .expected_completes = {prefix}_EXPECTED_COMPLETES,",
@@ -996,6 +1010,8 @@ def render_fast_api_section(
     static: Sequence[tuple[tuple[int, int], object]],
     packets: Sequence[tuple[tuple[int, int], object]],
     types: Mapping[str, object],
+    rearm_count: int,
+    setup_count: int,
 ) -> list[str]:
     """Return the generated fast API C header section."""
 
@@ -1010,10 +1026,12 @@ def render_fast_api_section(
         "",
         "// Fast API: local single-CGRA packets precomputed by scripts/cgra_fast_api.py.",
         "// Fast API is precomputed for cgra_target_local().",
-        "// Static packets stay in control memory; CONFIG contains per-run initialization.",
+        "// CONFIG contains REARM, fixed setup, then per-run initialization.",
         "",
         f"#define {guard_kernel}_FAST_STATIC_PACKET_COUNT {len(static_packets)}",
         f"#define {guard_kernel}_FAST_CONFIG_PACKET_COUNT {len(config_packets)}",
+        f"#define {guard_kernel}_FAST_REARM_PACKET_COUNT {rearm_count}",
+        f"#define {guard_kernel}_FAST_SETUP_PACKET_COUNT {setup_count}",
         f"#define {guard_kernel}_FAST_LAUNCH_PACKET_COUNT {len(launch_packets)}",
         "",
     ]
@@ -1069,7 +1087,9 @@ def write_header(
 ) -> None:
     guard_kernel = cfg.name.upper()
     guard = f"CGRA_{guard_kernel}_FAST_API_H"
-    static, runtime, relocations = split_packets(cfg, packets, types)
+    static, runtime, relocations, rearm_count, setup_count = split_packets(
+        cfg, packets, types
+    )
 
     lines = [
         f"#ifndef {guard}",
@@ -1086,7 +1106,9 @@ def write_header(
         f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}",
     ]
 
-    lines.extend(render_fast_api_section(cfg, static, runtime, types))
+    lines.extend(
+        render_fast_api_section(cfg, static, runtime, types, rearm_count, setup_count)
+    )
     lines.extend(render_runtime_section(cfg, relocations))
     lines.extend(render_kernel(cfg, relocations))
 

@@ -75,7 +75,7 @@ int main(void) {
   uint64_t result = 0;
 
   cgra_dma_mvin_async(gemmini_words, MVIN_DESCRIPTOR);
-  cgra_config(&RELU4X4);
+  cgra_config(&RELU4X4, CGRA_COLD);
 
   uint8_t observed_mvin_tag = cgra_dma_wait(MVIN_TAG_0);
   if (observed_mvin_tag != MVIN_TAG_0) {

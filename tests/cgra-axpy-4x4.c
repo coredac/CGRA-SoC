@@ -56,7 +56,7 @@ int main(void) {
   preload_axpy_data();
 
   printf("Configuring and launching AXPY...\n");
-  cgra_config(&AXPY);
+  cgra_config(&AXPY, CGRA_COLD);
   cgra_start(&AXPY);
 
   CGRA_WAIT(wait_result);

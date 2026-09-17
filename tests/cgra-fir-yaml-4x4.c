@@ -32,7 +32,7 @@ int main(void) {
   preload_fir4x4_data();
 
   printf("Configuring and launching FIR4x4...\n");
-  cgra_config(&FIR4X4);
+  cgra_config(&FIR4X4, CGRA_COLD);
   cgra_start(&FIR4X4);
 
   CGRA_WAIT(wait_result);
