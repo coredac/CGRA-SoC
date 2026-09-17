@@ -3,7 +3,7 @@
 #include "cgra_protocol.h"
 #include "cgra_runtime.h"
 #include "gemmini.h"
-#include "generated/cgra_relu4x4_fast_api.h"
+#include "generated/cgra_relu_runtime_fast_api.h"
 #include "pool.h"
 
 #include <stdint.h>
@@ -31,6 +31,8 @@ static elem_t B[INSTANCES][DIM][DIM] row_align(1);
 static acc_t gemmini_expected[TILES][INSTANCES][WORDS];
 static acc_t relu_expected[TILES][INSTANCES][WORDS];
 static acc_t output[TILES][CHANNELS] __attribute__((aligned(32)));
+static cgra_packet_t relu_config[RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT];
+static cgra_kernel_t relu;
 
 static const uint32_t ACC_WRITE = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACC_READ = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
@@ -38,6 +40,32 @@ static const cgra_dma_desc_t INPUT[INSTANCES] = {
     CGRA_DMA_DESC_CONST(0, BYTES, TAG_BASE),
     CGRA_DMA_DESC_CONST(0, BYTES, TAG_BASE + 1),
 };
+
+static unsigned long cycles(void) {
+  unsigned long value;
+  __asm__ volatile("rdcycle %0" : "=r"(value)::"memory");
+  return value;
+}
+
+static void init_cgra(void) {
+  const uint32_t symbols[RELU_RUNTIME_SYMBOL_COUNT] = {
+      [RELU_RUNTIME_SYMBOL_INPUT0] = 0,
+      [RELU_RUNTIME_SYMBOL_OUTPUT] = 0,
+      [RELU_RUNTIME_SYMBOL_ELEMENTS] = WORDS,
+  };
+  relu = RELU_RUNTIME;
+  for (unsigned index = 0; index < relu.config_count; ++index) {
+    relu_config[index] = relu.config_packets[index];
+  }
+  for (unsigned index = 0; index < relu.patch_count; ++index) {
+    const cgra_patch_t *patch = &relu.patches[index];
+    cgra_packet_t *packet = &relu_config[patch->packet_index];
+    const uint32_t value = symbols[patch->symbol_index] * patch->scale + patch->offset;
+    packet->mid = (packet->mid & ~RELU_RUNTIME_STORE_DATA_PAYLOAD_MID(UINT32_MAX)) | RELU_RUNTIME_STORE_DATA_PAYLOAD_MID(value);
+    packet->hi = (packet->hi & ~RELU_RUNTIME_STORE_DATA_PAYLOAD_HI(UINT32_MAX)) | RELU_RUNTIME_STORE_DATA_PAYLOAD_HI(value);
+  }
+  relu.config_packets = relu_config;
+}
 
 static void init_inputs(void) {
   for (unsigned tile = 0; tile < TILES; ++tile) {
@@ -118,7 +146,7 @@ static void prepare_cgra(accel_t device, accel_t source, unsigned instance, unsi
   accel_commands(device, {
     cgra_dma_mvin_async((const void *)input, INPUT[instance]);
     if (tile != 0) {
-      cgra_prepare(&RELU4X4, CGRA_REPEAT);
+      cgra_prepare(&relu, CGRA_REPEAT);
     }
   });
 }
@@ -127,7 +155,7 @@ static int start_cgra(accel_t device, unsigned instance, unsigned tile) {
   uint8_t tag = 0;
   accel_commands(device, {
     tag = cgra_dma_wait(TAG_BASE + instance);
-    cgra_start(&RELU4X4);
+    cgra_start(&relu);
   });
   if (tag != TAG_BASE + instance) {
     printf("CGRA%u DMA tag mismatch tile=%u actual=%u expected=%u\n", instance, tile, tag, TAG_BASE + instance);
@@ -145,7 +173,7 @@ static int wait_cgra(accel_t device, unsigned instance, unsigned tile) {
     CGRA_STATUS(status);
     CGRA_RESULT(result);
   });
-  if (ready != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != RELU4X4_EXPECTED_COMPLETES || result != 0) {
+  if (ready != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != relu.expected_completes || result != 0) {
     printf("CGRA%u completion mismatch tile=%u ready=%lu status=%lu result=%lu\n", instance, tile, (unsigned long)ready, (unsigned long)status, (unsigned long)result);
     return 1;
   }
@@ -204,16 +232,21 @@ int main(void) {
 
   init_inputs();
   init_expected();
+  init_cgra();
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
     load_gemmini(gemmini[instance], instance);
-    accel_commands(cgra[instance], { cgra_config(&RELU4X4, CGRA_COLD); });
+    accel_commands(cgra[instance], { cgra_config(&relu, CGRA_COLD); });
   }
   accel_commands(GEMMINI0, { gemmini_extended_mvin(A, A_ROW, DIM, TILES * PUBLICATION_ROWS); });
   accel_commands(POOL, {
     pool_config_input(CGRA1.spm, POOL_HEIGHT, POOL_WIDTH, CHANNELS);
     pool_config_window(POOL_MODE_MAX, POOL_HEIGHT, POOL_WIDTH, POOL_HEIGHT, POOL_WIDTH, 0, 0);
   });
+  cgra_dma_memory_fence();
+  // Sum command-to-Pool-completion intervals, excluding preload, initial configuration and verification.
+  unsigned long cpu_cycles = 0;
   for (unsigned tile = 0; tile < TILES; ++tile) {
+    const unsigned long start = cycles();
     for (unsigned instance = 0; instance < INSTANCES; ++instance) {
       if (instance != 0) {
         accel_commands(gemmini[instance], { gemmini_extended_mvin((const void *)cgra[instance - 1].spm, A_ROW, DIM, PUBLICATION_ROWS); });
@@ -228,6 +261,7 @@ int main(void) {
       cgra_dma_memory_fence();
     }
     failures += run_pool(tile);
+    cpu_cycles += cycles() - start;
     for (unsigned instance = 0; instance < INSTANCES; ++instance) {
       failures += verify_gemmini(gemmini[instance], instance, tile);
       failures += verify_cgra(cgra[instance], instance, tile);
@@ -235,6 +269,7 @@ int main(void) {
     failures += verify_pool(tile);
   }
 
+  printf("Multi-IP Manual tiles=%u cpu_cycles=%lu\n", TILES, cpu_cycles);
   if (failures != 0) {
     printf("Multi-IP Manual: FAIL (%d)\n", failures);
     return 1;

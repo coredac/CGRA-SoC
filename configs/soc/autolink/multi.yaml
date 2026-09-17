@@ -27,10 +27,16 @@ communication:
       type: gemmini
     cgra0:
       type: cgra
+      packed_words: 64
     cgra1:
       type: cgra
     pool:
       type: pool
+  buffer_slots:
+    gemmini0: 2
+    gemmini1: 2
+    cgra0: 2
+    cgra1: 2
   stages:
     - name: gemmini0
       endpoint: gemmini0

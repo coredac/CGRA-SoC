@@ -604,6 +604,11 @@ def load_config(
     )
     if packed_words is not None and packed_words <= 0:
         raise ValueError(f"{path}: packed_words must be positive")
+    packed_by_instance = {
+        name: require_int(value, "packed_words", path)
+        for name, value in communication.get("instances", {}).items()
+        if "packed_words" in value
+    }
     instances = {accel.name: accel for accel in instance_layout(document).instances}
     stages = load_stages(communication.get("stages"), instances, path)
     endpoint_names = {stage.endpoint for stage in stages}
@@ -632,7 +637,7 @@ def load_config(
             memories,
             hardware,
             path,
-            packed_words,
+            packed_by_instance.get(name, packed_words),
             name,
         )
         for name, accel in instances.items()

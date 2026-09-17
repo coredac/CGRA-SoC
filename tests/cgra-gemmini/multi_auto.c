@@ -3,7 +3,7 @@
 #include "cgra_link.h"
 #include "gemmini.h"
 #include "gemmini_job.h"
-#include "generated/cgra_relu4x4_fast_api.h"
+#include "generated/cgra_relu_runtime_fast_api.h"
 #include "pool.h"
 
 #include <stdint.h>
@@ -35,6 +35,12 @@ static acc_t output[TILES][CHANNELS] __attribute__((aligned(32)));
 
 static const uint32_t ACC_WRITE = (uint32_t)1 << (ADDR_LEN - 1);
 static const uint32_t ACC_READ = ((uint32_t)1 << (ADDR_LEN - 1)) | ((uint32_t)1 << (ADDR_LEN - 3));
+
+static unsigned long cycles(void) {
+  unsigned long value;
+  __asm__ volatile("rdcycle %0" : "=r"(value)::"memory");
+  return value;
+}
 
 static void init_inputs(void) {
   for (unsigned tile = 0; tile < TILES; ++tile) {
@@ -87,15 +93,22 @@ static void load_gemmini(accel_t device, unsigned instance) {
   });
 }
 
-static int configure_gemmini(accel_t device, uint32_t job, unsigned instance) {
-  const uint32_t publication = device.spm_bytes / ROW_BYTES - PUBLICATION_ROWS * ACC_ROW_STRIDE;
-  if (gemmini_job_capture_at(device.control, job, COMMANDS + (instance != 0), instance == 0) != 0) {
+static int configure_gemmini(accel_t device, uint32_t job, unsigned instance, unsigned slots) {
+  const uint32_t publication = (device.spm_bytes - slots * BYTES) / ROW_BYTES;
+  gemmini_job_write_at(device.control, GEMMINI_JOB_WINDOW_PIXEL_BYTES, CHANNELS * sizeof(elem_t));
+  if (gemmini_job_capture_at(device.control, job, COMMANDS + (instance != 0), 2) != 0) {
     return 1;
   }
   if (instance == 0) {
     const gemmini_patch_t input = {.command = 1, .operand = 0, .lsb = 0, .width = ADDR_LEN, .source = GEMMINI_VALUE_TILE_ID, .scale = PUBLICATION_ROWS, .offset = A_ROW};
     gemmini_job_patch_at(device.control, &input);
+  } else {
+    const gemmini_patch_t input = {.command = 0, .operand = 0, .lsb = 0, .width = 64, .source = GEMMINI_VALUE_INPUT_ADDRESS, .scale = 1, .offset = 0};
+    gemmini_job_patch_at(device.control, &input);
   }
+  const gemmini_patch_t destination = {
+      .command = COMMANDS - 1 + (instance != 0), .operand = 0, .lsb = 0, .width = ADDR_LEN, .source = GEMMINI_VALUE_SLOT, .scale = BYTES / ROW_BYTES, .offset = publication};
+  gemmini_job_patch_at(device.control, &destination);
   accel_commands(device, {
     if (instance != 0) {
       gemmini_extended_mvin((const void *)CGRA0.spm, A_ROW, DIM, PUBLICATION_ROWS);
@@ -108,8 +121,13 @@ static int configure_gemmini(accel_t device, uint32_t job, unsigned instance) {
 }
 
 static int configure_cgra(accel_t device, uint32_t job) {
+  static const cgra_link_symbol_t symbols[RELU_RUNTIME_SYMBOL_COUNT] = {
+      [RELU_RUNTIME_SYMBOL_INPUT0] = {0, WORDS, CGRA_LINK_SLOT},
+      [RELU_RUNTIME_SYMBOL_OUTPUT] = {0, WORDS, CGRA_LINK_SLOT},
+      [RELU_RUNTIME_SYMBOL_ELEMENTS] = {0, 0, CGRA_LINK_ELEMENTS},
+  };
   int status = 0;
-  accel_commands(device, { status = cgra_job_config_at(device.control, job, &RELU4X4, NULL); });
+  accel_commands(device, { status = cgra_job_config_at(device.control, job, &RELU_RUNTIME, symbols); });
   return status;
 }
 
@@ -139,31 +157,38 @@ static int verify_results(void) {
   return failures + (seen != expected);
 }
 
-static int verify_gemmini(accel_t device, unsigned instance) {
-  const volatile acc_t *actual = (const volatile acc_t *)(device.spm + device.spm_bytes - BYTES);
-  int failures = 0;
-  for (unsigned index = 0; index < WORDS; ++index) {
-    const acc_t expected = gemmini_expected[instance][TILES - 1][index];
-    const acc_t value = actual[index];
-    if (value != expected) {
-      printf("Gemmini%u mismatch index=%u actual=%d expected=%d\n", instance, index, (int)value, (int)expected);
-      ++failures;
+// The allocator chooses each IP's slot independently; locate the final tile after drain.
+static int verify_gemmini(accel_t device, unsigned instance, unsigned slots) {
+  for (unsigned slot = 0; slot < slots; ++slot) {
+    const volatile acc_t *actual = (const volatile acc_t *)(device.spm + device.spm_bytes - slots * BYTES + slot * BYTES);
+    unsigned index = 0;
+    while (index < WORDS && actual[index] == gemmini_expected[instance][TILES - 1][index]) {
+      ++index;
+    }
+    if (index == WORDS) {
+      return 0;
     }
   }
-  return failures;
+  printf("Gemmini%u final tile missing from publication slots\n", instance);
+  return 1;
 }
 
-static int verify_cgra(accel_t device, unsigned instance) {
-  int failures = 0;
-  for (unsigned index = 0; index < WORDS; ++index) {
-    const acc_t expected = relu_expected[instance][TILES - 1][index];
-    const acc_t value = instance == 0 ? ((const volatile int8_t *)device.spm)[index] : ((const volatile acc_t *)device.spm)[index];
-    if (value != expected) {
-      printf("CGRA%u mismatch index=%u actual=%d expected=%d\n", instance, index, (int)value, (int)expected);
-      ++failures;
+static int verify_cgra(accel_t device, unsigned instance, unsigned slots) {
+  for (unsigned slot = 0; slot < slots; ++slot) {
+    unsigned index = 0;
+    for (; index < WORDS; ++index) {
+      const unsigned offset = slot * WORDS + index;
+      const acc_t value = instance == 0 ? ((const volatile int8_t *)device.spm)[offset] : ((const volatile acc_t *)device.spm)[offset];
+      if (value != relu_expected[instance][TILES - 1][index]) {
+        break;
+      }
+    }
+    if (index == WORDS) {
+      return 0;
     }
   }
-  return failures;
+  printf("CGRA%u final tile missing from local slots\n", instance);
+  return 1;
 }
 
 static int verify_pool(void) {
@@ -191,6 +216,9 @@ int main(void) {
   const accel_t cgra[INSTANCES] = {CGRA0, CGRA1};
   const uint32_t gemmini_jobs[INSTANCES] = {AUTO_LINK_JOB_GEMMINI0, AUTO_LINK_JOB_GEMMINI1};
   const uint32_t cgra_jobs[INSTANCES] = {AUTO_LINK_JOB_CGRA0, AUTO_LINK_JOB_CGRA1};
+  const unsigned gemmini_slots[INSTANCES] = {AUTO_LINK_GEMMINI0_BUFFER_SLOTS, AUTO_LINK_GEMMINI1_BUFFER_SLOTS};
+  const unsigned cgra_slots[INSTANCES] = {AUTO_LINK_CGRA0_BUFFER_SLOTS, AUTO_LINK_CGRA1_BUFFER_SLOTS};
+  const unsigned transfers[INSTANCES] = {AUTO_LINK_COPY_GEMMINI0_CGRA0, AUTO_LINK_COPY_GEMMINI1_CGRA1};
 
   init_inputs();
   init_expected();
@@ -200,11 +228,14 @@ int main(void) {
   accel_commands(GEMMINI0, { gemmini_extended_mvin(A, A_ROW, DIM, TILES * PUBLICATION_ROWS); });
   gemmini_fence();
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
-    if (configure_gemmini(gemmini[instance], gemmini_jobs[instance], instance) != 0 || configure_cgra(cgra[instance], cgra_jobs[instance]) != 0) {
+    if (configure_gemmini(gemmini[instance], gemmini_jobs[instance], instance, gemmini_slots[instance]) != 0 || configure_cgra(cgra[instance], cgra_jobs[instance]) != 0) {
       printf("Multi-IP Auto: FAIL (configuration instance=%u)\n", instance);
       return 1;
     }
+    auto_link_transfer(transfers[instance], gemmini[instance].spm_bytes - gemmini_slots[instance] * BYTES, 0, BYTES, BYTES, CHANNELS * sizeof(acc_t));
   }
+  auto_link_transfer(AUTO_LINK_COPY_CGRA0_GEMMINI1, 0, 0, WORDS * sizeof(elem_t), 0, CHANNELS * sizeof(elem_t));
+  auto_link_transfer(AUTO_LINK_COPY_CGRA1_POOL, 0, 0, BYTES, 0, CHANNELS * sizeof(acc_t));
   configure_pool();
   const uint32_t stages[] = {AUTO_LINK_STAGE_GEMMINI0, AUTO_LINK_STAGE_CGRA0, AUTO_LINK_STAGE_GEMMINI1, AUTO_LINK_STAGE_CGRA1};
   for (unsigned index = 0; index < sizeof(stages) / sizeof(stages[0]); ++index) {
@@ -213,22 +244,25 @@ int main(void) {
   auto_link_tiles(TILES, 1, 1, 1);
 
   __asm__ volatile("fence rw, rw" ::: "memory");
+  const unsigned long begin = cycles();
   auto_link_input_ready();
   int failures = verify_results();
   while (*(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUNNING)) {
   }
   __asm__ volatile("fence rw, rw" ::: "memory");
-  const unsigned long cycles = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_CYCLES);
+  const unsigned long cpu_cycles = cycles() - begin;
+  const unsigned long fabric_cycles = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_CYCLES);
   const unsigned long overlap = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_OVERLAP);
   const unsigned long peak = *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_PEAK_ACTIVE);
-  printf("Multi-IP tiles=%u cycles=%lu overlap=%lu peak=%lu\n", TILES, cycles, overlap, peak);
+  printf("Multi-IP tiles=%u slots=%u/%u/%u/%u cycles=%lu cpu_cycles=%lu overlap=%lu peak=%lu\n", TILES, gemmini_slots[0], cgra_slots[0], gemmini_slots[1], cgra_slots[1], fabric_cycles, cpu_cycles,
+         overlap, peak);
   if (overlap == 0 || peak < 3) {
-    printf("Multi-IP tiles did not overlap across at least three IPs\n");
+    printf("Multi-IP pipeline did not overlap at least three tile IDs\n");
     ++failures;
   }
   for (unsigned instance = 0; instance < INSTANCES; ++instance) {
-    failures += verify_gemmini(gemmini[instance], instance);
-    failures += verify_cgra(cgra[instance], instance);
+    failures += verify_gemmini(gemmini[instance], instance, gemmini_slots[instance]);
+    failures += verify_cgra(cgra[instance], instance, cgra_slots[instance]);
   }
   failures += verify_pool();
   if (failures != 0) {

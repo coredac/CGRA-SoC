@@ -148,12 +148,14 @@ accel_commands(GEMMINI0, {
 
 Use separate, non-nested command blocks for different instances. MMIO configuration uses the matching descriptor's `.control` address. In this demo, CGRA0's MMIO endpoint collects all AutoLink results.
 
-Both tests run eight tiles through `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Each tile has two 16-element GEMM rows and produces eight MaxPool outputs. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights. Manual mode runs the tiles sequentially and checks each intermediate result; automatic mode reuses captured jobs, checks all final outputs and the last tile's intermediate results, and reports cross-IP overlap. AutoLink updates the first GEMM's input row and Pool's output address without CPU work between tiles. The current hardware uses one local SPM slot per buffered IP, so this measures cross-IP pipelining, not same-IP double-buffered execution. Both use the same hardware:
+Both tests run eight tiles through `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Each tile has two 16-element GEMM rows and produces eight MaxPool outputs. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights. Manual mode runs tiles sequentially and checks each intermediate result; automatic mode reuses captured jobs, checks all final outputs and the last tile's intermediate results, and reports cross-IP overlap. Each Gemmini/CGRA has two 128-byte tile regions in its existing SPM, configured by `communication.buffer_slots`; Pool streams without a publication SPM. AutoLink assigns slots independently, and existing field updates relocate input, computation and publication addresses without CPU intervention between tiles. Both tests use the same relocatable ReLU kernel and hardware:
 
 ```shell
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_auto.c ./run-chipyard-cgra-gemmini-demo.sh
 ```
+
+Automatic `cycles` and `overlap` count fabric cycles; `peak` counts distinct active tile IDs, not arithmetic units. Both tests report `cpu_cycles`: Manual sums each tile's command-to-Pool-completion interval, while Auto measures input-ready through graph drain. Initial configuration, preloading and output verification are excluded.
 
 #### Tiled Conv → ReLU → Pool
 
