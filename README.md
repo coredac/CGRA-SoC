@@ -148,7 +148,7 @@ accel_commands(GEMMINI0, {
 
 Use separate, non-nested command blocks for different instances. MMIO configuration uses the matching descriptor's `.control` address. In this demo, CGRA0's MMIO endpoint collects all AutoLink results.
 
-Both tests run `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights, and both tests check intermediate and final results. Manual mode starts each stage from the CPU; automatic mode needs only one input-ready event after configuration, with no CPU dispatch or intermediate DRAM copy. Both use the same hardware:
+Both tests run eight tiles through `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Each tile has two 16-element GEMM rows and produces eight MaxPool outputs. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights. Manual mode runs the tiles sequentially and checks each intermediate result; automatic mode reuses captured jobs, checks all final outputs and the last tile's intermediate results, and reports cross-IP overlap. AutoLink updates the first GEMM's input row and Pool's output address without CPU work between tiles. The current hardware uses one local SPM slot per buffered IP, so this measures cross-IP pipelining, not same-IP double-buffered execution. Both use the same hardware:
 
 ```shell
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
