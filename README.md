@@ -157,6 +157,20 @@ $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_auto.c ./run-c
 
 Automatic `cycles` and `overlap` count fabric cycles; `peak` counts distinct active tile IDs, not arithmetic units. Both tests report `cpu_cycles`: Manual sums each tile's command-to-Pool-completion interval, while Auto measures input-ready through graph drain. Initial configuration, preloading and output verification are excluded.
 
+#### Projected residual block
+
+`block_manual.c` and `block_auto.c` use two Gemmini and two CGRA instances. Gemmini0 executes both the main 3×3 stride-2 Conv1 and the 1×1 stride-2 projection. CGRA0 applies ReLU, Gemmini1 executes 3×3 Conv2, and CGRA1 joins Conv2 with the projection for Add+ReLU. Automatic execution uses the existing ready-job round-robin arbitration, not a fixed software schedule.
+
+The input is 8×10×4 and the output is 4×5×8. Six 2×2 output tiles include a clipped final column; Conv1 and ReLU produce the halo needed by Conv2. Input and weights are preloaded into Gemmini SPM, all intermediate transfers stay on-chip, and all 160 final INT32 values remain in CGRA1 SPM for CPU checking. Both Gemmini instances retain 64 KiB SPM and 32 KiB accumulator; each CGRA has 32 KiB SPM. Gemmini0 shares four publication slots between its two jobs; the other instances use two slots each.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/autolink/block.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml --output-dir tests/generated
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_manual.c LOADMEM=1 timeout_cycles=1000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_auto.c LOADMEM=1 timeout_cycles=1000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml
+```
+
+Manual reports sequential per-tile CPU cycles. Auto reports CPU and fabric cycles, overlap cycles and peak distinct active tiles. Setup, CPU reference calculation and final output checking are outside the reported execution intervals. This is one synthetic residual block, not a full ResNet inference or accuracy benchmark.
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.
@@ -170,4 +184,4 @@ $ CONFIG=CgraPoolTileRocketConfig TEST_SRC=tests/cgra-gemmini/pool_tiles.c LOADM
 
 The cycle budget includes software reference computation and configuration. Printed `cycles` measure the CPU-observed pipeline interval; `overlap` and `peak` measure cross-IP task overlap, not arithmetic-unit utilization. CI runs this test alongside the existing manual, automatic, AES, Pool and non-tiled residual tests, while retaining separate CGRA and OpenFPGA jobs.
 
-The tiled residual test (`residual_tiles.c`, `res_tiles.yaml`) is retained but currently deferred; repeated-IP tiled execution is outside the supported validation scope. It describes Conv1 → ReLU → Conv2 → Add+ReLU with a skip dependency, two tile partitions and preloaded skip data. Final output stays in separate per-tile SPM regions for CPU validation through the INT8 window after the run. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3). The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.
+The tiled residual test (`residual_tiles.c`, `res_tiles.yaml`) is retained but currently deferred; its single-Gemmini/single-CGRA reentrant pipeline remains outside the validated scope. It describes Conv1 → ReLU → Conv2 → Add+ReLU with a skip dependency, two tile partitions and preloaded skip data. Final output stays in separate per-tile SPM regions for CPU validation through the INT8 window after the run. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3). The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.
