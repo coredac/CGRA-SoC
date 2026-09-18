@@ -1,6 +1,6 @@
 kernel:
   name: sad
-  kernel_yaml: VectorCGRA/validation/test/sad/sad.yaml
+  kernel_yaml: VectorCGRA/validation/test/sad.yaml
 
 execution:
   compiled_ii: 5

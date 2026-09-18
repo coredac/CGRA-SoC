@@ -18,7 +18,6 @@ enum {
   PUBLICATION_ROWS = CGRA_BYTES / GEMMINI_ROW_BYTES,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_ROW_STRIDE,
   GEMMINI_COMMAND_COUNT = 5,
-  CGRA_EXPECTED_COMPLETES = 1,
   A_ROW = 0,
   B_ROW = DIM,
 };
@@ -71,16 +70,6 @@ static void preload_b(void) {
   gemmini_fence();
 }
 
-static void configure_cgra(void) {
-  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
-  for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
-    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
-  }
-  for (unsigned i = 0; i < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++i) {
-    cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[i]);
-  }
-}
-
 static int configure_gemmini(void) {
   if (gemmini_job_begin(GEMMINI_COMMAND_COUNT) != 0) {
     return 1;
@@ -112,7 +101,7 @@ int main(void) {
   init_test();
   preload_b();
   aes_job_configure(AUTO_LINK_JOB_AES, output, &completion, KEY, true);
-  configure_cgra();
+  cgra_job_config(0, &RELU4X4, NULL);
   if (configure_gemmini() != 0) {
     printf("AES + Gemmini + CGRA + AES Auto: FAIL\n");
     return 1;

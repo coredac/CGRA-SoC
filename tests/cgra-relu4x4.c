@@ -7,14 +7,11 @@
 #include <stdio.h>
 
 enum {
-  RELU4X4_EXPECTED_COMPLETES = 1,
   RELU4X4_EXPECTED_RESULT = 0,
   RELU4X4_INPUT_COUNT = 32,
 };
 
-static uint32_t relu4x4_input(uint8_t addr) {
-  return (uint32_t)((int32_t)addr - 16);
-}
+static uint32_t relu4x4_input(uint8_t addr) { return (uint32_t)((int32_t)addr - 16); }
 
 static uint32_t relu4x4_expected(uint8_t addr) {
   int32_t value = (int32_t)addr - 16;
@@ -35,8 +32,7 @@ static int verify_relu4x4_data(int verbose) {
     uint32_t expected = relu4x4_expected(addr);
     if (actual != expected) {
       if (verbose) {
-        printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual,
-               expected);
+        printf("Mismatch addr=%u actual=0x%08x expected=0x%08x\n", addr, actual, expected);
       }
       ++failures;
     }
@@ -50,25 +46,29 @@ int main(void) {
   uint64_t wait_result = 0;
   uint64_t result = 0;
 
-  CGRA_SET_EXPECTED_COMPLETES(RELU4X4_EXPECTED_COMPLETES);
-  preload_relu4x4_data();
-  configure_relu4x4_fast();
-  CGRA_WAIT(wait_result);
-
-  CGRA_STATUS(status);
-  CGRA_RESULT(result);
-  uint64_t complete = status & 0x1ULL;
-  uint64_t complete_count = (status >> 1) & 0xFFFFULL;
-  int data_failures = verify_relu4x4_data(0);
-
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != RELU4X4_EXPECTED_COMPLETES ||
-      result != RELU4X4_EXPECTED_RESULT || data_failures != 0) {
-    if (data_failures != 0) {
-      verify_relu4x4_data(1);
+  for (unsigned run = 0; run < 2; ++run) {
+    preload_relu4x4_data();
+    if (run == 0) {
+      cgra_config(&RELU4X4, CGRA_COLD);
+    } else {
+      cgra_prepare(&RELU4X4, CGRA_REPEAT);
     }
-    printf("CGRA RoCC ReLU4x4 fast API: FAIL\n");
-    return 1;
+    cgra_start(&RELU4X4);
+    CGRA_WAIT(wait_result);
+
+    CGRA_STATUS(status);
+    CGRA_RESULT(result);
+    uint64_t complete = status & 0x1ULL;
+    uint64_t complete_count = (status >> 1) & 0xFFFFULL;
+    int data_failures = verify_relu4x4_data(0);
+
+    if (wait_result != 1 || complete != 1 || complete_count != RELU4X4_EXPECTED_COMPLETES || result != RELU4X4_EXPECTED_RESULT || data_failures != 0) {
+      if (data_failures != 0) {
+        verify_relu4x4_data(1);
+      }
+      printf("CGRA RoCC ReLU4x4 fast API: FAIL\n");
+      return 1;
+    }
   }
 
   printf("CGRA RoCC ReLU4x4 fast API: PASS\n");

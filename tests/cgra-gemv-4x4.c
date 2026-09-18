@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 enum {
-  GEMV_EXPECTED_COMPLETES = 1,
   GEMV_EXPECTED_RESULT = 0,
   GEMV_N = 4,
   GEMV_BASE_X = 16,
@@ -47,8 +46,7 @@ static int verify_gemv_data(void) {
     uint32_t actual = gemv_read_mem_fast(addr);
     uint32_t expected = gemv_expected(row);
     if (actual != expected) {
-      printf("Mismatch y[%u] addr=%u actual=0x%08x expected=0x%08x\n", row,
-             addr, actual, expected);
+      printf("Mismatch y[%u] addr=%u actual=0x%08x expected=0x%08x\n", row, addr, actual, expected);
       ++failures;
     }
   }
@@ -65,13 +63,12 @@ int main(void) {
   CGRA_STATUS(status);
   printf("Initial status: 0x%lx\n", status);
 
-  CGRA_SET_EXPECTED_COMPLETES(GEMV_EXPECTED_COMPLETES);
-
   printf("Preloading GEMV data memory...\n");
   preload_gemv_data();
 
   printf("Configuring and launching GEMV...\n");
-  configure_gemv_fast();
+  cgra_config(&GEMV, CGRA_COLD);
+  cgra_start(&GEMV);
 
   CGRA_WAIT(wait_result);
   printf("WAIT result: 0x%lx\n", wait_result);
@@ -86,9 +83,7 @@ int main(void) {
   uint64_t complete_count = (status >> 1) & 0xFFFFULL;
   int data_failures = verify_gemv_data();
 
-  if (wait_result != 1 || complete != 1 ||
-      complete_count != GEMV_EXPECTED_COMPLETES ||
-      result != GEMV_EXPECTED_RESULT || data_failures != 0) {
+  if (wait_result != 1 || complete != 1 || complete_count != GEMV_EXPECTED_COMPLETES || result != GEMV_EXPECTED_RESULT || data_failures != 0) {
     printf("CGRA RoCC GEMV 4x4: FAIL\n");
     return 1;
   }

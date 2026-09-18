@@ -8,7 +8,6 @@
 
 enum {
   CGRA_RELU_INPUT_COUNT = 32,
-  CGRA_RELU_EXPECTED_COMPLETES = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
@@ -49,8 +48,7 @@ static int run_gemmini_gemm(void) {
   for (int i = 0; i < DIM; ++i) {
     for (int j = 0; j < DIM; ++j) {
       if (C[i][j] != A[i][j]) {
-        printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", i, j,
-               (int)C[i][j], (int)A[i][j]);
+        printf("Gemmini mismatch [%d][%d]: actual=%d expected=%d\n", i, j, (int)C[i][j], (int)A[i][j]);
         ++failures;
       }
     }
@@ -84,9 +82,7 @@ static int verify_cgra_relu_outputs(void) {
     uint32_t expected = value > 0 ? (uint32_t)value : 0;
     uint32_t actual = (uint32_t)relu4x4_read_mem_fast(addr);
     if (actual != expected) {
-      printf(
-          "CGRA ReLU mismatch addr=%u actual=0x%08x expected=0x%08x input=%d\n",
-          addr, actual, expected, (int)value);
+      printf("CGRA ReLU mismatch addr=%u actual=0x%08x expected=0x%08x input=%d\n", addr, actual, expected, (int)value);
       ++failures;
     }
   }
@@ -99,8 +95,8 @@ static int run_cgra_relu(void) {
 
   preload_cgra_relu_inputs();
 
-  CGRA_SET_EXPECTED_COMPLETES(CGRA_RELU_EXPECTED_COMPLETES);
-  configure_relu4x4_fast();
+  cgra_config(&RELU4X4, CGRA_COLD);
+  cgra_start(&RELU4X4);
 
   CGRA_WAIT(wait_result);
 

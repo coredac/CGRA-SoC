@@ -16,7 +16,6 @@ enum {
   CGRA_CHUNK_ELEMENTS = 32,
   CGRA_CHUNK_BYTES = CGRA_CHUNK_ELEMENTS * sizeof(acc_t),
   CGRA_SPM_WORD_ADDR = 0,
-  CGRA_EXPECTED_COMPLETES = 1,
   CGRA_EXPECTED_RESULT = 0,
 };
 
@@ -76,8 +75,7 @@ int main(void) {
   uint64_t result = 0;
 
   cgra_dma_mvin_async(gemmini_words, MVIN_DESCRIPTOR);
-  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
-  load_relu4x4_config_fast();
+  cgra_config(&RELU4X4, CGRA_COLD);
 
   uint8_t observed_mvin_tag = cgra_dma_wait(MVIN_TAG_0);
   if (observed_mvin_tag != MVIN_TAG_0) {
@@ -85,14 +83,14 @@ int main(void) {
     return 1;
   }
 
-  launch_relu4x4_fast();
+  cgra_start(&RELU4X4);
   CGRA_WAIT(wait_result);
   CGRA_STATUS(status);
   CGRA_RESULT(result);
 
   const uint64_t complete = status & UINT64_C(1);
   const uint64_t complete_count = (status >> 1) & UINT64_C(0xffff);
-  if (wait_result != 1 || complete != 1 || complete_count != CGRA_EXPECTED_COMPLETES || result != CGRA_EXPECTED_RESULT) {
+  if (wait_result != 1 || complete != 1 || complete_count != RELU4X4_EXPECTED_COMPLETES || result != CGRA_EXPECTED_RESULT) {
     printf("chunk 0 CGRA completion failure: wait=%lu status=0x%lx "
            "result=%lu\n",
            wait_result, status, result);

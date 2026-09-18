@@ -15,3 +15,4 @@ functs:
   DMA_WAIT: 14
   SPM_PKT_HI: 15
   SPM_PKT_TOP: 16
+  DMA_MVIN_I8_ASYNC: 17

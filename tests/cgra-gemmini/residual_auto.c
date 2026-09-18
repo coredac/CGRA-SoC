@@ -120,19 +120,9 @@ static int preload_skip(void) {
   return wait_result != 1;
 }
 
-static void queue_cgra_job(uint32_t job, uint32_t expected_completes, const cgra_packet_t *config, unsigned config_count, const cgra_packet_t *launch, unsigned launch_count) {
-  cgra_link_configure_job(job, config_count + launch_count, expected_completes);
-  for (unsigned index = 0; index < config_count; ++index) {
-    cgra_link_queue(config[index]);
-  }
-  for (unsigned index = 0; index < launch_count; ++index) {
-    cgra_link_queue(launch[index]);
-  }
-}
-
 static void configure_cgra(void) {
-  queue_cgra_job(0, RELU_TAIL_EXPECTED_COMPLETES, RELU_TAIL_FAST_CONFIG_PACKETS, RELU_TAIL_FAST_CONFIG_PACKET_COUNT, RELU_TAIL_FAST_LAUNCH_PACKETS, RELU_TAIL_FAST_LAUNCH_PACKET_COUNT);
-  queue_cgra_job(1, ADD_RELU_EXPECTED_COMPLETES, ADD_RELU_FAST_CONFIG_PACKETS, ADD_RELU_FAST_CONFIG_PACKET_COUNT, ADD_RELU_FAST_LAUNCH_PACKETS, ADD_RELU_FAST_LAUNCH_PACKET_COUNT);
+  cgra_job_config(0, &RELU_TAIL, NULL);
+  cgra_job_config(1, &ADD_RELU, NULL);
 }
 
 static int configure_gemmini(void) {
@@ -228,12 +218,15 @@ int main(void) {
     return 1;
   }
 
-  auto_link_input_ready();
-  int failures = verify_results();
-  failures += verify_output();
-  if (failures != 0) {
-    printf("Gemmini + CGRA Residual Auto: FAIL (%d)\n", failures);
-    return 1;
+  // Reuse the captured jobs and resident configurations for a second run.
+  for (unsigned run = 0; run < 2; ++run) {
+    auto_link_input_ready();
+    int failures = verify_results();
+    failures += verify_output();
+    if (failures != 0) {
+      printf("Gemmini + CGRA Residual Auto: FAIL (%d)\n", failures);
+      return 1;
+    }
   }
   printf("Gemmini + CGRA Residual Auto: PASS\n");
   return 0;

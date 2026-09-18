@@ -15,7 +15,6 @@ enum {
   GEMMINI_FULL_WIDTH_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
   PUBLICATION_ROWS = TRANSFER_BYTES / GEMMINI_FULL_WIDTH_ROW_BYTES,
   PUBLICATION_ROW = BANK_NUM * BANK_ROWS - PUBLICATION_ROWS * GEMMINI_FULL_WIDTH_ROW_STRIDE,
-  CGRA_EXPECTED_COMPLETES = 1,
 };
 
 static elem_t A[DIM][DIM] row_align(1);
@@ -64,16 +63,6 @@ static void run_gemmini(void) {
   gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE, ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM, PUBLICATION_ROWS);
 }
 
-static void configure_cgra(void) {
-  cgra_link_configure(RELU4X4_FAST_PACKET_COUNT, CGRA_EXPECTED_COMPLETES);
-  for (unsigned i = 0; i < RELU4X4_FAST_CONFIG_PACKET_COUNT; ++i) {
-    cgra_link_queue(RELU4X4_FAST_CONFIG_PACKETS[i]);
-  }
-  for (unsigned i = 0; i < RELU4X4_FAST_LAUNCH_PACKET_COUNT; ++i) {
-    cgra_link_queue(RELU4X4_FAST_LAUNCH_PACKETS[i]);
-  }
-}
-
 static int verify_result(cgra_link_result_t result) { return result.status != AUTO_LINK_STATUS_SUCCESS || result.detail != 0 || result.data != 0; }
 
 static int verify_output(void) {
@@ -92,7 +81,7 @@ static int verify_output(void) {
 int main(void) {
   init_inputs();
   aes_job_configure(AUTO_LINK_JOB_AES, ciphertext, &completion, KEY, true);
-  configure_cgra();
+  cgra_job_config(0, &RELU4X4, NULL);
   run_gemmini();
 
   const cgra_link_result_t cgra = cgra_link_wait();

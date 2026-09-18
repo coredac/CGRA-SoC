@@ -31,7 +31,6 @@ enum {
   A_ROW = 0,
   B_ROW = DIM,
   CGRA_SPM_WORD_ADDR = 0,
-  CGRA_EXPECTED_COMPLETES = 1,
   CGRA_INPUT_TAG = 0x20,
 };
 
@@ -140,16 +139,15 @@ static int run_cgra(void) {
   uint64_t result = 0;
 
   cgra_dma_mvin_async((const void *)source, CGRA_INPUT);
-  CGRA_SET_EXPECTED_COMPLETES(CGRA_EXPECTED_COMPLETES);
-  load_relu4x4_config_fast();
+  cgra_config(&RELU4X4, CGRA_COLD);
   if (cgra_dma_wait(CGRA_INPUT_TAG) != CGRA_INPUT_TAG) {
     return 1;
   }
-  launch_relu4x4_fast();
+  cgra_start(&RELU4X4);
   CGRA_WAIT(wait_result);
   CGRA_STATUS(status);
   CGRA_RESULT(result);
-  return wait_result != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != CGRA_EXPECTED_COMPLETES || result != 0;
+  return wait_result != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != RELU4X4_EXPECTED_COMPLETES || result != 0;
 }
 
 static int run_pool(void) {

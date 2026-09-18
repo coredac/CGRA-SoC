@@ -49,6 +49,14 @@ CGRA_REGISTERS = {
     "CONFIG_DONE": 0x060,
     "CONFIG_STATUS": 0x068,
     "CONFIG_DETAIL": 0x070,
+    "PATCH_COUNT": 0x080,
+    "REARM_COUNT": 0x088,
+    "SETUP_COUNT": 0x090,
+    "PATCH_PACKET": 0x0A8,
+    "PATCH_SOURCE": 0x0B0,
+    "PATCH_COEFFICIENT": 0x0B8,
+    "PATCH_BIAS": 0x0C0,
+    "PATCH_PUSH": 0x0C8,
 }
 
 GEMMINI_REGISTERS = {
@@ -59,6 +67,42 @@ GEMMINI_REGISTERS = {
     "CONFIG_DETAIL": 0x020,
     "SELECT": 0x028,
     "CONFIG_DONE": 0x030,
+    "PATCH_COUNT": 0x038,
+    "WINDOW_ROWS": 0x040,
+    "WINDOW_COLUMNS": 0x048,
+    "WINDOW_ROW_STEP": 0x050,
+    "WINDOW_COLUMN_STEP": 0x058,
+    "WINDOW_TOP": 0x060,
+    "WINDOW_BOTTOM": 0x068,
+    "WINDOW_LEFT": 0x070,
+    "WINDOW_RIGHT": 0x078,
+    "WINDOW_ADDRESS": 0x080,
+    "WINDOW_PIXEL_BYTES": 0x088,
+    "WINDOW_ROW_BYTES": 0x090,
+    "PATCH_COMMAND": 0x0A0,
+    "PATCH_OPERAND": 0x0A8,
+    "PATCH_LSB": 0x0B0,
+    "PATCH_WIDTH": 0x0B8,
+    "PATCH_SOURCE": 0x0C0,
+    "PATCH_SCALE": 0x0C8,
+    "PATCH_OFFSET": 0x0D0,
+    "PATCH_PUSH": 0x0D8,
+}
+
+GEMMINI_VALUES = {
+    "ROWS": 0,
+    "COLUMNS": 1,
+    "INPUT_ROWS": 2,
+    "INPUT_COLUMNS": 3,
+    "INPUT_STRIDE": 4,
+    "INPUT_ADDRESS": 5,
+    "OUTPUT_ADDRESS": 6,
+    "TOP": 7,
+    "BOTTOM": 8,
+    "LEFT": 9,
+    "RIGHT": 10,
+    "SLOT": 11,
+    "TILE_ID": 12,
 }
 
 AES_REGISTERS = {
@@ -81,12 +125,26 @@ AES_REGISTERS = {
 
 AUTO_LINK_REGISTERS = {
     "INPUT_READY": 0x000,
+    "ROWS": 0x008,
+    "COLUMNS": 0x010,
+    "TILE_ROWS": 0x018,
+    "TILE_COLUMNS": 0x020,
+    "EMITTING": 0x028,
+    "RUNNING": 0x038,
+    "CYCLES": 0x040,
+    "OVERLAP": 0x048,
+    "PEAK_ACTIVE": 0x050,
+    "TRANSFER_BASE": 0x100,
+    "TRANSFER_STRIDE": 0x028,
+    "REGION_BASE": 0x800,
+    "REGION_STRIDE": 0x040,
 }
 
 STATUSES = {
     "SUCCESS": 0,
     "SOURCE_FAILURE": 1,
     "SINK_FAILURE": 2,
+    "CONFIG_FAILURE": 3,
 }
 
 SPM_NAMES = ("gemmini_external_spm", "cgra_spm_window")
@@ -129,6 +187,11 @@ def scala_text(base_address: int) -> str:
         f"  val GEMMINI_{name}: Int = 0x{offset:03x}"
         for name, offset in GEMMINI_REGISTERS.items()
     )
+    values.extend(
+        f"  val GEMMINI_VALUE_{name}: Int = {value}"
+        for name, value in GEMMINI_VALUES.items()
+    )
+    values.append(f"  val GEMMINI_VALUE_COUNT: Int = {len(GEMMINI_VALUES)}")
     values.extend(
         f"  val AES_{name}: Int = 0x{offset:03x}"
         for name, offset in AES_REGISTERS.items()
@@ -180,6 +243,10 @@ def header_text(base_address: int) -> str:
     lines.extend(
         f"#define GEMMINI_JOB_{name} 0x{offset:03x}u"
         for name, offset in GEMMINI_REGISTERS.items()
+    )
+    lines.extend(
+        f"#define GEMMINI_VALUE_{name} {value}u"
+        for name, value in GEMMINI_VALUES.items()
     )
     lines.append("")
     lines.extend(
