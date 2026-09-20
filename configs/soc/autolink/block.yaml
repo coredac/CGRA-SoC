@@ -7,8 +7,8 @@ interface:
   predicate_nbits: 1
 
 memory:
-  data_mem_size_global: 8192
-  data_mem_size_per_bank: 1024
+  data_mem_size_global: 16384
+  data_mem_size_per_bank: 2048
   num_banks_per_cgra: 8
   num_registers_per_reg_bank: 8
   mem_access_is_combinational: true
@@ -17,7 +17,10 @@ memory:
     size_bytes: 65536
   cgra_spm_window:
     base_address: 0x60020000
-    size_bytes: 32768
+    size_bytes: 65536
+
+execution:
+  ctrl_count_bits: 14
 
 communication:
   instances:
@@ -27,7 +30,7 @@ communication:
       type: gemmini
     cgra0:
       type: cgra
-      packed_words: 256
+      packed_words: 4096
     cgra1:
       type: cgra
   buffer_slots:
@@ -53,18 +56,18 @@ communication:
       destination: projection
     - source: conv1
       destination: relu
-      size_bytes: 128
+      size_bytes: 2048
       source_format: int8
     - source: relu
       destination: conv2
-      size_bytes: 128
+      size_bytes: 2048
       format: int8
     - source: projection
       destination: add
-      destination_offset: 256
-      size_bytes: 32
+      destination_offset: 9216
+      size_bytes: 1152
       source_format: int8
     - source: conv2
       destination: add
-      size_bytes: 32
+      size_bytes: 1152
       source_format: int8

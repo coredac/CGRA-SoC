@@ -161,15 +161,16 @@ Automatic `cycles` and `overlap` count fabric cycles; `peak` counts distinct act
 
 `block_manual.c` and `block_auto.c` use two Gemmini and two CGRA instances. Gemmini0 executes both the main 3×3 stride-2 Conv1 and the 1×1 stride-2 projection. CGRA0 applies ReLU, Gemmini1 executes 3×3 Conv2, and CGRA1 joins Conv2 with the projection for Add+ReLU. Automatic execution uses the existing ready-job round-robin arbitration, not a fixed software schedule.
 
-The input is 8×10×4 and the output is 4×5×8. Six 2×2 output tiles include a clipped final column; Conv1 and ReLU produce the halo needed by Conv2. Input and weights are preloaded into Gemmini SPM, all intermediate transfers stay on-chip, and all 160 final INT32 values remain in CGRA1 SPM for CPU checking. Both Gemmini instances retain 64 KiB SPM and 32 KiB accumulator; each CGRA has 32 KiB SPM. Gemmini0 shares four publication slots between its two jobs; the other instances use two slots each.
+The input is 32×32×16 and the output is 16×16×32. Nine 6×6 output tiles include clipped right and bottom edges; Conv1 and ReLU produce the halo needed by Conv2. Input and weights are preloaded into Gemmini SPM, all intermediate transfers stay on-chip, and all 8192 final INT32 values remain in CGRA1 SPM for CPU checking. Both Gemmini instances retain 64 KiB SPM and 32 KiB accumulator; each CGRA has 64 KiB SPM. Gemmini0 shares four publication slots between its two jobs; the other instances use two slots each. The configured copy capacities support up to 6×6 output tiles; changing the C tests' `TILE_H` and `TILE_W` to 4 reuses the same hardware.
 
 ```shell
+$ chipyard/.conda-env/bin/python scripts/block_data.py
 $ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/autolink/block.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml --output-dir tests/generated
-$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_manual.c LOADMEM=1 timeout_cycles=1000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml --rebuild
-$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_auto.c LOADMEM=1 timeout_cycles=1000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_manual.c LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_auto.c LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml
 ```
 
-Manual reports sequential per-tile CPU cycles. Auto reports CPU and fabric cycles, overlap cycles and peak distinct active tiles. Setup, CPU reference calculation and final output checking are outside the reported execution intervals. This is one synthetic residual block, not a full ResNet inference or accuracy benchmark.
+`block_data.py` computes reference values on the host and emits the tensor dimensions and expected output into `tests/generated/block_data.h`. The RTL tests still initialize the synthetic inputs, execute every accelerator stage and check every output. Use the generator's size arguments to change the workload within the configured memory capacities. Manual reports sequential per-tile CPU cycles. Auto reports CPU and fabric cycles, overlap cycles and peak distinct active tiles. Setup and final output checking are outside the reported execution intervals. This is one synthetic residual block, not a full ResNet inference or accuracy benchmark.
 
 #### Tiled Conv → ReLU → Pool
 

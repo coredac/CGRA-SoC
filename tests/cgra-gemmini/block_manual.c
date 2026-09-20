@@ -2,6 +2,7 @@
 #include "auto_link.h"
 #include "cgra_dma.h"
 #include "gemmini.h"
+#include "generated/block_data.h"
 #include "generated/cgra_add_relu_runtime_fast_api.h"
 #include "generated/cgra_relu_runtime_fast_api.h"
 
@@ -9,17 +10,8 @@
 #include <stdio.h>
 
 enum {
-  INPUT_H = 8,
-  INPUT_W = 10,
-  INPUT_CHANNELS = 4,
-  CHANNELS = 8,
-  KERNEL = 3,
-  STRIDE = 2,
-  PADDING = 1,
-  HEIGHT = (INPUT_H + 2 * PADDING - KERNEL) / STRIDE + 1,
-  WIDTH = (INPUT_W + 2 * PADDING - KERNEL) / STRIDE + 1,
-  TILE_H = 2,
-  TILE_W = 2,
+  TILE_H = 6,
+  TILE_W = 6,
   TILES = ((HEIGHT + TILE_H - 1) / TILE_H) * ((WIDTH + TILE_W - 1) / TILE_W),
   HALO_WORDS = (TILE_H + 2 * PADDING) * (TILE_W + 2 * PADDING) * CHANNELS,
   CORE_WORDS = TILE_H * TILE_W * CHANNELS,
@@ -31,22 +23,11 @@ static elem_t input[INPUT_H][INPUT_W][INPUT_CHANNELS] row_align(1);
 static elem_t weights1[KERNEL][KERNEL][INPUT_CHANNELS][CHANNELS] row_align(1);
 static elem_t weights2[KERNEL][KERNEL][CHANNELS][CHANNELS] row_align(1);
 static elem_t projection[INPUT_CHANNELS][CHANNELS] row_align(1);
-static elem_t intermediate[HEIGHT][WIDTH][CHANNELS];
-static elem_t main_output[HEIGHT][WIDTH][CHANNELS];
-static elem_t skip_output[HEIGHT][WIDTH][CHANNELS];
-static acc_t expected[HEIGHT][WIDTH][CHANNELS];
 
 static unsigned long cycles(void) {
   unsigned long value;
   __asm__ volatile("rdcycle %0" : "=r"(value)::"memory");
   return value;
-}
-
-static elem_t requant(int32_t value) {
-  if (value > INT8_MAX) {
-    return INT8_MAX;
-  }
-  return value < INT8_MIN ? INT8_MIN : (elem_t)value;
 }
 
 static void init_inputs(void) {
@@ -74,48 +55,6 @@ static void init_inputs(void) {
   for (unsigned in = 0; in < INPUT_CHANNELS; ++in) {
     for (unsigned out = 0; out < CHANNELS; ++out) {
       projection[in][out] = (elem_t)((int)((in * 3 + out) % 5) - 2);
-    }
-  }
-}
-
-static void reference(const elem_t *source, const elem_t *weights, elem_t *destination, int rows, int columns, unsigned channels, unsigned kernel, unsigned stride, int padding, int relu) {
-  for (unsigned row = 0; row < HEIGHT; ++row) {
-    for (unsigned column = 0; column < WIDTH; ++column) {
-      for (unsigned out = 0; out < CHANNELS; ++out) {
-        int32_t sum = 0;
-        for (unsigned y = 0; y < kernel; ++y) {
-          const int in_row = (int)(row * stride + y) - padding;
-          if (in_row < 0 || in_row >= rows) {
-            continue;
-          }
-          for (unsigned x = 0; x < kernel; ++x) {
-            const int in_column = (int)(column * stride + x) - padding;
-            if (in_column < 0 || in_column >= columns) {
-              continue;
-            }
-            for (unsigned in = 0; in < channels; ++in) {
-              const unsigned source_index = (in_row * columns + in_column) * channels + in;
-              const unsigned weight_index = ((y * kernel + x) * channels + in) * CHANNELS + out;
-              sum += source[source_index] * weights[weight_index];
-            }
-          }
-        }
-        destination[(row * WIDTH + column) * CHANNELS + out] = requant(relu && sum < 0 ? 0 : sum);
-      }
-    }
-  }
-}
-
-static void init_expected(void) {
-  reference(&input[0][0][0], &weights1[0][0][0][0], &intermediate[0][0][0], INPUT_H, INPUT_W, INPUT_CHANNELS, KERNEL, STRIDE, PADDING, 1);
-  reference(&intermediate[0][0][0], &weights2[0][0][0][0], &main_output[0][0][0], HEIGHT, WIDTH, CHANNELS, KERNEL, 1, PADDING, 0);
-  reference(&input[0][0][0], &projection[0][0], &skip_output[0][0][0], INPUT_H, INPUT_W, INPUT_CHANNELS, 1, STRIDE, 0, 0);
-  for (unsigned row = 0; row < HEIGHT; ++row) {
-    for (unsigned column = 0; column < WIDTH; ++column) {
-      for (unsigned channel = 0; channel < CHANNELS; ++channel) {
-        const int32_t sum = main_output[row][column][channel] + skip_output[row][column][channel];
-        expected[row][column][channel] = sum > 0 ? sum : 0;
-      }
     }
   }
 }
@@ -292,7 +231,6 @@ static int run_tile(region_t core, unsigned tile) {
 
 int main(void) {
   init_inputs();
-  init_expected();
   load_inputs();
   accel_commands(CGRA0, { cgra_send_packets_fast(RELU_RUNTIME.static_packets, RELU_RUNTIME.static_count); });
   accel_commands(CGRA1, { cgra_send_packets_fast(ADD_RELU_RUNTIME.static_packets, ADD_RELU_RUNTIME.static_count); });
