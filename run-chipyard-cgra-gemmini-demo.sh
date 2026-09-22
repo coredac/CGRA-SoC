@@ -191,6 +191,10 @@ SOURCES=("$TEST_SRC")
 if uses_aes_manual; then
   SOURCES+=("$AES_SW/accellib.c")
 fi
+LINK_FLAGS=()
+if [[ -n "${BINARY_ARGS:-}" ]]; then
+  LINK_FLAGS+=("-specs=$CHIPYARD_DIR/toolchains/libgloss/util/htif_argv.specs")
+fi
 riscv64-unknown-elf-gcc \
   -std=gnu99 -O2 -Wall -Wextra -fno-common -fno-builtin-printf \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
@@ -205,6 +209,7 @@ riscv64-unknown-elf-gcc \
   -I "$GEMMINI_SW/riscv-tests/env" \
   -I "$GEMMINI_SW/riscv-tests/benchmarks/common" \
   -specs="$CHIPYARD_DIR/toolchains/libgloss/util/htif_nano.specs" \
+  "${LINK_FLAGS[@]}" \
   -static -T "$CHIPYARD_DIR/tests/htif.ld" \
   "${SOURCES[@]}" \
   -o "$BIN_PATH"

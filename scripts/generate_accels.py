@@ -27,6 +27,7 @@ class Accel:
     base: int
     size: int
     control: int = 0
+    element_bits: int = 32
 
 
 @dataclass(frozen=True)
@@ -56,7 +57,16 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
             size = spm["size_bytes"]
             base = value.get("base_address", spm["base_address"] + counts[kind] * size)
             counts[kind] += 1
-        instances.append(Accel(name, kind, index, base, size))
+        instances.append(
+            Accel(
+                name,
+                kind,
+                index,
+                base,
+                size,
+                element_bits=value.get("element_bits", 32),
+            )
+        )
     ranges = (
         [(accel.base, accel.size) for accel in instances if accel.size]
         if enabled
@@ -87,7 +97,7 @@ def load_layout(path: Path) -> AccelLayout:
 
 def scala_text(layout: AccelLayout) -> str:
     instances = ",\n".join(
-        f'    AccelSpec("{accel.name}", "{accel.kind}", {accel.id}, BigInt("{accel.base:x}", 16), {accel.size}, BigInt("{accel.control:x}", 16))'
+        f'    AccelSpec("{accel.name}", "{accel.kind}", {accel.id}, BigInt("{accel.base:x}", 16), {accel.size}, BigInt("{accel.control:x}", 16), elementBits = {accel.element_bits})'
         for accel in layout.instances
     )
     return f"""package chipyard.socgen.generated

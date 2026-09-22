@@ -39,4 +39,18 @@ static inline void auto_link_input_ready(void) {
   __asm__ volatile("fence iorw, iorw" ::: "memory");
 }
 
+static inline void auto_link_job(uint32_t stage, uint32_t job) {
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_STAGE) = stage;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_JOB) = job;
+}
+
+static inline void auto_link_run_config(uint32_t id) { *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_CAPTURE) = id; }
+
+static inline void auto_link_run(uint32_t first, uint32_t count) {
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_FIRST) = first;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_COUNT) = count;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_START) = 1;
+  __asm__ volatile("fence iorw, iorw" ::: "memory");
+}
+
 #endif

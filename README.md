@@ -172,6 +172,24 @@ $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_auto.c LOADMEM
 
 `block_data.py` computes reference values on the host and emits the tensor dimensions and expected output into `tests/generated/block_data.h`. The RTL tests still initialize the synthetic inputs, execute every accelerator stage and check every output. Use the generator's size arguments to change the workload within the configured memory capacities. Manual reports sequential per-tile CPU cycles. Auto reports CPU and fabric cycles, overlap cycles and peak distinct active tiles. Setup and final output checking are outside the reported execution intervals. This is one synthetic residual block, not a full ResNet inference or accuracy benchmark.
 
+#### Sequential projected residual blocks
+
+`blocks.c` reuses the same four IPs for `32×32×16 → 16×16×32 → 8×8×64`. AutoLink pipelines full-width strips within each block; the next block starts after the current block drains. Output tiles are initially 2×16 and 2×8. Gemmini SPMs are 128 KiB each, accumulators remain 32 KiB, and CGRA SPMs remain 64 KiB each. Both CGRAs expose packed INT8 windows while computing with INT32 locally.
+
+Native convolution DMA loads weights from DRAM and reads the preceding block's packed CGRA1 output directly for the next Conv1 and projection. There is no separate boundary copy or intermediate DRAM writeback. Both blocks' outputs remain in separate CGRA1 SPM regions, starting at local words 4096 and 12288, for checking all 12288 values. Static CGRA kernels stay resident; Add job variants select each output region. The host generates reference outputs and constant synthetic weights, while the CPU initializes the first input tensor.
+
+`BINARY_ARGS` selects the configuration policy: `0` configures and starts each block from the CPU, `1` preconfigures both blocks but lets the CPU trigger each cached run, and `2` preconfigures both and starts one hardware-controlled sequence. The graph and data path are identical in all modes; the full chain does not overlap different blocks.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/blocks_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/blocks.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=0 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=2 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml
+```
+
+`initial_setup_cycles` measures configuration before launch, excluding common input preparation. `chain_cycles` covers the whole chain, including CPU-controlled boundary configuration or triggering where applicable. CPU/Cached boundary counters are parts of this interval, not additional costs. Auto reports only the last block's fabric counters and does not claim to measure its hardware boundary cost separately. Output checking and result printing occur afterward. This is a synthetic two-block workload, not full ResNet inference.
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.

@@ -59,7 +59,7 @@ CAPABILITIES = {
     "aes": {"source", "destination"},
     "pool": {"destination"},
 }
-STAGE_KEYS = {"name", "endpoint"}
+STAGE_KEYS = {"name", "endpoint", "jobs"}
 DEPENDENCY_KEYS = {
     "source",
     "destination",
@@ -84,6 +84,7 @@ class Stage:
     name: str
     endpoint: str
     job: int
+    jobs: int = 1
 
 
 @dataclass(frozen=True)
@@ -131,6 +132,7 @@ class AutoLinkConfig:
     buffer_slots: dict[str, int]
     instances: dict[str, Accel]
     bridges: dict[str, CgraBridge | None]
+    run_capacity: int = 0
 
 
 def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
@@ -202,8 +204,9 @@ def load_stages(
         if name in names:
             raise ValueError(f"{path}: duplicate stage '{name}'")
         job = jobs.get(endpoint, 0)
-        stages.append(Stage(name, endpoint, job))
-        jobs[endpoint] = job + 1
+        count = value.get("jobs", 1)
+        stages.append(Stage(name, endpoint, job, count))
+        jobs[endpoint] = job + count
         names.add(name)
     return tuple(stages)
 
@@ -338,6 +341,7 @@ def infer_bridge(
     path: Path,
     packed_words: int | None = None,
     name: str = "cgra",
+    output_format: str | None = None,
 ) -> CgraBridge | None:
     stage_map = {stage.name: stage for stage in stages}
     transformed = [
@@ -351,7 +355,7 @@ def infer_bridge(
             and stage_map[dependency.source].endpoint == name
         )
     ]
-    if not transformed:
+    if not transformed and output_format != INT8_FORMAT:
         if packed_words is not None:
             raise ValueError(f"{path}: packed_words requires a CGRA INT8 output")
         return None
@@ -369,7 +373,9 @@ def infer_bridge(
         and stage_map[dependency.source].endpoint != name
         and stage_map[dependency.destination].endpoint == name
     ]
-    if not outbound or len(transformed) != len(outbound) + len(inbound):
+    if (not outbound and output_format != INT8_FORMAT) or len(transformed) != len(
+        outbound
+    ) + len(inbound):
         raise ValueError(
             f"{path}: int8 transformations require a CGRA output and CGRA input/output edges"
         )
@@ -387,9 +393,15 @@ def infer_bridge(
         (dependency.copy.source_offset // CGRA_WORD_BYTES, dependency.copy.size)
         for dependency in outbound
     ]
-    outbound_word = min(start for start, _ in output_ranges)
-    output_span = max(start + size for start, size in output_ranges) - outbound_word
-    outbound_words = output_span if packed_words is None else packed_words
+    outbound_word = min((start for start, _ in output_ranges), default=0)
+    output_span = (
+        max((start + size for start, size in output_ranges), default=0) - outbound_word
+    )
+    outbound_words = (
+        output_span or cgra.size // CGRA_WORD_BYTES
+        if packed_words is None
+        else packed_words
+    )
     if outbound_words < output_span:
         raise ValueError(f"{path}: packed_words does not cover declared CGRA outputs")
     input_ranges = {
@@ -639,13 +651,22 @@ def load_config(
             path,
             packed_by_instance.get(name, packed_words),
             name,
+            communication.get("instances", {}).get(name, {}).get("output_format"),
         )
         for name, accel in instances.items()
         if accel.kind == "cgra"
     }
     bridge = next(iter(bridges.values()), None)
     config = AutoLinkConfig(
-        gemmini, cgra, stages, dependencies, bridge, buffer_slots, instances, bridges
+        gemmini,
+        cgra,
+        stages,
+        dependencies,
+        bridge,
+        buffer_slots,
+        instances,
+        bridges,
+        communication.get("run_capacity", 0),
     )
     validate_memory(config, path)
     return config
@@ -777,7 +798,9 @@ def scala_text(config: AutoLinkConfig) -> str:
         if stage.endpoint not in names:
             names.append(stage.endpoint)
     stages = ",\n".join(
-        f'      AutoStageSpec(name = "{stage.name}", endpoint = "{stage.endpoint}", job = {stage.job})'
+        f'      AutoStageSpec(name = "{stage.name}", endpoint = "{stage.endpoint}", job = {stage.job}'
+        + (f", jobs = {stage.jobs}" if stage.jobs != 1 else "")
+        + ")"
         for stage in config.stages
     )
     dependencies = ",\n".join(
@@ -787,6 +810,9 @@ def scala_text(config: AutoLinkConfig) -> str:
         for dependency in config.dependencies
     )
     endpoints = ",\n".join(endpoint_text(config, name) for name in names)
+    capacity = (
+        f",\n    runCapacity = {config.run_capacity}" if config.run_capacity else ""
+    )
     return f"""package chipyard.socgen.generated
 
 import chipyard.example.CGRAGenerated
@@ -803,7 +829,7 @@ object AutoLinkGenerated {{
 {endpoints}),
     beatBytes = CGRAGenerated.params.dma.dramDataWidth / 8,
     controlAddress = CgraLinkControlGenerated.autoLinkAddress,
-    controlBytes = CgraLinkControlGenerated.pageSizeBytes)
+    controlBytes = CgraLinkControlGenerated.pageSizeBytes{capacity})
 }}
 """
 
@@ -818,7 +844,8 @@ def header_text(config: AutoLinkConfig) -> str:
         for index, stage in enumerate(config.stages)
     )
     jobs = "\n".join(
-        f"#define AUTO_LINK_JOB_{stage.name.upper()} {stage.job}u"
+        f"#define AUTO_LINK_JOB_{stage.name.upper()} {stage.job}u\n"
+        f"#define AUTO_LINK_JOB_{stage.name.upper()}_COUNT {stage.jobs}u"
         for stage in config.stages
     )
     copies = "\n".join(
