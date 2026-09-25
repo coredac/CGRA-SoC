@@ -190,6 +190,23 @@ $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS
 
 `initial_setup_cycles` measures configuration before launch, excluding common input preparation. `chain_cycles` covers the whole chain, including CPU-controlled boundary configuration or triggering where applicable. CPU/Cached boundary counters are parts of this interval, not additional costs. Auto reports only the last block's fabric counters and does not claim to measure its hardware boundary cost separately. Output checking and result printing occur afterward. This is a synthetic two-block workload, not full ResNet inference.
 
+#### Synthetic ResNet-8
+
+`resnet.c` follows the MLPerf Tiny v1.1 ResNet-8 dimensions: `32×32×3 → stem (16 channels) → ordinary residual block (16) → projected block (32) → projected block (64) → global average → FC (10 logits)`. It uses synthetic INT8 inputs and weights, saturation-based quantization and TensorFlow SAME padding, not trained-model accuracy evaluation. Softmax is not included.
+
+Both Gemmini and both CGRA SPMs are 128 KiB each; Gemmini accumulators remain 32 KiB. CGRAs compute in INT32 and expose INT8 outputs. Intermediate tensors remain in SPM, weights and reference values reside in DRAM, and the ten final INT32 logits are written to DRAM. The existing Pool performs signed AveragePool through its unchanged RoCC interface.
+
+`BINARY_ARGS=0` runs the whole network manually. `1` uses the same manual stem, ordinary block and tail, but the CPU starts an AutoLink tiled pipeline for each projected block. This Hybrid mode does not make the whole network autonomous. Both modes use two-row full-width strips and check the stem, every residual block, global average and final logits against host-generated reference values.
+
+`setup_cycles` includes input preparation, preloading and initial configuration. `execution_cycles` sums the stem, residual blocks, Pool and FC intervals, including CPU control within those stages but excluding progress printing and output checking. Hybrid fabric counters describe each projected block, not the whole network. These are simulated CPU cycles, not host simulation time.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/resnet_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=0 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml
+```
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.
