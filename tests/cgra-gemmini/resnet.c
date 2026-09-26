@@ -6,6 +6,9 @@
 #include "gemmini_conv.h"
 #include "generated/cgra_add_relu_runtime_fast_api.h"
 #include "generated/cgra_relu_runtime_fast_api.h"
+#include "generated/cgra_softmax_exp_fast_api.h"
+#include "generated/cgra_softmax_max_fast_api.h"
+#include "generated/cgra_softmax_norm_fast_api.h"
 #include "generated/resnet_data.h"
 #include "pool.h"
 
@@ -22,6 +25,9 @@ enum {
   STEM_WORD = AUTO_LINK_CGRA0_BUFFER_SLOTS * HALO_WORDS,
   FC_A_ROW = 0,
   FC_B_ROW = FC_A_ROW + FC_CHANNELS,
+  FC_OUTPUT_ROW = FC_B_ROW + FC_CHANNELS,
+  FC_ROW_STRIDE = sizeof(acc_t) / sizeof(elem_t),
+  FC_TRANSFER_BYTES = (CLASSES * sizeof(acc_t) + CGRA_DMA_BEAT_BYTES - 1) / CGRA_DMA_BEAT_BYTES * CGRA_DMA_BEAT_BYTES,
 };
 
 typedef struct {
@@ -33,7 +39,6 @@ typedef struct {
 } timing_t;
 
 static elem_t input[INPUT_H][INPUT_W][INPUT_CHANNELS] row_align(1);
-static acc_t logits[CLASSES] row_align(1);
 static cgra_packet_t relu_config[RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT];
 static cgra_packet_t add_config[ADD_RELU_RUNTIME_FAST_CONFIG_PACKET_COUNT];
 static unsigned relu_runs, add_runs;
@@ -69,6 +74,8 @@ static unsigned tile_words(const block_t *block) { return TILE_ROWS * block->col
 static uintptr_t input_address(void) { return GEMMINI0.spm + GEMMINI0.spm_bytes / 2; }
 
 static uintptr_t pool_address(void) { return input_address() + sizeof(input); }
+
+static uintptr_t logits_address(void) { return GEMMINI0.spm + FC_OUTPUT_ROW * DIM * sizeof(elem_t); }
 
 static uintptr_t block_input(unsigned index) { return index == 0 ? CGRA0.spm + STEM_WORD : CGRA1.spm + output_word(index - 1); }
 
@@ -140,6 +147,19 @@ static int copy_input(accel_t device, uintptr_t source, unsigned word, unsigned 
   return 0;
 }
 
+// Called within the selected device's accel_commands block.
+static int wait_cgra(accel_t device, const cgra_kernel_t *kernel) {
+  uint64_t ready = 0, status = 0, result = 0;
+  CGRA_WAIT(ready);
+  CGRA_STATUS(status);
+  CGRA_RESULT(result);
+  if (ready != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != kernel->expected_completes || result != 0) {
+    printf("ResNet CGRA device=%u ready=%lu status=%lu result=%lu\n", device.id, (unsigned long)ready, (unsigned long)status, (unsigned long)result);
+    return 1;
+  }
+  return 0;
+}
+
 static int run_cgra(accel_t device, const cgra_kernel_t *original, cgra_packet_t *config, const uint32_t *symbols, cgra_run_t mode) {
   cgra_kernel_t kernel = *original;
   for (unsigned index = 0; index < kernel.config_count; ++index) {
@@ -152,19 +172,13 @@ static int run_cgra(accel_t device, const cgra_kernel_t *original, cgra_packet_t
     packet->hi = (packet->hi & ~RELU_RUNTIME_STORE_DATA_PAYLOAD_HI(UINT32_MAX)) | RELU_RUNTIME_STORE_DATA_PAYLOAD_HI(value);
   }
   kernel.config_packets = config;
-  uint64_t ready = 0, status = 0, result = 0;
+  int failed = 0;
   accel_commands(device, {
     cgra_prepare(&kernel, mode);
     cgra_start(&kernel);
-    CGRA_WAIT(ready);
-    CGRA_STATUS(status);
-    CGRA_RESULT(result);
+    failed = wait_cgra(device, &kernel);
   });
-  if (ready != 1 || (status & UINT64_C(1)) != 1 || ((status >> 1) & UINT64_C(0xffff)) != kernel.expected_completes || result != 0) {
-    printf("ResNet CGRA device=%u ready=%lu status=%lu result=%lu\n", device.id, (unsigned long)ready, (unsigned long)status, (unsigned long)result);
-    return 1;
-  }
-  return 0;
+  return failed;
 }
 
 static int run_relu(unsigned output, unsigned elements) {
@@ -372,6 +386,7 @@ static void run_fc(void) {
     gemmini_extended3_config_ld(FC_CHANNELS * sizeof(elem_t), MVIN_SCALE_IDENTITY, false, 0);
     gemmini_extended3_config_ld(CLASSES * sizeof(elem_t), MVIN_SCALE_IDENTITY, false, 1);
     gemmini_extended3_config_ld(CLASSES * sizeof(acc_t), MVIN_SCALE_IDENTITY, false, 2);
+    // Accumulate input-channel tiles onto the bias, keeping INT32 results.
     gemmini_extended_mvin3(fc_bias, acc_write, CLASSES, 1);
     for (unsigned channel = 0; channel < FC_CHANNELS; channel += DIM) {
       gemmini_extended_mvin((const void *)(pool_address() + channel), FC_A_ROW + channel, DIM, 1);
@@ -379,9 +394,38 @@ static void run_fc(void) {
       gemmini_extended_preload(FC_B_ROW + channel, acc_add, CLASSES, DIM, CLASSES, 1);
       gemmini_extended_compute_preloaded(FC_A_ROW + channel, GARBAGE_ADDR, DIM, 1, CLASSES, 1);
     }
-    gemmini_extended_mvout(logits, acc_read, CLASSES, 1);
+    gemmini_extended_mvout_spad(FC_OUTPUT_ROW, FC_ROW_STRIDE, acc_read, CLASSES, 1);
   });
   gemmini_fence();
+}
+
+static int run_softmax(void) {
+  const cgra_dma_desc_t descriptor = CGRA_DMA_DESC_CONST(SOFTMAX_MAX_ARG0, FC_TRANSFER_BYTES, 0);
+  uint8_t tag = 0;
+  accel_commands(CGRA0, {
+    // Beat padding is unused; the kernel reads only CLASSES logits.
+    cgra_dma_mvin_async((const void *)logits_address(), descriptor);
+    tag = cgra_dma_wait(0);
+  });
+  if (tag != 0) {
+    printf("ResNet Softmax DMA tag=%u expected=0\n", tag);
+    return 1;
+  }
+  const cgra_kernel_t *const kernels[] = {&SOFTMAX_MAX, &SOFTMAX_EXP, &SOFTMAX_NORM};
+  for (unsigned phase = 0; phase < sizeof(kernels) / sizeof(kernels[0]); ++phase) {
+    const cgra_kernel_t *kernel = kernels[phase];
+    int failed = 0;
+    accel_commands(CGRA0, {
+      cgra_config(kernel, CGRA_SWITCH);
+      cgra_start(kernel);
+      failed = wait_cgra(CGRA0, kernel);
+    });
+    if (failed) {
+      printf("ResNet Softmax phase=%u failed\n", phase);
+      return 1;
+    }
+  }
+  return 0;
 }
 
 static int verify_tensor(const char *name, uintptr_t address, const int8_t *expected, unsigned elements) {
@@ -416,9 +460,16 @@ static int verify_output(void) {
     failures += verify_tensor(names[index], CGRA1.spm + output_word(index), expected[index], block->rows * block->columns * block->channels);
   }
   failures += verify_tensor("pool", pool_address(), expected_pool, FC_CHANNELS);
+  const volatile acc_t *logits = (const volatile acc_t *)logits_address();
   for (unsigned index = 0; index < CLASSES; ++index) {
     printf("ResNet logit=%u actual=%d expected=%d\n", index, (int)logits[index], (int)expected_logits[index]);
     failures += logits[index] != expected_logits[index];
+  }
+  for (unsigned index = 0; index < CLASSES; ++index) {
+    int32_t probability = 0;
+    accel_commands(CGRA0, { probability = (int32_t)(uint32_t)softmax_norm_read_mem_fast(SOFTMAX_NORM_ARG2 + index); });
+    printf("ResNet probability=%u actual=%d expected=%d\n", index, (int)probability, (int)expected_probabilities[index]);
+    failures += probability != expected_probabilities[index];
   }
   return failures;
 }
@@ -451,7 +502,7 @@ int main(int argc, char **argv) {
     execution_cycles += timings[index].execution;
     printf("ResNet-8 %s block=%u complete cycles=%lu\n", modes[mode], index, timings[index].execution);
   }
-  unsigned long pool_cycles = 0, fc_cycles = 0;
+  unsigned long pool_cycles = 0, fc_cycles = 0, softmax_cycles = 0;
   if (failures == 0) {
     begin = cycles();
     failures += run_pool();
@@ -463,13 +514,21 @@ int main(int argc, char **argv) {
     run_fc();
     fc_cycles = cycles() - begin;
     execution_cycles += fc_cycles;
+  }
+  if (failures == 0) {
+    begin = cycles();
+    failures += run_softmax();
+    softmax_cycles = cycles() - begin;
+    execution_cycles += softmax_cycles;
+  }
+  if (failures == 0) {
     failures += verify_output();
   }
   for (unsigned index = 0; index < BLOCKS; ++index) {
     const timing_t *timing = &timings[index];
     printf("ResNet-8 %s block=%u execution_cycles=%lu fabric_cycles=%lu overlap=%lu peak=%lu\n", modes[mode], index, timing->execution, timing->fabric, timing->overlap, timing->peak);
   }
-  printf("ResNet-8 %s setup_cycles=%lu execution_cycles=%lu pool_cycles=%lu fc_cycles=%lu\n", modes[mode], setup_cycles, execution_cycles, pool_cycles, fc_cycles);
+  printf("ResNet-8 %s setup_cycles=%lu execution_cycles=%lu pool_cycles=%lu fc_cycles=%lu softmax_cycles=%lu\n", modes[mode], setup_cycles, execution_cycles, pool_cycles, fc_cycles, softmax_cycles);
   printf("ResNet-8 %s: %s\n", modes[mode], failures == 0 ? "PASS" : "FAIL");
   return failures != 0;
 }

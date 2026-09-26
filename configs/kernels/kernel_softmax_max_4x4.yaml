@@ -1,0 +1,12 @@
+kernel:
+  name: softmax_max
+  kernel_yaml: VectorCGRA/validation/test/softmax_max.yaml
+  required_words: 17
+  bindings:
+    arg0: 0
+    arg1: 16
+
+execution:
+  compiled_ii: 8
+  loop_times: 80
+  expected_completes: 1

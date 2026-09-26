@@ -192,17 +192,19 @@ $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS
 
 #### Synthetic ResNet-8
 
-`resnet.c` follows the MLPerf Tiny v1.1 ResNet-8 dimensions: `32×32×3 → stem (16 channels) → ordinary residual block (16) → projected block (32) → projected block (64) → global average → FC (10 logits)`. It uses synthetic INT8 inputs and weights, saturation-based quantization and TensorFlow SAME padding, not trained-model accuracy evaluation. Softmax is not included.
+`resnet.c` follows the MLPerf Tiny v1.1 ResNet-8 dimensions: `32×32×3 → stem (16 channels) → ordinary residual block (16) → projected block (32) → projected block (64) → global average → FC → Softmax (10 probabilities)`. It uses synthetic INT8 inputs and weights, saturation-based quantization and TensorFlow SAME padding, not trained-model accuracy evaluation. The CGRA Softmax interprets the INT32 logits with scale `1/256` and leaves Q15 probabilities in its SPM; `32768` represents one.
 
-Both Gemmini and both CGRA SPMs are 128 KiB each; Gemmini accumulators remain 32 KiB. CGRAs compute in INT32 and expose INT8 outputs. Intermediate tensors remain in SPM, weights and reference values reside in DRAM, and the ten final INT32 logits are written to DRAM. The existing Pool performs signed AveragePool through its unchanged RoCC interface.
+Both Gemmini and both CGRA SPMs are 128 KiB each; Gemmini accumulators remain 32 KiB. CGRAs compute in INT32 and expose INT8 outputs. Intermediate tensors remain in SPM; weights and reference values reside in DRAM. FC publishes ten INT32 logits to Gemmini0 SPM, then CGRA0 DMA reads them directly for Softmax. The existing Pool performs signed AveragePool through its unchanged RoCC interface.
 
-`BINARY_ARGS=0` runs the whole network manually. `1` uses the same manual stem, ordinary block and tail, but the CPU starts an AutoLink tiled pipeline for each projected block. This Hybrid mode does not make the whole network autonomous. Both modes use two-row full-width strips and check the stem, every residual block, global average and final logits against host-generated reference values.
+`BINARY_ARGS=0` runs the whole network manually. `1` uses the same manual stem, ordinary block and tail, but the CPU starts an AutoLink tiled pipeline for each projected block. This Hybrid mode does not make the whole network autonomous. Both modes use two-row full-width strips and check the stem, every residual block, global average, logits and probabilities against host-generated reference values.
 
-`setup_cycles` includes input preparation, preloading and initial configuration. `execution_cycles` sums the stem, residual blocks, Pool and FC intervals, including CPU control within those stages but excluding progress printing and output checking. Hybrid fabric counters describe each projected block, not the whole network. These are simulated CPU cycles, not host simulation time.
+After FC, both modes use the CPU to load and start three CGRA0 phases: maximum, approximate exponential/sum, and normalization. Each phase replaces the previous control configuration without expanding control memory. Native RoCC reads preserve the INT32/Q15 probabilities instead of passing through the INT8 TileLink window. A subsequent inference must reload the ReLU configuration.
+
+`setup_cycles` includes input preparation, preloading and initial configuration. `execution_cycles` sums the stem, residual blocks, Pool, FC and Softmax intervals, including CPU control within those stages but excluding progress printing and output checking. `softmax_cycles` includes the SPM-to-SPM DMA and three configuration/execution phases. Hybrid fabric counters describe each projected block, not the whole network. These are simulated CPU cycles, not host simulation time.
 
 ```shell
 $ chipyard/.conda-env/bin/python scripts/resnet_data.py
-$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml configs/kernels/kernel_softmax_max_4x4.yaml configs/kernels/kernel_softmax_exp_4x4.yaml configs/kernels/kernel_softmax_norm_4x4.yaml
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=0 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml --rebuild
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml
 ```

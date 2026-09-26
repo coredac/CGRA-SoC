@@ -34,6 +34,9 @@ SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_relu_tail_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_relu_runtime_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_add_relu_runtime_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_softmax_max_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_softmax_exp_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_softmax_norm_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -46,6 +49,9 @@ SUPPORTED_KERNEL_NAMES = {
     "relu_tail",
     "relu_runtime",
     "add_relu_runtime",
+    "softmax_max",
+    "softmax_exp",
+    "softmax_norm",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -668,6 +674,50 @@ def build_relocations(
     return sorted(relocations, key=lambda relocation: relocation.packet_index)
 
 
+def complete_prologues(packets, types):
+    # Routing prologue selectors are one-based; FU prologue selectors are zero-based.
+    fields = {
+        CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR: ("routing_xbar_outport", 0),
+        CMD_CONFIG_PROLOGUE_FU_CROSSBAR: ("fu_xbar_outport", 1),
+    }
+    configured = {
+        (
+            int(packet.payload.cmd),
+            int(packet.dst),
+            int(packet.payload.ctrl_addr),
+            int(getattr(packet.payload.ctrl, fields[int(packet.payload.cmd)][0])[0]),
+        )
+        for _, packet in packets
+        if int(packet.payload.cmd) in fields
+    }
+    zeros = []
+    for coord, packet in packets:
+        if int(packet.payload.cmd) != CMD_CONFIG:
+            continue
+        for command, (field, bias) in fields.items():
+            sources = {int(port) for port in getattr(packet.payload.ctrl, field)} - {0}
+            for source in sorted(sources):
+                index = source - bias
+                key = (command, int(packet.dst), int(packet.payload.ctrl_addr), index)
+                if key in configured:
+                    continue
+                ctrl = types["CtrlType"]()
+                ports = getattr(ctrl, field)
+                ports[0] = type(ports[0])(index)
+                payload = types["CgraPayloadType"](
+                    command,
+                    ctrl_addr=packet.payload.ctrl_addr,
+                    ctrl=ctrl,
+                    data=types["DataType"](0, 1),
+                )
+                zeros.append(
+                    (coord, types["IntraCgraPktType"](0, packet.dst, payload=payload))
+                )
+                configured.add(key)
+    # Replacing a resident kernel must also overwrite its old nonzero prologues.
+    return packets + zeros
+
+
 def split_packets(cfg: KernelConfig, packets, types):
     static_commands = {
         CMD_CONFIG,
@@ -726,7 +776,13 @@ def split_packets(cfg: KernelConfig, packets, types):
         replace(item, packet_index=prefix_count + indices[item.packet_index])
         for item in relocations
     ]
-    return static, rearm + setup + runtime, relocations, len(rearm), len(setup)
+    return (
+        complete_prologues(static, types),
+        rearm + setup + runtime,
+        relocations,
+        len(rearm),
+        len(setup),
+    )
 
 
 def render_runtime_section(cfg: KernelConfig, relocations) -> list[str]:
@@ -1105,6 +1161,10 @@ def write_header(
         f"#define {guard_kernel}_TOTAL_CTRL_STEPS {cfg.loop_times}",
         f"#define {guard_kernel}_EXPECTED_COMPLETES {cfg.expected_completes}",
     ]
+    lines.extend(
+        f"#define {guard_kernel}_{symbol.upper()} {value}"
+        for symbol, value in cfg.bindings.items()
+    )
 
     lines.extend(
         render_fast_api_section(cfg, static, runtime, types, rearm_count, setup_count)

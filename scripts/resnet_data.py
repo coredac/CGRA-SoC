@@ -62,6 +62,19 @@ def conv(source, weight, rows, columns, inputs, outputs, kernel, stride):
     return result
 
 
+def softmax(logits):
+    """Convert Q8 logits to Q15 probabilities using the CGRA kernel coefficients."""
+    maximum = max(logits)
+    exponents = []
+    for value in logits:
+        distance = min(maximum - value, 4096)
+        shift = (distance * 370) >> 16
+        polynomial = 346 - distance + 177 * shift
+        exponents.append((polynomial * polynomial + 62885) >> (shift + 2))
+    total = sum(exponents)
+    return [(value * (1 << 15) + total // 2) // total for value in exponents]
+
+
 def reference():
     source = [
         (row * 7 + column * 3 + channel * 5 + row * column) % 17 - 8
@@ -134,6 +147,7 @@ def reference():
         fc_weights=fc_weights,
         fc_bias=bias,
         expected_logits=logits,
+        expected_probabilities=softmax(logits),
     )
     return blocks, tensors
 
@@ -175,7 +189,11 @@ def header(blocks, tensors):
     )
     lines.extend(["};", ""])
     for name, values in tensors.items():
-        kind = "int32_t" if name in ("fc_bias", "expected_logits") else "int8_t"
+        kind = (
+            "int32_t"
+            if name in ("fc_bias", "expected_logits", "expected_probabilities")
+            else "int8_t"
+        )
         lines.append(f"static const {kind} {name}[{len(values)}] row_align(1) = {{")
         for start in range(0, len(values), 32):
             lines.append(
