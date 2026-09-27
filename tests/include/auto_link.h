@@ -44,6 +44,44 @@ static inline void auto_link_job(uint32_t stage, uint32_t job) {
   *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_JOB) = job;
 }
 
+static inline uintptr_t auto_link_address(auto_link_address_t address, const uintptr_t *bindings) { return address.binding < 0 ? address.value : bindings[address.binding]; }
+
+static inline void auto_link_load(const auto_link_graph_t *graph, const uintptr_t *bindings) {
+  for (unsigned index = 0; index < graph->stage_capacity; ++index) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_STAGE) = index;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_ENABLE) = 0;
+  }
+  for (unsigned index = 0; index < graph->edge_capacity; ++index) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE) = index;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_FLAGS) = 0;
+  }
+  for (unsigned index = 0; index < graph->stage_count; ++index) {
+    const auto_link_stage_t *stage = &graph->stages[index];
+    const auto_link_output_t *output = &stage->output;
+    auto_link_job(index, stage->job);
+    auto_link_region(index, 0, 0, 0, 0, 0, 0, 0, 0);
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_ENDPOINT) = stage->endpoint;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_OUTPUT_FLAGS) = output->flags;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_OUTPUT_PIXEL_BYTES) = output->pixel_bytes;
+    *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_OUTPUT_ADDRESS) = auto_link_address(output->address, bindings);
+    *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_OUTPUT_STRIDE) = output->stride;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_OUTPUT_BYTES) = output->bytes;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_ENABLE) = 1;
+  }
+  for (unsigned index = 0; index < graph->edge_count; ++index) {
+    const auto_link_edge_t *edge = &graph->edges[index];
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE) = index;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_SOURCE) = edge->source;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_DESTINATION) = edge->destination;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_BYTES) = edge->bytes;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_EXPANSION) = edge->expansion;
+    *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_SOURCE_BASE) = auto_link_address(edge->address, bindings);
+    auto_link_transfer(index, edge->source_offset, edge->destination_offset, edge->source_stride, 0, edge->pixel_bytes);
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_FLAGS) = edge->flags;
+  }
+  __asm__ volatile("fence iorw, iorw" ::: "memory");
+}
+
 static inline void auto_link_run_config(uint32_t id) { *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_CAPTURE) = id; }
 
 static inline void auto_link_run(uint32_t first, uint32_t count) {

@@ -1,0 +1,63 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 128
+  data_mem_size_per_bank: 16
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60020000
+    size_bytes: 512
+
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+    gemmini1:
+      type: gemmini
+    cgra0:
+      type: cgra
+      output_format: int8
+      packed_words: 128
+    cgra1:
+      type: cgra
+      output_format: int8
+      packed_words: 128
+    pool:
+      type: pool
+      element_bits: 8
+  capacity:
+    stages: 5
+    dependencies: 6
+    jobs:
+      gemmini0: 1
+      gemmini1: 1
+      cgra0: 1
+      cgra1: 1
+      pool: 1
+  buffer_slots:
+    gemmini0: 2
+    gemmini1: 2
+    cgra0: 2
+    cgra1: 2
+  stages:
+    - name: matmul
+      endpoint: gemmini0
+    - name: activation
+      endpoint: cgra0
+  dependencies:
+    - source: input_ready
+      destination: matmul
+    - source: matmul
+      destination: activation
+      size_bytes: 128

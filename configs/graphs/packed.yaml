@@ -1,0 +1,13 @@
+name: packed
+buffers:
+  input:
+    address: input
+    size_bytes: 32
+    format: int8
+stages:
+  - name: activation
+    endpoint: cgra1
+dependencies:
+  - source: input_ready
+    destination: activation
+    buffer: input

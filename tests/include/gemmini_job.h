@@ -2,8 +2,12 @@
 #define GEMMINI_JOB_H
 
 #include "cgra_link_control_generated.h"
+#include "rocc.h"
 
 #include <stdint.h>
+
+// End a CPU-issued producer job; the wrapper waits for native DMA and compute to drain.
+static inline void gemmini_commands_end(void) { ROCC_INSTRUCTION_S(3, 0, GEMMINI_COMMAND_END); }
 
 static inline uint32_t gemmini_job_read_at(uintptr_t base, uintptr_t offset) { return *(volatile uint32_t *)(base + offset); }
 

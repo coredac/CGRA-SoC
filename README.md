@@ -98,9 +98,12 @@ The combined flow runs Gemmini and CGRA in the same Chipyard system and can also
 - Supported: runtime tile shapes, transfer offsets and buffer-slot strides within the generated graph
 - Supported: CGRA input-copy/compute overlap using separate SPM slots
 - Supported: two Gemmini, two independent CGRA instances and Pool through one shared CPU command interface
-- Unsupported: runtime graph changes and concurrent kernels on one IP
+- Supported: CPU-loaded dependency graphs within generated IP and table capacities
+- Unsupported: in-flight graph changes and concurrent kernels on one IP
 
 In the three-stage AES path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. That demo remains sequential with one 128-byte chunk. AutoLink carries control and TileLink carries payload; tiled CNN demos reuse cached jobs across multiple chunks. See [hardware contracts](./docs/contracts.md) for supported interfaces.
+
+CPU-issued Gemmini producers finish their command sequence with `gemmini_commands_end()` so the wrapper can publish after computation and DMA drain. Captured automatic jobs already carry a command count and do not need this marker. Plain manual execution is unchanged.
 
 For automatic CGRA execution, call `cgra_job_config(job, &RELU4X4, NULL)` before releasing dependencies. This loads static controls and captures runtime initialization plus launch packets; it does not start computation. Tiled kernels pass their symbol bindings instead of `NULL`. AutoLink starts the configured job when its inputs are ready, and hardware applies the configured field updates on each tile without per-tile CPU configuration.
 
@@ -134,7 +137,25 @@ Run the automatic three-stage path with:
 $ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml --rebuild
 ```
 
-Use `--soc-yaml` to select the graph; changing YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+Use `--soc-yaml` to select the hardware and default graph; changing this YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+
+#### Runtime dependency graphs
+
+CPU-started graphs can change without rebuilding RTL, within the selected hardware's IP, stage, dependency and job capacities. A runtime graph YAML names stages, their endpoint instances and dependencies; it does not instantiate new hardware. Generate its C descriptor with `--graph-yaml`, then call `auto_link_load(&GRAPH, addresses)` before the existing tile configuration and `auto_link_input_ready()`. Wait for all results and `RUNNING=0` before replacing the graph. Legacy externally triggered configurations retain their original startup and do not support runtime graph replacement.
+
+Named `buffers` declare addresses, sizes and optional formats once. A stage's `output.buffer` and its consumers' dependency `buffer` refer to the same storage. Fixed addresses can name SPM; symbolic addresses receive software-owned pointers through `auto_link_load`. Pool/AES automatic destinations use the graph binding; Gemmini uses a captured native output command with an `OutputAddress` patch. CGRA does not accept an explicit output buffer: its results stay in local SPM for consumers to pull. Software can explicitly issue a manual DMA write after the graph drains. Buffers are passive storage, not extra stages or DMA engines. Manual APIs are unchanged.
+
+`graph.c` changes graphs on one five-IP system and checks SPM and DRAM transfers. It rebinds Gemmini/Pool DRAM outputs without reconfiguring the IP jobs, while Pool pulls CGRA results directly from SPM. Separate raw/packed input graphs finish in CGRA SPM, then the CPU explicitly requests raw INT32 or packed INT8 DMA writeout. Generate its descriptors and ReLU API before running:
+
+```shell
+$ for graph in local dram raw packed; do chipyard/.conda-env/bin/python scripts/generate_auto_links.py --soc-yaml configs/soc/autolink/graph.yaml --graph-yaml configs/graphs/$graph.yaml --header-out tests/generated/graph_$graph.h; done
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/graph.yaml configs/kernels/kernel_relu_runtime_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/graph.c LOADMEM=1 timeout_cycles=350000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/graph.yaml --rebuild
+```
+
+Later edits to runtime graph YAML require regenerating its header and rebuilding the C binary, not the simulator. A physical address selects SPM or DRAM through TileLink; the graph does not carry a memory-type flag. Manual CGRA writeout handles a contiguous region, not a two-dimensional tensor scatter.
+
+The GitHub workflow runs this test in the CGRA and Gemmini E2E job, generating all four graph descriptors and the matching ReLU API before rebuilding the simulator. Its log is included in the existing test-log artifact.
 
 #### Multiple accelerator instances
 

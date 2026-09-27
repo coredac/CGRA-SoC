@@ -27,7 +27,7 @@ typedef uint64_t cgra_dma_desc_t;
 
 #define CGRA_DMA_DESC_CONST(spm_addr, nbytes, tag) CGRA_DMA_DESC_CONST_IMPL(spm_addr, nbytes, tag, CGRA_DMA_BEAT_BYTES)
 
-/* The descriptor counts destination bytes; the packed source has one byte per word. */
+/* The descriptor counts native SPM bytes; the packed memory side has one byte per word. */
 #define CGRA_DMA_I8_DESC_CONST(spm_addr, elements, tag) CGRA_DMA_DESC_CONST_IMPL(spm_addr, (uint64_t)(elements) * CGRA_DMA_WORD_BYTES, tag, CGRA_DMA_WORD_BYTES)
 
 #define CGRA_DMA_STRINGIFY_IMPL(value) #value
@@ -61,6 +61,8 @@ static inline void cgra_dma_mvout_async(void *dram, cgra_dma_desc_t desc) {
   /* In Phase 1, the bare-metal pointer value is used as a physical address. */
   CGRA_DMA_ISSUE(CGRA_FUNCT_DMA_MVOUT_ASYNC, dram, desc);
 }
+
+static inline void cgra_dma_mvout_i8_async(void *dram, cgra_dma_desc_t desc) { CGRA_DMA_ISSUE(CGRA_FUNCT_DMA_MVOUT_I8_ASYNC, dram, desc); }
 
 static inline uint8_t cgra_dma_wait(uint8_t expected_tag) {
   uintptr_t expected = expected_tag;

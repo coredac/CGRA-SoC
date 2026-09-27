@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate complete elaborated AutoLink parameters."""
+"""Generate AutoLink hardware capacities and loadable YAML task graphs."""
 
 from __future__ import annotations
 
 import argparse
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Mapping
 
@@ -57,9 +57,9 @@ CAPABILITIES = {
     "gemmini": {"source", "destination"},
     "cgra": {"source", "destination"},
     "aes": {"source", "destination"},
-    "pool": {"destination"},
+    "pool": {"source", "destination"},
 }
-STAGE_KEYS = {"name", "endpoint", "jobs"}
+STAGE_KEYS = {"name", "endpoint", "jobs", "output"}
 DEPENDENCY_KEYS = {
     "source",
     "destination",
@@ -68,6 +68,7 @@ DEPENDENCY_KEYS = {
     "destination_offset",
     "format",
     "source_format",
+    "buffer",
 }
 INT8_FORMAT = "int8"
 CGRA_WORD_BYTES = 4
@@ -80,11 +81,30 @@ class Memory:
 
 
 @dataclass(frozen=True)
+class Buffer:
+    address: int | str
+    size: int
+    format: str | None = None
+    stride: int = 0
+    pixel_bytes: int = 0
+
+
+@dataclass(frozen=True)
+class Output:
+    buffer: str
+    address: int | str
+    stride: int
+    size: int
+    pixel_bytes: int
+
+
+@dataclass(frozen=True)
 class Stage:
     name: str
     endpoint: str
     job: int
     jobs: int = 1
+    output: Output | None = None
 
 
 @dataclass(frozen=True)
@@ -94,6 +114,10 @@ class Copy:
     size: int
     format: str | None
     source_format: str | None = None
+    source_address: int | str | None = None
+    buffer: str | None = None
+    source_stride: int = 0
+    pixel_bytes: int = 0
 
     @property
     def destination_size(self) -> int:
@@ -133,6 +157,9 @@ class AutoLinkConfig:
     instances: dict[str, Accel]
     bridges: dict[str, CgraBridge | None]
     run_capacity: int = 0
+    stage_capacity: int = 0
+    dependency_capacity: int = 0
+    jobs: dict[str, int] | None = None
 
 
 def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
@@ -178,8 +205,50 @@ def load_memory(data: Mapping[str, object], key: str, path: Path) -> Memory:
     return memory
 
 
+def load_buffers(values: Mapping[str, object], path: Path) -> dict[str, Buffer]:
+    buffers = {}
+    for name, fields in values.items():
+        tensor_format = fields.get("format")
+        if tensor_format not in (None, "int8", "int32"):
+            raise ValueError(f"{path}: buffer '{name}' format must be int8 or int32")
+        size = require_int(fields, "size_bytes", path)
+        if size <= 0:
+            raise ValueError(f"{path}: buffer '{name}' size_bytes must be positive")
+        buffers[name] = Buffer(
+            load_address(fields["address"], path),
+            size,
+            tensor_format,
+            fields.get("stride", 0),
+            fields.get("bytes_per_pixel", 0),
+        )
+    return buffers
+
+
+def load_output(
+    fields: Mapping[str, object], buffers: Mapping[str, Buffer], kind: str, path: Path
+) -> Output:
+    if kind == "cgra":
+        raise ValueError(
+            f"{path}: CGRA outputs stay in local SPM; automatic writeback is unsupported"
+        )
+    if set(fields) != {"buffer"}:
+        raise ValueError(f"{path}: output accepts only a buffer reference")
+    name = fields["buffer"]
+    buffer = buffers[name]
+    return Output(
+        name,
+        buffer.address,
+        buffer.stride,
+        buffer.size,
+        buffer.pixel_bytes,
+    )
+
+
 def load_stages(
-    values: object, instances: Mapping[str, Accel], path: Path
+    values: object,
+    instances: Mapping[str, Accel],
+    buffers: Mapping[str, Buffer],
+    path: Path,
 ) -> tuple[Stage, ...]:
     if not isinstance(values, list) or not values:
         raise ValueError(f"{path}: 'stages' must be a non-empty list")
@@ -205,10 +274,26 @@ def load_stages(
             raise ValueError(f"{path}: duplicate stage '{name}'")
         job = jobs.get(endpoint, 0)
         count = value.get("jobs", 1)
-        stages.append(Stage(name, endpoint, job, count))
+        output = None
+        if "output" in value:
+            output = load_output(
+                require_mapping(value, "output", path),
+                buffers,
+                instances[endpoint].kind,
+                path,
+            )
+        stages.append(Stage(name, endpoint, job, count, output))
         jobs[endpoint] = job + count
         names.add(name)
     return tuple(stages)
+
+
+def load_address(value: object, path: Path) -> int | str:
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+        return value
+    if isinstance(value, str) and STAGE_NAME.fullmatch(value):
+        return value
+    raise ValueError(f"{path}: address must be a physical integer or binding name")
 
 
 def load_offset(value: object, field: str, path: Path, index: int) -> int | None:
@@ -224,6 +309,7 @@ def load_dependencies(
     stages: tuple[Stage, ...],
     memories: Mapping[str, Memory],
     instances: Mapping[str, Accel],
+    buffers: Mapping[str, Buffer],
     path: Path,
 ) -> tuple[Dependency, ...]:
     if not isinstance(values, list) or not values:
@@ -272,6 +358,17 @@ def load_dependencies(
         size = value.get("size_bytes")
         tensor_format = value.get("format")
         source_format = value.get("source_format")
+        buffer_name = value.get("buffer")
+        buffer = buffers[buffer_name] if buffer_name is not None else None
+        source_address = buffer.address if buffer else None
+        if buffer is not None:
+            if tensor_format is not None or source_format is not None:
+                raise ValueError(f"{path}: buffer dependencies inherit their format")
+            size = buffer.size if size is None else size
+            if instances[destination_stage.endpoint].kind == "cgra":
+                source_format = INT8_FORMAT if buffer.format == INT8_FORMAT else None
+            if (source_offset or 0) + size > buffer.size:
+                raise ValueError(f"{path}: dependency exceeds buffer '{buffer_name}'")
         if tensor_format is not None and tensor_format != INT8_FORMAT:
             raise ValueError(
                 f"{path}: dependencies[{index}].format must be '{INT8_FORMAT}'"
@@ -295,28 +392,35 @@ def load_dependencies(
                 or destination_offset is not None
                 or tensor_format is not None
                 or source_format is not None
+                or source_address is not None
             ):
                 raise ValueError(
                     f"{path}: dependencies[{index}] copy fields require size_bytes"
                 )
             copy = None
         else:
-            if source == INPUT_READY:
-                raise ValueError(f"{path}: input_ready cannot carry data")
+            if source == INPUT_READY and source_address is None:
+                raise ValueError(f"{path}: input_ready data requires a buffer")
             if not isinstance(size, int) or isinstance(size, bool) or size <= 0:
                 raise ValueError(
                     f"{path}: dependencies[{index}].size_bytes must be positive"
                 )
-            source_stage = stage_map[source]
-            if "source" not in CAPABILITIES[instances[source_stage.endpoint].kind]:
-                raise ValueError(
-                    f"{path}: endpoint '{source_stage.endpoint}' cannot be a source"
-                )
-            source_memory = memories.get(source_stage.endpoint)
+            source_stage = stage_map.get(source)
+            source_memory = (
+                memories.get(source_stage.endpoint) if source_stage else None
+            )
+            if (
+                source_stage
+                and instances[source_stage.endpoint].kind == "pool"
+                and source_address is None
+            ):
+                raise ValueError(f"{path}: Pool output requires a buffer")
             if source_offset is None:
                 source_offset = (
                     source_memory.size - size
-                    if instances[source_stage.endpoint].kind == "gemmini"
+                    if source_address is None
+                    and source_stage
+                    and instances[source_stage.endpoint].kind == "gemmini"
                     else 0
                 )
             if source_offset < 0:
@@ -324,7 +428,15 @@ def load_dependencies(
             if destination_offset is None:
                 destination_offset = 0
             copy = Copy(
-                source_offset, destination_offset, size, tensor_format, source_format
+                source_offset,
+                destination_offset,
+                size,
+                tensor_format,
+                source_format,
+                source_address,
+                buffer_name,
+                buffer.stride if buffer else 0,
+                buffer.pixel_bytes if buffer and "size_bytes" not in value else 0,
             )
         dependencies.append(
             Dependency(None if source == INPUT_READY else source, destination, copy)
@@ -432,6 +544,7 @@ def infer_bridge(
         and stage_map[dependency.source].endpoint == name
         and dependency.copy is not None
         and dependency.copy.format != INT8_FORMAT
+        and dependency.copy.source_address is None
         for dependency in dependencies
     ):
         raise ValueError(
@@ -516,14 +629,34 @@ def validate_graph(
             raise ValueError(f"{path}: external stage '{name}' needs a copied output")
 
     publications = {stage.name: set() for stage in stages}
+    outputs = {stage.name: stage.output for stage in stages}
+    writers = [stage.output.buffer for stage in stages if stage.output is not None]
+    if len(writers) != len(set(writers)):
+        raise ValueError(f"{path}: a buffer must have only one producer")
     for dependency in dependencies:
         if dependency.source is not None and dependency.copy is not None:
             publications[dependency.source].add(
-                (dependency.copy.source_offset, dependency.copy.size)
+                (
+                    dependency.copy.source_address,
+                    dependency.copy.source_offset,
+                    dependency.copy.size,
+                )
             )
     for name, ranges in publications.items():
-        if len(ranges) > 1:
+        if outputs[name] is None and len(ranges) > 1:
             raise ValueError(f"{path}: stage '{name}' has ambiguous output ranges")
+
+    for dependency in dependencies:
+        if dependency.source is None or dependency.copy is None:
+            continue
+        output = outputs[dependency.source]
+        buffer = dependency.copy.buffer
+        if (output is not None and buffer != output.buffer) or (
+            buffer is not None and output is None
+        ):
+            raise ValueError(
+                f"{path}: '{dependency.source}' consumers must read its published output"
+            )
 
     degree = {
         stage.name: sum(source is not None for source in incoming[stage.name])
@@ -544,9 +677,25 @@ def validate_graph(
 
 
 def validate_destinations(
-    stages: tuple[Stage, ...], dependencies: tuple[Dependency, ...], path: Path
+    stages: tuple[Stage, ...],
+    dependencies: tuple[Dependency, ...],
+    instances: Mapping[str, Accel],
+    path: Path,
 ) -> None:
     for stage in stages:
+        incoming = [
+            dependency
+            for dependency in dependencies
+            if dependency.destination == stage.name
+        ]
+        if (
+            instances[stage.endpoint].kind in ("aes", "pool")
+            and incoming
+            and sum(dependency.copy is not None for dependency in incoming) != 1
+        ):
+            raise ValueError(
+                f"{path}: streaming stage '{stage.name}' requires exactly one data input"
+            )
         ranges = sorted(
             (
                 dependency.copy.destination_offset,
@@ -570,14 +719,15 @@ def validate_memory(config: AutoLinkConfig, path: Path) -> None:
     }
     stage_map = {stage.name: stage for stage in config.stages}
     for dependency in config.dependencies:
-        if dependency.copy is None or dependency.source is None:
+        if dependency.copy is None:
             continue
         copy = dependency.copy
-        source = stage_map[dependency.source].endpoint
         destination = stage_map[dependency.destination].endpoint
+        source = stage_map[dependency.source].endpoint if dependency.source else None
         source_memory = memories.get(source)
         if (
             source_memory is not None
+            and copy.source_address is None
             and copy.source_offset + copy.size > source_memory.size
         ):
             raise ValueError(
@@ -622,9 +772,9 @@ def load_config(
         if "packed_words" in value
     }
     instances = {accel.name: accel for accel in instance_layout(document).instances}
-    stages = load_stages(communication.get("stages"), instances, path)
-    endpoint_names = {stage.endpoint for stage in stages}
-    if any(name not in endpoint_names for name in buffer_slots):
+    buffers = load_buffers(communication.get("buffers", {}), path)
+    stages = load_stages(communication.get("stages"), instances, buffers, path)
+    if any(name not in instances for name in buffer_slots):
         raise ValueError(f"{path}: buffer_slots names an unknown endpoint")
     if any(not isinstance(count, int) or count <= 0 for count in buffer_slots.values()):
         raise ValueError(f"{path}: buffer slot counts must be positive integers")
@@ -634,13 +784,13 @@ def load_config(
         if accel.size
     }
     dependencies = load_dependencies(
-        communication.get("dependencies"), stages, memories, instances, path
+        communication.get("dependencies"), stages, memories, instances, buffers, path
     )
     validate_copy_alignment(
         stages, dependencies, hardware.dma_beat_bytes, instances, path
     )
     validate_graph(stages, dependencies, path)
-    validate_destinations(stages, dependencies, path)
+    validate_destinations(stages, dependencies, instances, path)
     bridges = {
         name: infer_bridge(
             stages,
@@ -657,6 +807,15 @@ def load_config(
         if accel.kind == "cgra"
     }
     bridge = next(iter(bridges.values()), None)
+    capacity = communication.get("capacity", {})
+    job_counts = {
+        name: max(
+            (stage.job + stage.jobs for stage in stages if stage.endpoint == name),
+            default=1,
+        )
+        for name in instances
+    }
+    job_counts.update(capacity.get("jobs", {}))
     config = AutoLinkConfig(
         gemmini,
         cgra,
@@ -667,9 +826,113 @@ def load_config(
         instances,
         bridges,
         communication.get("run_capacity", 0),
+        capacity.get("stages", len(stages)),
+        capacity.get("dependencies", len(dependencies)),
+        job_counts,
     )
     validate_memory(config, path)
+    validate_capacity(config, path)
     return config
+
+
+def validate_capacity(config: AutoLinkConfig, path: Path) -> None:
+    if (
+        len(config.stages) > config.stage_capacity
+        or len(config.dependencies) > config.dependency_capacity
+    ):
+        raise ValueError(f"{path}: graph exceeds hardware stage/dependency capacity")
+    for name, instance in config.instances.items():
+        if config.jobs[name] <= 0:
+            raise ValueError(f"{path}: '{name}' job capacity must be positive")
+        if instance.kind == "pool" and config.jobs[name] != 1:
+            raise ValueError(
+                f"{path}: Pool has one configuration and requires job capacity 1"
+            )
+        if instance.kind in ("aes", "pool") and config.buffer_slots.get(name, 1) != 1:
+            raise ValueError(
+                f"{path}: streaming endpoint '{name}' requires one buffer slot"
+            )
+    for stage in config.stages:
+        if stage.jobs <= 0:
+            raise ValueError(f"{path}: '{stage.name}' job count must be positive")
+        if stage.job + stage.jobs > config.jobs[stage.endpoint]:
+            raise ValueError(
+                f"{path}: '{stage.endpoint}' jobs exceed hardware capacity"
+            )
+
+
+def load_graph(
+    path: Path, hardware: AutoLinkConfig, beat_bytes: int
+) -> tuple[str, AutoLinkConfig]:
+    validate_runtime_entry(hardware, path)
+    document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    name = document.get("name", path.stem)
+    if STAGE_NAME.fullmatch(name) is None:
+        raise ValueError(f"{path}: graph name must be a lowercase identifier")
+    buffers = load_buffers(document.get("buffers", {}), path)
+    stages = load_stages(document["stages"], hardware.instances, buffers, path)
+    memories = {
+        name: Memory(accel.base, accel.size)
+        for name, accel in hardware.instances.items()
+        if accel.size
+    }
+    dependencies = load_dependencies(
+        document["dependencies"], stages, memories, hardware.instances, buffers, path
+    )
+    config = replace(hardware, stages=stages, dependencies=dependencies)
+    validate_graph(stages, dependencies, path)
+    validate_destinations(stages, dependencies, hardware.instances, path)
+    validate_copy_alignment(stages, dependencies, beat_bytes, hardware.instances, path)
+    validate_memory(config, path)
+    validate_capacity(config, path)
+    validate_runtime_entry(config, path)
+    for dependency in dependencies:
+        copy = dependency.copy
+        if copy is None or copy.source_address is not None:
+            continue
+        source = stage_map(config)[dependency.source].endpoint
+        destination = stage_map(config)[dependency.destination].endpoint
+        if hardware.instances[source].kind == "cgra":
+            packed = hardware.bridges[source] is not None
+            if packed != (copy.format == INT8_FORMAT):
+                raise ValueError(
+                    f"{path}: '{source}' copy format must match its configured SPM window"
+                )
+        if copy.format != INT8_FORMAT:
+            continue
+        for endpoint in (source, destination):
+            if (
+                hardware.instances[endpoint].kind == "cgra"
+                and hardware.bridges[endpoint] is None
+            ):
+                raise ValueError(f"{path}: '{endpoint}' has no configured INT8 window")
+        if hardware.instances[source].kind == "cgra":
+            bridge = hardware.bridges[source]
+            word = copy.source_offset // CGRA_WORD_BYTES
+            if (
+                word < bridge.outbound_word
+                or word + copy.size > bridge.outbound_word + bridge.outbound_words
+            ):
+                raise ValueError(f"{path}: '{source}' output exceeds its INT8 window")
+        if hardware.instances[destination].kind == "cgra":
+            bridge = hardware.bridges[destination]
+            if (
+                copy.destination_offset != bridge.inbound_word * CGRA_WORD_BYTES
+                or copy.size != bridge.inbound_words * CGRA_WORD_BYTES
+            ):
+                raise ValueError(
+                    f"{path}: '{destination}' requantization requires its configured input region"
+                )
+    return name, config
+
+
+def validate_runtime_entry(config: AutoLinkConfig, path: Path) -> None:
+    # In a validated DAG, every stage having an incoming edge makes input_ready its only root.
+    destinations = {dependency.destination for dependency in config.dependencies}
+    if any(stage.name not in destinations for stage in config.stages):
+        raise ValueError(
+            f"{path}: runtime graphs and their hardware default graph must start at input_ready"
+        )
 
 
 def buffer_text(memory: Memory) -> str:
@@ -696,26 +959,10 @@ def gemmini_endpoint(config: AutoLinkConfig, name: str) -> str:
 def cgra_endpoint(config: AutoLinkConfig, name: str) -> str:
     accel = config.instances[name]
     bridge = config.bridges[name]
-    copies = [dependency for dependency in config.dependencies if dependency.copy]
-    stages = stage_map(config)
-    is_source = any(
-        dependency.source is not None and stages[dependency.source].endpoint == name
-        for dependency in copies
-    )
-    if is_source:
-        size = bridge.window_bytes if bridge is not None else accel.size
-        return (
-            f'      AutoEndpointSpec(name = "{name}", buffer = '
-            f"{buffer_text(Memory(accel.base, size))}, localBytes = {accel.size}, "
-            "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
-            f"bufferSlots = {config.buffer_slots.get(name, 1)}, releaseOnCopy = true)"
-        )
-    local_bytes = (
-        "CGRAGenerated.params.dma.spmWords * "
-        "CGRAGenerated.params.dataPayloadWidth / 8"
-    )
+    size = bridge.window_bytes if bridge is not None else accel.size
     return (
-        f'      AutoEndpointSpec(name = "{name}", buffer = None, localBytes = {local_bytes}, '
+        f'      AutoEndpointSpec(name = "{name}", buffer = '
+        f"{buffer_text(Memory(accel.base, size))}, localBytes = {accel.size}, "
         "bufferedInput = true, inputAlignment = CGRAGenerated.params.dataPayloadWidth / 8, "
         f"bufferSlots = {config.buffer_slots.get(name, 1)}, releaseOnCopy = true)"
     )
@@ -754,7 +1001,7 @@ def pool_endpoint(config: AutoLinkConfig, name: str) -> str:
         for dependency in copies
         if stages[dependency.destination].endpoint == name
     ]
-    return f'      AutoEndpointSpec(name = "{name}", buffer = None, localBytes = {max(sizes)}, releaseOnCopy = true)'
+    return f'      AutoEndpointSpec(name = "{name}", buffer = None, localBytes = {max(sizes, default=0)}, releaseOnCopy = true)'
 
 
 ENDPOINT_TEXT = {
@@ -766,7 +1013,8 @@ ENDPOINT_TEXT = {
 
 
 def endpoint_text(config: AutoLinkConfig, name: str) -> str:
-    return ENDPOINT_TEXT[config.instances[name].kind](config, name)
+    text = ENDPOINT_TEXT[config.instances[name].kind](config, name)
+    return text[:-1] + f", jobs = {config.jobs[name]})"
 
 
 def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
@@ -784,22 +1032,36 @@ def copy_text(config: AutoLinkConfig, dependency: Dependency) -> str:
     expansion = (
         f", expansion = {CGRA_WORD_BYTES}" if copy.source_format == INT8_FORMAT else ""
     )
+    address = ""
+    if copy.source_address is not None:
+        value = copy.source_address if isinstance(copy.source_address, int) else 0
+        address = f', sourceAddress = Some(BigInt("{value:x}", 16))'
     return (
         "Some(AutoCopySpec("
         f"sourceOffset = {source_offset}, destinationOffset = {copy.destination_offset}, "
-        f"bytes = {copy.size}{expansion}))"
+        f"bytes = {copy.size}{expansion}{address}, sourceStride = {copy.source_stride}, "
+        f"bytesPerPixel = {copy.pixel_bytes}))"
+    )
+
+
+def output_text(output: Output | None) -> str:
+    if output is None:
+        return ""
+    address = output.address if isinstance(output.address, int) else 0
+    return (
+        f', output = Some(AutoOutputSpec(address = BigInt("{address:x}", 16), '
+        f"bytes = {output.size}, stride = {output.stride}, "
+        f"bytesPerPixel = {output.pixel_bytes}))"
     )
 
 
 def scala_text(config: AutoLinkConfig) -> str:
     stage_index = {stage.name: index for index, stage in enumerate(config.stages)}
-    names = []
-    for stage in config.stages:
-        if stage.endpoint not in names:
-            names.append(stage.endpoint)
+    names = config.instances
     stages = ",\n".join(
         f'      AutoStageSpec(name = "{stage.name}", endpoint = "{stage.endpoint}", job = {stage.job}'
         + (f", jobs = {stage.jobs}" if stage.jobs != 1 else "")
+        + output_text(stage.output)
         + ")"
         for stage in config.stages
     )
@@ -813,6 +1075,7 @@ def scala_text(config: AutoLinkConfig) -> str:
     capacity = (
         f",\n    runCapacity = {config.run_capacity}" if config.run_capacity else ""
     )
+    capacity += f",\n    stageCapacity = {config.stage_capacity},\n    dependencyCapacity = {config.dependency_capacity}"
     return f"""package chipyard.socgen.generated
 
 import chipyard.example.CGRAGenerated
@@ -834,28 +1097,120 @@ object AutoLinkGenerated {{
 """
 
 
-def header_text(config: AutoLinkConfig) -> str:
+def address_text(value: int | str, bindings: Mapping[str, int]) -> str:
+    if isinstance(value, str):
+        return f"{{.value = 0, .binding = {bindings[value]}}}"
+    return f"{{.value = UINT64_C(0x{value:x}), .binding = -1}}"
+
+
+def graph_tables(config: AutoLinkConfig, prefix: str) -> str:
+    symbols = [stage.output.address for stage in config.stages if stage.output]
+    symbols += [
+        dependency.copy.source_address
+        for dependency in config.dependencies
+        if dependency.copy
+    ]
+    bindings = {
+        name: index
+        for index, name in enumerate(
+            dict.fromkeys(value for value in symbols if isinstance(value, str))
+        )
+    }
+    constants = "\n".join(
+        f"#define {prefix}_ADDRESS_{name.upper()} {index}u"
+        for name, index in bindings.items()
+    )
+    stages = []
+    for stage in config.stages:
+        output = ".address = {.binding = -1}"
+        if stage.output is not None:
+            value = stage.output
+            output = (
+                f".flags = 1u, .pixel_bytes = {value.pixel_bytes}u, "
+                f".address = {address_text(value.address, bindings)}, .stride = {value.stride}u, .bytes = {value.size}u"
+            )
+        stages.append(
+            f"  {{.endpoint = {config.instances[stage.endpoint].id}u, .job = {stage.job}u, .output = {{{output}}}}}"
+        )
+    indices = {stage.name: index for index, stage in enumerate(config.stages)}
+    names = stage_map(config)
+    edges = []
+    for dependency in config.dependencies:
+        source = indices[dependency.source] if dependency.source else 0
+        destination = indices[dependency.destination]
+        flags = (
+            1
+            | (int(dependency.source is None) << 1)
+            | (int(dependency.copy is not None) << 2)
+        )
+        fields = (
+            f".source = {source}u, .destination = {destination}u, .flags = {flags}u"
+        )
+        copy = dependency.copy
+        if copy is None:
+            fields += ", .address = {.binding = -1}"
+        else:
+            address = copy.source_address
+            offset = copy.source_offset
+            if address is None:
+                endpoint = names[dependency.source].endpoint
+                accel = config.instances[endpoint]
+                address = config.gemmini.base if accel.kind == "aes" else accel.base
+                if copy.format == INT8_FORMAT and accel.kind == "cgra":
+                    offset = (
+                        offset // CGRA_WORD_BYTES
+                        - config.bridges[endpoint].outbound_word
+                    )
+            expansion = 2 if copy.source_format == INT8_FORMAT else 0
+            fields += (
+                f", .bytes = {copy.size}u, .expansion = {expansion}u, .address = {address_text(address, bindings)}, "
+                f".source_offset = {offset}u, .destination_offset = {copy.destination_offset}u, "
+                f".source_stride = {copy.source_stride}u, .pixel_bytes = {copy.pixel_bytes}u"
+            )
+        edges.append(f"  {{{fields}}}")
+    stage_text = ",\n".join(stages)
+    edge_text = ",\n".join(edges)
+    return f"""{constants}
+#define {prefix}_ADDRESS_COUNT {len(bindings)}u
+
+static const auto_link_stage_t {prefix}_STAGES[] = {{
+{stage_text}
+}};
+static const auto_link_edge_t {prefix}_EDGES[] = {{
+{edge_text}
+}};
+static const auto_link_graph_t {prefix}_GRAPH = {{
+  .stage_count = {len(config.stages)}u, .edge_count = {len(config.dependencies)}u,
+  .stage_capacity = {config.stage_capacity}u, .edge_capacity = {config.dependency_capacity}u,
+  .stages = {prefix}_STAGES, .edges = {prefix}_EDGES
+}};
+"""
+
+
+def header_text(config: AutoLinkConfig, prefix: str = "AUTO_LINK") -> str:
     slots = "\n".join(
-        f"#define AUTO_LINK_{name.upper()}_BUFFER_SLOTS {config.buffer_slots.get(name, 1)}u"
-        for name in dict.fromkeys(stage.endpoint for stage in config.stages)
+        f"#define {prefix}_{name.upper()}_BUFFER_SLOTS {config.buffer_slots.get(name, 1)}u"
+        for name in config.instances
     )
     constants = "\n".join(
-        f"#define AUTO_LINK_STAGE_{stage.name.upper()} {index}u"
+        f"#define {prefix}_STAGE_{stage.name.upper()} {index}u"
         for index, stage in enumerate(config.stages)
     )
     jobs = "\n".join(
-        f"#define AUTO_LINK_JOB_{stage.name.upper()} {stage.job}u\n"
-        f"#define AUTO_LINK_JOB_{stage.name.upper()}_COUNT {stage.jobs}u"
+        f"#define {prefix}_JOB_{stage.name.upper()} {stage.job}u\n"
+        f"#define {prefix}_JOB_{stage.name.upper()}_COUNT {stage.jobs}u"
         for stage in config.stages
     )
     copies = "\n".join(
-        f"#define AUTO_LINK_COPY_{dependency.source.upper()}_{dependency.destination.upper()} {index}u"
+        f"#define {prefix}_COPY_{(dependency.source or INPUT_READY).upper()}_{dependency.destination.upper()} {index}u"
         for index, dependency in enumerate(config.dependencies)
         if dependency.copy is not None
     )
     return f"""/* Generated by scripts/generate_auto_links.py. Do not edit. */
-#ifndef AUTO_LINK_GENERATED_H
-#define AUTO_LINK_GENERATED_H
+#ifndef {prefix}_GENERATED_H
+#define {prefix}_GENERATED_H
+
+#include "auto_link_types.h"
 
 {slots}
 
@@ -865,6 +1220,8 @@ def header_text(config: AutoLinkConfig) -> str:
 
 {copies}
 
+{graph_tables(config, prefix)}
+
 #endif
 """
 
@@ -872,6 +1229,11 @@ def header_text(config: AutoLinkConfig) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--soc-yaml", type=Path, default=DEFAULT_SOC)
+    parser.add_argument(
+        "--graph-yaml",
+        type=Path,
+        help="Emit a loadable graph header against --soc-yaml without changing hardware",
+    )
     parser.add_argument("--cgra-scala", type=Path, default=DEFAULT_CGRA_SCALA)
     parser.add_argument(
         "--cache-block-scala", type=Path, default=DEFAULT_CACHE_BLOCK_SCALA
@@ -888,6 +1250,15 @@ def main() -> int:
     config = load_config(
         path, args.cgra_scala.resolve(), args.cache_block_scala.resolve()
     )
+    if args.graph_yaml is not None:
+        if args.header_out is None or args.scala_out is not None:
+            raise ValueError(
+                "--graph-yaml requires --header-out and does not emit Scala"
+            )
+        hardware = load_cgra_hardware(args.cgra_scala, args.cache_block_scala)
+        name, graph = load_graph(args.graph_yaml, config, hardware.dma_beat_bytes)
+        write(args.header_out, header_text(graph, name.upper()), args.check)
+        return 0
     write(args.scala_out or DEFAULT_OUTPUT, scala_text(config), args.check)
     if args.header_out is not None or args.scala_out is None:
         write(args.header_out or DEFAULT_HEADER, header_text(config), args.check)

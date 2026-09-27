@@ -33,6 +33,7 @@ DEFAULT_SCALA = (
 DEFAULT_HEADER = ROOT / "tests" / "include" / "cgra_link_control_generated.h"
 PAGE_SIZE_BYTES = 4096
 PAGE_COUNT = 4
+GEMMINI_COMMAND_END = 125
 
 CGRA_REGISTERS = {
     "PACKET_COUNT": 0x000,
@@ -141,6 +142,20 @@ AUTO_LINK_REGISTERS = {
     "RUN_FIRST": 0x070,
     "RUN_COUNT": 0x078,
     "RUN_START": 0x080,
+    "ENDPOINT": 0x088,
+    "ENABLE": 0x090,
+    "EDGE": 0x098,
+    "EDGE_SOURCE": 0x0A0,
+    "EDGE_DESTINATION": 0x0A8,
+    "EDGE_FLAGS": 0x0B0,
+    "EDGE_BYTES": 0x0B8,
+    "EDGE_EXPANSION": 0x0C0,
+    "EDGE_SOURCE_BASE": 0x0C8,
+    "OUTPUT_FLAGS": 0x0D0,
+    "OUTPUT_PIXEL_BYTES": 0x0D4,
+    "OUTPUT_ADDRESS": 0x0E8,
+    "OUTPUT_STRIDE": 0x0F0,
+    "OUTPUT_BYTES": 0x0F8,
     "TRANSFER_BASE": 0x100,
     "TRANSFER_STRIDE": 0x028,
     "REGION_BASE": 0x800,
@@ -216,6 +231,7 @@ def scala_text(base_address: int, layout: AccelLayout | None = None) -> str:
         addresses(base_address, layout)
     )
     values = []
+    values.append(f"  val GEMMINI_COMMAND_END: Int = {GEMMINI_COMMAND_END}")
     values.extend(
         f"  val {name}: Int = 0x{offset:03x}" for name, offset in CGRA_REGISTERS.items()
     )
@@ -269,6 +285,7 @@ def header_text(base_address: int, layout: AccelLayout | None = None) -> str:
         f"#define GEMMINI_JOB_BASE UINT64_C(0x{gemmini_address:x})",
         f"#define AES_JOB_BASE UINT64_C(0x{aes_address:x})",
         f"#define AUTO_LINK_BASE UINT64_C(0x{auto_link_address:x})",
+        f"#define GEMMINI_COMMAND_END {GEMMINI_COMMAND_END}",
         "",
     ]
     lines.extend(

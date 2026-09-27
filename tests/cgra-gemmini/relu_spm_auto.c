@@ -2,6 +2,7 @@
 #include "cgra_link.h"
 #include "cgra_protocol.h"
 #include "gemmini.h"
+#include "gemmini_job.h"
 #include "generated/cgra_relu4x4_fast_api.h"
 
 #include <stdint.h>
@@ -54,6 +55,7 @@ static void run_gemmini(void) {
   gemmini_preload(B_addr, ACCUMULATOR_WRITE_ADDRESS);
   gemmini_compute_preloaded(A_addr, GARBAGE_ADDR);
   gemmini_extended_mvout_spad(PUBLICATION_ROW, GEMMINI_FULL_WIDTH_ROW_STRIDE, ACCUMULATOR_FULL_WIDTH_ADDRESS, DIM, PUBLICATION_ROWS);
+  gemmini_commands_end();
 }
 
 static int verify_result(cgra_link_result_t result) {
