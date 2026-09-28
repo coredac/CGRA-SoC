@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+"""Generate synthetic ResNet-8 weights and exact saturation-based reference data."""
+
+import argparse
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+INPUT_H = 32
+INPUT_W = 32
+INPUT_CHANNELS = 3
+CHANNELS = (16, 32, 64)
+CLASSES = 10
+KERNEL = 3
+TILE_ROWS = 2
+
+
+def weights(inputs, outputs, kernel, seed):
+    values = [0] * (kernel * kernel * inputs * outputs)
+    for out in range(outputs):
+        for tap in range(4 if kernel > 1 else 2):
+            position = (out * 7 + seed * 11 + tap * (inputs + 1)) % (
+                kernel * kernel * inputs
+            )
+            values[position * outputs + out] += 1 if (out + tap + seed) % 3 else -1
+    return values
+
+
+def conv(source, weight, rows, columns, inputs, outputs, kernel, stride):
+    height = (rows + stride - 1) // stride
+    width = (columns + stride - 1) // stride
+    top = max((height - 1) * stride + kernel - rows, 0) // 2
+    left = max((width - 1) * stride + kernel - columns, 0) // 2
+    taps = [
+        [
+            (
+                y,
+                x,
+                channel,
+                weight[((y * kernel + x) * inputs + channel) * outputs + out],
+            )
+            for y in range(kernel)
+            for x in range(kernel)
+            for channel in range(inputs)
+            if weight[((y * kernel + x) * inputs + channel) * outputs + out]
+        ]
+        for out in range(outputs)
+    ]
+    result = []
+    for row in range(height):
+        for column in range(width):
+            for channel_taps in taps:
+                total = 0
+                for y, x, channel, value in channel_taps:
+                    in_row = row * stride + y - top
+                    in_column = column * stride + x - left
+                    if 0 <= in_row < rows and 0 <= in_column < columns:
+                        total += (
+                            source[(in_row * columns + in_column) * inputs + channel]
+                            * value
+                        )
+                result.append(min(127, max(-128, total)))
+    return result
+
+
+def softmax(logits):
+    """Convert Q8 logits to Q15 probabilities using the CGRA kernel coefficients."""
+    maximum = max(logits)
+    exponents = []
+    for value in logits:
+        distance = min(maximum - value, 4096)
+        shift = (distance * 370) >> 16
+        polynomial = 346 - distance + 177 * shift
+        exponents.append((polynomial * polynomial + 62885) >> (shift + 2))
+    total = sum(exponents)
+    return [(value * (1 << 15) + total // 2) // total for value in exponents]
+
+
+def reference():
+    source = [
+        (row * 7 + column * 3 + channel * 5 + row * column) % 17 - 8
+        for row in range(INPUT_H)
+        for column in range(INPUT_W)
+        for channel in range(INPUT_CHANNELS)
+    ]
+    stem_weights = weights(INPUT_CHANNELS, CHANNELS[0], KERNEL, 1)
+    stem = [
+        max(0, value)
+        for value in conv(
+            source,
+            stem_weights,
+            INPUT_H,
+            INPUT_W,
+            INPUT_CHANNELS,
+            CHANNELS[0],
+            KERNEL,
+            1,
+        )
+    ]
+    tensors = {"stem_weights": stem_weights, "expected_stem": stem}
+    source = stem
+    rows, columns, inputs = INPUT_H, INPUT_W, CHANNELS[0]
+    blocks = []
+    for index, outputs in enumerate(CHANNELS):
+        stride = 1 if index == 0 else 2
+        height, width = rows // stride, columns // stride
+        blocks.append((rows, columns, inputs, height, width, outputs, stride))
+        first_weights = weights(inputs, outputs, KERNEL, index * 3 + 2)
+        second_weights = weights(outputs, outputs, KERNEL, index * 3 + 3)
+        first = [
+            max(0, value)
+            for value in conv(
+                source, first_weights, rows, columns, inputs, outputs, KERNEL, stride
+            )
+        ]
+        main = conv(first, second_weights, height, width, outputs, outputs, KERNEL, 1)
+        skip = source
+        if index != 0:
+            projection = weights(inputs, outputs, 1, index * 3 + 4)
+            tensors[f"projection_{index}"] = projection
+            skip = conv(source, projection, rows, columns, inputs, outputs, 1, stride)
+        source = [min(127, max(0, value + bypass)) for value, bypass in zip(main, skip)]
+        tensors[f"weights1_{index}"] = first_weights
+        tensors[f"weights2_{index}"] = second_weights
+        tensors[f"expected_{index}"] = source
+        rows, columns, inputs = height, width, outputs
+    pixels = rows * columns
+    pooled = [
+        (sum(source[channel::inputs]) + pixels // 2) // pixels
+        for channel in range(inputs)
+    ]
+    fc_weights = [
+        (channel * 3 + out * 7 + channel * out) % 5 - 2
+        for channel in range(inputs)
+        for out in range(CLASSES)
+    ]
+    bias = [out * 3 - 11 for out in range(CLASSES)]
+    logits = [
+        bias[out]
+        + sum(
+            pooled[channel] * fc_weights[channel * CLASSES + out]
+            for channel in range(inputs)
+        )
+        for out in range(CLASSES)
+    ]
+    tensors.update(
+        expected_pool=pooled,
+        fc_weights=fc_weights,
+        fc_bias=bias,
+        expected_logits=logits,
+        expected_probabilities=softmax(logits),
+    )
+    return blocks, tensors
+
+
+def header(blocks, tensors):
+    core = max(TILE_ROWS * block[4] * block[5] for block in blocks)
+    halo = max((TILE_ROWS + 2) * block[4] * block[5] for block in blocks)
+    lines = [
+        "/* Generated by scripts/resnet_data.py. Do not edit. */",
+        "#ifndef RESNET_DATA_H",
+        "#define RESNET_DATA_H",
+        "",
+        "#include <stdint.h>",
+        "",
+        "enum {",
+        f"  INPUT_H = {INPUT_H},",
+        f"  INPUT_W = {INPUT_W},",
+        f"  INPUT_CHANNELS = {INPUT_CHANNELS},",
+        f"  STEM_CHANNELS = {CHANNELS[0]},",
+        f"  FC_CHANNELS = {CHANNELS[-1]},",
+        f"  CLASSES = {CLASSES},",
+        f"  BLOCKS = {len(blocks)},",
+        f"  KERNEL = {KERNEL},",
+        "  PADDING = KERNEL / 2,",
+        f"  TILE_ROWS = {TILE_ROWS},",
+        f"  CORE_WORDS = {core},",
+        f"  HALO_WORDS = {halo},",
+        "};",
+        "",
+        "typedef struct {",
+        "  unsigned input_rows, input_columns, input_channels;",
+        "  unsigned rows, columns, channels, stride;",
+        "} block_t;",
+        "",
+        "static const block_t blocks[BLOCKS] = {",
+    ]
+    lines.extend(
+        "  {" + ", ".join(str(value) for value in block) + "}," for block in blocks
+    )
+    lines.extend(["};", ""])
+    for name, values in tensors.items():
+        kind = (
+            "int32_t"
+            if name in ("fc_bias", "expected_logits", "expected_probabilities")
+            else "int8_t"
+        )
+        lines.append(f"static const {kind} {name}[{len(values)}] row_align(1) = {{")
+        for start in range(0, len(values), 32):
+            lines.append(
+                "  "
+                + ", ".join(str(value) for value in values[start : start + 32])
+                + ","
+            )
+        lines.extend(["};", ""])
+    for name in ("weights1", "weights2", "expected", "projection"):
+        values = [
+            f"{name}_{index}" if name != "projection" or index != 0 else "NULL"
+            for index in range(len(blocks))
+        ]
+        lines.append(
+            f"static const int8_t *const {name}[BLOCKS] = {{" + ", ".join(values) + "};"
+        )
+    lines.extend(["", "#endif", ""])
+    return "\n".join(lines)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output", type=Path, default=ROOT / "tests/generated/resnet_data.h"
+    )
+    args = parser.parse_args()
+    blocks, tensors = reference()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(header(blocks, tensors), encoding="utf-8")
+    for name, values in tensors.items():
+        if name.startswith("expected"):
+            print(
+                f"{name}: {len(values)} values, range [{min(values)}, {max(values)}], {len(set(values))} distinct"
+            )
+    print(f"Generated {args.output}")
+
+
+if __name__ == "__main__":
+    main()

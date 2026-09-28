@@ -97,9 +97,13 @@ The combined flow runs Gemmini and CGRA in the same Chipyard system and can also
 - Supported: non-tiled residual blocks that reuse two Gemmini jobs and two resident CGRA kernels
 - Supported: runtime tile shapes, transfer offsets and buffer-slot strides within the generated graph
 - Supported: CGRA input-copy/compute overlap using separate SPM slots
-- Unsupported: runtime graph changes and concurrent kernels on one IP
+- Supported: two Gemmini, two independent CGRA instances and Pool through one shared CPU command interface
+- Supported: CPU-loaded dependency graphs within generated IP and table capacities
+- Unsupported: in-flight graph changes and concurrent kernels on one IP
 
 In the three-stage AES path, Gemmini publishes to its external SPM, CGRA pulls the data and computes into its local SPM, and AES reads that SPM directly before writing ciphertext to DRAM. That demo remains sequential with one 128-byte chunk. AutoLink carries control and TileLink carries payload; tiled CNN demos reuse cached jobs across multiple chunks. See [hardware contracts](./docs/contracts.md) for supported interfaces.
+
+CPU-issued Gemmini producers finish their command sequence with `gemmini_commands_end()` so the wrapper can publish after computation and DMA drain. Captured automatic jobs already carry a command count and do not need this marker. Plain manual execution is unchanged.
 
 For automatic CGRA execution, call `cgra_job_config(job, &RELU4X4, NULL)` before releasing dependencies. This loads static controls and captures runtime initialization plus launch packets; it does not start computation. Tiled kernels pass their symbol bindings instead of `NULL`. AutoLink starts the configured job when its inputs are ready, and hardware applies the configured field updates on each tile without per-tile CPU configuration.
 
@@ -133,7 +137,98 @@ Run the automatic three-stage path with:
 $ CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml --rebuild
 ```
 
-Use `--soc-yaml` to select the graph; changing YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+Use `--soc-yaml` to select the hardware and default graph; changing this YAML requires `--rebuild`. The AES configuration defaults to `gca.yaml` for the full AES → Gemmini → CGRA → AES path.
+
+#### Runtime dependency graphs
+
+CPU-started graphs can change without rebuilding RTL, within the selected hardware's IP, stage, dependency and job capacities. A runtime graph YAML names stages, their endpoint instances and dependencies; it does not instantiate new hardware. Generate its C descriptor with `--graph-yaml`, then call `auto_link_load(&GRAPH, addresses)` before the existing tile configuration and `auto_link_input_ready()`. Wait for all results and `RUNNING=0` before replacing the graph. Legacy externally triggered configurations retain their original startup and do not support runtime graph replacement.
+
+Named `buffers` declare addresses, sizes and optional formats once. A stage's `output.buffer` and its consumers' dependency `buffer` refer to the same storage. Fixed addresses can name SPM; symbolic addresses receive software-owned pointers through `auto_link_load`. Pool/AES automatic destinations use the graph binding; Gemmini uses a captured native output command with an `OutputAddress` patch. CGRA does not accept an explicit output buffer: its results stay in local SPM for consumers to pull. Software can explicitly issue a manual DMA write after the graph drains. Buffers are passive storage, not extra stages or DMA engines. Manual APIs are unchanged.
+
+`graph.c` changes graphs on one five-IP system and checks SPM and DRAM transfers. It rebinds Gemmini/Pool DRAM outputs without reconfiguring the IP jobs, while Pool pulls CGRA results directly from SPM. Separate raw/packed input graphs finish in CGRA SPM, then the CPU explicitly requests raw INT32 or packed INT8 DMA writeout. Generate its descriptors and ReLU API before running:
+
+```shell
+$ for graph in local dram raw packed; do chipyard/.conda-env/bin/python scripts/generate_auto_links.py --soc-yaml configs/soc/autolink/graph.yaml --graph-yaml configs/graphs/$graph.yaml --header-out tests/generated/graph_$graph.h; done
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/graph.yaml configs/kernels/kernel_relu_runtime_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/graph.c LOADMEM=1 timeout_cycles=350000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/graph.yaml --rebuild
+```
+
+Later edits to runtime graph YAML require regenerating its header and rebuilding the C binary, not the simulator. A physical address selects SPM or DRAM through TileLink; the graph does not carry a memory-type flag. Manual CGRA writeout handles a contiguous region, not a two-dimensional tensor scatter.
+
+The GitHub workflow runs this test in the CGRA and Gemmini E2E job, generating all four graph descriptors and the matching ReLU API before rebuilding the simulator. Its log is included in the existing test-log artifact.
+
+#### Multiple accelerator instances
+
+`multi.yaml` names each instance separately. The generated descriptors select the target while retaining native IP APIs:
+
+```c
+accel_commands(GEMMINI0, {
+  gemmini_mvin(input, 0);
+});
+```
+
+Use separate, non-nested command blocks for different instances. MMIO configuration uses the matching descriptor's `.control` address. In this demo, CGRA0's MMIO endpoint collects all AutoLink results.
+
+Both tests run eight tiles through `gemmini0 → cgra0 → gemmini1 → cgra1 → pool`. Each tile has two 16-element GEMM rows and produces eight MaxPool outputs. Gemmini1 reads CGRA0's packed INT8 SPM window with native `mvin`; CGRA1 exposes raw INT32 results to Pool. The second GEMM uses different weights. Manual mode runs tiles sequentially and checks each intermediate result; automatic mode reuses captured jobs, checks all final outputs and the last tile's intermediate results, and reports cross-IP overlap. Each Gemmini/CGRA has two 128-byte tile regions in its existing SPM, configured by `communication.buffer_slots`; Pool streams without a publication SPM. AutoLink assigns slots independently, and existing field updates relocate input, computation and publication addresses without CPU intervention between tiles. Both tests use the same relocatable ReLU kernel and hardware:
+
+```shell
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_manual.c ./run-chipyard-cgra-gemmini-demo.sh --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/multi_auto.c ./run-chipyard-cgra-gemmini-demo.sh
+```
+
+Automatic `cycles` and `overlap` count fabric cycles; `peak` counts distinct active tile IDs, not arithmetic units. Both tests report `cpu_cycles`: Manual sums each tile's command-to-Pool-completion interval, while Auto measures input-ready through graph drain. Initial configuration, preloading and output verification are excluded.
+
+#### Projected residual block
+
+`block_manual.c` and `block_auto.c` use two Gemmini and two CGRA instances. Gemmini0 executes both the main 3×3 stride-2 Conv1 and the 1×1 stride-2 projection. CGRA0 applies ReLU, Gemmini1 executes 3×3 Conv2, and CGRA1 joins Conv2 with the projection for Add+ReLU. Automatic execution uses the existing ready-job round-robin arbitration, not a fixed software schedule.
+
+The input is 32×32×16 and the output is 16×16×32. Nine 6×6 output tiles include clipped right and bottom edges; Conv1 and ReLU produce the halo needed by Conv2. Input and weights are preloaded into Gemmini SPM, all intermediate transfers stay on-chip, and all 8192 final INT32 values remain in CGRA1 SPM for CPU checking. Both Gemmini instances retain 64 KiB SPM and 32 KiB accumulator; each CGRA has 64 KiB SPM. Gemmini0 shares four publication slots between its two jobs; the other instances use two slots each. The configured copy capacities support up to 6×6 output tiles; changing the C tests' `TILE_H` and `TILE_W` to 4 reuses the same hardware.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/block_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/arch.yaml --soc-yaml configs/soc/autolink/block.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml --output-dir tests/generated
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_manual.c LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/block_auto.c LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/block.yaml
+```
+
+`block_data.py` computes reference values on the host and emits the tensor dimensions and expected output into `tests/generated/block_data.h`. The RTL tests still initialize the synthetic inputs, execute every accelerator stage and check every output. Use the generator's size arguments to change the workload within the configured memory capacities. Manual reports sequential per-tile CPU cycles. Auto reports CPU and fabric cycles, overlap cycles and peak distinct active tiles. Setup and final output checking are outside the reported execution intervals. This is one synthetic residual block, not a full ResNet inference or accuracy benchmark.
+
+#### Sequential projected residual blocks
+
+`blocks.c` reuses the same four IPs for `32×32×16 → 16×16×32 → 8×8×64`. AutoLink pipelines full-width strips within each block; the next block starts after the current block drains. Output tiles are initially 2×16 and 2×8. Gemmini SPMs are 128 KiB each, accumulators remain 32 KiB, and CGRA SPMs remain 64 KiB each. Both CGRAs expose packed INT8 windows while computing with INT32 locally.
+
+Native convolution DMA loads weights from DRAM and reads the preceding block's packed CGRA1 output directly for the next Conv1 and projection. There is no separate boundary copy or intermediate DRAM writeback. Both blocks' outputs remain in separate CGRA1 SPM regions, starting at local words 4096 and 12288, for checking all 12288 values. Static CGRA kernels stay resident; Add job variants select each output region. The host generates reference outputs and constant synthetic weights, while the CPU initializes the first input tensor.
+
+`BINARY_ARGS` selects the configuration policy: `0` configures and starts each block from the CPU, `1` preconfigures both blocks but lets the CPU trigger each cached run, and `2` preconfigures both and starts one hardware-controlled sequence. The graph and data path are identical in all modes; the full chain does not overlap different blocks.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/blocks_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/blocks.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=0 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/blocks.c BINARY_ARGS=2 LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/blocks.yaml
+```
+
+`initial_setup_cycles` measures configuration before launch, excluding common input preparation. `chain_cycles` covers the whole chain, including CPU-controlled boundary configuration or triggering where applicable. CPU/Cached boundary counters are parts of this interval, not additional costs. Auto reports only the last block's fabric counters and does not claim to measure its hardware boundary cost separately. Output checking and result printing occur afterward. This is a synthetic two-block workload, not full ResNet inference.
+
+#### Synthetic ResNet-8
+
+`resnet.c` follows the MLPerf Tiny v1.1 ResNet-8 dimensions: `32×32×3 → stem (16 channels) → ordinary residual block (16) → projected block (32) → projected block (64) → global average → FC → Softmax (10 probabilities)`. It uses synthetic INT8 inputs and weights, saturation-based quantization and TensorFlow SAME padding, not trained-model accuracy evaluation. The CGRA Softmax interprets the INT32 logits with scale `1/256` and leaves Q15 probabilities in its SPM; `32768` represents one.
+
+Both Gemmini and both CGRA SPMs are 128 KiB each; Gemmini accumulators remain 32 KiB. CGRAs compute in INT32 and expose INT8 outputs. Intermediate tensors remain in SPM; weights and reference values reside in DRAM. FC publishes ten INT32 logits to Gemmini0 SPM, then CGRA0 DMA reads them directly for Softmax. The existing Pool performs signed AveragePool through its unchanged RoCC interface.
+
+`BINARY_ARGS=0` runs the whole network manually. `1` uses the same manual stem, ordinary block and tail, but the CPU starts an AutoLink tiled pipeline for each projected block. This Hybrid mode does not make the whole network autonomous. Both modes use two-row full-width strips and check the stem, every residual block, global average, logits and probabilities against host-generated reference values.
+
+After FC, both modes use the CPU to load and start three CGRA0 phases: maximum, approximate exponential/sum, and normalization. Each phase replaces the previous control configuration without expanding control memory. Native RoCC reads preserve the INT32/Q15 probabilities instead of passing through the INT8 TileLink window. A subsequent inference must reload the ReLU configuration.
+
+`setup_cycles` includes input preparation, preloading and initial configuration. `execution_cycles` sums the stem, residual blocks, Pool, FC and Softmax intervals, including CPU control within those stages but excluding progress printing and output checking. `softmax_cycles` includes the SPM-to-SPM DMA and three configuration/execution phases. Hybrid fabric counters describe each projected block, not the whole network. These are simulated CPU cycles, not host simulation time.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/resnet_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml configs/kernels/kernel_softmax_max_4x4.yaml configs/kernels/kernel_softmax_exp_4x4.yaml configs/kernels/kernel_softmax_norm_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=0 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml --rebuild
+$ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml
+```
 
 #### Tiled Conv → ReLU → Pool
 
@@ -148,4 +243,4 @@ $ CONFIG=CgraPoolTileRocketConfig TEST_SRC=tests/cgra-gemmini/pool_tiles.c LOADM
 
 The cycle budget includes software reference computation and configuration. Printed `cycles` measure the CPU-observed pipeline interval; `overlap` and `peak` measure cross-IP task overlap, not arithmetic-unit utilization. CI runs this test alongside the existing manual, automatic, AES, Pool and non-tiled residual tests, while retaining separate CGRA and OpenFPGA jobs.
 
-The tiled residual test (`residual_tiles.c`, `res_tiles.yaml`) is retained but currently deferred; repeated-IP tiled execution is outside the supported validation scope. It describes Conv1 → ReLU → Conv2 → Add+ReLU with a skip dependency, two tile partitions and preloaded skip data. Final output stays in separate per-tile SPM regions for CPU validation through the INT8 window after the run. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3). The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.
+The tiled residual test (`residual_tiles.c`, `res_tiles.yaml`) is retained but currently deferred; its single-Gemmini/single-CGRA reentrant pipeline remains outside the validated scope. It describes Conv1 → ReLU → Conv2 → Add+ReLU with a skip dependency, two tile partitions and preloaded skip data. Final output stays in separate per-tile SPM regions for CPU validation through the INT8 window after the run. Output checks skip each tile's first element because of [the known VectorCGRA store bug](https://github.com/coredac/CGRA-SoC/issues/3). The reported overlap counts active task intervals on different IPs and tiles, not arithmetic-unit utilization.

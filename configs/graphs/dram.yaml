@@ -1,0 +1,36 @@
+name: dram
+buffers:
+  logits:
+    address: logits
+    size_bytes: 128
+    format: int32
+  pooled:
+    address: pooled
+    size_bytes: 8
+    format: int8
+stages:
+  - name: matmul
+    endpoint: gemmini1
+    output:
+      buffer: logits
+  - name: activation
+    endpoint: cgra1
+  - name: pool
+    endpoint: pool
+    output:
+      buffer: pooled
+  - name: tail
+    endpoint: cgra0
+dependencies:
+  - source: input_ready
+    destination: matmul
+  - source: matmul
+    destination: activation
+    buffer: logits
+  - source: activation
+    destination: pool
+    size_bytes: 32
+    format: int8
+  - source: pool
+    destination: tail
+    buffer: pooled

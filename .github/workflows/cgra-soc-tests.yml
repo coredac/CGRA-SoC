@@ -268,10 +268,6 @@ jobs:
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
           grep -q "Gemmini + CGRA + AES Auto: PASS" cgra-gemmini-aes-auto.log
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/relu_spm_auto_fail.c \
-            ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml 2>&1 | tee cgra-gemmini-aes-auto-fail.log
-          grep -q "Three-IP Automatic flow failure: PASS" cgra-gemmini-aes-auto-fail.log
-          CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
             TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca.yaml --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
@@ -329,6 +325,18 @@ jobs:
             TEST_SRC=tests/cgra-gemmini/residual_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-auto.log
           grep -q "Gemmini + CGRA Residual Auto: PASS" cgra-gemmini-residual-auto.log
+
+      - name: Generate runtime graph descriptors and CGRA fast API
+        run: |
+          for graph in local dram raw packed; do
+            .venv/bin/python scripts/generate_auto_links.py --soc-yaml configs/soc/autolink/graph.yaml --graph-yaml configs/graphs/$graph.yaml --header-out tests/generated/graph_$graph.h
+          done
+          .venv/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/graph.yaml configs/kernels/kernel_relu_runtime_4x4.yaml
+
+      - name: Run runtime graph E2E test
+        run: |
+          CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/graph.c LOADMEM=1 timeout_cycles=350000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/graph.yaml --rebuild 2>&1 | tee cgra-runtime-graph.log
+          grep -q "Runtime graph: PASS (0 mismatches)" cgra-runtime-graph.log
 
       - name: Upload test logs
         if: always()

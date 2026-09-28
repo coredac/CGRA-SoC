@@ -2,6 +2,8 @@
 #ifndef AUTO_LINK_GENERATED_H
 #define AUTO_LINK_GENERATED_H
 
+#include "auto_link_types.h"
+
 #define AUTO_LINK_GEMMINI_BUFFER_SLOTS 2u
 #define AUTO_LINK_CGRA_BUFFER_SLOTS 2u
 #define AUTO_LINK_POOL_BUFFER_SLOTS 1u
@@ -11,10 +13,33 @@
 #define AUTO_LINK_STAGE_POOL 2u
 
 #define AUTO_LINK_JOB_GEMMINI 0u
+#define AUTO_LINK_JOB_GEMMINI_COUNT 1u
 #define AUTO_LINK_JOB_CGRA 0u
+#define AUTO_LINK_JOB_CGRA_COUNT 1u
 #define AUTO_LINK_JOB_POOL 0u
+#define AUTO_LINK_JOB_POOL_COUNT 1u
 
 #define AUTO_LINK_COPY_GEMMINI_CGRA 1u
 #define AUTO_LINK_COPY_CGRA_POOL 2u
+
+
+#define AUTO_LINK_ADDRESS_COUNT 0u
+
+static const auto_link_stage_t AUTO_LINK_STAGES[] = {
+  {.endpoint = 0u, .job = 0u, .output = {.address = {.binding = -1}}},
+  {.endpoint = 1u, .job = 0u, .output = {.address = {.binding = -1}}},
+  {.endpoint = 2u, .job = 0u, .output = {.address = {.binding = -1}}}
+};
+static const auto_link_edge_t AUTO_LINK_EDGES[] = {
+  {.source = 0u, .destination = 0u, .flags = 3u, .address = {.binding = -1}},
+  {.source = 0u, .destination = 1u, .flags = 5u, .bytes = 64u, .expansion = 2u, .address = {.value = UINT64_C(0x60000000), .binding = -1}, .source_offset = 65472u, .destination_offset = 0u, .source_stride = 0u, .pixel_bytes = 0u},
+  {.source = 1u, .destination = 2u, .flags = 5u, .bytes = 64u, .expansion = 0u, .address = {.value = UINT64_C(0x60010000), .binding = -1}, .source_offset = 0u, .destination_offset = 0u, .source_stride = 0u, .pixel_bytes = 0u}
+};
+static const auto_link_graph_t AUTO_LINK_GRAPH = {
+  .stage_count = 3u, .edge_count = 3u,
+  .stage_capacity = 3u, .edge_capacity = 3u,
+  .stages = AUTO_LINK_STAGES, .edges = AUTO_LINK_EDGES
+};
+
 
 #endif

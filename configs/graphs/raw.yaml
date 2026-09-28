@@ -1,0 +1,13 @@
+name: raw
+buffers:
+  input:
+    address: input
+    size_bytes: 128
+    format: int32
+stages:
+  - name: activation
+    endpoint: cgra0
+dependencies:
+  - source: input_ready
+    destination: activation
+    buffer: input

@@ -52,6 +52,7 @@ from VectorCGRA.cgra.IntegratedCgraWithDmaRTL import (  # noqa: E402
 )
 from VectorCGRA.fu.flexible.FlexibleFuRTL import FlexibleFuRTL  # noqa: E402
 from VectorCGRA.lib.messages import mk_cgra_payload, mk_ctrl, mk_data  # noqa: E402
+from VectorCGRA.lib.util.common import MAX_CTRL_COUNT  # noqa: E402
 from VectorCGRA.multi_cgra.arch_parser.ArchParser import ArchParser  # noqa: E402
 
 
@@ -69,6 +70,7 @@ class SocConfig:
     num_registers_per_reg_bank: int
     mem_access_is_combinational: bool
     ctrl_count_per_iter: int | None
+    ctrl_count_bits: int
 
 
 def resolve_input_path(path: str | Path) -> Path:
@@ -152,6 +154,7 @@ def load_soc_config(path: str | Path) -> SocConfig:
             memory, "mem_access_is_combinational", False, soc_yaml
         ),
         ctrl_count_per_iter=optional_int(execution, "ctrl_count_per_iter", soc_yaml),
+        ctrl_count_bits=execution.get("ctrl_count_bits", clog2(MAX_CTRL_COUNT + 1)),
     )
     if config.num_fu_outports != INTEGRATED_CGRA_NUM_FU_OUTPORTS:
         raise ValueError(
@@ -253,6 +256,7 @@ def build_dut(arch_yaml: Path, soc_yaml: Path) -> IntegratedCgraWithDmaRTL:
         id_to_2d_map,
         is_multi_cgra=False,
         cgra_id=0,
+        ctrl_count_bits=soc_cfg.ctrl_count_bits,
     )
 
 

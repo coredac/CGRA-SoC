@@ -1,0 +1,84 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+
+memory:
+  data_mem_size_global: 32768
+  data_mem_size_per_bank: 4096
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: true
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 131072
+  cgra_spm_window:
+    base_address: 0x60040000
+    size_bytes: 131072
+
+execution:
+  ctrl_count_bits: 14
+
+communication:
+  run_capacity: 2
+  instances:
+    gemmini0:
+      type: gemmini
+    gemmini1:
+      type: gemmini
+    cgra0:
+      type: cgra
+      packed_words: 32768
+    cgra1:
+      type: cgra
+      output_format: int8
+      packed_words: 32768
+    pool:
+      type: pool
+      element_bits: 8
+      line_buffer_entries: 128
+  buffer_slots:
+    gemmini0: 4
+    gemmini1: 2
+    cgra0: 2
+    cgra1: 2
+  stages:
+    - name: conv1
+      endpoint: gemmini0
+      jobs: 2
+    - name: projection
+      endpoint: gemmini0
+      jobs: 2
+    - name: relu
+      endpoint: cgra0
+    - name: conv2
+      endpoint: gemmini1
+      jobs: 2
+    - name: add
+      endpoint: cgra1
+      jobs: 2
+  dependencies:
+    - source: input_ready
+      destination: conv1
+    - source: input_ready
+      destination: projection
+    - source: conv1
+      destination: relu
+      size_bytes: 2048
+      source_format: int8
+    - source: relu
+      destination: conv2
+      size_bytes: 2048
+      format: int8
+    - source: projection
+      destination: add
+      destination_offset: 8192
+      size_bytes: 1024
+      source_format: int8
+    - source: conv2
+      destination: add
+      size_bytes: 1024
+      source_format: int8

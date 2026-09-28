@@ -1,6 +1,7 @@
 #include "cgra_link.h"
 #include "cgra_spm_window.h"
 #include "gemmini.h"
+#include "gemmini_job.h"
 #include "generated/cgra_relu4x4_fast_api.h"
 #include "pool.h"
 
@@ -87,6 +88,7 @@ static void launch_gemmini(void) {
   gemmini_extended_preload(B_ROW, ACC_WRITE_ADDR, B_COLUMNS, B_ROWS, B_COLUMNS, A_ROWS);
   gemmini_extended_compute_preloaded(A_ROW, GARBAGE_ADDR, A_COLUMNS, A_ROWS, B_COLUMNS, A_ROWS);
   gemmini_extended_mvout_spad(PUBLICATION_ROW, ROW_STRIDE, ACC_FULL_WIDTH_ADDR, B_COLUMNS, A_ROWS);
+  gemmini_commands_end();
 }
 
 static int verify_output(void) {

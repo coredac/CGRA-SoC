@@ -1,0 +1,12 @@
+name: local
+stages:
+  - name: matmul
+    endpoint: gemmini0
+  - name: activation
+    endpoint: cgra0
+dependencies:
+  - source: input_ready
+    destination: matmul
+  - source: matmul
+    destination: activation
+    size_bytes: 128
