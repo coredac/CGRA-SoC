@@ -4,11 +4,11 @@
 
 #include "accel.h"
 
-#define ACCEL_ROUTED 0
+#define ACCEL_ROUTED 1
 #define ACCEL_COUNT 3u
 
-static const accel_t GEMMINI = {.id = 0u, .control = UINT64_C(0x60012000), .spm = UINT64_C(0x60000000), .spm_bytes = 65536u};
-static const accel_t CGRA = {.id = 1u, .control = UINT64_C(0x60011000), .spm = UINT64_C(0x60010000), .spm_bytes = 512u};
-static const accel_t POOL = {.id = 2u, .control = UINT64_C(0x0), .spm = UINT64_C(0x0), .spm_bytes = 0u};
+static const accel_t GEMMINI0 = {.id = 0u, .control = UINT64_C(0x60060000), .spm = UINT64_C(0x60000000), .spm_bytes = 131072u};
+static const accel_t GEMMINI1 = {.id = 1u, .control = UINT64_C(0x60061000), .spm = UINT64_C(0x60020000), .spm_bytes = 131072u};
+static const accel_t CGRA0 = {.id = 2u, .control = UINT64_C(0x60062000), .spm = UINT64_C(0x60040000), .spm_bytes = 131072u};
 
 #endif

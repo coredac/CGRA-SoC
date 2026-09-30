@@ -14,7 +14,7 @@ typedef struct {
   uint32_t job;
 } cgra_link_result_t;
 
-enum { CGRA_LINK_SLOT = 0, CGRA_LINK_ELEMENTS = 1, CGRA_LINK_TILE_ID = 2 };
+enum { CGRA_LINK_SLOT = 0, CGRA_LINK_ELEMENTS = 1, CGRA_LINK_TILE_ID = 2, CGRA_LINK_ROW = 3, CGRA_LINK_ROWS = 4 };
 
 typedef struct {
   uint32_t base;
@@ -22,13 +22,20 @@ typedef struct {
   uint32_t source;
 } cgra_link_symbol_t;
 
+typedef struct {
+  uint32_t job;
+  const cgra_kernel_t *kernel;
+  const cgra_link_symbol_t *bindings;
+} cgra_link_job_t;
+
 static inline uint32_t cgra_link_read_at(uintptr_t base, uintptr_t offset) { return *(volatile uint32_t *)(base + offset); }
 
 static inline void cgra_link_write_at(uintptr_t base, uintptr_t offset, uint32_t value) { *(volatile uint32_t *)(base + offset) = value; }
 
 static inline uint32_t cgra_link_read(uintptr_t offset) { return cgra_link_read_at(CGRA_LINK_CONTROL_BASE, offset); }
 
-static inline int cgra_link_begin_at(uintptr_t base, uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count, uint32_t rearm_count, uint32_t setup_count) {
+static inline int cgra_link_begin_at(uintptr_t base, uint32_t job, uint32_t packet_count, uint32_t expected_completes, uint32_t patch_count, uint32_t rearm_count, uint32_t setup_count,
+                                     uint32_t next_job) {
   uint64_t ready = 0;
   // Drain native static configuration before subsequent RoCC packets enter capture.
   CGRA_WAIT(ready);
@@ -39,6 +46,7 @@ static inline int cgra_link_begin_at(uintptr_t base, uint32_t job, uint32_t pack
   cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_COUNT, patch_count);
   cgra_link_write_at(base, CGRA_LINK_CONTROL_REARM_COUNT, rearm_count);
   cgra_link_write_at(base, CGRA_LINK_CONTROL_SETUP_COUNT, setup_count);
+  cgra_link_write_at(base, CGRA_LINK_CONTROL_NEXT_JOB, next_job);
   cgra_link_write_at(base, CGRA_LINK_CONTROL_CONFIG_SUBMIT, 1);
   __asm__ volatile("" ::: "memory");
   while (cgra_link_read_at(base, CGRA_LINK_CONTROL_CONFIG_READY) == 0) {
@@ -73,10 +81,10 @@ static inline void cgra_link_queue(cgra_packet_t packet) {
 }
 
 // The caller targets this endpoint's RoCC instance and configures before releasing dependencies.
-static inline int cgra_job_config_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) {
+static inline int cgra_link_capture_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings, uint32_t next_job) {
   cgra_send_packets_fast(kernel->static_packets, kernel->static_count);
   const uint32_t patch_count = bindings == NULL ? 0 : kernel->patch_count;
-  if (cgra_link_begin_at(base, job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count, kernel->rearm_count, kernel->setup_count) != 0) {
+  if (cgra_link_begin_at(base, job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count, kernel->rearm_count, kernel->setup_count, next_job) != 0) {
     return 1;
   }
   cgra_link_patches_at(base, kernel, bindings, patch_count);
@@ -89,7 +97,23 @@ static inline int cgra_job_config_at(uintptr_t base, uint32_t job, const cgra_ke
   return 0;
 }
 
+static inline int cgra_job_config_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) { return cgra_link_capture_at(base, job, kernel, bindings, 0); }
+
 static inline int cgra_job_config(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) { return cgra_job_config_at(CGRA_LINK_CONTROL_BASE, job, kernel, bindings); }
+
+// Jobs occur once in the list; launch its first ID after configuring the sequence.
+static inline int cgra_job_sequence_at(uintptr_t base, const cgra_link_job_t *jobs, uint32_t count) {
+  for (uint32_t index = 0; index < count; ++index) {
+    const cgra_link_job_t *job = &jobs[index];
+    const uint32_t next_job = index + 1 < count ? jobs[index + 1].job + 1 : 0;
+    if (cgra_link_capture_at(base, job->job, job->kernel, job->bindings, next_job) != 0) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+static inline int cgra_job_sequence(const cgra_link_job_t *jobs, uint32_t count) { return cgra_job_sequence_at(CGRA_LINK_CONTROL_BASE, jobs, count); }
 
 static inline cgra_link_result_t cgra_link_wait_at(uintptr_t base) {
   cgra_link_write_at(base, CGRA_LINK_CONTROL_RESULT_POP, 1);

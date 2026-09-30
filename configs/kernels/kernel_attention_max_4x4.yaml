@@ -1,0 +1,18 @@
+kernel:
+  name: attention_max
+  kernel_yaml: VectorCGRA/validation/test/attention_max.yaml
+  required_words: 12416
+  bindings: {arg0: 0, arg1: 4096, arg2: 128, arg3: 0, arg4: 2048}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: columns}
+    - {symbol: arg3, kind: count, role: row}
+    - {symbol: arg4, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 16
+  loop_times: 32768
+  expected_completes: 2
+  runtime_count: {symbol: arg4, scale: 16, offset: 0}

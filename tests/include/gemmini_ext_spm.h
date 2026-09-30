@@ -5,6 +5,6 @@
 #include <stdint.h>
 
 #define GEMMINI_EXT_SPM_BASE UINT64_C(0x60000000)
-#define GEMMINI_EXT_SPM_SIZE_BYTES 65536u
+#define GEMMINI_EXT_SPM_SIZE_BYTES 131072u
 
 #endif

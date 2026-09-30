@@ -230,6 +230,23 @@ $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS
 $ CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/resnet.c BINARY_ARGS=1 LOADMEM=1 timeout_cycles=8000000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml
 ```
 
+#### Causal Attention prefill
+
+`attention.c` runs one attention head with 128 tokens and head dimension 64: `Gemmini0 QKᵀ → CGRA scale/mask/Softmax → Gemmini1 PV`. Q, K and V are synthetic INT8 tensors; scores and accumulators are INT32. Softmax produces values from 0 to 127 in CGRA SPM, read as INT8 through its packed window. This is the attention core, not a full GPT-2 block or a trained-model accuracy evaluation.
+
+Each tile contains 16 query rows and attends to all permitted preceding keys. K and V remain preloaded. The three Softmax phases occupy disjoint resident control ranges; automatic execution follows a software-configured cached-job sequence and publishes only after normalization. Two slots per IP support inter-IP overlap without an intermediate DRAM copy. Manual mode uses the same native commands and kernels, starting each phase from the CPU. Final INT32 output remains in Gemmini1 SPM and all 8192 elements are checked against the host-generated integer reference.
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/attention_data.py
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml configs/kernels/kernel_attention_max_4x4.yaml configs/kernels/kernel_attention_exp_4x4.yaml configs/kernels/kernel_attention_norm_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig BINARY_ARGS=manual LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml --rebuild tests/cgra-gemmini/attention.c
+$ CONFIG=MultiAccelRocketConfig BINARY_ARGS=auto LOADMEM=1 timeout_cycles=4000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml tests/cgra-gemmini/attention.c
+```
+
+`setup_cycles` covers preloading and configuration; `execution_cycles` covers the tiled attention calculation, excluding final checking. Automatic mode also reports fabric cycles and cross-IP overlap. Size changes must fit the native GEMM blocks, command cache and reserved SPM regions; reducing tile rows increases padded Q storage, so smaller tiles do not always use less SPM.
+
+The default configuration passed both modes with all 8192 outputs matching: manual execution took 1,442,525 CPU cycles and automatic execution took 1,091,680 CPU cycles. The automatic fabric recorded 49,966 overlap cycles. Its peak counter includes scheduling activity and is not a count of simultaneously computing IPs.
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.
