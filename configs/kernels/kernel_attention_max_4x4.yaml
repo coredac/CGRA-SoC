@@ -12,7 +12,7 @@ runtime:
     - {symbol: arg4, kind: count, role: elements}
 execution:
   ctrl_base: 0
-  compiled_ii: 16
-  loop_times: 32768
+  compiled_ii: 12
+  loop_times: 24576
   expected_completes: 2
-  runtime_count: {symbol: arg4, scale: 16, offset: 0}
+  runtime_count: {symbol: arg4, scale: 12, offset: 0}

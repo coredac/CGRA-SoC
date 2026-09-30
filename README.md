@@ -245,7 +245,7 @@ $ CONFIG=MultiAccelRocketConfig BINARY_ARGS=auto LOADMEM=1 timeout_cycles=400000
 
 `setup_cycles` covers preloading and configuration; `execution_cycles` covers the tiled attention calculation, excluding final checking. Automatic mode also reports fabric cycles and cross-IP overlap. Size changes must fit the native GEMM blocks, command cache and reserved SPM regions; reducing tile rows increases padded Q storage, so smaller tiles do not always use less SPM.
 
-The default configuration passed both modes with all 8192 outputs matching: manual execution took 1,442,525 CPU cycles and automatic execution took 1,091,680 CPU cycles. The automatic fabric recorded 49,966 overlap cycles. Its peak counter includes scheduling activity and is not a count of simultaneously computing IPs.
+The default configuration passed both modes with all 8192 outputs matching. With Softmax II 12/18/13, manual execution took 1,229,474 CPU cycles and automatic execution took 878,320 CPU cycles, down 14.8% and 19.5% from the previous II 16/24/16 schedules. The automatic fabric recorded 867,527 cycles and 49,966 overlap cycles. Its peak counter includes scheduling activity and is not a count of simultaneously computing IPs.
 
 #### Tiled Conv → ReLU → Pool
 

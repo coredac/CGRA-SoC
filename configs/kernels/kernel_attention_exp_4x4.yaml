@@ -14,7 +14,7 @@ runtime:
     - {symbol: arg6, kind: count, role: elements}
 execution:
   ctrl_base: 16
-  compiled_ii: 24
-  loop_times: 49152
+  compiled_ii: 18
+  loop_times: 36864
   expected_completes: 4
-  runtime_count: {symbol: arg6, scale: 24, offset: 0}
+  runtime_count: {symbol: arg6, scale: 18, offset: 0}
