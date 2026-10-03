@@ -247,6 +247,23 @@ $ CONFIG=MultiAccelRocketConfig BINARY_ARGS=auto LOADMEM=1 timeout_cycles=400000
 
 The default configuration passed both modes with all 8192 outputs matching. With Softmax II 12/18/13, manual execution took 1,229,474 CPU cycles and automatic execution took 878,320 CPU cycles, down 14.8% and 19.5% from the previous II 16/24/16 schedules. The automatic fabric recorded 867,527 cycles and 49,966 overlap cycles. Its peak counter includes scheduling activity and is not a count of simultaneously computing IPs.
 
+#### Multi-head Attention
+
+`mha.c` extends the attention core with Q/K/V projections, head concatenation and an output projection. The CPU configures Gemmini projections and advances between heads; each head uses the existing automatic tiled `QKᵀ → Softmax → PV` pipeline. It reuses the two Gemminis, one CGRA and Attention configuration above. It does not include LayerNorm, residual addition or the MLP.
+
+Inputs and weights are synthetic INT8, with INT32 accumulation and INT8 saturation after each projection and PV. Current-head Q/K/V and Softmax intermediates stay in SPM. Gemmini writes each head into its columns of the DRAM concatenation buffer using a row stride, then reads that buffer for the output projection. The host generates exact integer references; the test checks both concatenation and final output without doing model arithmetic on the CPU.
+
+Generate the two-head case (`hidden=128`, `N=128`, `d=64`, 16 query rows per tile), then use the same simulator and fast APIs as Attention:
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/mha_data.py --heads 2
+$ CONFIG=MultiAccelRocketConfig LOADMEM=1 timeout_cycles=12000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml tests/cgra-gemmini/mha.c
+```
+
+For the GPT-2 Small attention dimensions, generate with `--heads 12` (`hidden=768`) and run the same C test with `timeout_cycles=60000000`. No RTL rebuild is needed when changing only this generated data. These are hybrid synthetic attention tests, not trained-model inference or a complete GPT-2 block.
+
+Both cases passed RTL simulation with zero mismatches in concatenation and final output: 16,384 elements each for two heads and 98,304 each for twelve heads. CPU-observed execution took 1,843,314 and 12,605,864 cycles respectively, including projections and head pipelines but excluding initial setup and result checking.
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.
