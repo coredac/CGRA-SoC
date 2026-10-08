@@ -26,11 +26,21 @@ communication:
   instances:
     gemmini0:
       type: gemmini
+      command_capacity: 64
+      patch_capacity: 64
     gemmini1:
       type: gemmini
+      command_capacity: 64
+      patch_capacity: 64
     cgra0:
       type: cgra
       packed_words: 32768
+  run_capacity: 9
+  capacity:
+    results: 132
+    jobs:
+      gemmini0: 7
+      gemmini1: 3
   buffer_slots:
     gemmini0: 2
     gemmini1: 2

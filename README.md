@@ -249,20 +249,24 @@ The default configuration passed both modes with all 8192 outputs matching. With
 
 #### Multi-head Attention
 
-`mha.c` extends the attention core with Q/K/V projections, head concatenation and an output projection. The CPU configures Gemmini projections and advances between heads; each head uses the existing automatic tiled `QKᵀ → Softmax → PV` pipeline. It reuses the two Gemminis, one CGRA and Attention configuration above. It does not include LayerNorm, residual addition or the MLP.
+`mha.c` extends the attention core with Q/K/V projections, head concatenation and an output projection. Hybrid mode (`BINARY_ARGS=0`, the default) lets the CPU issue projections and advance between heads. Automatic mode (`BINARY_ARGS=1`) captures shared jobs once and starts the whole layer with one command: one interval repeats projection plus Attention across heads, then another repeats output-projection column blocks. Each head retains the automatic tiled `QKᵀ → Softmax → PV` pipeline. Both modes reuse the two Gemminis, one CGRA and Attention configuration above. They do not include LayerNorm, residual addition or the MLP.
 
 Inputs and weights are synthetic INT8, with INT32 accumulation and INT8 saturation after each projection and PV. Current-head Q/K/V and Softmax intermediates stay in SPM. Gemmini writes each head into its columns of the DRAM concatenation buffer using a row stride, then reads that buffer for the output projection. The host generates exact integer references; the test checks both concatenation and final output without doing model arithmetic on the CPU.
 
-Generate the two-head case (`hidden=128`, `N=128`, `d=64`, 16 query rows per tile), then use the same simulator and fast APIs as Attention:
+Generate the two-head case (`hidden=128`, `N=128`, `d=64`, 16 query rows per tile) and the loadable single-stage projection graphs. Use the Attention fast APIs above, and rebuild once after changing the hardware or YAML:
 
 ```shell
 $ chipyard/.conda-env/bin/python scripts/mha_data.py --heads 2
-$ CONFIG=MultiAccelRocketConfig LOADMEM=1 timeout_cycles=12000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml tests/cgra-gemmini/mha.c
+$ for ip in g0 g1; do chipyard/.conda-env/bin/python scripts/generate_auto_links.py --soc-yaml configs/soc/autolink/attention.yaml --graph-yaml configs/graphs/mha_$ip.yaml --header-out tests/generated/mha_$ip.h; done
+$ CONFIG=MultiAccelRocketConfig BINARY_ARGS=1 LOADMEM=1 timeout_cycles=12000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml --rebuild tests/cgra-gemmini/mha.c
+$ CONFIG=MultiAccelRocketConfig BINARY_ARGS=0 LOADMEM=1 timeout_cycles=12000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/attention.yaml tests/cgra-gemmini/mha.c
 ```
 
-For the GPT-2 Small attention dimensions, generate with `--heads 12` (`hidden=768`) and run the same C test with `timeout_cycles=60000000`. No RTL rebuild is needed when changing only this generated data. These are hybrid synthetic attention tests, not trained-model inference or a complete GPT-2 block.
+For the GPT-2 Small attention dimensions, generate with `--heads 12` (`hidden=768`) and run the same C test with `timeout_cycles=60000000`. No RTL rebuild is needed when changing only this generated data. The YAML reserves nine run profiles, seven Gemmini0 jobs, three Gemmini1 jobs, the three existing CGRA jobs, and 132 completion reports. Gemmini uses native compute loops and runtime address patches instead of duplicating commands for every head. These are synthetic attention tests, not trained-model inference or a complete GPT-2 block.
 
-Both cases passed RTL simulation with zero mismatches in concatenation and final output: 16,384 elements each for two heads and 98,304 each for twelve heads. CPU-observed execution took 1,843,314 and 12,605,864 cycles respectively, including projections and head pipelines but excluding initial setup and result checking.
+`setup_cycles` includes initial job and run configuration. `execution_cycles` includes projections and head pipelines but excludes setup and final checking. Both concatenation and final output are checked: 16,384 elements each for two heads and 98,304 each for twelve heads.
+
+Both two-head modes passed: hybrid took 1,844,011 execution cycles and automatic took 1,834,488. Twelve-head automatic execution also passed, with 132 completion reports, zero mismatches in both tensors, and 12,502,648 execution cycles.
 
 #### Tiled Conv → ReLU → Pool
 

@@ -160,6 +160,7 @@ class AutoLinkConfig:
     stage_capacity: int = 0
     dependency_capacity: int = 0
     jobs: dict[str, int] | None = None
+    result_capacity: int = 0
 
 
 def load_cgra_hardware(cgra_path: Path, cache_block_path: Path) -> CgraHardware:
@@ -829,6 +830,7 @@ def load_config(
         capacity.get("stages", len(stages)),
         capacity.get("dependencies", len(dependencies)),
         job_counts,
+        capacity.get("results", 0),
     )
     validate_memory(config, path)
     validate_capacity(config, path)
@@ -1076,6 +1078,8 @@ def scala_text(config: AutoLinkConfig) -> str:
         f",\n    runCapacity = {config.run_capacity}" if config.run_capacity else ""
     )
     capacity += f",\n    stageCapacity = {config.stage_capacity},\n    dependencyCapacity = {config.dependency_capacity}"
+    if config.result_capacity:
+        capacity += f",\n    resultCapacity = {config.result_capacity}"
     return f"""package chipyard.socgen.generated
 
 import chipyard.example.CGRAGenerated

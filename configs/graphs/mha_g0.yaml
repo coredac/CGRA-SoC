@@ -1,0 +1,7 @@
+name: mha_g0
+stages:
+  - name: projection
+    endpoint: gemmini0
+dependencies:
+  - source: input_ready
+    destination: projection
