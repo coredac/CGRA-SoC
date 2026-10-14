@@ -8,6 +8,14 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      gpt2_shape:
+        description: GPT-2 prefill fixture (wide uses hidden=768 and twelve heads)
+        type: choice
+        default: small
+        options:
+          - small
+          - wide
 
 concurrency:
   group: cgra-soc-${{ github.workflow }}-${{ github.ref }}
@@ -345,6 +353,118 @@ jobs:
           name: gemmini-test-logs
           path: |
             *.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  gpt2-tests:
+    name: GPT-2 ${{ matrix.mode }} (${{ inputs.gpt2_shape || 'small' }})
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: manual
+            source: gpt2.c
+            args: '0 spm bench'
+            pass: 'GPT2: PASS'
+          - mode: auto
+            source: auto_block.c
+            args: '0'
+            pass: 'Auto block: PASS'
+          - mode: hybrid
+            source: hybrid_block.c
+            args: ''
+            pass: 'Hybrid block: PASS'
+    env:
+      SHAPE: ${{ inputs.gpt2_shape || 'small' }}
+      CONFIG: MultiAccelRocketConfig
+      LOADMEM: '1'
+      RANDOM_SEED: '1'
+      timeout_cycles: '100000000'
+      MAKEFLAGS: '-j2 VERILATOR_THREADS=2'
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Check block references and configuration
+        run: |
+          source chipyard/env.sh
+          export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
+          mkdir -p build/gpt2-reference
+          cd build/gpt2-reference
+          ../../.venv/bin/python -m pytest \
+            ../../VectorCGRA/fu/single/test/AdderRTL_test.py::test_sub_const_handshake \
+            ../../VectorCGRA/cgra/test/CgraRTL_block_test_from_yaml.py \
+            ../../VectorCGRA/cgra/test/CgraRTL_activation_test_from_yaml.py \
+            --test-verilog -v --tb=short 2>&1 | tee reference.log
+
+      - name: Generate identical two-input fixtures and kernel APIs
+        run: |
+          heads=2
+          length=64
+          if [[ "$SHAPE" == wide ]]; then
+            heads=12
+            length=16
+          fi
+          .venv/bin/python scripts/gpt2_data.py --heads "$heads" --length "$length" --seed 0 --runs 2 --report gpt2-reference.json
+          sha256sum tests/generated/gpt2_data.h | tee gpt2-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_attention_*_4x4.yaml \
+            configs/kernels/kernel_block_*_4x4.yaml
+          .venv/bin/python scripts/generate_auto_links.py \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            --graph-yaml configs/graphs/block_load.yaml \
+            --header-out tests/generated/block_load.h
+
+      - name: Rebuild and run both inputs without reset
+        env:
+          SOURCE: ${{ matrix.source }}
+          BINARY_ARGS: ${{ matrix.args }}
+          PASS_MARKER: ${{ matrix.pass }}
+        run: |
+          /usr/bin/time -p ./run-chipyard-cgra-gemmini-demo.sh \
+            --rebuild --arch-yaml configs/arch/attention.yaml \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            "tests/cgra-gemmini/$SOURCE" 2>&1 | tee gpt2.log
+          grep -Fxq "$PASS_MARKER" gpt2.log
+          {
+            echo '### GPT-2 target-cycle results'
+            echo
+            echo 'Host wall time includes the rebuild and is not a hardware performance metric.'
+            echo
+            echo '```text'
+            cat gpt2-fixture.log
+            grep -E '^(GPT2|Auto block|Hybrid block).* (total=|mismatched_words=|peak_profiles=)|^(GPT2|Auto block|Hybrid block): PASS' gpt2.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload GPT-2 results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpt2-${{ matrix.mode }}-${{ env.SHAPE }}
+          path: |
+            gpt2*.log
+            gpt2-reference.json
+            build/gpt2-reference/reference.log
             chipyard/build-setup.log
           if-no-files-found: ignore
 

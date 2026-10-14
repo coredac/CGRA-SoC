@@ -1,0 +1,17 @@
+kernel:
+  name: block_ln_sum
+  kernel_yaml: VectorCGRA/validation/test/block_ln_sum.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 4090, arg2: 768, arg3: 768}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: columns}
+    - {symbol: arg3, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 7
+  loop_times: 5376
+  expected_completes: 3
+  runtime_count: {symbol: arg3, scale: 7, offset: 0}

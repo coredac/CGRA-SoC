@@ -39,7 +39,8 @@ static inline int cgra_link_begin_at(uintptr_t base, uint32_t job, uint32_t pack
   uint64_t ready = 0;
   // Drain native static configuration before subsequent RoCC packets enter capture.
   CGRA_WAIT(ready);
-  (void)ready;
+  // Consume the response before independent MMIO writes can enable capture.
+  __asm__ volatile("add zero, %0, zero" : : "r"(ready) : "memory");
   cgra_link_write_at(base, CGRA_LINK_CONTROL_JOB, job);
   cgra_link_write_at(base, CGRA_LINK_CONTROL_PACKET_COUNT, packet_count);
   cgra_link_write_at(base, CGRA_LINK_CONTROL_EXPECTED_COMPLETES, expected_completes);
@@ -100,6 +101,38 @@ static inline int cgra_link_capture_at(uintptr_t base, uint32_t job, const cgra_
 static inline int cgra_job_config_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) { return cgra_link_capture_at(base, job, kernel, bindings, 0); }
 
 static inline int cgra_job_config(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings) { return cgra_job_config_at(CGRA_LINK_CONTROL_BASE, job, kernel, bindings); }
+
+// Cache static controls with fixed setup so overlapping kernels restore on a job switch.
+// next_job is zero for the final phase, otherwise the next job ID plus one.
+static inline int cgra_job_full_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings, uint32_t next_job) {
+  cgra_kernel_t full = *kernel;
+  cgra_packet_t packets[kernel->config_count + kernel->static_count];
+  cgra_patch_t patches[kernel->patch_count + 1];
+  uint32_t count = 0;
+  for (uint32_t index = 0; index < kernel->rearm_count; ++index) {
+    packets[count++] = kernel->config_packets[index];
+  }
+  for (uint32_t index = 0; index < kernel->static_count; ++index) {
+    packets[count++] = kernel->static_packets[index];
+  }
+  for (uint32_t index = kernel->rearm_count; index < kernel->config_count; ++index) {
+    packets[count++] = kernel->config_packets[index];
+  }
+  for (uint32_t index = 0; index < kernel->patch_count; ++index) {
+    patches[index] = kernel->patches[index];
+    patches[index].packet_index += kernel->static_count;
+  }
+  full.static_count = 0;
+  full.config_packets = packets;
+  full.config_count = count;
+  full.setup_count += kernel->static_count;
+  full.patches = patches;
+  return cgra_link_capture_at(base, job, &full, bindings, next_job);
+}
+
+static inline int cgra_job_full(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings, uint32_t next_job) {
+  return cgra_job_full_at(CGRA_LINK_CONTROL_BASE, job, kernel, bindings, next_job);
+}
 
 // Jobs occur once in the list; launch its first ID after configuring the sequence.
 static inline int cgra_job_sequence_at(uintptr_t base, const cgra_link_job_t *jobs, uint32_t count) {

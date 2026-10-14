@@ -1,0 +1,11 @@
+name: block_load
+stages:
+  - name: qk
+    endpoint: gemmini0
+  - name: v
+    endpoint: gemmini1
+dependencies:
+  - source: input_ready
+    destination: qk
+  - source: input_ready
+    destination: v

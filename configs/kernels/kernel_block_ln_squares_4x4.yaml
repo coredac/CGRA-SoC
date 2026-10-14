@@ -1,0 +1,18 @@
+kernel:
+  name: block_ln_squares
+  kernel_yaml: VectorCGRA/validation/test/block_ln_squares.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 4091, arg2: 4092, arg3: 768, arg4: 768}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: input1}
+    - {symbol: arg2, kind: spm_word, role: output}
+    - {symbol: arg3, kind: count, role: columns}
+    - {symbol: arg4, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 9
+  loop_times: 6912
+  expected_completes: 4
+  runtime_count: {symbol: arg4, scale: 9, offset: 0}

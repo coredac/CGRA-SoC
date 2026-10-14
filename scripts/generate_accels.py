@@ -46,6 +46,7 @@ class AccelLayout:
     page_count: int
     pools: Mapping[str, Mapping[str, int]]
     gemminis: Mapping[str, Mapping[str, int]]
+    cgra_packets: Mapping[str, int]
 
 
 def instance_layout(document: Mapping[str, object]) -> AccelLayout:
@@ -92,6 +93,11 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
         for name, value in values.items()
         if value["type"] == "gemmini"
     }
+    cgra_packets = {
+        name: value.get("packet_capacity", 96)
+        for name, value in values.items()
+        if value["type"] == "cgra"
+    }
     return AccelLayout(
         enabled,
         tuple(instances),
@@ -100,6 +106,7 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
         root_page + 1,
         pools,
         gemminis,
+        cgra_packets,
     )
 
 
@@ -120,6 +127,9 @@ def scala_text(layout: AccelLayout) -> str:
         f'    "{name}" -> GemminiCacheParams({", ".join(f"{GEMMINI_FIELDS[key]} = {value}" for key, value in params.items())})'
         for name, params in layout.gemminis.items()
     )
+    cgra_packets = ",\n".join(
+        f'    "{name}" -> {capacity}' for name, capacity in layout.cgra_packets.items()
+    )
     return f"""package chipyard.socgen.generated
 
 import chipyard.socgen.link.AccelSpec
@@ -138,6 +148,8 @@ object AccelGenerated {{
 {pools})
   val gemminis: Map[String, GemminiCacheParams] = Map(
 {gemminis})
+  val cgraPackets: Map[String, Int] = Map(
+{cgra_packets})
 }}
 """
 

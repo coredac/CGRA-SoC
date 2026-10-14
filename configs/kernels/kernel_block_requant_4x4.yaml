@@ -1,0 +1,17 @@
+kernel:
+  name: block_requant
+  kernel_yaml: VectorCGRA/validation/test/block_requant.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 3072, arg2: 4, arg3: 768}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: divisor}
+    - {symbol: arg3, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 22
+  loop_times: 16896
+  expected_completes: 1
+  runtime_count: {symbol: arg3, scale: 22, offset: 0}

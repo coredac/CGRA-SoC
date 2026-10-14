@@ -40,6 +40,16 @@ SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_attention_max_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_attention_exp_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_attention_norm_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_sum_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_mean_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_squares_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_variance_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_sqrt_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_norm_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_gelu_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_activation_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_requant_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_residual_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -58,6 +68,16 @@ SUPPORTED_KERNEL_NAMES = {
     "attention_max",
     "attention_exp",
     "attention_norm",
+    "block_ln_sum",
+    "block_ln_mean",
+    "block_ln_squares",
+    "block_ln_variance",
+    "block_ln_sqrt",
+    "block_ln_norm",
+    "block_gelu",
+    "block_activation",
+    "block_requant",
+    "block_residual",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -234,16 +254,19 @@ def load_runtime(data: Mapping, path: Path, bindings: Mapping):
     } != set(bindings):
         raise ValueError(f"{path}: runtime symbols must name each binding exactly once")
     roles = set()
-    scalar_roles = {"elements", "row", "rows", "columns"}
+    scalar_roles = {"elements", "row", "rows", "columns", "divisor"}
+    address_roles = {"output", "gamma", "beta", "mean", "std"}
     for item in symbols:
         address_role = re.fullmatch(r"(input|output)[0-9]+", item.role)
         if item.kind not in ("spm_word", "count") or (
-            item.role != "output" and item.role not in scalar_roles and not address_role
+            item.role not in address_roles
+            and item.role not in scalar_roles
+            and not address_role
         ):
             raise ValueError(f"{path}: unsupported runtime symbol kind or role")
         if (item.kind == "count") != (item.role in scalar_roles) or item.role in roles:
             raise ValueError(
-                f"{path}: runtime roles must be unique and geometry must use counts"
+                f"{path}: runtime roles must be unique and scalar values must use counts"
             )
         roles.add(item.role)
     count_data = require_mapping(

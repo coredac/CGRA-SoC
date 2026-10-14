@@ -1,0 +1,16 @@
+kernel:
+  name: block_ln_sqrt
+  kernel_yaml: VectorCGRA/validation/test/block_ln_sqrt.yaml
+  required_words: 4096
+  bindings: {arg0: 4093, arg1: 4094, arg2: 1}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 64
+  loop_times: 64
+  expected_completes: 1
+  runtime_count: {symbol: arg2, scale: 64, offset: 0}

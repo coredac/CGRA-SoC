@@ -1,0 +1,16 @@
+kernel:
+  name: block_activation
+  kernel_yaml: VectorCGRA/validation/test/block_activation.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 2048, arg2: 2048}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 27
+  loop_times: 55296
+  expected_completes: 2
+  runtime_count: {symbol: arg2, scale: 27, offset: 0}

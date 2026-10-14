@@ -1,0 +1,16 @@
+kernel:
+  name: block_gelu
+  kernel_yaml: VectorCGRA/validation/test/block_gelu.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 3072, arg2: 768}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 30
+  loop_times: 23040
+  expected_completes: 1
+  runtime_count: {symbol: arg2, scale: 30, offset: 0}
