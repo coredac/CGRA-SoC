@@ -50,6 +50,7 @@ SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_block_activation_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_block_requant_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_block_residual_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -78,6 +79,7 @@ SUPPORTED_KERNEL_NAMES = {
     "block_activation",
     "block_requant",
     "block_residual",
+    "gcn",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):

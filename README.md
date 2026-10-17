@@ -416,6 +416,33 @@ The [SoC workflow](.github/workflows/cgra-soc-tests.yml) runs Manual (`gpt2.c`, 
 
 Each job checks the host references and translated CGRA kernels, generates the same seed-0 pair of inputs, regenerates the Attention/block APIs and rebuilds `MultiAccelRocketConfig` from `attention.yaml` and `gpt2.yaml`. Both inputs run without accelerator reset. A successful exit and the final PASS marker are required. The job summary records target-cycle totals, output checks and the fixture checksum; artifacts retain simulator/reference logs and the numerical reference report. Compare target cycles, not CI host times, which include setup/build costs and depend on runner load. Neither shape measures reduced-capacity hardware area or pretrained-model accuracy.
 
+#### Synthetic single-layer GCN
+
+`gcn.c` runs `ReLU(D^-1/2 (A+I) D^-1/2 XW)` in Manual, Auto and Hybrid modes on the same hardware. Gemmini computes the dense projection; CGRA follows CSR neighbor indices and accumulates normalized weighted features. Manual schedules each node/channel chunk on the CPU. Auto submits the projection, input copies and complete aggregation chain once; Hybrid caches at most eight aggregation tasks and reuses those job IDs between completed batches. All modes finish with one CPU-issued raw DMA to preserve INT32 Q15 output. Graphs, degree one-hot features and seeded weights are generated locally; no dataset download or trained-model accuracy claim is involved.
+
+Generate the data and kernel API, then use the existing GPT-2 hardware configuration:
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/gcn_data.py --report build/gcn-reference.json
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml configs/kernels/kernel_gcn_4x4.yaml
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=30000000 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gcn.c
+```
+
+The runner command assumes the same hardware has already been built; add `--rebuild` when switching configurations. New graph data and kernel packets alone do not require rebuilding RTL. The test alternates all three modes on each graph and repeats twice without accelerator reset, checking every projected and final value. Host and device outputs are poisoned before each timed inference to detect missing writes. Total CPU-observed cycles include task preparation, configuration capture, DMA, computation, waits and final output DMA; poisoning, printing and numerical checks are excluded. Auto/Hybrid also report setup, execution and writeback separately; Manual includes command configuration in execution. Compare total cycles, not execution alone. Peak cached jobs and profiles describe software requirements, not measured hardware area. Require `GCN: PASS` and exit status zero. Run the host reference tests with `python -m unittest discover -s scripts/tests -p gcn_test.py`; the independent kernel reference is `VectorCGRA/cgra/test/CgraRTL_gcn_test_from_yaml.py --test-verilog`.
+
+The seed-0 three-mode regression passed all 18 graph/mode/repeat combinations: 61,440 projected and 52,224 final values, zero mismatches, `GCN: PASS` and exit status zero. The star exercises a 126+2 channel split at its degree-20 center; the irregular graph includes an isolated node. Three host tests passed. The unchanged kernel retains its earlier four-case Verilog reference validation of 209 outputs, including degree 64 and relocated channel slices. The complete regression uses a 30-million simulator-cycle budget; the previous Manual-only 20-million budget truncated the final case and was increased before the successful full rerun.
+
+| Synthetic graph | Nodes | Repeat | Manual cycles | Auto cycles | Hybrid cycles |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Ring with chords | 16 | 0 | 325,993 | 335,393 | 335,279 |
+| Ring with chords | 16 | 1 | 320,295 | 333,005 | 335,115 |
+| Star | 20 | 0 | 270,898 | 287,305 | 291,438 |
+| Star | 20 | 1 | 270,434 | 287,415 | 291,526 |
+| Irregular with isolated node | 32 | 0 | 619,076 | 639,607 | 646,066 |
+| Irregular with isolated node | 32 | 1 | 618,086 | 639,647 | 645,783 |
+
+Auto uses 16/21/32 CGRA jobs for these graphs. Hybrid uses at most eight, in two/three/four batches, with total cycles within 1.5% of Auto in both repeats. Both use two/four/four Gemmini jobs and at most three/five/five profiles. Manual remains faster in these configuration-inclusive small-graph measurements; cached execution reduces CPU scheduling but adds capture/setup cost. These scalar-kernel results do not establish a throughput advantage or reduced hardware area.
+
 #### Tiled Conv → ReLU → Pool
 
 `pool_tiles.c` runs a 4×6×3 input through a 3×3 convolution with eight output channels, ReLU, and 2×2 stride-2 MaxPool, producing a 2×3×8 output. One captured configuration runs both 1×2 and 2×1 output-tile partitions, including smaller boundary tiles. Gemmini and Pool use INT8; the CGRA wrapper expands input to INT32 and packs its INT32 output back to INT8.
