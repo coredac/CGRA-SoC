@@ -5,13 +5,15 @@
 #include "cgra_link.h"
 #include "gcn_jobs.h"
 
-static void gcn_profile(unsigned profile, accel_t device, unsigned job, const auto_link_edge_t *edges, unsigned count) {
+static void gcn_profile_tiles(unsigned profile, accel_t device, unsigned job, const auto_link_edge_t *edges, unsigned count, unsigned tiles) {
   const auto_link_stage_t stage = {.endpoint = device.id, .job = job, .output = {.address = {.binding = -1}}};
   const auto_link_graph_t graph = {.stage_count = 1, .edge_count = count, .stage_capacity = 3, .edge_capacity = 3, .stages = &stage, .edges = edges};
   auto_link_load(&graph, NULL);
-  auto_link_tiles(1, 1, 1, 1);
+  auto_link_tiles(tiles, 1, 1, 1);
   auto_link_run_config(profile);
 }
+
+static void gcn_profile(unsigned profile, accel_t device, unsigned job, const auto_link_edge_t *edges, unsigned count) { gcn_profile_tiles(profile, device, job, edges, count, 1); }
 
 static int gcn_project(const gcn_graph_t *graph) {
   const auto_link_edge_t root = {.destination = 0, .flags = 3, .address = {.binding = -1}};
@@ -21,7 +23,12 @@ static int gcn_project(const gcn_graph_t *graph) {
       if (gcn_projection_job(job, graph->x + row * GCN_INPUTS, gcn_weight, bias, projected + row * GCN_OUTPUTS, column)) {
         return 1;
       }
-      gcn_profile(job, GEMMINI0, job, &root, 1);
+      if (job == 0) {
+        gcn_profile(job, GEMMINI0, job, &root, 1);
+      } else {
+        auto_link_job(0, job);
+        auto_link_run_config(job);
+      }
       ++job;
     }
   }
@@ -29,21 +36,7 @@ static int gcn_project(const gcn_graph_t *graph) {
   return 0;
 }
 
-static int gcn_batch(const gcn_graph_t *graph, const gcn_task_t *tasks, unsigned count, unsigned profile, int first) {
-  cgra_kernel_t kernel = GCN;
-  // All tasks use the same resident program, loaded once before the first batch.
-  kernel.static_count = 0;
-  for (unsigned job = 0; job < count; ++job) {
-    cgra_link_symbol_t symbols[7];
-    for (unsigned index = 0; index < 7; ++index) {
-      symbols[index] = (cgra_link_symbol_t){.base = tasks[job].args[index], .source = CGRA_LINK_SLOT};
-    }
-    int failed;
-    accel_commands(CGRA0, { failed = cgra_link_capture_at(CGRA0.control, job, &kernel, symbols, job + 1 == count ? 0 : job + 2); });
-    if (failed) {
-      return 1;
-    }
-  }
+static void gcn_inputs(const gcn_graph_t *graph, unsigned profile, unsigned job, unsigned tiles, int copy) {
   const auto_link_edge_t root = {.destination = 0, .flags = 3, .address = {.binding = -1}};
   const unsigned edge_bytes = ((graph->edges + 3) & ~3) * sizeof(int32_t);
   const auto_link_edge_t inputs[] = {
@@ -55,15 +48,42 @@ static int gcn_batch(const gcn_graph_t *graph, const gcn_task_t *tasks, unsigned
       {.destination = 0, .flags = 7, .bytes = edge_bytes, .address = {.value = (uintptr_t)graph->col, .binding = -1}, .destination_offset = NEIGHBORS * sizeof(int32_t)},
       {.destination = 0, .flags = 7, .bytes = edge_bytes, .address = {.value = (uintptr_t)graph->edge_weight, .binding = -1}, .destination_offset = WEIGHTS * sizeof(int32_t)},
   };
-  gcn_profile(profile, CGRA0, 0, first ? inputs : &root, first ? 3 : 1);
+  gcn_profile_tiles(profile, CGRA0, job, copy ? inputs : &root, copy ? 3 : 1, tiles);
+}
+
+static int gcn_batch(const gcn_graph_t *graph, const gcn_task_t *tasks, unsigned count, unsigned aggregates, unsigned profile, unsigned batch) {
+  const unsigned long begin = clock_cycles();
+  const uint32_t relu_args[] = {OUTPUT, OUTPUT, graph->nodes * GCN_OUTPUTS};
+  for (unsigned job = 0; job < count; ++job) {
+    cgra_kernel_t kernel = job < aggregates ? *aggregation : GCN_RELU;
+    // Programs are resident; the final split-layout job runs ReLU over all nodes.
+    kernel.static_count = 0;
+    cgra_packet_t packets[kernel.config_count];
+    // Each job has fixed arguments; capture resolved payloads without relocations.
+    resolve_packets(&kernel, job < aggregates ? tasks[job].args : relu_args, packets);
+    kernel.config_packets = packets;
+    int failed;
+    accel_commands(CGRA0, { failed = cgra_link_capture_at(CGRA0.control, job, &kernel, NULL, job + 1 == count ? 0 : job + 2); });
+    if (failed) {
+      return 1;
+    }
+    ++stats.captures;
+    stats.packets += kernel.config_count + kernel.launch_count;
+  }
+  stats.capture += clock_cycles() - begin;
   if (count > stats.cgra_jobs) {
     stats.cgra_jobs = count;
   }
+  // Later batches reuse the control-only profile captured by batch 1.
+  if (batch > 1) {
+    return 0;
+  }
+  gcn_inputs(graph, profile, 0, 1, batch == 0);
   return 0;
 }
 
-static int gcn_execute(unsigned projection_jobs) {
-  const unsigned profiles = projection_jobs + 1;
+static int gcn_execute(unsigned projection_jobs, unsigned groups) {
+  const unsigned profiles = projection_jobs + groups;
   cgra_dma_memory_fence();
   auto_link_run(0, profiles);
   unsigned reports = 0, failures = 0;
@@ -76,7 +96,7 @@ static int gcn_execute(unsigned projection_jobs) {
       continue;
     }
     const cgra_link_result_t result = cgra_link_wait_at(CGRA0.control);
-    const unsigned job = reports < projection_jobs ? reports : 0;
+    const unsigned job = reports < projection_jobs ? reports : reports - projection_jobs;
     if (result.status != AUTO_LINK_STATUS_SUCCESS || result.detail || result.data || result.stage != 0 || result.job != job) {
       printf("GCN report stage=%u job=%u status=%u detail=%u data=%u\n", result.stage, result.job, result.status, result.detail, result.data);
       ++failures;
@@ -98,21 +118,22 @@ static int gcn_execute(unsigned projection_jobs) {
 static int run_auto(const gcn_graph_t *graph, unsigned capacity) {
   unsigned long begin = clock_cycles();
   const unsigned count = task_count(graph);
+  const unsigned jobs = count + split_relu;
   gcn_task_t tasks[count];
   tasks_init(graph, tasks);
   if (gcn_project(graph)) {
     return 1;
   }
-  accel_commands(CGRA0, { cgra_send_packets_fast(GCN.static_packets, GCN.static_count); });
-  for (unsigned first = 0; first < count; first += capacity) {
-    const unsigned batch = count - first < capacity ? count - first : capacity;
+  for (unsigned first = 0; first < jobs; first += capacity) {
+    const unsigned batch = jobs - first < capacity ? jobs - first : capacity;
+    const unsigned aggregates = count - first < batch ? count - first : batch;
     const unsigned projections = first == 0 ? stats.gemmini_jobs : 0;
-    if (gcn_batch(graph, tasks + first, batch, projections, first == 0)) {
+    if (gcn_batch(graph, tasks + first, batch, aggregates, projections, first / capacity)) {
       return 1;
     }
     stats.setup += clock_cycles() - begin;
     begin = clock_cycles();
-    if (gcn_execute(projections)) {
+    if (gcn_execute(projections, 1)) {
       return 1;
     }
     stats.execute += clock_cycles() - begin;

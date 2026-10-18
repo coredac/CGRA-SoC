@@ -19,7 +19,7 @@ ACCEL_GENERATOR="$ROOT_DIR/scripts/generate_accels.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 CGRA_ARCH_YAML="$ROOT_DIR/configs/arch/arch.yaml"
 REBUILD=0
-TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
+TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/integration/relu_spm_auto.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
@@ -211,7 +211,7 @@ riscv64-unknown-elf-gcc \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \
-  -I "$ROOT_DIR/tests/cgra-gemmini" \
+  -I "$ROOT_DIR/tests/cgra-gemmini/common" \
   -I "$AES_SW" \
   -I "$CHIPYARD_DIR/tests" \
   -I "$GEMMINI_SW" \

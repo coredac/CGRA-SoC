@@ -51,6 +51,8 @@ SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_block_requant_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_block_residual_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_gcn_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_aggregate_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_relu_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -80,6 +82,8 @@ SUPPORTED_KERNEL_NAMES = {
     "block_requant",
     "block_residual",
     "gcn",
+    "gcn_aggregate",
+    "gcn_relu",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -256,7 +260,7 @@ def load_runtime(data: Mapping, path: Path, bindings: Mapping):
     } != set(bindings):
         raise ValueError(f"{path}: runtime symbols must name each binding exactly once")
     roles = set()
-    scalar_roles = {"elements", "row", "rows", "columns", "divisor"}
+    scalar_roles = {"elements", "row", "rows", "columns", "divisor", "stride"}
     address_roles = {"output", "gamma", "beta", "mean", "std"}
     for item in symbols:
         address_role = re.fullmatch(r"(input|output)[0-9]+", item.role)

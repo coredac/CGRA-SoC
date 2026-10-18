@@ -27,12 +27,36 @@ class GcnTest(unittest.TestCase):
                         "Generated adjacency must be undirected without self-loops"
                     )
         if len(graphs[1]["neighbors"][0]) != 19 or graphs[2]["neighbors"][-1]:
-            self.fail("Fixtures must exercise the degree-20 split and an isolated node")
+            self.fail("Fixtures must include a degree-20 center and an isolated node")
 
     def test_sparse_reference_matches_dense(self):
         graph = dict(id=7, name="path-isolated", neighbors=[{1}, {0, 2}, {1}, set()])
         weight = data.weights(3)
-        tensors, report = data.reference(graph, weight)
+        for sign in (1, -1):
+            self.check_reference(graph, weight, sign)
+        original, _ = data.reference(graph, weight)
+        alternate, _ = data.reference(graph, weight, -1)
+        if original["expected_y"] == alternate["expected_y"]:
+            self.fail("Distinct signed inputs must exercise different final outputs")
+
+    def test_large_star(self):
+        graph = data.graphs(0, 64)[1]
+        tensors, report = data.reference(graph, data.weights(0))
+        if report["nodes"] != 64 or report["rows"] != 64 or report["edges"] != 190:
+            self.fail(
+                "Large star must contain 64 nodes and 190 edges including self-loops"
+            )
+        degrees = [len(row) + 1 for row in graph["neighbors"]]
+        if degrees != [64] + [2] * 63:
+            self.fail("Large star must contain a degree-64 center and degree-2 leaves")
+        source = tensors["x"][1]
+        projected = tensors["expected_z"][1]
+        weight = data.weights(0)
+        if source[63] != 1 or projected[: data.OUTPUTS] != weight[63 * data.OUTPUTS :]:
+            self.fail("Degree-63 one-hot feature must use the last valid input channel")
+
+    def check_reference(self, graph, weight, sign):
+        tensors, report = data.reference(graph, weight, sign)
         source = tensors["x"][1]
         projected = tensors["expected_z"][1]
         for row in range(report["rows"]):
@@ -78,7 +102,8 @@ class GcnTest(unittest.TestCase):
         ]
         weight = data.weights(0)
         fixtures = [data.reference(graph, weight) for graph in graphs]
-        result = "".join(data.header(weight, fixtures))
+        alternates = [data.reference(graph, weight, -1) for graph in graphs]
+        result = "".join(data.header(weight, fixtures, alternates))
         if (
             '#define GCN_DATASET "synthetic-gcn"' not in result
             or "GCN_GRAPHS = 2" not in result
@@ -90,6 +115,13 @@ class GcnTest(unittest.TestCase):
             self.fail("Synthetic model weights must be reproducible from the seed")
         if "gcn_1_expected_y" not in result or "gcn_graphs[GCN_GRAPHS]" not in result:
             self.fail("Generated descriptor does not include every complete graph")
+        if (
+            "gcn_alt_graphs[GCN_GRAPHS]" not in result
+            or "gcn_alt_1_expected_y" not in result
+        ):
+            self.fail(
+                "Generated alternate descriptors must include both input references"
+            )
         if (
             "gcn_1_col[4]" not in result
             or "gcn_1_edge_weight[4]" not in result

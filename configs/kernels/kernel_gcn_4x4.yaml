@@ -2,7 +2,7 @@ kernel:
   name: gcn
   kernel_yaml: VectorCGRA/validation/test/gcn.yaml
   required_words: 32768
-  bindings: {arg0: 0, arg1: 24576, arg2: 26624, arg3: 28672, arg4: 4, arg5: 0, arg6: 512}
+  bindings: {arg0: 0, arg1: 24576, arg2: 26624, arg3: 28672, arg4: 4, arg5: 0, arg6: 512, arg7: 128}
 runtime:
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
@@ -12,9 +12,10 @@ runtime:
     - {symbol: arg4, kind: count, role: columns}
     - {symbol: arg5, kind: count, role: row}
     - {symbol: arg6, kind: count, role: elements}
+    - {symbol: arg7, kind: count, role: stride}
 execution:
   ctrl_base: 0
-  compiled_ii: 26
-  loop_times: 13312
-  expected_completes: 1
-  runtime_count: {symbol: arg6, scale: 26, offset: 0}
+  compiled_ii: 10
+  loop_times: 5120
+  expected_completes: 5
+  runtime_count: {symbol: arg6, scale: 10, offset: 0}
