@@ -412,11 +412,17 @@ Hybrid used 1.20% and 1.14% more cycles than Auto, and 20.70% and 20.74% fewer t
 
 Host runner times were 7,365.33 s for Auto, 8,636.46 s for Hybrid and 9,487.37 s for Manual, with the same eight-thread hardware model reused. Simulations ran concurrently after Auto's earlier start, so these are waiting-time records, not a fair host-performance comparison. The focused K=768/K=3072 column-job test also passed all 24,576 outputs before the full runs.
 
-#### GPT-2 CI
+#### Application CI
 
-The [SoC workflow](.github/workflows/cgra-soc-tests.yml) runs Manual (`gpt2.c`, `0 spm bench`), whole-block Auto (`auto_block.c`, `0`) and operator-level Hybrid (`hybrid_block.c`) in independent jobs for code changes. PR and push runs use N=64, hidden=128, two heads and FF=512. To test N=16, hidden=768, twelve heads and FF=3072, manually dispatch the workflow with `gpt2_shape=wide`. The default dispatch shape is `small`.
+The [SoC workflow](.github/workflows/cgra-soc-tests.yml) groups application regressions into `App / resnet`, `App / gpt2` and `App / gcn`. Each job checks references, generates its fixtures and APIs, then runs its modes sequentially with one simulator rebuild. Integration tests remain separate.
 
-Each job checks the host references and translated CGRA kernels, generates the same seed-0 pair of inputs, regenerates the Attention/block APIs and rebuilds `MultiAccelRocketConfig` from `attention.yaml` and `gpt2.yaml`. Both inputs run without accelerator reset. A successful exit and the final PASS marker are required. The job summary records target-cycle totals, output checks and the fixture checksum; artifacts retain simulator/reference logs and the numerical reference report. Compare target cycles, not CI host times, which include setup/build costs and depend on runner load. Neither shape measures reduced-capacity hardware area or pretrained-model accuracy.
+- ResNet-8 runs Manual and Hybrid; whole-network Auto is not implemented.
+- GPT-2 runs Manual (`gpt2.c`, `0 spm bench`), whole-block Auto (`auto_block.c`, `0`) and operator-level Hybrid (`hybrid_block.c`). PR and push runs use N=64, hidden=128, two heads and FF=512, with the same seed-0 pair of inputs in every mode. Both inputs run without accelerator reset.
+- GCN runs the three small synthetic graphs twice in Manual, Auto, Hybrid, grouped Auto and grouped Hybrid (`gcn.c`, `0 10 2`), using fused aggregation/ReLU.
+
+Manual dispatch defaults to `gpt2_shape=small`. Selecting `wide` runs only the full-width GPT-2 application comparison (N=16, hidden=768, twelve heads and FF=3072), alongside the existing integration jobs. Its three modes remain separate parallel jobs to avoid exceeding the hosted runner's six-hour job limit; each rebuilds the same hardware and uses the same two-input fixture.
+
+Successful exits and PASS markers are required. Job summaries record target cycles and fixture checksums; artifacts retain per-mode simulator logs, reference logs and generated numerical reports where available. Compare target cycles, not CI host time. These synthetic workloads do not measure reduced-capacity hardware area or pretrained-model accuracy.
 
 #### Synthetic single-layer GCN
 

@@ -356,10 +356,152 @@ jobs:
             chipyard/build-setup.log
           if-no-files-found: ignore
 
-  gpt2-tests:
-    name: GPT-2 ${{ matrix.mode }} (${{ inputs.gpt2_shape || 'small' }})
+  app-tests:
+    name: App / ${{ matrix.app }}
     needs: changes
-    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    if: ${{ !cancelled() && inputs.gpt2_shape != 'wide' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [resnet, gpt2, gcn]
+    env:
+      CONFIG: MultiAccelRocketConfig
+      LOADMEM: '1'
+      RANDOM_SEED: '1'
+      MAKEFLAGS: '-j2 VERILATOR_THREADS=2'
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh
+
+      - name: Check application references
+        env:
+          APP: ${{ matrix.app }}
+        run: |
+          source chipyard/env.sh
+          export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
+          case "$APP" in
+            resnet)
+              references=(cgra/test/CgraRTL_relu4x4_test_from_yaml.py cgra/test/CgraRTL_add_relu_test_from_yaml.py cgra/test/CgraRTL_softmax_test_from_yaml.py)
+              ;;
+            gpt2)
+              references=(fu/single/test/AdderRTL_test.py::test_sub_const_handshake cgra/test/CgraRTL_block_test_from_yaml.py cgra/test/CgraRTL_activation_test_from_yaml.py)
+              ;;
+            gcn)
+              references=(cgra/test/CgraRTL_gcn_test_from_yaml.py)
+              ;;
+          esac
+          cd VectorCGRA
+          ../.venv/bin/python -m pytest "${references[@]}" --test-verilog -v --tb=short 2>&1 | tee ../app-reference.log
+
+      - name: Generate ResNet fixture and kernel APIs
+        if: matrix.app == 'resnet'
+        run: |
+          .venv/bin/python scripts/resnet_data.py
+          sha256sum tests/generated/resnet_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml \
+            configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml \
+            configs/kernels/kernel_softmax_max_4x4.yaml configs/kernels/kernel_softmax_exp_4x4.yaml configs/kernels/kernel_softmax_norm_4x4.yaml
+
+      - name: Run ResNet Manual and Hybrid
+        if: matrix.app == 'resnet'
+        env:
+          timeout_cycles: '8000000'
+        run: |
+          BINARY_ARGS=0 ./run-chipyard-cgra-gemmini-demo.sh --rebuild --soc-yaml configs/soc/autolink/resnet.yaml tests/cgra-gemmini/resnet/resnet.c 2>&1 | tee app-manual.log
+          grep -Fxq 'ResNet-8 Manual: PASS' app-manual.log
+          BINARY_ARGS=1 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml tests/cgra-gemmini/resnet/resnet.c 2>&1 | tee app-hybrid.log
+          grep -Fxq 'ResNet-8 Hybrid: PASS' app-hybrid.log
+
+      - name: Generate GPT-2 two-input fixture and kernel APIs
+        if: matrix.app == 'gpt2'
+        run: |
+          .venv/bin/python scripts/gpt2_data.py --heads 2 --length 64 --seed 0 --runs 2 --report app-reference.json
+          sha256sum tests/generated/gpt2_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_attention_*_4x4.yaml configs/kernels/kernel_block_*_4x4.yaml
+          .venv/bin/python scripts/generate_auto_links.py \
+            --soc-yaml configs/soc/autolink/gpt2.yaml --graph-yaml configs/graphs/block_load.yaml \
+            --header-out tests/generated/block_load.h
+
+      - name: Run GPT-2 Manual, Auto and Hybrid
+        if: matrix.app == 'gpt2'
+        env:
+          timeout_cycles: '100000000'
+        run: |
+          BINARY_ARGS='0 spm bench' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/gpt2.c 2>&1 | tee app-manual.log
+          grep -Fxq 'GPT2: PASS' app-manual.log
+          BINARY_ARGS=0 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/auto_block.c 2>&1 | tee app-auto.log
+          grep -Fxq 'Auto block: PASS' app-auto.log
+          BINARY_ARGS='' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/hybrid_block.c 2>&1 | tee app-hybrid.log
+          grep -Fxq 'Hybrid block: PASS' app-hybrid.log
+
+      - name: Generate small GCN fixtures and kernel APIs
+        if: matrix.app == 'gcn'
+        run: |
+          .venv/bin/python scripts/gcn_data.py --seed 0 --report app-reference.json
+          sha256sum tests/generated/gcn_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_gcn_4x4.yaml configs/kernels/kernel_gcn_aggregate_4x4.yaml configs/kernels/kernel_gcn_relu_4x4.yaml
+
+      - name: Run GCN five-mode comparison
+        if: matrix.app == 'gcn'
+        env:
+          BINARY_ARGS: '0 10 2'
+          timeout_cycles: '50000000'
+        run: |
+          ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gcn/gcn.c 2>&1 | tee app-gcn.log
+          grep -Fxq 'GCN: PASS' app-gcn.log
+          for mode in manual auto hybrid group-auto group-hybrid; do
+            grep -Eq "^GCN mode=$mode .* mismatches=0$" app-gcn.log
+          done
+
+      - name: Summarize application target cycles
+        env:
+          APP: ${{ matrix.app }}
+        run: |
+          {
+            echo "### $APP target-cycle results"
+            echo
+            echo 'Compare target cycles, not CI host time. Modes share one hardware build.'
+            echo
+            echo '```text'
+            cat app-fixture.log
+            grep -hE '^(ResNet-8|GPT2|Auto block|Hybrid block|GCN).* (cycles=|setup_cycles=|total=|mismatched_words=|peak_profiles=)|^(ResNet-8.*|GPT2|Auto block|Hybrid block|GCN): PASS' app-*.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload application results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.app }}
+          path: |
+            app-*.log
+            app-reference.json
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  gpt2-wide-tests:
+    name: GPT-2 wide / ${{ matrix.mode }}
+    needs: changes
+    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && inputs.gpt2_shape == 'wide' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
     runs-on: ubuntu-22.04
     timeout-minutes: 360
     strategy:
