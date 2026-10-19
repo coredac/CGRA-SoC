@@ -3,7 +3,7 @@
 
 #include "block_auto.h"
 
-enum { BH_PROFILES = 8, BH_JOBS = 8, BH_REPORTS = 128, BH_TOTAL_REPORTS = BLOCK_HIDDEN == 768 ? 624 : 378 };
+enum { BH_PROFILES = 8, BH_JOBS = 8, BH_REPORTS = 128, BH_TOTAL_REPORTS = BLOCK_HIDDEN == 768 ? 624 : (BLOCK_N == 16 ? 102 : 378) };
 
 static const int8_t *bh_input;
 static int8_t *bh_output;

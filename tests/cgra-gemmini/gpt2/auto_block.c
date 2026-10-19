@@ -33,9 +33,10 @@ static int check(unsigned mode, unsigned run) {
 
 int main(int argc, char **argv) {
   const int mode = argc > 1 ? atoi(argv[1]) : 0;
-  const int supported = (BLOCK_N == 64 && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
+  const int supported =
+      ((BLOCK_N == 16 || BLOCK_N == 64) && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
   if (mode < 0 || mode > 7 || !supported || BLOCK_RUNS < 2) {
-    printf("Auto block requires mode0..7, N64/H128 or N16/H768, runs>=2\n");
+    printf("Auto block requires mode0..7, N16/64 H128 heads2 FF512 or N16 H768 heads12 FF3072, runs>=2\n");
     return 1;
   }
   accel_commands(GEMMINI0, { gemmini_flush(0); });

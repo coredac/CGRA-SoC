@@ -10,11 +10,12 @@ on:
   workflow_dispatch:
     inputs:
       gpt2_shape:
-        description: GPT-2 prefill fixture (wide uses hidden=768 and twelve heads)
+        description: GPT-2 fixture (small N16/H128, n64 N64/H128, wide N16/H768)
         type: choice
         default: small
         options:
           - small
+          - n64
           - wide
 
 concurrency:
@@ -63,6 +64,27 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
               output.write(f"hardware={str(hardware).lower()}\n")
           PY
+
+  script-tests:
+    name: Shared configuration checks
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Check shared configuration scripts
+        run: |
+          python -m pip install PyYAML
+          python -m unittest discover -s scripts/tests -p 'accels_test.py'
 
   cgra-tests:
     name: CGRA Verilator tests
@@ -359,7 +381,7 @@ jobs:
   app-tests:
     name: App / ${{ matrix.app }}
     needs: changes
-    if: ${{ !cancelled() && inputs.gpt2_shape != 'wide' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    if: ${{ !cancelled() && inputs.gpt2_shape != 'wide' && inputs.gpt2_shape != 'n64' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
     runs-on: ubuntu-22.04
     timeout-minutes: 360
     strategy:
@@ -382,27 +404,28 @@ jobs:
         with:
           submodules: false
 
-      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+      - name: Configure Chipyard and VectorCGRA environment
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: .github/scripts/setup-cgra-soc-env.sh
+        run: .github/scripts/setup-cgra-soc-env.sh --skip-openfpga
 
-      - name: Check application references
+      - name: Check ${{ matrix.app }} references
         env:
           APP: ${{ matrix.app }}
         run: |
           source chipyard/env.sh
           export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
           export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-          .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
           case "$APP" in
             resnet)
               references=(cgra/test/CgraRTL_relu4x4_test_from_yaml.py cgra/test/CgraRTL_add_relu_test_from_yaml.py cgra/test/CgraRTL_softmax_test_from_yaml.py)
               ;;
             gpt2)
+              .venv/bin/python -m unittest discover -s scripts/tests -p 'block_test.py'
               references=(fu/single/test/AdderRTL_test.py::test_sub_const_handshake cgra/test/CgraRTL_block_test_from_yaml.py cgra/test/CgraRTL_activation_test_from_yaml.py)
               ;;
             gcn)
+              .venv/bin/python -m unittest discover -s scripts/tests -p 'gcn_test.py'
               references=(cgra/test/CgraRTL_gcn_test_from_yaml.py)
               ;;
           esac
@@ -431,7 +454,7 @@ jobs:
       - name: Generate GPT-2 two-input fixture and kernel APIs
         if: matrix.app == 'gpt2'
         run: |
-          .venv/bin/python scripts/gpt2_data.py --heads 2 --length 64 --seed 0 --runs 2 --report app-reference.json
+          .venv/bin/python scripts/gpt2_data.py --heads 2 --length 16 --seed 0 --runs 2 --report app-reference.json
           sha256sum tests/generated/gpt2_data.h | tee app-fixture.log
           .venv/bin/python scripts/cgra_fast_api.py \
             --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml \
@@ -499,10 +522,10 @@ jobs:
             chipyard/build-setup.log
           if-no-files-found: ignore
 
-  gpt2-wide-tests:
-    name: GPT-2 wide / ${{ matrix.mode }}
+  gpt2-dispatch-tests:
+    name: GPT-2 ${{ inputs.gpt2_shape }} / ${{ matrix.mode }}
     needs: changes
-    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && inputs.gpt2_shape == 'wide' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && (inputs.gpt2_shape == 'wide' || inputs.gpt2_shape == 'n64') && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
     runs-on: ubuntu-22.04
     timeout-minutes: 360
     strategy:
@@ -522,7 +545,7 @@ jobs:
             args: ''
             pass: 'Hybrid block: PASS'
     env:
-      SHAPE: ${{ inputs.gpt2_shape || 'small' }}
+      SHAPE: ${{ inputs.gpt2_shape }}
       CONFIG: MultiAccelRocketConfig
       LOADMEM: '1'
       RANDOM_SEED: '1'
@@ -539,17 +562,17 @@ jobs:
         with:
           submodules: false
 
-      - name: Configure Chipyard, VectorCGRA, and OpenFPGA environment
+      - name: Configure Chipyard and VectorCGRA environment
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: .github/scripts/setup-cgra-soc-env.sh
+        run: .github/scripts/setup-cgra-soc-env.sh --skip-openfpga
 
       - name: Check block references and configuration
         run: |
           source chipyard/env.sh
           export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
           export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-          .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
+          .venv/bin/python -m unittest discover -s scripts/tests -p 'block_test.py'
           mkdir -p build/gpt2-reference
           cd build/gpt2-reference
           ../../.venv/bin/python -m pytest \

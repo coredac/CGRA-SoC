@@ -153,9 +153,10 @@ int main(int argc, char **argv) {
   }
   const char *storage = argc > 2 ? argv[2] : "dram";
   local = strcmp(storage, "spm") == 0;
-  const int spm_shape = (BLOCK_N == 64 && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
+  const int spm_shape =
+      ((BLOCK_N == 16 || BLOCK_N == 64) && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
   if ((!local && strcmp(storage, "dram") != 0) || (local && !spm_shape)) {
-    printf("GPT2 storage must be dram, or spm with N=64 H=128 heads=2 FF=512 or N=16 H=768 heads=12 FF=3072\n");
+    printf("GPT2 storage must be dram, or spm with N=16/64 H=128 heads=2 FF=512 or N=16 H=768 heads=12 FF=3072\n");
     return 1;
   }
   benchmark = argc > 3 && strcmp(argv[3], "bench") == 0;

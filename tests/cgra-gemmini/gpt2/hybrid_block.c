@@ -20,9 +20,10 @@ static int check(unsigned run) {
 }
 
 int main(void) {
-  const int supported = (BLOCK_N == 64 && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
+  const int supported =
+      ((BLOCK_N == 16 || BLOCK_N == 64) && BLOCK_HIDDEN == 128 && BLOCK_HEADS == 2 && BLOCK_FF == 512) || (BLOCK_N == 16 && BLOCK_HIDDEN == 768 && BLOCK_HEADS == 12 && BLOCK_FF == 3072);
   if (!supported || BLOCK_D != 64 || BLOCK_RUNS < 2) {
-    printf("Hybrid block requires N64 H128 heads2 FF512 or N16 H768 heads12 FF3072, D64 runs>=2\n");
+    printf("Hybrid block requires N16/64 H128 heads2 FF512 or N16 H768 heads12 FF3072, D64 runs>=2\n");
     return 1;
   }
   accel_commands(GEMMINI0, { gemmini_flush(0); });

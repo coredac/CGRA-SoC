@@ -4,7 +4,7 @@
 #include "block_auto_jobs.h"
 #include "block_cgra.h"
 
-// Retained-SPM plans for N64/H128 and N16/H768 on configs/soc/autolink/gpt2.yaml.
+// Retained-SPM plans for N16/64 H128 and N16 H768 on configs/soc/autolink/gpt2.yaml.
 // Runtime graphs below vary copy format, endpoint, and job without regenerating RTL.
 enum { BA_LN1 = 3, BA_LN2 = 10, BA_QKV = 17, BA_OUTPUT = 18, BA_FC = 19, BA_PV = 20, BA_ADD = 21, BA_GELU = 22, BA_AFFINE = 16384, BA_LN_OUTPUT = 4096, BA_STATS = 6144 };
 enum { BA_WORDS = BLOCK_N * BLOCK_HIDDEN, BA_EXPANDED = BLOCK_N * BLOCK_FF, BA_LN_ROWS = BLOCK_HIDDEN == 768 ? 2 : 16, BA_LN_WORDS = BA_LN_ROWS * BLOCK_HIDDEN };
