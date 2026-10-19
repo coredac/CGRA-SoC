@@ -393,6 +393,7 @@ jobs:
         run: |
           source chipyard/env.sh
           export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
           .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
           case "$APP" in
             resnet)
@@ -547,6 +548,7 @@ jobs:
         run: |
           source chipyard/env.sh
           export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
           .venv/bin/python -m unittest discover -s scripts/tests -p '*_test.py'
           mkdir -p build/gpt2-reference
           cd build/gpt2-reference
