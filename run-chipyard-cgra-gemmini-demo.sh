@@ -212,7 +212,7 @@ fi
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 SOURCES=("$TEST_SRC")
 if ((WITH_RUNTIME)); then
-  SOURCES+=("$ROOT_DIR/runtime/soc_runtime.c")
+  SOURCES+=("$ROOT_DIR/runtime/soc_runtime.c" "$ROOT_DIR/runtime/gemmini.c" "$ROOT_DIR/runtime/cgra.c")
 fi
 if uses_aes_manual; then
   SOURCES+=("$AES_SW/accellib.c")

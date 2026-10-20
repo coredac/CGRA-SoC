@@ -1,37 +1,75 @@
 #ifndef SOC_PLAN_H
 #define SOC_PLAN_H
 
-#define SOC_PLAN_ABI 1
-enum { SOC_TASKS = 3, SOC_DIM = 16, SOC_ROWS = 2, SOC_WORDS = SOC_ROWS * SOC_DIM };
+#include "accel.h"
+#include "auto_link_types.h"
+#include "cgra_link.h"
+#include "gemmini_job.h"
+
+#define SOC_PLAN_ABI 2
 
 typedef enum { SOC_MANUAL, SOC_HYBRID, SOC_AUTO } soc_mode_t;
-typedef enum { SOC_GEMM, SOC_RELU_I8 } soc_kernel_t;
+typedef enum { SOC_GEMMINI, SOC_CGRA } soc_kind_t;
+typedef enum { SOC_LITERAL, SOC_ARGUMENT, SOC_SPM } soc_base_t;
 
 typedef struct {
-  soc_kernel_t kernel;
+  uint64_t value;
+  soc_base_t base;
+  unsigned index;
+} soc_operand_t;
+
+typedef struct {
+  unsigned funct;
+  soc_operand_t rs1;
+  soc_operand_t rs2;
+} soc_command_t;
+
+typedef struct {
+  soc_operand_t source;
+  unsigned word;
+  unsigned bytes;
+  unsigned tag;
+} soc_dma_t;
+
+/* All command selection, buffer placement and relocation comes from the plan. */
+typedef struct {
+  soc_kind_t kind;
   unsigned endpoint;
   unsigned job;
+  unsigned init_count;
+  const soc_command_t *init;
+  unsigned command_count;
+  const soc_command_t *commands;
+  unsigned patch_count;
+  const gemmini_patch_t *patches;
+  const cgra_kernel_t *kernel;
+  const cgra_link_symbol_t *symbols;
+  unsigned dma_count;
+  const soc_dma_t *dmas;
 } soc_task_t;
 
+/* CPU steps execute their task list for each tile; automatic steps launch a profile. */
 typedef struct {
-  unsigned first;
-  unsigned count;
   unsigned automatic;
-} soc_region_t;
+  unsigned tiles;
+  unsigned task_count;
+  const unsigned *tasks;
+  unsigned profile;
+  unsigned collector;
+  const auto_link_graph_t *graph;
+  const uintptr_t *destination_strides;
+} soc_step_t;
 
-/* The v1 plan describes the fixed GEMM -> ReLU/INT8 -> GEMM template. */
 typedef struct {
   unsigned abi;
   soc_mode_t mode;
   unsigned tiles;
-  soc_task_t tasks[SOC_TASKS];
-  unsigned region_count;
-  soc_region_t regions[SOC_TASKS];
-  unsigned input_row;
-  unsigned weight_row;
-  unsigned publication_bytes;
-  unsigned slot_words;
-  unsigned relu_word;
+  unsigned device_count;
+  const accel_t *const *devices;
+  unsigned task_count;
+  const soc_task_t *tasks;
+  unsigned step_count;
+  const soc_step_t *steps;
 } soc_plan_t;
 
 #endif

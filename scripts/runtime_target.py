@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the hardware assumptions of Amoeba's fixed v1 SoC plan."""
+"""Check the hardware assumptions of Amoeba's fixed SoC target."""
 
 import argparse
 from pathlib import Path
@@ -65,18 +65,20 @@ def check_target(soc_path, arch_path):
     ):
         errors.append("expected the 4x4 attention CGRA with 32768 INT32 words")
     if link.buffer_slots != {"gemmini0": 2, "gemmini1": 2, "cgra0": 2}:
-        errors.append("the v1 layout reserves exactly two slots per endpoint")
+        errors.append("the fixed layout reserves exactly two slots per endpoint")
     bridge = link.bridges.get("cgra0")
     if bridge is None or bridge.outbound_word != 0 or bridge.outbound_words < 320:
         errors.append("CGRA must expose at least 320 packed INT8 words from word 0")
     if (
-        link.stage_capacity < 3
-        or link.dependency_capacity < 3
+        link.stage_capacity != 3
+        or link.dependency_capacity != 3
         or link.run_capacity < 1
         or link.result_capacity < 3
         or any(link.jobs.get(name, 0) < 1 for name in instances)
     ):
-        errors.append("insufficient graph, run, job or result capacity")
+        errors.append(
+            "expected three stage/edge slots and sufficient run/job/result capacity"
+        )
     for name, commands in (("gemmini0", 3), ("gemmini1", 4)):
         limits = layout.gemminis.get(name, {})
         if (

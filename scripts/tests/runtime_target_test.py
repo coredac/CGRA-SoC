@@ -27,6 +27,7 @@ class RuntimeTargetTest(unittest.TestCase):
         changes = [
             ("buffer_slots", {"gemmini0": 3, "gemmini1": 2, "cgra0": 2}, "slots"),
             ("run_capacity", 0, "capacity"),
+            ("capacity", {"stages": 4, "dependencies": 4, "results": 512}, "capacity"),
         ]
         for key, value, message in changes:
             with self.subTest(key=key), tempfile.TemporaryDirectory() as directory:

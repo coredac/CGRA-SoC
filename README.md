@@ -42,16 +42,18 @@ Generated files are excluded by `.clang-format-ignore`. VectorCGRA, Chipyard, an
 
 ## Compiler and Runtime
 
-The first Amoeba integration compiles a small Taskflow example into C execution plans for `Gemmini0 → CGRA ReLU → Gemmini1`. Manual submits each task on the CPU; Hybrid automates the first two tasks; Auto launches the whole chain. It reuses the existing `gpt2.yaml` hardware and ReLU mapping, without a C frontend or full application conversion.
+The first Amoeba integration compiles a small Taskflow example into C execution plans for `Gemmini0 → CGRA ReLU → Gemmini1`. The compiler emits native command templates, buffer bindings, address patches, transfers, dependency graphs and execution steps. The CPU runtime interprets those records through Gemmini and CGRA drivers; it has no application-specific task sequence. Manual submits each task on the CPU; Hybrid automates the first two tasks; Auto launches the whole chain. This path reuses the existing `gpt2.yaml` hardware and ReLU mapping, without a C frontend or full application conversion.
 
 Build the SoC backend using the LLVM revision documented in [Amoeba](amoeba/README.md). Neura is optional for this path:
 
 ```shell
 $ cmake -S amoeba -B amoeba/build -G Ninja -DAMOEBA_ENABLE_NEURA=OFF -DCMAKE_BUILD_TYPE=Release -DMLIR_DIR=/path/to/llvm-project/build/lib/cmake/mlir -DLLVM_DIR=/path/to/llvm-project/build/lib/cmake/llvm
 $ cmake --build amoeba/build --target mlir-amoeba-opt -j8
-$ mkdir -p tests/generated
+$ mkdir -p build tests/generated
 $ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/pipeline.mlir --soc-assign --soc-emit-plan="output=tests/generated/runtime_plan.h" -o /dev/null
 $ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml configs/kernels/kernel_relu_runtime_4x4.yaml
+$ cc -std=gnu11 -O2 -I runtime -I tests -I tests/include -I chipyard/tests -I chipyard/generators/gemmini/software/gemmini-rocc-tests -I chipyard/generators/gemmini/software/gemmini-rocc-tests/include tests/runtime/plan.c -o build/runtime-plan-check
+$ build/runtime-plan-check
 $ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/pipeline.c
 ```
 
