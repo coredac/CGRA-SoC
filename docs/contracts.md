@@ -42,6 +42,18 @@ The main generation entry points are:
 
 Use the scripts' `--help` output and the current YAML schema instead of copying arguments from old plans or logs.
 
+## Compiler and runtime
+
+The Amoeba SoC backend accepts one fixed Taskflow chain: `gemm_i8 → relu_i8 → gemm_i8`. Each Taskflow task is one kernel invocation, with explicit memory dependence states and a call to a known kernel declaration; the compiler does not infer kernels from arbitrary C or lower whole applications. `soc-assign` assigns Gemmini0, CGRA0 and Gemmini1; `soc-emit-plan` emits the versioned `runtime/soc_plan.h` ABI consumed by `runtime/soc_runtime.c`. The initial `gpt2` target preset requires `configs/soc/autolink/gpt2.yaml` and `configs/arch/attention.yaml`. The combined runner's `--runtime` option checks its layout and capacity assumptions with `scripts/runtime_target.py` before building; C compilation also checks native element widths and the packet layout. This is not a portable hardware-discovery interface.
+
+The first template supports even matrix row counts from 2 through 16, 16 input/output channels, and 2×16 tiles. Both GEMMs take signed INT8 inputs/weights and produce INT32 accumulators without scaling or activation. CGRA applies INT32 ReLU using the existing relocatable mapping; its packed SPM window saturates the result to signed INT8 before Gemmini1 reads it. Tensor bindings are contiguous and nonaliasing. The compiler checks the known call signatures, task dependence and region structure, shapes, endpoint assignment and fixed storage/cache limits; unsupported programs fail compilation, without runtime fallback or automatic chunking.
+
+The three plans share arithmetic and placement. Manual submits every kernel from the CPU. Hybrid honors the explicit first-two-task region, completes it for all tiles, then submits Gemmini1 tasks on the CPU. Auto launches all three tasks as one region, with no intermediate CPU task submission. Preparation may load inputs/weights and capture jobs on the CPU in every mode. One zero-initialized runtime context owns the accelerators and retains CGRA execution state across inputs and mode changes; prepare and execute are paired and sequential on one hart, with no external accelerator use between calls.
+
+Gemmini0 inputs occupy native rows below weight row 16; two 128-byte publication slots occupy the SPM tail. CGRA has two 32-word input slots and retains each output at word `64 + TileId*32`. G0→CGRA uses a slot-addressed automatic DMA dependency. CGRA→G1 uses a completion dependency, with G1's captured native DMA reading the retained per-tile packed address. These outputs stay live until the entire inference drains, including Hybrid's CPU-controlled tail; slot allocation order is never inferred from TileId. The compiler's eight-tile limit keeps input rows disjoint from weights.
+
+Automatic runs drain results while running and finish only when both the run and result queue are empty. Reports identify stages, not individual tiles. Native manual tasks do not issue `gemmini_commands_end()`, which requires an armed automatic publication watch. Preparation and execution cycle totals include their respective configuration, DMA and completion costs; reference calculation and validation are not timed. Generated plans and packet headers remain uncommitted and are rebuilt from the pinned compiler and kernel metadata.
+
 ## Supported systems
 
 ### CGRA

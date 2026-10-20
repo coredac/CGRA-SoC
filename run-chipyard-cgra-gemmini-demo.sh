@@ -19,6 +19,7 @@ ACCEL_GENERATOR="$ROOT_DIR/scripts/generate_accels.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
 CGRA_ARCH_YAML="$ROOT_DIR/configs/arch/arch.yaml"
 REBUILD=0
+WITH_RUNTIME=0
 TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/integration/relu_spm_auto.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
@@ -74,7 +75,7 @@ case "$CONFIG" in
 esac
 
 usage() {
-  echo "usage: $0 [--rebuild] [--fast] [--soc-yaml path] [--arch-yaml path] [test-source.c]" >&2
+  echo "usage: $0 [--rebuild] [--fast] [--runtime] [--soc-yaml path] [--arch-yaml path] [test-source.c]" >&2
   echo "       CONFIG=$CONFIG TEST_SRC=$TEST_SRC $0 --rebuild" >&2
 }
 
@@ -85,6 +86,9 @@ while (($# > 0)); do
       ;;
     --fast)
       # Fast simulation is the only supported mode.
+      ;;
+    --runtime)
+      WITH_RUNTIME=1
       ;;
     --soc-yaml)
       if (($# < 2)); then
@@ -187,6 +191,14 @@ if uses_cgra_spm; then
   fi
 fi
 
+if ((WITH_RUNTIME)); then
+  if [[ "$CONFIG" != MultiAccelRocketConfig ]]; then
+    echo "error: --runtime requires MultiAccelRocketConfig" >&2
+    exit 1
+  fi
+  python3 "$ROOT_DIR/scripts/runtime_target.py" --soc-yaml "$CGRA_SOC_YAML" --arch-yaml "$CGRA_ARCH_YAML"
+fi
+
 if ((REBUILD)); then
   echo "[1/3] Rebuilding $CONFIG simulator"
   make -C sims/verilator CONFIG="$CONFIG"
@@ -199,6 +211,9 @@ fi
 
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 SOURCES=("$TEST_SRC")
+if ((WITH_RUNTIME)); then
+  SOURCES+=("$ROOT_DIR/runtime/soc_runtime.c")
+fi
 if uses_aes_manual; then
   SOURCES+=("$AES_SW/accellib.c")
 fi
@@ -211,6 +226,7 @@ riscv64-unknown-elf-gcc \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \
+  -I "$ROOT_DIR/runtime" \
   -I "$ROOT_DIR/tests/cgra-gemmini/common" \
   -I "$AES_SW" \
   -I "$CHIPYARD_DIR/tests" \
