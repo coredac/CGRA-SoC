@@ -1,0 +1,21 @@
+kernel:
+  name: block_ln_norm
+  kernel_yaml: VectorCGRA/validation/test/block_ln_norm.yaml
+  required_words: 4096
+  bindings: {arg0: 0, arg1: 1024, arg2: 2048, arg3: 3072, arg4: 4091, arg5: 4094, arg6: 768, arg7: 768}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: gamma}
+    - {symbol: arg2, kind: spm_word, role: beta}
+    - {symbol: arg3, kind: spm_word, role: output}
+    - {symbol: arg4, kind: spm_word, role: mean}
+    - {symbol: arg5, kind: spm_word, role: std}
+    - {symbol: arg6, kind: count, role: columns}
+    - {symbol: arg7, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 11
+  loop_times: 8448
+  expected_completes: 6
+  runtime_count: {symbol: arg7, scale: 11, offset: 0}

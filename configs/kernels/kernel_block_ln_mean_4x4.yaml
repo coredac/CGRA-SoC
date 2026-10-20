@@ -1,0 +1,17 @@
+kernel:
+  name: block_ln_mean
+  kernel_yaml: VectorCGRA/validation/test/block_ln_mean.yaml
+  required_words: 4096
+  bindings: {arg0: 4090, arg1: 4091, arg2: 768, arg3: 1}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: output}
+    - {symbol: arg2, kind: count, role: columns}
+    - {symbol: arg3, kind: count, role: elements}
+execution:
+  ctrl_base: 0
+  compiled_ii: 9
+  loop_times: 9
+  expected_completes: 1
+  runtime_count: {symbol: arg3, scale: 9, offset: 0}

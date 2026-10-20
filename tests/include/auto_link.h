@@ -82,7 +82,14 @@ static inline void auto_link_load(const auto_link_graph_t *graph, const uintptr_
   __asm__ volatile("fence iorw, iorw" ::: "memory");
 }
 
-static inline void auto_link_run_config(uint32_t id) { *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_CAPTURE) = id; }
+// Capture an interval end; count is its total iterations, zero selects no repeat.
+static inline void auto_link_run_repeat(uint32_t id, uint32_t first, uint32_t count) {
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_REPEAT_FIRST) = first;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_REPEAT_COUNT) = count;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_CAPTURE) = id;
+}
+
+static inline void auto_link_run_config(uint32_t id) { auto_link_run_repeat(id, 0, 0); }
 
 static inline void auto_link_run(uint32_t first, uint32_t count) {
   *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUN_FIRST) = first;

@@ -23,6 +23,9 @@ typedef struct {
   uint32_t source;
   uint32_t scale;
   int32_t offset;
+  uint32_t source2;
+  uint32_t scale2;
+  uint32_t relative;
 } gemmini_patch_t;
 
 static inline void gemmini_job_patch_at(uintptr_t base, const gemmini_patch_t *patch) {
@@ -33,6 +36,9 @@ static inline void gemmini_job_patch_at(uintptr_t base, const gemmini_patch_t *p
   gemmini_job_write_at(base, GEMMINI_JOB_PATCH_SOURCE, patch->source);
   gemmini_job_write_at(base, GEMMINI_JOB_PATCH_SCALE, patch->scale);
   gemmini_job_write_at(base, GEMMINI_JOB_PATCH_OFFSET, (uint32_t)patch->offset);
+  gemmini_job_write_at(base, GEMMINI_JOB_PATCH_SOURCE2, patch->source2);
+  gemmini_job_write_at(base, GEMMINI_JOB_PATCH_SCALE2, patch->scale2);
+  gemmini_job_write_at(base, GEMMINI_JOB_PATCH_RELATIVE, patch->relative);
   gemmini_job_write_at(base, GEMMINI_JOB_PATCH_PUSH, 1);
 }
 

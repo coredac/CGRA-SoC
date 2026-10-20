@@ -1,0 +1,18 @@
+kernel:
+  name: attention_norm
+  kernel_yaml: VectorCGRA/validation/test/attention_norm.yaml
+  required_words: 12416
+  bindings: {arg0: 4160, arg1: 8256, arg2: 8320, arg3: 128, arg4: 2048}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: input1}
+    - {symbol: arg2, kind: spm_word, role: output}
+    - {symbol: arg3, kind: count, role: columns}
+    - {symbol: arg4, kind: count, role: elements}
+execution:
+  ctrl_base: 40
+  compiled_ii: 13
+  loop_times: 26624
+  expected_completes: 2
+  runtime_count: {symbol: arg4, scale: 13, offset: 0}

@@ -8,6 +8,15 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      gpt2_shape:
+        description: GPT-2 fixture (small N16/H128, n64 N64/H128, wide N16/H768)
+        type: choice
+        default: small
+        options:
+          - small
+          - n64
+          - wide
 
 concurrency:
   group: cgra-soc-${{ github.workflow }}-${{ github.ref }}
@@ -55,6 +64,27 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
               output.write(f"hardware={str(hardware).lower()}\n")
           PY
+
+  script-tests:
+    name: Shared configuration checks
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Check shared configuration scripts
+        run: |
+          python -m pip install PyYAML
+          python -m unittest discover -s scripts/tests -p 'accels_test.py'
 
   cgra-tests:
     name: CGRA Verilator tests
@@ -239,50 +269,50 @@ jobs:
       - name: Run Gemmini and CGRA manual E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiRocketConfig \
-            ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
+            ./run-chipyard-cgra-gemmini-demo.sh --rebuild tests/cgra-gemmini/integration/relu_spm_manual.c 2>&1 | tee cgra-gemmini-manual.log
           grep -q "Gemmini + CGRA Manual SPM ReLU: PASS" cgra-gemmini-manual.log
           CONFIG=CGRAMinimalGemminiRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/relu_dma.c \
+            TEST_SRC=tests/cgra-gemmini/integration/relu_dma.c \
             ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini-dma.log
           grep -q "Gemmini + CGRA DMA ReLU chunk 0 smoke test: PASS" cgra-gemmini-dma.log
           CONFIG=CGRAMinimalGemminiRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/relu.c \
+            TEST_SRC=tests/cgra-gemmini/integration/relu.c \
             ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee cgra-gemmini.log
           grep -q "Gemmini + CGRA demo: PASS" cgra-gemmini.log
 
       - name: Run AES, Gemmini, and CGRA manual E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiAESRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_manual.c \
+            TEST_SRC=tests/cgra-gemmini/integration/relu_spm_aes_manual.c \
             ./run-chipyard-cgra-gemmini-demo.sh --rebuild 2>&1 | tee cgra-gemmini-aes-manual.log
           grep -q "Gemmini + CGRA + AES Manual: PASS" cgra-gemmini-aes-manual.log
           CONFIG=CGRAMinimalGemminiAESRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_manual.c \
+            TEST_SRC=tests/cgra-gemmini/integration/aes_gemm_relu_manual.c \
             ./run-chipyard-cgra-gemmini-demo.sh 2>&1 | tee aes-gemmini-cgra-manual.log
           grep -q "AES + Gemmini + CGRA + AES Manual: PASS" aes-gemmini-cgra-manual.log
 
       - name: Run AES, Gemmini, and CGRA automatic E2E tests
         run: |
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/relu_spm_aes_auto.c \
+            TEST_SRC=tests/cgra-gemmini/integration/relu_spm_aes_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca_short.yaml --rebuild 2>&1 | tee cgra-gemmini-aes-auto.log
           grep -q "Gemmini + CGRA + AES Auto: PASS" cgra-gemmini-aes-auto.log
           CONFIG=CGRAMinimalGemminiAESAutoLinkRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/aes_gemm_relu_auto.c \
+            TEST_SRC=tests/cgra-gemmini/integration/aes_gemm_relu_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gca.yaml --rebuild 2>&1 | tee aes-gemmini-cgra-auto.log
           grep -q "AES + Gemmini + CGRA + AES Auto: PASS" aes-gemmini-cgra-auto.log
 
       - name: Run Gemmini, CGRA, and Pool manual E2E test
         run: |
           CONFIG=CGRAMinimalGemminiPoolRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/conv_relu_pool_manual.c \
+            TEST_SRC=tests/cgra-gemmini/integration/conv_relu_pool_manual.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gcp.yaml --rebuild 2>&1 | tee cgra-gemmini-pool-manual.log
           grep -q "Gemmini Conv + CGRA ReLU + Pool Manual: PASS" cgra-gemmini-pool-manual.log
 
       - name: Run Gemmini, CGRA, and Pool automatic E2E test
         run: |
           CONFIG=CGRAMinimalGemminiPoolAutoLinkRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/conv_relu_pool_auto.c \
+            TEST_SRC=tests/cgra-gemmini/integration/conv_relu_pool_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/gcp.yaml --rebuild 2>&1 | tee cgra-gemmini-pool-auto.log
           grep -q "Gemmini Conv + CGRA ReLU + Pool Auto: PASS" cgra-gemmini-pool-auto.log
 
@@ -297,7 +327,7 @@ jobs:
       - name: Run Gemmini, CGRA, and Pool tile E2E test
         run: |
           CONFIG=CgraPoolTileRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/pool_tiles.c \
+            TEST_SRC=tests/cgra-gemmini/integration/pool_tiles.c \
             LOADMEM=1 \
             timeout_cycles=350000 \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/tiles.yaml --rebuild 2>&1 | tee cgra-gemmini-pool-tiles.log
@@ -315,14 +345,14 @@ jobs:
       - name: Run Gemmini and CGRA residual manual E2E test
         run: |
           CONFIG=CGRAMinimalGemminiResidualRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/residual_manual.c \
+            TEST_SRC=tests/cgra-gemmini/integration/residual_manual.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-manual.log
           grep -q "Gemmini + CGRA Residual Manual: PASS" cgra-gemmini-residual-manual.log
 
       - name: Run Gemmini and CGRA residual automatic E2E test
         run: |
           CONFIG=CGRAMinimalGemminiResidualAutoLinkRocketConfig \
-            TEST_SRC=tests/cgra-gemmini/residual_auto.c \
+            TEST_SRC=tests/cgra-gemmini/integration/residual_auto.c \
             ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/res.yaml --rebuild 2>&1 | tee cgra-gemmini-residual-auto.log
           grep -q "Gemmini + CGRA Residual Auto: PASS" cgra-gemmini-residual-auto.log
 
@@ -335,7 +365,7 @@ jobs:
 
       - name: Run runtime graph E2E test
         run: |
-          CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/graph.c LOADMEM=1 timeout_cycles=350000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/graph.yaml --rebuild 2>&1 | tee cgra-runtime-graph.log
+          CONFIG=MultiAccelRocketConfig TEST_SRC=tests/cgra-gemmini/integration/graph.c LOADMEM=1 timeout_cycles=350000 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/graph.yaml --rebuild 2>&1 | tee cgra-runtime-graph.log
           grep -q "Runtime graph: PASS (0 mismatches)" cgra-runtime-graph.log
 
       - name: Upload test logs
@@ -345,6 +375,263 @@ jobs:
           name: gemmini-test-logs
           path: |
             *.log
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  app-tests:
+    name: App / ${{ matrix.app }}
+    needs: changes
+    if: ${{ !cancelled() && inputs.gpt2_shape != 'wide' && inputs.gpt2_shape != 'n64' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [resnet, gpt2, gcn]
+    env:
+      CONFIG: MultiAccelRocketConfig
+      LOADMEM: '1'
+      RANDOM_SEED: '1'
+      MAKEFLAGS: '-j2 VERILATOR_THREADS=2'
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard and VectorCGRA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh --skip-openfpga
+
+      - name: Check ${{ matrix.app }} references
+        env:
+          APP: ${{ matrix.app }}
+        run: |
+          source chipyard/env.sh
+          export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+          case "$APP" in
+            resnet)
+              references=(cgra/test/CgraRTL_relu4x4_test_from_yaml.py cgra/test/CgraRTL_add_relu_test_from_yaml.py cgra/test/CgraRTL_softmax_test_from_yaml.py)
+              ;;
+            gpt2)
+              .venv/bin/python -m unittest discover -s scripts/tests -p 'block_test.py'
+              references=(fu/single/test/AdderRTL_test.py::test_sub_const_handshake cgra/test/CgraRTL_block_test_from_yaml.py cgra/test/CgraRTL_activation_test_from_yaml.py)
+              ;;
+            gcn)
+              .venv/bin/python -m unittest discover -s scripts/tests -p 'gcn_test.py'
+              references=(cgra/test/CgraRTL_gcn_test_from_yaml.py)
+              ;;
+          esac
+          cd VectorCGRA
+          ../.venv/bin/python -m pytest "${references[@]}" --test-verilog -v --tb=short 2>&1 | tee ../app-reference.log
+
+      - name: Generate ResNet fixture and kernel APIs
+        if: matrix.app == 'resnet'
+        run: |
+          .venv/bin/python scripts/resnet_data.py
+          sha256sum tests/generated/resnet_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py --soc-yaml configs/soc/autolink/resnet.yaml \
+            configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml \
+            configs/kernels/kernel_softmax_max_4x4.yaml configs/kernels/kernel_softmax_exp_4x4.yaml configs/kernels/kernel_softmax_norm_4x4.yaml
+
+      - name: Run ResNet Manual and Hybrid
+        if: matrix.app == 'resnet'
+        env:
+          timeout_cycles: '8000000'
+        run: |
+          BINARY_ARGS=0 ./run-chipyard-cgra-gemmini-demo.sh --rebuild --soc-yaml configs/soc/autolink/resnet.yaml tests/cgra-gemmini/resnet/resnet.c 2>&1 | tee app-manual.log
+          grep -Fxq 'ResNet-8 Manual: PASS' app-manual.log
+          BINARY_ARGS=1 ./run-chipyard-cgra-gemmini-demo.sh --soc-yaml configs/soc/autolink/resnet.yaml tests/cgra-gemmini/resnet/resnet.c 2>&1 | tee app-hybrid.log
+          grep -Fxq 'ResNet-8 Hybrid: PASS' app-hybrid.log
+
+      - name: Generate GPT-2 two-input fixture and kernel APIs
+        if: matrix.app == 'gpt2'
+        run: |
+          .venv/bin/python scripts/gpt2_data.py --heads 2 --length 16 --seed 0 --runs 2 --report app-reference.json
+          sha256sum tests/generated/gpt2_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_attention_*_4x4.yaml configs/kernels/kernel_block_*_4x4.yaml
+          .venv/bin/python scripts/generate_auto_links.py \
+            --soc-yaml configs/soc/autolink/gpt2.yaml --graph-yaml configs/graphs/block_load.yaml \
+            --header-out tests/generated/block_load.h
+
+      - name: Run GPT-2 Manual, Auto and Hybrid
+        if: matrix.app == 'gpt2'
+        env:
+          timeout_cycles: '100000000'
+        run: |
+          BINARY_ARGS='0 spm bench' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/gpt2.c 2>&1 | tee app-manual.log
+          grep -Fxq 'GPT2: PASS' app-manual.log
+          BINARY_ARGS=0 ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/auto_block.c 2>&1 | tee app-auto.log
+          grep -Fxq 'Auto block: PASS' app-auto.log
+          BINARY_ARGS='' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gpt2/hybrid_block.c 2>&1 | tee app-hybrid.log
+          grep -Fxq 'Hybrid block: PASS' app-hybrid.log
+
+      - name: Generate small GCN fixtures and kernel APIs
+        if: matrix.app == 'gcn'
+        run: |
+          .venv/bin/python scripts/gcn_data.py --seed 0 --report app-reference.json
+          sha256sum tests/generated/gcn_data.h | tee app-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_gcn_4x4.yaml configs/kernels/kernel_gcn_aggregate_4x4.yaml configs/kernels/kernel_gcn_relu_4x4.yaml
+
+      - name: Run GCN five-mode comparison
+        if: matrix.app == 'gcn'
+        env:
+          BINARY_ARGS: '0 10 2'
+          timeout_cycles: '50000000'
+        run: |
+          ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/cgra-gemmini/gcn/gcn.c 2>&1 | tee app-gcn.log
+          grep -Fxq 'GCN: PASS' app-gcn.log
+          for mode in manual auto hybrid group-auto group-hybrid; do
+            grep -Eq "^GCN mode=$mode .* mismatches=0$" app-gcn.log
+          done
+
+      - name: Summarize application target cycles
+        env:
+          APP: ${{ matrix.app }}
+        run: |
+          {
+            echo "### $APP target-cycle results"
+            echo
+            echo 'Compare target cycles, not CI host time. Modes share one hardware build.'
+            echo
+            echo '```text'
+            cat app-fixture.log
+            grep -hE '^(ResNet-8|GPT2|Auto block|Hybrid block|GCN).* (cycles=|setup_cycles=|total=|mismatched_words=|peak_profiles=)|^(ResNet-8.*|GPT2|Auto block|Hybrid block|GCN): PASS' app-*.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload application results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.app }}
+          path: |
+            app-*.log
+            app-reference.json
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
+  gpt2-dispatch-tests:
+    name: GPT-2 ${{ inputs.gpt2_shape }} / ${{ matrix.mode }}
+    needs: changes
+    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && (inputs.gpt2_shape == 'wide' || inputs.gpt2_shape == 'n64') && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: manual
+            source: gpt2.c
+            args: '0 spm bench'
+            pass: 'GPT2: PASS'
+          - mode: auto
+            source: auto_block.c
+            args: '0'
+            pass: 'Auto block: PASS'
+          - mode: hybrid
+            source: hybrid_block.c
+            args: ''
+            pass: 'Hybrid block: PASS'
+    env:
+      SHAPE: ${{ inputs.gpt2_shape }}
+      CONFIG: MultiAccelRocketConfig
+      LOADMEM: '1'
+      RANDOM_SEED: '1'
+      timeout_cycles: '100000000'
+      MAKEFLAGS: '-j2 VERILATOR_THREADS=2'
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Configure Chipyard and VectorCGRA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh --skip-openfpga
+
+      - name: Check block references and configuration
+        run: |
+          source chipyard/env.sh
+          export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          export PKG_CONFIG_PATH="$PWD/chipyard/.conda-env/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+          .venv/bin/python -m unittest discover -s scripts/tests -p 'block_test.py'
+          mkdir -p build/gpt2-reference
+          cd build/gpt2-reference
+          ../../.venv/bin/python -m pytest \
+            ../../VectorCGRA/fu/single/test/AdderRTL_test.py::test_sub_const_handshake \
+            ../../VectorCGRA/cgra/test/CgraRTL_block_test_from_yaml.py \
+            ../../VectorCGRA/cgra/test/CgraRTL_activation_test_from_yaml.py \
+            --test-verilog -v --tb=short 2>&1 | tee reference.log
+
+      - name: Generate identical two-input fixtures and kernel APIs
+        run: |
+          heads=2
+          length=64
+          if [[ "$SHAPE" == wide ]]; then
+            heads=12
+            length=16
+          fi
+          .venv/bin/python scripts/gpt2_data.py --heads "$heads" --length "$length" --seed 0 --runs 2 --report gpt2-reference.json
+          sha256sum tests/generated/gpt2_data.h | tee gpt2-fixture.log
+          .venv/bin/python scripts/cgra_fast_api.py \
+            --arch-yaml configs/arch/attention.yaml \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            configs/kernels/kernel_attention_*_4x4.yaml \
+            configs/kernels/kernel_block_*_4x4.yaml
+          .venv/bin/python scripts/generate_auto_links.py \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            --graph-yaml configs/graphs/block_load.yaml \
+            --header-out tests/generated/block_load.h
+
+      - name: Rebuild and run both inputs without reset
+        env:
+          SOURCE: ${{ matrix.source }}
+          BINARY_ARGS: ${{ matrix.args }}
+          PASS_MARKER: ${{ matrix.pass }}
+        run: |
+          /usr/bin/time -p ./run-chipyard-cgra-gemmini-demo.sh \
+            --rebuild --arch-yaml configs/arch/attention.yaml \
+            --soc-yaml configs/soc/autolink/gpt2.yaml \
+            "tests/cgra-gemmini/gpt2/$SOURCE" 2>&1 | tee gpt2.log
+          grep -Fxq "$PASS_MARKER" gpt2.log
+          {
+            echo '### GPT-2 target-cycle results'
+            echo
+            echo 'Host wall time includes the rebuild and is not a hardware performance metric.'
+            echo
+            echo '```text'
+            cat gpt2-fixture.log
+            grep -E '^(GPT2|Auto block|Hybrid block).* (total=|mismatched_words=|peak_profiles=)|^(GPT2|Auto block|Hybrid block): PASS' gpt2.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload GPT-2 results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpt2-${{ matrix.mode }}-${{ env.SHAPE }}
+          path: |
+            gpt2*.log
+            gpt2-reference.json
+            build/gpt2-reference/reference.log
             chipyard/build-setup.log
           if-no-files-found: ignore
 

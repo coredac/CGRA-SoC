@@ -1,0 +1,20 @@
+kernel:
+  name: attention_exp
+  kernel_yaml: VectorCGRA/validation/test/attention_exp.yaml
+  required_words: 12416
+  bindings: {arg0: 0, arg1: 4096, arg2: 4160, arg3: 8256, arg4: 128, arg5: 0, arg6: 2048}
+runtime:
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: input1}
+    - {symbol: arg2, kind: spm_word, role: output}
+    - {symbol: arg3, kind: spm_word, role: output1}
+    - {symbol: arg4, kind: count, role: columns}
+    - {symbol: arg5, kind: count, role: row}
+    - {symbol: arg6, kind: count, role: elements}
+execution:
+  ctrl_base: 16
+  compiled_ii: 18
+  loop_times: 36864
+  expected_completes: 4
+  runtime_count: {symbol: arg6, scale: 18, offset: 0}

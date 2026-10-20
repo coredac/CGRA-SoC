@@ -17,8 +17,9 @@ CONTROL_GENERATOR="$ROOT_DIR/scripts/generate_cgra_link_control.py"
 AUTO_LINK_GENERATOR="$ROOT_DIR/scripts/generate_auto_links.py"
 ACCEL_GENERATOR="$ROOT_DIR/scripts/generate_accels.py"
 CONFIG="${CONFIG:-CGRAMinimalGemminiAutoLinkRocketConfig}"
+CGRA_ARCH_YAML="$ROOT_DIR/configs/arch/arch.yaml"
 REBUILD=0
-TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/relu_spm_auto.c}"
+TEST_SRC="${TEST_SRC:-$ROOT_DIR/tests/cgra-gemmini/integration/relu_spm_auto.c}"
 TEST_NAME="$(basename "$TEST_SRC" .c)"
 
 uses_auto_link() {
@@ -73,7 +74,7 @@ case "$CONFIG" in
 esac
 
 usage() {
-  echo "usage: $0 [--rebuild] [--fast] [--soc-yaml path] [test-source.c]" >&2
+  echo "usage: $0 [--rebuild] [--fast] [--soc-yaml path] [--arch-yaml path] [test-source.c]" >&2
   echo "       CONFIG=$CONFIG TEST_SRC=$TEST_SRC $0 --rebuild" >&2
 }
 
@@ -92,6 +93,15 @@ while (($# > 0)); do
         exit 1
       fi
       CGRA_SOC_YAML="$2"
+      shift
+      ;;
+    --arch-yaml)
+      if (($# < 2)); then
+        echo "error: --arch-yaml requires a path" >&2
+        usage
+        exit 1
+      fi
+      CGRA_ARCH_YAML="$2"
       shift
       ;;
     -h|--help)
@@ -124,6 +134,7 @@ if [[ ! -f "$CGRA_SOC_YAML" ]]; then
   exit 1
 fi
 CGRA_SOC_YAML="$(realpath "$CGRA_SOC_YAML")"
+CGRA_ARCH_YAML="$(realpath "$CGRA_ARCH_YAML")"
 
 if (( ! REBUILD )); then
   echo "note: first run should use --rebuild so elaboration regenerates matching gemmini_params.h" >&2
@@ -144,7 +155,7 @@ export LD_LIBRARY_PATH="$CHIPYARD_DIR/.conda-env/lib:${LD_LIBRARY_PATH:-}"
 
 if ((REBUILD)); then
   echo "[generate] CGRA design"
-  python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML"
+  python3 "$ROOT_DIR/scripts/generate_single_cgra.py" --soc-yaml "$CGRA_SOC_YAML" --arch-yaml "$CGRA_ARCH_YAML"
 fi
 
 if ((REBUILD)); then
@@ -200,7 +211,7 @@ riscv64-unknown-elf-gcc \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \
-  -I "$ROOT_DIR/tests/cgra-gemmini" \
+  -I "$ROOT_DIR/tests/cgra-gemmini/common" \
   -I "$AES_SW" \
   -I "$CHIPYARD_DIR/tests" \
   -I "$GEMMINI_SW" \

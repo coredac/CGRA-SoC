@@ -11,6 +11,22 @@ OPENFPGA_VENV_DIR="$OPENFPGA_DIR/.venv"
 OPENFPGA_LOCAL_DIR="$OPENFPGA_DIR/.local"
 OPENFPGA_DEPS_DIR="$OPENFPGA_DIR/.deps"
 CONDA_PREFIX_DEFAULT="${CONDA_PREFIX_DEFAULT:-$HOME/conda}"
+SKIP_OPENFPGA=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --skip-openfpga) SKIP_OPENFPGA=true ;;
+    --help)
+      echo "Usage: $0 [--skip-openfpga]"
+      echo "  --skip-openfpga  Skip FPGA fabric dependencies for application tests."
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg" >&2
+      exit 1
+      ;;
+  esac
+done
 
 have_cmd() {
   command -v "$1" >/dev/null 2>&1
@@ -19,9 +35,13 @@ have_cmd() {
 ensure_root_submodules() {
   (
     cd "$ROOT_DIR"
-    echo "Initializing root submodules: chipyard, VectorCGRA, OpenFPGA."
-    git submodule sync -- chipyard VectorCGRA OpenFPGA
-    git submodule update --init -- chipyard VectorCGRA OpenFPGA
+    local -a submodules=(chipyard VectorCGRA)
+    if [[ "$SKIP_OPENFPGA" == false ]]; then
+      submodules+=(OpenFPGA)
+    fi
+    echo "Initializing root submodules: ${submodules[*]}."
+    git submodule sync -- "${submodules[@]}"
+    git submodule update --init -- "${submodules[@]}"
   )
 }
 
@@ -501,6 +521,10 @@ print(f"pymtl3={pymtl3.__file__}")
 print(f"yaml={yaml.__version__}")
 PY
 
+  if [[ "$SKIP_OPENFPGA" == true ]]; then
+    return
+  fi
+
   "$OPENFPGA_VENV_DIR/bin/python" - <<'PY'
 import coloredlogs
 import envyaml
@@ -517,10 +541,14 @@ PY
 
 ensure_root_submodules
 ensure_vectorcgra_submodules
-ensure_openfpga_submodules
+if [[ "$SKIP_OPENFPGA" == false ]]; then
+  ensure_openfpga_submodules
+fi
 ensure_chipyard_submodules
 ensure_gemmini_submodules
 ensure_chipyard_env
 ensure_top_venv
-ensure_openfpga_env
+if [[ "$SKIP_OPENFPGA" == false ]]; then
+  ensure_openfpga_env
+fi
 check_environment

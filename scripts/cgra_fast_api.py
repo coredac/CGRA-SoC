@@ -37,6 +37,22 @@ SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
     ROOT / "configs" / "kernels" / "kernel_softmax_max_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_softmax_exp_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_softmax_norm_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_attention_max_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_attention_exp_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_attention_norm_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_sum_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_mean_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_squares_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_variance_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_sqrt_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_ln_norm_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_gelu_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_activation_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_requant_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_block_residual_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_aggregate_4x4.yaml",
+    ROOT / "configs" / "kernels" / "kernel_gcn_relu_4x4.yaml",
 )
 SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
 SUPPORTED_KERNEL_NAMES = {
@@ -52,6 +68,22 @@ SUPPORTED_KERNEL_NAMES = {
     "softmax_max",
     "softmax_exp",
     "softmax_norm",
+    "attention_max",
+    "attention_exp",
+    "attention_norm",
+    "block_ln_sum",
+    "block_ln_mean",
+    "block_ln_squares",
+    "block_ln_variance",
+    "block_ln_sqrt",
+    "block_ln_norm",
+    "block_gelu",
+    "block_activation",
+    "block_requant",
+    "block_residual",
+    "gcn",
+    "gcn_aggregate",
+    "gcn_relu",
 }
 
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
@@ -228,15 +260,19 @@ def load_runtime(data: Mapping, path: Path, bindings: Mapping):
     } != set(bindings):
         raise ValueError(f"{path}: runtime symbols must name each binding exactly once")
     roles = set()
+    scalar_roles = {"elements", "row", "rows", "columns", "divisor", "stride"}
+    address_roles = {"output", "gamma", "beta", "mean", "std"}
     for item in symbols:
-        input_role = re.fullmatch(r"input[0-9]+", item.role)
+        address_role = re.fullmatch(r"(input|output)[0-9]+", item.role)
         if item.kind not in ("spm_word", "count") or (
-            item.role not in ("output", "elements") and not input_role
+            item.role not in address_roles
+            and item.role not in scalar_roles
+            and not address_role
         ):
             raise ValueError(f"{path}: unsupported runtime symbol kind or role")
-        if (item.kind == "count") != (item.role == "elements") or item.role in roles:
+        if (item.kind == "count") != (item.role in scalar_roles) or item.role in roles:
             raise ValueError(
-                f"{path}: runtime roles must be unique and elements must be a count"
+                f"{path}: runtime roles must be unique and scalar values must use counts"
             )
         roles.add(item.role)
     count_data = require_mapping(
@@ -247,7 +283,7 @@ def load_runtime(data: Mapping, path: Path, bindings: Mapping):
         require_int(count_data, "scale", path),
         require_int(count_data, "offset", path),
     )
-    if [item.symbol for item in symbols if item.kind == "count"] != [count.symbol]:
+    if [item.symbol for item in symbols if item.role == "elements"] != [count.symbol]:
         raise ValueError(
             f"{path}: execution.runtime_count must name the elements symbol"
         )
@@ -382,6 +418,17 @@ def build_packet_types(cfg: KernelConfig) -> Mapping[str, object]:
 
 
 def _make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
+    kernel = load_yaml_mapping(cfg.kernel_yaml)
+    operands = {
+        operand["operand"]
+        for core in kernel["array_config"]["cores"]
+        for entry in core["entries"]
+        for instruction in entry["instructions"]
+        for operation in instruction["operations"]
+        for operand in operation.get("src_operands", [])
+    }
+    # Execution-only symbols relocate step counts without a native constant.
+    bindings = {name: value for name, value in cfg.bindings.items() if name in operands}
     factory = ScriptFactory(
         path=str(cfg.kernel_yaml),
         CtrlType=types["CtrlType"],
@@ -407,7 +454,7 @@ def _make_vector_cgra_packets(cfg: KernelConfig, types: Mapping[str, object]):
         CtrlAddrType=types["CtrlAddrType"],
         DataAddrType=types["DataAddrType"],
         num_registers_per_reg_bank=cfg.num_registers_per_reg_bank,
-        bindings=cfg.bindings,
+        bindings=bindings,
     )
 
     with contextlib.redirect_stdout(io.StringIO()):
@@ -656,7 +703,7 @@ def build_relocations(
                 )
             found = True
             relocations.append(Relocation(index, symbol_index, 1, 0))
-        if not found:
+        if not found and symbol.symbol != cfg.runtime_count.symbol:
             raise ValueError(
                 f"{cfg.source_path}: no packet relocation for {symbol.symbol}"
             )
