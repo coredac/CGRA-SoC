@@ -1,5 +1,6 @@
-#include "driver.h"
+#include "internal/driver.h"
 
+#include "gemmini_job.h"
 #include "gemmini_params.h"
 
 _Static_assert(DIM == 16 && ADDR_LEN == 32 && sizeof(elem_t) == 1 && sizeof(acc_t) == 4, "SoC plans require the INT8/INT32 Gemmini command ABI");
@@ -67,25 +68,17 @@ static uint64_t source(unsigned id, unsigned tile) {
   __builtin_unreachable();
 }
 
-static uint64_t patched(const soc_task_t *task, unsigned index, unsigned operand, uint64_t original, unsigned tile) {
-  uint64_t result = original;
-  for (unsigned update = 0; update < task->patch_count; ++update) {
-    const gemmini_patch_t *patch = &task->patches[update];
-    if (patch->command != index || patch->operand != operand) {
-      continue;
-    }
-    const uint64_t field = UINT64_MAX >> (64 - patch->width);
-    const uint64_t mask = field << patch->lsb;
-    uint64_t value = source(patch->source, tile) * patch->scale + (uint64_t)(int64_t)patch->offset;
-    if (patch->scale2 != 0) {
-      value += source(patch->source2, tile) * patch->scale2;
-    }
-    if (patch->relative) {
-      value += (original >> patch->lsb) & field;
-    }
-    result = (result & ~mask) | ((value << patch->lsb) & mask);
+static uint64_t patched(const gemmini_patch_t *patch, uint64_t original, unsigned tile) {
+  const uint64_t field = UINT64_MAX >> (64 - patch->width);
+  const uint64_t mask = field << patch->lsb;
+  uint64_t value = source(patch->source, tile) * patch->scale + (uint64_t)(int64_t)patch->offset;
+  if (patch->scale2 != 0) {
+    value += source(patch->source2, tile) * patch->scale2;
   }
-  return result;
+  if (patch->relative) {
+    value += (original >> patch->lsb) & field;
+  }
+  return (original & ~mask) | ((value << patch->lsb) & mask);
 }
 
 void soc_gemmini_execute(const soc_context_t *context, const soc_task_t *task, unsigned tile) {
@@ -93,9 +86,12 @@ void soc_gemmini_execute(const soc_context_t *context, const soc_task_t *task, u
   accel_commands(device, {
     for (unsigned index = 0; index < task->command_count; ++index) {
       const soc_command_t *entry = &task->commands[index];
-      const uint64_t rs1 = patched(task, index, 0, soc_operand(context, entry->rs1), tile);
-      const uint64_t rs2 = patched(task, index, 1, soc_operand(context, entry->rs2), tile);
-      command(entry->funct, rs1, rs2);
+      uint64_t operands[] = {soc_operand(context, entry->rs1), soc_operand(context, entry->rs2)};
+      for (unsigned update = 0; update < entry->patch_count; ++update) {
+        const gemmini_patch_t *patch = &task->patches[entry->patch_begin + update];
+        operands[patch->operand] = patched(patch, operands[patch->operand], tile);
+      }
+      command(entry->funct, operands[0], operands[1]);
     }
   });
 }

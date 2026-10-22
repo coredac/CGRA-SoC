@@ -2,6 +2,7 @@
 #define GEMMINI_JOB_H
 
 #include "cgra_link_control_generated.h"
+#include "gemmini_types.h"
 #include "rocc.h"
 
 #include <stdint.h>
@@ -14,19 +15,6 @@ static inline uint32_t gemmini_job_read_at(uintptr_t base, uintptr_t offset) { r
 static inline void gemmini_job_write_at(uintptr_t base, uintptr_t offset, uint32_t value) { *(volatile uint32_t *)(base + offset) = value; }
 
 static inline void gemmini_job_write(uintptr_t offset, uint32_t value) { gemmini_job_write_at(GEMMINI_JOB_BASE, offset, value); }
-
-typedef struct {
-  uint32_t command;
-  uint32_t operand;
-  uint32_t lsb;
-  uint32_t width;
-  uint32_t source;
-  uint32_t scale;
-  int32_t offset;
-  uint32_t source2;
-  uint32_t scale2;
-  uint32_t relative;
-} gemmini_patch_t;
 
 static inline void gemmini_job_patch_at(uintptr_t base, const gemmini_patch_t *patch) {
   gemmini_job_write_at(base, GEMMINI_JOB_PATCH_COMMAND, patch->command);

@@ -1,6 +1,7 @@
-#include "driver.h"
+#include "internal/driver.h"
 
 #include "auto_link.h"
+#include "cgra_link.h"
 
 #include <stdio.h>
 
@@ -10,31 +11,12 @@ static unsigned long cycles(void) {
   return value;
 }
 
-static int automatic_task(const soc_plan_t *plan, unsigned task) {
-  for (unsigned index = 0; index < plan->step_count; ++index) {
-    const soc_step_t *step = &plan->steps[index];
-    if (!step->automatic) {
-      continue;
-    }
-    for (unsigned entry = 0; entry < step->task_count; ++entry) {
-      if (step->tasks[entry] == task) {
-        return 1;
-      }
-    }
-  }
-  return 0;
-}
-
 static void capture_step(const soc_context_t *context, const soc_step_t *step) {
   uintptr_t bindings[context->plan->device_count];
   for (unsigned index = 0; index < context->plan->device_count; ++index) {
     bindings[index] = context->plan->devices[index]->spm;
   }
   auto_link_load(step->graph, bindings);
-  for (unsigned index = 0; index < step->graph->edge_count; ++index) {
-    const auto_link_edge_t *edge = &step->graph->edges[index];
-    auto_link_transfer(index, edge->source_offset, edge->destination_offset, edge->source_stride, step->destination_strides[index], edge->pixel_bytes);
-  }
   auto_link_tiles(step->tiles, 1, 1, 1);
   auto_link_run_config(step->profile);
 }
@@ -46,6 +28,7 @@ int soc_prepare(soc_context_t *context, const soc_plan_t *plan, const uintptr_t 
   context->stats = (soc_stats_t){0};
   for (unsigned index = 0; index < plan->device_count; ++index) {
     context->states[index].last = NULL;
+    context->states[index].loaded = NULL;
   }
   for (unsigned index = 0; index < plan->task_count; ++index) {
     const soc_task_t *task = &plan->tasks[index];
@@ -56,22 +39,21 @@ int soc_prepare(soc_context_t *context, const soc_plan_t *plan, const uintptr_t 
   __asm__ volatile("fence iorw, iorw" ::: "memory");
   for (unsigned index = 0; index < plan->task_count; ++index) {
     const soc_task_t *task = &plan->tasks[index];
-    if (!automatic_task(plan, index)) {
-      if (task->kind == SOC_CGRA) {
-        soc_cgra_load(context, task);
-      }
-      continue;
+    if (task->kind == SOC_CGRA && soc_cgra_preload(context, task) != 0) {
+      return 1;
     }
+  }
+  for (unsigned index = 0; index < plan->capture_count; ++index) {
+    const unsigned id = plan->capture_tasks[index];
+    const soc_task_t *task = &plan->tasks[id];
     const int status = task->kind == SOC_GEMMINI ? soc_gemmini_capture(context, task) : soc_cgra_capture(context, task);
     if (status != 0) {
-      printf("SoC runtime: capture failed task=%u\n", index);
+      printf("SoC runtime: capture failed task=%u\n", id);
       return status;
     }
   }
-  for (unsigned index = 0; index < plan->step_count; ++index) {
-    if (plan->steps[index].automatic) {
-      capture_step(context, &plan->steps[index]);
-    }
+  for (unsigned index = 0; index < plan->profile_count; ++index) {
+    capture_step(context, &plan->steps[plan->profile_steps[index]]);
   }
   __asm__ volatile("fence iorw, iorw" ::: "memory");
   context->stats.prepare_cycles = cycles() - begin;
@@ -116,6 +98,7 @@ static int automatic_step(soc_context_t *context, const soc_step_t *step) {
         if (task->kind == SOC_CGRA) {
           context->states[task->endpoint].started = 1;
           context->states[task->endpoint].last = NULL;
+          context->states[task->endpoint].loaded = NULL;
         }
       }
       seen |= bit;
@@ -133,18 +116,41 @@ static int automatic_step(soc_context_t *context, const soc_step_t *step) {
   return failures != 0;
 }
 
-int soc_execute(soc_context_t *context) {
-  const unsigned long begin = cycles();
-  int status = 0;
-  for (unsigned index = 0; index < context->plan->step_count; ++index) {
-    const soc_step_t *step = &context->plan->steps[index];
-    status = step->automatic ? automatic_step(context, step) : cpu_step(context, step);
-    if (status != 0) {
-      break;
-    }
+static int finish(soc_context_t *context, unsigned long begin, int status) {
+  __asm__ volatile("fence iorw, iorw" ::: "memory");
+  for (unsigned index = 0; status == 0 && index < context->plan->output_count; ++index) {
+    status = soc_store(context, &context->plan->outputs[index]);
   }
   __asm__ volatile("fence iorw, iorw" ::: "memory");
   context->stats.execute_cycles = cycles() - begin;
   context->stats.total_cycles = context->stats.prepare_cycles + context->stats.execute_cycles;
   return status;
+}
+
+int soc_execute_manual(soc_context_t *context) {
+  const unsigned long begin = cycles();
+  int status = 0;
+  for (unsigned index = 0; status == 0 && index < context->plan->step_count; ++index) {
+    status = cpu_step(context, &context->plan->steps[index]);
+  }
+  return finish(context, begin, status);
+}
+
+int soc_execute_auto(soc_context_t *context) {
+  const unsigned long begin = cycles();
+  int status = 0;
+  for (unsigned index = 0; status == 0 && index < context->plan->step_count; ++index) {
+    status = automatic_step(context, &context->plan->steps[index]);
+  }
+  return finish(context, begin, status);
+}
+
+int soc_execute_hybrid(soc_context_t *context) {
+  const unsigned long begin = cycles();
+  int status = 0;
+  for (unsigned index = 0; status == 0 && index < context->plan->step_count; ++index) {
+    const soc_step_t *step = &context->plan->steps[index];
+    status = step->automatic ? automatic_step(context, step) : cpu_step(context, step);
+  }
+  return finish(context, begin, status);
 }

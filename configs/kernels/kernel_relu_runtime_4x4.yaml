@@ -8,6 +8,9 @@ kernel:
     arg2: 1
 
 runtime:
+  input_bits: [32]
+  output_bits: [8, 32]
+  tile_rows: 2
   symbols:
     - symbol: arg0
       kind: spm_word

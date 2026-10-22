@@ -76,7 +76,7 @@ static inline void auto_link_load(const auto_link_graph_t *graph, const uintptr_
     *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_BYTES) = edge->bytes;
     *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_EXPANSION) = edge->expansion;
     *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_SOURCE_BASE) = auto_link_address(edge->address, bindings);
-    auto_link_transfer(index, edge->source_offset, edge->destination_offset, edge->source_stride, 0, edge->pixel_bytes);
+    auto_link_transfer(index, edge->source_offset, edge->destination_offset, edge->source_stride, edge->destination_stride, edge->pixel_bytes);
     *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_FLAGS) = edge->flags;
   }
   __asm__ volatile("fence iorw, iorw" ::: "memory");

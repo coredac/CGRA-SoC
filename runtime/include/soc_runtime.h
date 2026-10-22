@@ -14,6 +14,7 @@ typedef struct {
 typedef struct {
   unsigned started;
   const soc_task_t *last;
+  const cgra_kernel_t *loaded;
 } soc_state_t;
 
 typedef struct {
@@ -25,6 +26,9 @@ typedef struct {
 
 /* Supply one zero-initialized state per device; retain it across calls and modes. */
 int soc_prepare(soc_context_t *context, const soc_plan_t *plan, const uintptr_t *arguments);
-int soc_execute(soc_context_t *context);
+/* Use the entry matching the prepared plan's mode. */
+int soc_execute_manual(soc_context_t *context);
+int soc_execute_auto(soc_context_t *context);
+int soc_execute_hybrid(soc_context_t *context);
 
 #endif

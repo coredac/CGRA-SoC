@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-enum { ROWS = SOC_PIPELINE_ROWS, DIM = SOC_PIPELINE_DIM };
+enum { ROWS = SOC_PLAN_ROWS, DIM = 16 };
 
 static int8_t input[ROWS][DIM] __attribute__((aligned(64)));
 static int8_t weights[2][DIM][DIM] __attribute__((aligned(64)));
@@ -70,7 +70,8 @@ static int check_schedule(const soc_plan_t *plan, const soc_context_t *ctx) {
 
 int main(void) {
   static const char *names[] = {"manual", "hybrid", "auto"};
-  soc_state_t states[SOC_PIPELINE_DEVICES] = {0};
+  static int (*const execute[])(soc_context_t *) = {soc_execute_manual, soc_execute_hybrid, soc_execute_auto};
+  soc_state_t states[SOC_PLAN_DEVICES] = {0};
   soc_context_t ctx = {.states = states};
   const uintptr_t arguments[] = {(uintptr_t)input, (uintptr_t)weights[0], 0, 0, (uintptr_t)weights[1], (uintptr_t)output};
   /* End in Manual to exercise return from automatic to native commands. */
@@ -81,7 +82,7 @@ int main(void) {
     for (unsigned sample = 0; sample < 2; ++sample) {
       init_data(rows, sample);
       reference(rows);
-      if (soc_prepare(&ctx, plan, arguments) || soc_execute(&ctx) || verify(rows) || check_schedule(plan, &ctx)) {
+      if (soc_prepare(&ctx, plan, arguments) || execute[modes[trial]](&ctx) || verify(rows) || check_schedule(plan, &ctx)) {
         printf("Runtime %s input=%u: FAIL\n", names[plan->mode], sample);
         return 1;
       }

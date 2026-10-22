@@ -196,7 +196,7 @@ if ((WITH_RUNTIME)); then
     echo "error: --runtime requires MultiAccelRocketConfig" >&2
     exit 1
   fi
-  python3 "$ROOT_DIR/scripts/runtime_target.py" --soc-yaml "$CGRA_SOC_YAML" --arch-yaml "$CGRA_ARCH_YAML"
+  "$CHIPYARD_DIR/.conda-env/bin/python" "$ROOT_DIR/scripts/runtime_target.py" --soc-yaml "$CGRA_SOC_YAML" --arch-yaml "$CGRA_ARCH_YAML" --output "${RUNTIME_TARGET:-$ROOT_DIR/tests/generated/runtime_target.yaml}" --check
 fi
 
 if ((REBUILD)); then
@@ -212,7 +212,7 @@ fi
 echo "$BUILD_STEP Building $TEST_NAME -> $BIN_PATH"
 SOURCES=("$TEST_SRC")
 if ((WITH_RUNTIME)); then
-  SOURCES+=("$ROOT_DIR/runtime/soc_runtime.c" "$ROOT_DIR/runtime/gemmini.c" "$ROOT_DIR/runtime/cgra.c")
+  SOURCES+=("$ROOT_DIR/runtime/src/soc_runtime.c" "$ROOT_DIR/runtime/src/driver.c" "$ROOT_DIR/runtime/src/gemmini.c" "$ROOT_DIR/runtime/src/cgra.c")
 fi
 if uses_aes_manual; then
   SOURCES+=("$AES_SW/accellib.c")
@@ -226,7 +226,7 @@ riscv64-unknown-elf-gcc \
   -march=rv64imafd -mabi=lp64d -mcmodel=medany \
   -I "$ROOT_DIR/tests/include" \
   -I "$ROOT_DIR/tests" \
-  -I "$ROOT_DIR/runtime" \
+  -I "$ROOT_DIR/runtime/include" \
   -I "$ROOT_DIR/tests/cgra-gemmini/common" \
   -I "$AES_SW" \
   -I "$CHIPYARD_DIR/tests" \

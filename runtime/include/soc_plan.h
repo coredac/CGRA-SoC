@@ -1,12 +1,12 @@
 #ifndef SOC_PLAN_H
 #define SOC_PLAN_H
 
-#include "accel.h"
+#include "accel_types.h"
 #include "auto_link_types.h"
-#include "cgra_link.h"
-#include "gemmini_job.h"
+#include "cgra_types.h"
+#include "gemmini_types.h"
 
-#define SOC_PLAN_ABI 2
+#define SOC_PLAN_ABI 4
 
 typedef enum { SOC_MANUAL, SOC_HYBRID, SOC_AUTO } soc_mode_t;
 typedef enum { SOC_GEMMINI, SOC_CGRA } soc_kind_t;
@@ -22,14 +22,28 @@ typedef struct {
   unsigned funct;
   soc_operand_t rs1;
   soc_operand_t rs2;
+  unsigned patch_begin;
+  unsigned patch_count;
 } soc_command_t;
 
+/* DMA bytes count native SPM bytes, including packed INT8 transfers. */
 typedef struct {
   soc_operand_t source;
+  uintptr_t source_stride;
   unsigned word;
   unsigned bytes;
   unsigned tag;
+  unsigned packed;
 } soc_dma_t;
+
+typedef struct {
+  soc_kind_t kind;
+  unsigned endpoint;
+  unsigned word;
+  unsigned bytes;
+  unsigned packed;
+  soc_operand_t destination;
+} soc_output_t;
 
 /* All command selection, buffer placement and relocation comes from the plan. */
 typedef struct {
@@ -44,6 +58,10 @@ typedef struct {
   const gemmini_patch_t *patches;
   const cgra_kernel_t *kernel;
   const cgra_link_symbol_t *symbols;
+  unsigned full_config;
+  unsigned elements;
+  unsigned preload_count;
+  const soc_dma_t *preloads;
   unsigned dma_count;
   const soc_dma_t *dmas;
 } soc_task_t;
@@ -57,7 +75,6 @@ typedef struct {
   unsigned profile;
   unsigned collector;
   const auto_link_graph_t *graph;
-  const uintptr_t *destination_strides;
 } soc_step_t;
 
 typedef struct {
@@ -68,8 +85,14 @@ typedef struct {
   const accel_t *const *devices;
   unsigned task_count;
   const soc_task_t *tasks;
+  unsigned capture_count;
+  const unsigned *capture_tasks;
   unsigned step_count;
   const soc_step_t *steps;
+  unsigned profile_count;
+  const unsigned *profile_steps;
+  unsigned output_count;
+  const soc_output_t *outputs;
 } soc_plan_t;
 
 #endif

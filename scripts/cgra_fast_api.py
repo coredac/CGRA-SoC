@@ -29,63 +29,6 @@ DEFAULT_CONFIGS = (
     ROOT / "configs" / "kernels" / "kernel_histogram_4x4.yaml",
     ROOT / "configs" / "kernels" / "kernel_axpy_4x4.yaml",
 )
-SUPPORTED_CONFIGS = DEFAULT_CONFIGS + (
-    ROOT / "configs" / "kernels" / "kernel_add_relu_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_relu_tail_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_relu_runtime_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_add_relu_runtime_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_softmax_max_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_softmax_exp_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_softmax_norm_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_attention_max_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_attention_exp_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_attention_norm_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_sum_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_mean_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_squares_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_variance_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_sqrt_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_ln_norm_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_gelu_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_activation_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_requant_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_block_residual_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_gcn_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_gcn_aggregate_4x4.yaml",
-    ROOT / "configs" / "kernels" / "kernel_gcn_relu_4x4.yaml",
-)
-SUPPORTED_CONFIG_NAMES = {path.name for path in SUPPORTED_CONFIGS}
-SUPPORTED_KERNEL_NAMES = {
-    "fir4x4",
-    "relu4x4",
-    "gemv",
-    "histogram",
-    "axpy",
-    "add_relu",
-    "relu_tail",
-    "relu_runtime",
-    "add_relu_runtime",
-    "softmax_max",
-    "softmax_exp",
-    "softmax_norm",
-    "attention_max",
-    "attention_exp",
-    "attention_norm",
-    "block_ln_sum",
-    "block_ln_mean",
-    "block_ln_squares",
-    "block_ln_variance",
-    "block_ln_sqrt",
-    "block_ln_norm",
-    "block_gelu",
-    "block_activation",
-    "block_requant",
-    "block_residual",
-    "gcn",
-    "gcn_aggregate",
-    "gcn_relu",
-}
-
 for path in (SCRIPT_DIR, ROOT, VECTOR_ROOT):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
@@ -300,13 +243,8 @@ def load_kernel_config(path: Path, arch_yaml: Path, soc_yaml: Path) -> KernelCon
     execution = require_mapping(data, "execution", path)
 
     name = require_str(kernel, "name", path)
-    if name not in SUPPORTED_KERNEL_NAMES or path.name not in SUPPORTED_CONFIG_NAMES:
-        supported = ", ".join(sorted(SUPPORTED_CONFIG_NAMES))
-        raise ValueError(
-            f"{path}: unsupported single-CGRA fast kernel '{name}'. "
-            f"Supported configs are: {supported}"
-        )
-
+    if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name) is None:
+        raise ValueError(f"{path}: kernel name must be a C identifier")
     kernel_yaml = resolve_input_path(
         require_str(kernel, "kernel_yaml", path), path.parent
     )
@@ -823,6 +761,7 @@ def split_packets(cfg: KernelConfig, packets, types):
         replace(item, packet_index=prefix_count + indices[item.packet_index])
         for item in relocations
     ]
+    relocations.sort(key=lambda item: item.packet_index)
     return (
         complete_prologues(static, types),
         rearm + setup + runtime,
@@ -838,7 +777,7 @@ def render_runtime_section(cfg: KernelConfig, relocations) -> list[str]:
     prefix = cfg.name.upper()
     lines = [
         "",
-        "// Relocations index CONFIG_PACKETS followed by LAUNCH_PACKETS.",
+        "// Relocations are ordered by packet index: CONFIG_PACKETS then LAUNCH_PACKETS.",
         "// Fields: packet_index, symbol_index, scale, offset.",
         f"#define {prefix}_SYMBOL_COUNT {len(cfg.runtime_symbols)}",
     ]

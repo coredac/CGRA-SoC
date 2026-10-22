@@ -3,38 +3,9 @@
 
 #include "cgra_layout.h"
 #include "cgra_protocol.h"
+#include "cgra_types.h"
 #include <stddef.h>
 #include <stdint.h>
-
-typedef struct {
-  uint64_t lo;
-  uint64_t mid;
-  uint64_t hi;
-  uint64_t top;
-} cgra_packet_t;
-
-typedef struct {
-  uint32_t packet_index;
-  uint32_t symbol_index;
-  uint32_t scale;
-  uint32_t offset;
-} cgra_patch_t;
-
-typedef enum { CGRA_COLD, CGRA_REPEAT, CGRA_SWITCH } cgra_run_t;
-
-typedef struct {
-  const cgra_packet_t *static_packets;
-  uint32_t static_count;
-  const cgra_packet_t *config_packets;
-  uint32_t config_count;
-  uint32_t rearm_count;
-  uint32_t setup_count;
-  const cgra_packet_t *launch_packets;
-  uint32_t launch_count;
-  uint32_t expected_completes;
-  const cgra_patch_t *patches;
-  uint32_t patch_count;
-} cgra_kernel_t;
 
 #if CGRA_INTRA_PKT_NBITS > 256
 #error "cgra runtime packet send supports up to four 64-bit chunks"

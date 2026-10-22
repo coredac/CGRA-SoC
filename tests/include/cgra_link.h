@@ -14,14 +14,6 @@ typedef struct {
   uint32_t job;
 } cgra_link_result_t;
 
-enum { CGRA_LINK_SLOT = 0, CGRA_LINK_ELEMENTS = 1, CGRA_LINK_TILE_ID = 2, CGRA_LINK_ROW = 3, CGRA_LINK_ROWS = 4 };
-
-typedef struct {
-  uint32_t base;
-  uint32_t stride;
-  uint32_t source;
-} cgra_link_symbol_t;
-
 typedef struct {
   uint32_t job;
   const cgra_kernel_t *kernel;

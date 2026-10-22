@@ -1,104 +1,125 @@
 #!/usr/bin/env python3
-"""Check the hardware assumptions of Amoeba's fixed SoC target."""
+"""Export the generated SoC resources and kernel metadata for Amoeba."""
 
 import argparse
 from pathlib import Path
 
 import yaml
 
+from cgra_fast_api import (
+    build_packet_types,
+    load_kernel_config,
+    make_vector_cgra_packets,
+    ordered_packets,
+    split_packets,
+)
+from cgra_rtl_generator import load_soc_config
 from generate_accels import instance_layout
-from generate_auto_links import load_config
+from generate_auto_links import (
+    DEFAULT_CACHE_BLOCK_SCALA,
+    DEFAULT_CGRA_SCALA,
+    load_cgra_hardware,
+    load_config,
+)
+from generate_gemmini_ext_spm import write
 
 
-def check_target(soc_path, arch_path):
-    soc = yaml.safe_load(soc_path.read_text())
-    arch = yaml.safe_load(arch_path.read_text())
-    layout = instance_layout(soc)
+def kernel_metadata(path, arch_path, soc_path):
+    config = load_kernel_config(path, arch_path, soc_path)
+    runtime = yaml.safe_load(path.read_text())["runtime"]
+    types = build_packet_types(config)
+    packets = ordered_packets(config, make_vector_cgra_packets(config, types))
+    static, captured, _, _, _ = split_packets(config, packets, types)
+    return {
+        "name": config.name,
+        "header": f"generated/cgra_{config.name}_fast_api.h",
+        "symbol": config.name.upper(),
+        "input_bits": runtime["input_bits"],
+        "output_bits": runtime["output_bits"],
+        "tile_rows": runtime["tile_rows"],
+        "symbols": [item.role for item in config.runtime_symbols],
+        "packets": len(captured),
+        "static_packets": len(static),
+        "count_scale": config.runtime_count.scale,
+        "count_offset": config.runtime_count.offset,
+    }
+
+
+def target_metadata(soc_path, arch_path, kernels):
+    layout = instance_layout(yaml.safe_load(soc_path.read_text()))
     link = load_config(soc_path)
-    memory = soc["memory"]
-    instances = soc["communication"]["instances"]
-    errors = []
-    if any(
-        arch.get(name)
-        for name in ("cgra_overrides", "tile_overrides", "link_overrides")
-    ):
-        errors.append("the fixed ReLU mapping does not support architecture overrides")
-    if soc["execution"] != {"ctrl_count_bits": 16} or soc["interface"] != {
-        "num_tile_inports": 4,
-        "num_tile_outports": 4,
-        "num_fu_inports": 4,
-        "num_fu_outports": 2,
-        "data_nbits": 32,
-        "predicate_nbits": 1,
-    }:
-        errors.append("expected the attention execution counter and packet interface")
-    if [(item.name, item.kind, item.id, item.size) for item in layout.instances] != [
-        ("gemmini0", "gemmini", 0, 131072),
-        ("gemmini1", "gemmini", 1, 131072),
-        ("cgra0", "cgra", 2, 131072),
-    ]:
-        errors.append("expected Gemmini0/Gemmini1/CGRA0 with 128-KiB SPMs")
-    if (
-        arch["multi_cgra_defaults"] != {"rows": 1, "columns": 1}
-        or arch["cgra_defaults"] != {"rows": 4, "columns": 4, "configMemSize": 64}
-        or arch["tile_defaults"]["num_registers"] != 8
-        or arch["tile_defaults"]["fu_types"]
-        != [
-            "add",
-            "mul",
-            "div",
-            "logic",
-            "shift",
-            "cmp",
-            "sel",
-            "grant",
-            "phi",
-            "mem",
-            "return",
-            "gep",
-        ]
-        or memory["data_mem_size_global"] != 32768
-        or memory["data_mem_size_per_bank"] != 4096
-        or memory["num_banks_per_cgra"] != 8
-        or memory["num_registers_per_reg_bank"] != 8
-        or not memory["mem_access_is_combinational"]
-    ):
-        errors.append("expected the 4x4 attention CGRA with 32768 INT32 words")
-    if link.buffer_slots != {"gemmini0": 2, "gemmini1": 2, "cgra0": 2}:
-        errors.append("the fixed layout reserves exactly two slots per endpoint")
-    bridge = link.bridges.get("cgra0")
-    if bridge is None or bridge.outbound_word != 0 or bridge.outbound_words < 320:
-        errors.append("CGRA must expose at least 320 packed INT8 words from word 0")
-    if (
-        link.stage_capacity != 3
-        or link.dependency_capacity != 3
-        or link.run_capacity < 1
-        or link.result_capacity < 3
-        or any(link.jobs.get(name, 0) < 1 for name in instances)
-    ):
-        errors.append(
-            "expected three stage/edge slots and sufficient run/job/result capacity"
+    soc = load_soc_config(soc_path)
+    hardware = load_cgra_hardware(DEFAULT_CGRA_SCALA, DEFAULT_CACHE_BLOCK_SCALA)
+    devices = []
+    for device in layout.instances:
+        bridge = link.bridges.get(device.name)
+        gemmini = layout.gemminis.get(device.name, {})
+        devices.append(
+            {
+                "name": device.name,
+                "kind": device.kind,
+                "id": device.id,
+                "spm_bytes": device.size,
+                "slots": link.buffer_slots.get(device.name, 1),
+                "jobs": link.jobs[device.name],
+                "commands": (
+                    gemmini.get("command_capacity", 16)
+                    if device.kind == "gemmini"
+                    else 0
+                ),
+                "patches": (
+                    gemmini.get("patch_capacity", 32) if device.kind == "gemmini" else 0
+                ),
+                "packets": layout.cgra_packets.get(device.name, 0),
+                "packed_word": bridge.outbound_word if bridge else 0,
+                "packed_words": bridge.outbound_words if bridge else 0,
+            }
         )
-    for name, commands in (("gemmini0", 3), ("gemmini1", 4)):
-        limits = layout.gemminis.get(name, {})
-        if (
-            limits.get("command_capacity", 16) < commands
-            or limits.get("patch_capacity", 32) < 2
-        ):
-            errors.append(f"{name} cannot capture the fixed GEMM template")
-    if layout.cgra_packets.get("cgra0", 0) < 76:
-        errors.append("CGRA needs 76 captured ReLU packets")
-    return errors
+    collector = next(
+        (device.id for device in layout.instances if device.kind == "cgra"), None
+    )
+    if collector is None:
+        raise ValueError("target requires a CGRA result collector")
+    return {
+        "devices": devices,
+        "fabric": {
+            "stages": link.stage_capacity,
+            "edges": link.dependency_capacity,
+            "runs": link.run_capacity,
+            "results": link.result_capacity
+            or max(2, max(1, link.run_capacity) * link.stage_capacity),
+            "collector": collector,
+            "alignment": hardware.dma_beat_bytes,
+        },
+        "cgra": {
+            "word_bits": soc.data_nbits,
+            "counter_bits": soc.ctrl_count_bits,
+            "words": soc.data_mem_size_per_bank * soc.num_banks_per_cgra,
+        },
+        "kernel_sources": [str(path.resolve()) for path in kernels],
+        "kernels": [kernel_metadata(path, arch_path, soc_path) for path in kernels],
+    }
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--soc-yaml", type=Path, required=True)
     parser.add_argument("--arch-yaml", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--check", action="store_true")
+    parser.add_argument("kernels", nargs="*", type=Path)
     args = parser.parse_args()
-    for error in check_target(args.soc_yaml, args.arch_yaml):
-        print(f"runtime target: {error}")
-        return 1
+    try:
+        kernels = args.kernels
+        if args.check and not kernels:
+            sources = yaml.safe_load(args.output.read_text())["kernel_sources"]
+            kernels = [Path(path) for path in sources]
+        target = target_metadata(args.soc_yaml, args.arch_yaml, kernels)
+        content = "# Generated by scripts/runtime_target.py. Do not edit.\n"
+        content += yaml.safe_dump(target, sort_keys=False)
+        write(args.output, content, args.check)
+    except (OSError, KeyError, TypeError, ValueError) as error:
+        parser.exit(1, f"runtime target: {error}\n")
     return 0
 
 

@@ -33,6 +33,7 @@ typedef struct {
   uintptr_t destination_offset;
   uintptr_t source_stride;
   unsigned pixel_bytes;
+  uintptr_t destination_stride;
 } auto_link_edge_t;
 
 typedef struct {
