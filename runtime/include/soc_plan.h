@@ -5,8 +5,9 @@
 #include "auto_link_types.h"
 #include "cgra_types.h"
 #include "gemmini_types.h"
+#include "soc_driver.h"
 
-#define SOC_PLAN_ABI 4
+#define SOC_PLAN_ABI 5
 
 typedef enum { SOC_MANUAL, SOC_HYBRID, SOC_AUTO } soc_mode_t;
 typedef enum { SOC_GEMMINI, SOC_CGRA } soc_kind_t;
@@ -46,8 +47,8 @@ typedef struct {
 } soc_output_t;
 
 /* All command selection, buffer placement and relocation comes from the plan. */
-typedef struct {
-  soc_kind_t kind;
+struct soc_task {
+  const soc_driver_t *driver;
   unsigned endpoint;
   unsigned job;
   unsigned init_count;
@@ -64,7 +65,7 @@ typedef struct {
   const soc_dma_t *preloads;
   unsigned dma_count;
   const soc_dma_t *dmas;
-} soc_task_t;
+};
 
 /* CPU steps execute their task list for each tile; automatic steps launch a profile. */
 typedef struct {
@@ -77,6 +78,14 @@ typedef struct {
   const auto_link_graph_t *graph;
 } soc_step_t;
 
+typedef enum { SOC_INIT, SOC_CAPTURE, SOC_PROFILE } soc_prep_kind_t;
+
+/* Index selects a task for INIT/CAPTURE or an execution step for PROFILE. */
+typedef struct {
+  soc_prep_kind_t kind;
+  unsigned index;
+} soc_prep_t;
+
 typedef struct {
   unsigned abi;
   soc_mode_t mode;
@@ -85,12 +94,10 @@ typedef struct {
   const accel_t *const *devices;
   unsigned task_count;
   const soc_task_t *tasks;
-  unsigned capture_count;
-  const unsigned *capture_tasks;
+  unsigned prep_count;
+  const soc_prep_t *prep;
   unsigned step_count;
   const soc_step_t *steps;
-  unsigned profile_count;
-  const unsigned *profile_steps;
   unsigned output_count;
   const soc_output_t *outputs;
 } soc_plan_t;

@@ -55,9 +55,7 @@ $ mkdir -p build tests/generated
 $ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
 $ chipyard/.conda-env/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml --output tests/generated/runtime_target.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
 $ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/pipeline.mlir --soc-assign="target=tests/generated/runtime_target.yaml" --soc-emit-plan="output=tests/generated/runtime_plan.h" -o /dev/null
-$ cc -std=gnu11 -O2 -I runtime/include -I tests -I tests/include -I chipyard/tests -I chipyard/generators/gemmini/software/gemmini-rocc-tests -I chipyard/generators/gemmini/software/gemmini-rocc-tests/include tests/runtime/plan.c -o build/runtime-plan-check
-$ build/runtime-plan-check
-$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/pipeline.c
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/gemm_relu_gemm.c
 ```
 
 Omit `--rebuild` only when reusing a simulator for this same design. The test checks two consecutive inputs in each mode against a CPU reference, then returns to Manual to check mode transitions. It reports preparation, execution and total target cycles, plus automatic launches and CPU task submissions. Input/weight loading and configuration are included in preparation; output DMA and completion collection are included in execution. Reference computation and output checking are outside timing. Interface and supported-shape details are in [the runtime contract](docs/contracts.md#compiler-and-runtime).
@@ -68,14 +66,14 @@ A second example uses a 12×8 GEMM followed by terminal CGRA ReLU, with a four-r
 
 ```shell
 $ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/terminal.mlir --soc-assign="target=tests/generated/runtime_target.yaml tile-rows=4" --soc-emit-plan="output=tests/generated/runtime_terminal.h" -o /dev/null
-$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/terminal.c
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/gemm_relu.c
 ```
 
 The shared-CGRA example runs ReLU→GEMM→AddReLU, with host input preloads and two mappings on one CGRA:
 
 ```shell
 $ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/shared.mlir --soc-assign="target=tests/generated/runtime_target.yaml tile-rows=4" --soc-emit-plan="output=tests/generated/runtime_shared.h" -o /dev/null
-$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/shared.c
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/relu_gemm_add_relu.c
 ```
 
 ## Supported Flows

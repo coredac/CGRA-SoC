@@ -90,6 +90,6 @@ int main(void) {
              ctx.stats.total_cycles, ctx.stats.automatic_launches, ctx.stats.cpu_task_submissions);
     }
   }
-  puts("Runtime pipeline: PASS");
+  puts("Runtime GEMM-ReLU-GEMM: PASS");
   return 0;
 }

@@ -16,11 +16,11 @@ static inline uint64_t soc_operand(const soc_context_t *context, soc_operand_t o
   __builtin_unreachable();
 }
 
-void soc_gemmini_init(const soc_context_t *context, const soc_task_t *task);
+int soc_gemmini_init(const soc_context_t *context, const soc_task_t *task);
 int soc_gemmini_capture(const soc_context_t *context, const soc_task_t *task);
-void soc_gemmini_execute(const soc_context_t *context, const soc_task_t *task, unsigned tile);
+int soc_gemmini_execute(soc_context_t *context, const soc_task_t *task, unsigned tile);
 
-int soc_cgra_preload(const soc_context_t *context, const soc_task_t *task);
+int soc_cgra_init(const soc_context_t *context, const soc_task_t *task);
 int soc_cgra_capture(const soc_context_t *context, const soc_task_t *task);
 int soc_cgra_execute(soc_context_t *context, const soc_task_t *task, unsigned tile);
 int soc_cgra_store(const soc_context_t *context, const soc_output_t *output);

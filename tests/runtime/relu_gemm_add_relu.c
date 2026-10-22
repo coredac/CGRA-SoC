@@ -66,6 +66,6 @@ int main(void) {
       return 1;
     }
   }
-  puts("Runtime shared: PASS");
+  puts("Runtime ReLU-GEMM-AddReLU: PASS");
   return 0;
 }

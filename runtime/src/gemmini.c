@@ -40,9 +40,11 @@ static void commands(const soc_context_t *context, const soc_command_t *list, un
   }
 }
 
-void soc_gemmini_init(const soc_context_t *context, const soc_task_t *task) {
+int soc_gemmini_init(const soc_context_t *context, const soc_task_t *task) {
   const accel_t device = *context->plan->devices[task->endpoint];
   accel_commands(device, { commands(context, task->init, task->init_count); });
+  __asm__ volatile("fence iorw, iorw" ::: "memory");
+  return 0;
 }
 
 int soc_gemmini_capture(const soc_context_t *context, const soc_task_t *task) {
@@ -81,7 +83,7 @@ static uint64_t patched(const gemmini_patch_t *patch, uint64_t original, unsigne
   return (original & ~mask) | ((value << patch->lsb) & mask);
 }
 
-void soc_gemmini_execute(const soc_context_t *context, const soc_task_t *task, unsigned tile) {
+int soc_gemmini_execute(soc_context_t *context, const soc_task_t *task, unsigned tile) {
   const accel_t device = *context->plan->devices[task->endpoint];
   accel_commands(device, {
     for (unsigned index = 0; index < task->command_count; ++index) {
@@ -94,4 +96,7 @@ void soc_gemmini_execute(const soc_context_t *context, const soc_task_t *task, u
       command(entry->funct, operands[0], operands[1]);
     }
   });
+  return 0;
 }
+
+const soc_driver_t soc_gemmini_driver = {.init = soc_gemmini_init, .capture = soc_gemmini_capture, .execute = soc_gemmini_execute};

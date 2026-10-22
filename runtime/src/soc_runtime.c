@@ -21,39 +21,35 @@ static void capture_step(const soc_context_t *context, const soc_step_t *step) {
   auto_link_run_config(step->profile);
 }
 
+static int prepare(const soc_context_t *context, const soc_prep_t *operation) {
+  const soc_plan_t *plan = context->plan;
+  switch (operation->kind) {
+  case SOC_INIT: {
+    const soc_task_t *task = &plan->tasks[operation->index];
+    return task->driver->init(context, task);
+  }
+  case SOC_CAPTURE: {
+    const soc_task_t *task = &plan->tasks[operation->index];
+    return task->driver->capture(context, task);
+  }
+  case SOC_PROFILE:
+    capture_step(context, &plan->steps[operation->index]);
+    return 0;
+  }
+  __builtin_unreachable();
+}
+
 int soc_prepare(soc_context_t *context, const soc_plan_t *plan, const uintptr_t *arguments) {
   const unsigned long begin = cycles();
   context->plan = plan;
   context->arguments = arguments;
   context->stats = (soc_stats_t){0};
-  for (unsigned index = 0; index < plan->device_count; ++index) {
-    context->states[index].last = NULL;
-    context->states[index].loaded = NULL;
-  }
-  for (unsigned index = 0; index < plan->task_count; ++index) {
-    const soc_task_t *task = &plan->tasks[index];
-    if (task->kind == SOC_GEMMINI) {
-      soc_gemmini_init(context, task);
-    }
-  }
-  __asm__ volatile("fence iorw, iorw" ::: "memory");
-  for (unsigned index = 0; index < plan->task_count; ++index) {
-    const soc_task_t *task = &plan->tasks[index];
-    if (task->kind == SOC_CGRA && soc_cgra_preload(context, task) != 0) {
-      return 1;
-    }
-  }
-  for (unsigned index = 0; index < plan->capture_count; ++index) {
-    const unsigned id = plan->capture_tasks[index];
-    const soc_task_t *task = &plan->tasks[id];
-    const int status = task->kind == SOC_GEMMINI ? soc_gemmini_capture(context, task) : soc_cgra_capture(context, task);
+  for (unsigned index = 0; index < plan->prep_count; ++index) {
+    const int status = prepare(context, &plan->prep[index]);
     if (status != 0) {
-      printf("SoC runtime: capture failed task=%u\n", id);
+      printf("SoC runtime: preparation failed operation=%u\n", index);
       return status;
     }
-  }
-  for (unsigned index = 0; index < plan->profile_count; ++index) {
-    capture_step(context, &plan->steps[plan->profile_steps[index]]);
   }
   __asm__ volatile("fence iorw, iorw" ::: "memory");
   context->stats.prepare_cycles = cycles() - begin;
@@ -66,12 +62,9 @@ static int cpu_step(soc_context_t *context, const soc_step_t *step) {
     for (unsigned index = 0; index < step->task_count; ++index) {
       const soc_task_t *task = &context->plan->tasks[step->tasks[index]];
       ++context->stats.cpu_task_submissions;
-      if (task->kind == SOC_CGRA) {
-        if (soc_cgra_execute(context, task, tile) != 0) {
-          return 1;
-        }
-      } else {
-        soc_gemmini_execute(context, task, tile);
+      const int status = task->driver->execute(context, task, tile);
+      if (status != 0) {
+        return status;
       }
       __asm__ volatile("fence iorw, iorw" ::: "memory");
     }
@@ -95,10 +88,8 @@ static int automatic_step(soc_context_t *context, const soc_step_t *step) {
         ++failures;
       } else {
         const soc_task_t *task = &context->plan->tasks[step->tasks[result.stage]];
-        if (task->kind == SOC_CGRA) {
-          context->states[task->endpoint].started = 1;
-          context->states[task->endpoint].last = NULL;
-          context->states[task->endpoint].loaded = NULL;
+        if (task->driver->complete) {
+          task->driver->complete(context, task);
         }
       }
       seen |= bit;

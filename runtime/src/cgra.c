@@ -100,7 +100,10 @@ static int wait_dma(unsigned tag) {
   return 0;
 }
 
-int soc_cgra_preload(const soc_context_t *context, const soc_task_t *task) {
+int soc_cgra_init(const soc_context_t *context, const soc_task_t *task) {
+  soc_state_t *state = &context->states[task->endpoint];
+  state->last = NULL;
+  state->loaded = NULL;
   const accel_t device = *context->plan->devices[task->endpoint];
   for (unsigned index = 0; index < task->preload_count; ++index) {
     const soc_dma_t *dma = &task->preloads[index];
@@ -185,3 +188,12 @@ int soc_cgra_store(const soc_context_t *context, const soc_output_t *output) {
   });
   return status;
 }
+
+static void complete(soc_context_t *context, const soc_task_t *task) {
+  soc_state_t *state = &context->states[task->endpoint];
+  state->started = 1;
+  state->last = NULL;
+  state->loaded = NULL;
+}
+
+const soc_driver_t soc_cgra_driver = {.init = soc_cgra_init, .capture = soc_cgra_capture, .execute = soc_cgra_execute, .complete = complete};

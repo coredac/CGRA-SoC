@@ -50,6 +50,6 @@ int main(void) {
       return 1;
     }
   }
-  puts("Runtime terminal: PASS");
+  puts("Runtime GEMM-ReLU: PASS");
   return 0;
 }
