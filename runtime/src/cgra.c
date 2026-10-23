@@ -50,14 +50,11 @@ static void send(const soc_task_t *task, unsigned tile, const cgra_packet_t *pac
 
 static void prepare(const soc_task_t *task, cgra_run_t mode, unsigned tile, unsigned *cursor) {
   const cgra_kernel_t *kernel = task->kernel;
-  if (mode != CGRA_COLD) {
-    send(task, tile, kernel->config_packets, 0, kernel->rearm_count, cursor);
+  cgra_span_t spans[2];
+  cgra_config_spans(kernel, mode, spans);
+  for (unsigned index = 0; index < 2; ++index) {
+    send(task, tile, kernel->config_packets + spans[index].first, spans[index].first, spans[index].count, cursor);
   }
-  if (mode != CGRA_REPEAT) {
-    send(task, tile, kernel->config_packets + kernel->rearm_count, kernel->rearm_count, kernel->setup_count, cursor);
-  }
-  const unsigned first = kernel->rearm_count + kernel->setup_count;
-  send(task, tile, kernel->config_packets + first, first, kernel->config_count - first, cursor);
 }
 
 int soc_cgra_capture(const soc_context_t *context, const soc_task_t *task) {
@@ -104,19 +101,22 @@ int soc_cgra_init(const soc_context_t *context, const soc_task_t *task) {
   soc_state_t *state = &context->states[task->endpoint];
   state->last = NULL;
   state->loaded = NULL;
+  if (task->preload_count == 0) {
+    return 0;
+  }
   const accel_t device = *context->plan->devices[task->endpoint];
-  for (unsigned index = 0; index < task->preload_count; ++index) {
-    const soc_dma_t *dma = &task->preloads[index];
-    int status = 0;
-    accel_commands(device, {
+  int status = 0;
+  accel_commands(device, {
+    for (unsigned index = 0; index < task->preload_count; ++index) {
+      const soc_dma_t *dma = &task->preloads[index];
       input_dma(context, dma, 0);
       status = wait_dma(dma->tag);
-    });
-    if (status != 0) {
-      return status;
+      if (status != 0) {
+        break;
+      }
     }
-  }
-  return 0;
+  });
+  return status;
 }
 
 static int load(const soc_context_t *context, const soc_task_t *task, cgra_run_t mode, unsigned tile, unsigned *cursor) {

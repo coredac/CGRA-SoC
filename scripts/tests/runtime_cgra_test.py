@@ -1,4 +1,4 @@
-"""Compare streamed manual CGRA packets with the previous copy-and-patch path."""
+"""Check CGRA packet ordering and preload target selection."""
 
 import subprocess
 import tempfile
@@ -23,7 +23,7 @@ MOCK = r"""
 #define AUTO_LINK_STATUS_SUCCESS 0
 typedef uint64_t cgra_dma_desc_t;
 static cgra_packet_t sent[32], pending;
-static unsigned sent_count, selections, expected_count, dma_waits;
+static unsigned sent_count, selections, expected_count, dma_waits, dma_loads, fail_dma;
 #undef accel_commands
 #define accel_commands(device, ...) do { (void)(device); ++selections; __VA_ARGS__ } while (0)
 #define CGRA_RAW_PKT_LO(value) (pending.lo = (value))
@@ -35,9 +35,9 @@ static unsigned sent_count, selections, expected_count, dma_waits;
 #define CGRA_STATUS(value) ((value) = 1 | (expected_count << 1))
 #define CGRA_RESULT(value) ((value) = 0)
 #include "cgra_runtime.h"
-static void cgra_dma_mvin_async(const void *source, cgra_dma_desc_t desc) { (void)source; (void)desc; }
+static void cgra_dma_mvin_async(const void *source, cgra_dma_desc_t desc) { (void)source; (void)desc; ++dma_loads; }
 static void cgra_dma_mvin_i8_async(const void *source, cgra_dma_desc_t desc) { cgra_dma_mvin_async(source, desc); }
-static uint8_t cgra_dma_wait(uint8_t tag) { ++dma_waits; return tag; }
+static uint8_t cgra_dma_wait(uint8_t tag) { ++dma_waits; return dma_waits == fail_dma ? tag ^ 1 : tag; }
 void cgra_dma_mvout_async(void *, cgra_dma_desc_t);
 void cgra_dma_mvout_i8_async(void *, cgra_dma_desc_t);
 int cgra_job_full_at(uintptr_t, uint32_t, const cgra_kernel_t *, const cgra_link_symbol_t *, uint32_t);
@@ -50,7 +50,7 @@ SOURCE = r"""
 #include <string.h>
 #include "runtime/src/cgra.c"
 
-static void reference(const soc_task_t *task, unsigned tile, cgra_run_t mode) {
+static int reference(const soc_task_t *task, unsigned tile, cgra_run_t mode) {
   cgra_kernel_t kernel = *task->kernel;
   cgra_packet_t packets[16];
   memcpy(packets, kernel.config_packets, kernel.config_count * sizeof(*packets));
@@ -73,8 +73,20 @@ static void reference(const soc_task_t *task, unsigned tile, cgra_run_t mode) {
   }
   kernel.config_packets = packets;
   kernel.launch_packets = packets + kernel.config_count;
+  const unsigned begin = sent_count;
+  // Keep the original three-section sequence independent of the shared helper.
+  if (mode != CGRA_COLD) cgra_send_packets_fast(packets, kernel.rearm_count);
+  if (mode != CGRA_REPEAT) cgra_send_packets_fast(packets + kernel.rearm_count, kernel.setup_count);
+  const unsigned first = kernel.rearm_count + kernel.setup_count;
+  cgra_send_packets_fast(packets + first, kernel.config_count - first);
+  cgra_start(&kernel);
+  cgra_packet_t expected[32];
+  const unsigned count = sent_count;
+  memcpy(expected, sent, count * sizeof(*sent));
+  sent_count = begin;
   cgra_prepare(&kernel, mode);
   cgra_start(&kernel);
+  return sent_count != count || memcmp(sent, expected, count * sizeof(*sent)) != 0;
 }
 
 int main(void) {
@@ -109,7 +121,10 @@ int main(void) {
           state = (soc_state_t){.started = mode != CGRA_COLD, .last = mode == CGRA_REPEAT ? &task : &other, .loaded = mode == CGRA_REPEAT ? &kernel : NULL};
           sent_count = 0;
           if (state.loaded != &kernel) cgra_send_packets_fast(kernel.static_packets, kernel.static_count);
-          reference(&task, tile, mode);
+          if (reference(&task, tile, mode)) {
+            fprintf(stderr, "native preparation mismatch mode=%u\n", mode);
+            return 1;
+          }
           cgra_packet_t expected[32];
           unsigned count = sent_count;
           memcpy(expected, sent, count * sizeof(*sent));
@@ -121,6 +136,23 @@ int main(void) {
         }
       }
     }
+  }
+  const soc_dma_t preloads[] = {{.bytes = 4, .tag = 3}, {.bytes = 8, .tag = 4, .packed = 1}, {.bytes = 4, .tag = 5}};
+  task.preloads = preloads;
+  for (unsigned count = 0; count <= 3; ++count) {
+    task.preload_count = count;
+    state = (soc_state_t){.started = 1, .last = &task, .loaded = &kernel};
+    selections = dma_waits = dma_loads = 0;
+    if (soc_cgra_init(&context, &task) != 0 || selections != (count != 0) || dma_loads != count || dma_waits != count || !state.started || state.last || state.loaded) {
+      fprintf(stderr, "preload mismatch count=%u\n", count);
+      return 1;
+    }
+  }
+  fail_dma = 2;
+  selections = dma_waits = dma_loads = 0;
+  if (soc_cgra_init(&context, &task) == 0 || selections != 1 || dma_loads != 2 || dma_waits != 2) {
+    fprintf(stderr, "preload did not stop after DMA failure\n");
+    return 1;
   }
   return 0;
 }

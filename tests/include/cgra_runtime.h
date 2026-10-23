@@ -26,18 +26,25 @@ static inline void cgra_send_packets_fast(const cgra_packet_t *pkts, size_t coun
   }
 }
 
+typedef struct {
+  unsigned first;
+  unsigned count;
+} cgra_span_t;
+
+// COLD skips rearm; REPEAT skips setup; SWITCH sends both.
+static inline void cgra_config_spans(const cgra_kernel_t *kernel, cgra_run_t mode, cgra_span_t spans[2]) {
+  const unsigned first = kernel->rearm_count + (mode == CGRA_REPEAT ? kernel->setup_count : 0);
+  spans[0] = (cgra_span_t){0, mode == CGRA_COLD ? 0 : kernel->rearm_count};
+  spans[1] = (cgra_span_t){first, kernel->config_count - first};
+}
+
 // COLD is the first physical CGRA run after reset; REPEAT reuses fixed setup.
 static inline void cgra_prepare(const cgra_kernel_t *kernel, cgra_run_t mode) {
-  const cgra_packet_t *packets = kernel->config_packets;
-  if (mode != CGRA_COLD) {
-    cgra_send_packets_fast(packets, kernel->rearm_count);
+  cgra_span_t spans[2];
+  cgra_config_spans(kernel, mode, spans);
+  for (unsigned index = 0; index < 2; ++index) {
+    cgra_send_packets_fast(kernel->config_packets + spans[index].first, spans[index].count);
   }
-  packets += kernel->rearm_count;
-  if (mode != CGRA_REPEAT) {
-    cgra_send_packets_fast(packets, kernel->setup_count);
-  }
-  packets += kernel->setup_count;
-  cgra_send_packets_fast(packets, kernel->config_count - kernel->rearm_count - kernel->setup_count);
 }
 
 static inline void cgra_config(const cgra_kernel_t *kernel, cgra_run_t mode) {
