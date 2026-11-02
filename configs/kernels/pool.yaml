@@ -1,0 +1,15 @@
+# Complete native global-average Pool with INT8 input and output.
+kind: pool
+kernel:
+  name: pool_average
+runtime:
+  input_bits: [[8]]
+  output_bits: [[8]]
+  input_shapes: [[p, c]]
+  output_shapes: [[s, c]]
+  tile_rows: 1
+  max_tile_rows: 1
+  shape_limits: {s: 1}
+  whole_inputs: [0]
+  complete: true
+  parameters: [rows, columns, channels]

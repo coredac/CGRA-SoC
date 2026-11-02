@@ -1,0 +1,16 @@
+# Native INT8/INT32 Gemmini tile interface; limits follow its DIM=16 ABI.
+kind: gemmini
+kernel:
+  name: gemmini_i8
+runtime:
+  input_bits: [[8], [8]]
+  output_bits: [[32]]
+  input_shapes: [[m, k], [k, n]]
+  output_shapes: [[m, n]]
+  tile_rows: 16
+  max_tile_rows: 16
+  shape_limits: {k: 16, n: 16}
+  whole_inputs: [1]
+  # Conservative capture bounds for every supported preload/publish/store choice.
+  commands: 8
+  patches: 3

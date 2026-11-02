@@ -1,8 +1,72 @@
 #ifndef GEMMINI_CONV_H
 #define GEMMINI_CONV_H
 
+#include "../../runtime/planning/workspace.h"
 #include "gemmini.h"
 #include "gemmini_job.h"
+
+/* Complete native NHWC invocation; a_spad_id=b_spad_id=1 reserves the lower half. */
+#define GEMMINI_CONV_COMMANDS 9
+
+typedef struct {
+  unsigned input_rows, input_columns, input_channels;
+  unsigned output_rows, output_columns, output_channels;
+  unsigned kernel, stride, dilation, padding_top, padding_left;
+  const elem_t *input, *weight;
+  const acc_t *bias;
+  elem_t *output;
+  int activation;
+  acc_scale_t scale;
+} gemmini_conv_t;
+
+static inline int gemmini_conv_valid(const gemmini_conv_t *p, unsigned input_elements, unsigned weight_elements, unsigned output_elements) {
+  const unsigned dimensions[] = {p->input_rows, p->input_columns, p->input_channels, p->output_rows, p->output_columns, p->output_channels, p->kernel, p->dilation};
+  for (unsigned index = 0; index < sizeof(dimensions) / sizeof(dimensions[0]); ++index) {
+    if (!dimensions[index] || dimensions[index] > UINT16_MAX) {
+      return 0;
+    }
+  }
+  /* Native command fields use eight-bit stride/top and ten-bit dilation. */
+  if (!p->stride || p->stride > UINT8_MAX || p->padding_top > UINT8_MAX || p->padding_left > UINT16_MAX || p->dilation > 1023) {
+    return 0;
+  }
+  if ((uint64_t)p->input_rows * p->input_columns * p->input_channels != input_elements || (uint64_t)p->kernel * p->kernel * p->input_channels * p->output_channels != weight_elements ||
+      (uint64_t)p->output_rows * p->output_columns * p->output_channels != output_elements) {
+    return 0;
+  }
+  const uint64_t extent = (uint64_t)(p->kernel - 1) * p->dilation;
+  const uint64_t rows = (uint64_t)p->output_rows * p->stride + extent;
+  const uint64_t columns = (uint64_t)p->output_columns * p->stride + extent;
+  if (rows > BANK_NUM * BANK_ROWS || columns > BANK_NUM * BANK_ROWS || p->padding_top > extent || p->padding_left > extent) {
+    return 0;
+  }
+  if (rows > (uint64_t)p->padding_top + p->input_rows + UINT8_MAX || columns > (uint64_t)p->padding_left + p->input_columns + UINT16_MAX) {
+    return 0;
+  }
+  return gemmini_workspace_fits(gemmini_conv_workspace(p->output_rows, p->output_columns, p->input_channels, p->output_channels, p->kernel, p->stride, p->dilation));
+}
+
+/* Manual submission and capture share these native commands. */
+static inline void gemmini_conv_emit(const gemmini_conv_t *p) {
+  const int extent = (p->kernel - 1) * p->dilation;
+  const int bottom = (int)(p->output_rows * p->stride) + extent - (int)p->padding_top - (int)p->input_rows;
+  const int right = (int)(p->output_columns * p->stride) + extent - (int)p->padding_left - (int)p->input_columns;
+  gemmini_extended_config_st(p->output_channels * sizeof(elem_t), p->activation, p->scale);
+  gemmini_extended3_config_ex(WEIGHT_STATIONARY, 0, 0, 0, 1, p->stride, false, false, false);
+  const acc_t *accumulator = p->bias == NULL ? (const acc_t *)(uintptr_t)1 : p->bias;
+  sp_tiled_conv(1, p->input_rows, p->input_columns, p->input_channels, p->output_channels, p->output_rows, p->output_columns, p->output_rows, p->output_columns, p->stride, p->padding_top, p->kernel,
+                p->dilation, p->input_channels, p->output_channels, p->output_channels, 1, 1, 0, 1, p->output_rows, p->output_columns, p->output_channels, p->kernel, p->kernel, p->input_channels,
+                p->padding_left, right > 0 ? right : 0, p->padding_top, bottom > 0 ? bottom : 0, 0, 0, 0, 0, p->input, p->weight, p->output, accumulator, p->activation, p->scale, false, false, false,
+                false, false, p->bias == NULL, true, false, false, false, 1, 1);
+}
+
+static inline int gemmini_conv_capture(uintptr_t control, unsigned job, const gemmini_conv_t *params) {
+  if (gemmini_job_capture_at(control, job, GEMMINI_CONV_COMMANDS, 0)) {
+    return 1;
+  }
+  gemmini_conv_emit(params);
+  return gemmini_job_end_at(control);
+}
 
 // Batch-one NHWC with trusted native storage and tile dimensions.
 static inline int gemmini_capture_conv_at(uintptr_t control, uint32_t job, int input_rows, int input_columns, int input_channels, int output_channels, int kernel, int stride, int padding,
@@ -36,15 +100,24 @@ static inline int gemmini_capture_conv_at(uintptr_t control, uint32_t job, int i
   for (unsigned index = 0; index < count; ++index) {
     gemmini_job_patch_at(control, &patches[index]);
   }
-  const int bottom = tile_rows * stride + extent - padding - input_rows;
-  const int right = tile_columns * stride + extent - padding - input_columns;
-  gemmini_extended_config_st(output_channels * sizeof(elem_t), activation, scale);
-  gemmini_extended3_config_ex(WEIGHT_STATIONARY, 0, 0, 0, 1, stride, false, false, false);
-  // A non-null ignored bias pointer requests a fresh zero accumulator in native loop_conv.
-  const acc_t *accumulator = bias == NULL ? (const acc_t *)(uintptr_t)1 : bias;
-  sp_tiled_conv(1, input_rows, input_columns, input_channels, output_channels, tile_rows, tile_columns, tile_rows, tile_columns, stride, padding, kernel, dilation, input_channels, output_channels,
-                output_channels, 1, 1, 0, 1, tile_rows, tile_columns, output_channels, kernel, kernel, input_channels, padding, right > 0 ? right : 0, padding, bottom > 0 ? bottom : 0, 0, 0, 0, 0,
-                input, weights, output, accumulator, activation, scale, false, false, false, false, false, bias == NULL, true, false, false, false, 1, 1);
+  const gemmini_conv_t params = {.input_rows = input_rows,
+                                 .input_columns = input_columns,
+                                 .input_channels = input_channels,
+                                 .output_rows = tile_rows,
+                                 .output_columns = tile_columns,
+                                 .output_channels = output_channels,
+                                 .kernel = kernel,
+                                 .stride = stride,
+                                 .dilation = dilation,
+                                 .padding_top = padding,
+                                 .padding_left = padding,
+                                 .input = input,
+                                 .weight = weights,
+                                 .bias = bias,
+                                 .output = output,
+                                 .activation = activation,
+                                 .scale = scale};
+  gemmini_conv_emit(&params);
   return gemmini_job_end_at(control);
 }
 

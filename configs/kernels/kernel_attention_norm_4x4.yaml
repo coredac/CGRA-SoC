@@ -1,9 +1,19 @@
+kind: cgra
 kernel:
   name: attention_norm
   kernel_yaml: VectorCGRA/validation/test/attention_norm.yaml
   required_words: 12416
   bindings: {arg0: 4160, arg1: 8256, arg2: 8320, arg3: 128, arg4: 2048}
 runtime:
+  input_bits: [[32], [32]]
+  output_bits: [[8, 32]]
+  input_shapes: [[m, n], [m, s]]
+  output_shapes: [[m, n]]
+  iteration_shape: [m, n]
+  tile_rows: 4
+  max_tile_rows: 65535
+  shape_limits: {s: 1}
+  whole_inputs: []
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: input1}

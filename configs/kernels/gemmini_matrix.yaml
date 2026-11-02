@@ -1,0 +1,21 @@
+# Complete INT8 matrix multiplication with broadcast INT32 bias and output.
+kind: gemmini_matrix
+kernel:
+  name: gemmini_matrix
+runtime:
+  query:
+    library: ../../build/native-query.so
+    symbol: amoeba_query_matrix
+  input_bits: [[8], [8], [32]]
+  output_bits: [[32]]
+  input_shapes: [[a, b], [c, d], [s, n]]
+  output_shapes: [[m, n]]
+  tile_rows: 16
+  max_tile_rows: 65535
+  shape_limits: {s: 1}
+  whole_inputs: [0, 1, 2]
+  parameters: [m, k, n, transpose_a, transpose_b]
+  complete: true
+  workspace_divisor: 2
+  commands: 12
+  patches: 0

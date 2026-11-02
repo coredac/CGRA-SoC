@@ -10,3 +10,6 @@
 [submodule "OpenFPGA"]
 	path = OpenFPGA
 	url = https://github.com/lnis-uofu/OpenFPGA.git
+[submodule "amoeba"]
+	path = amoeba
+	url = https://github.com/HobbitQia/amoeba.git

@@ -522,6 +522,107 @@ jobs:
             chipyard/build-setup.log
           if-no-files-found: ignore
 
+  runtime-tests:
+    name: Compiler and runtime / small applications
+    needs: changes
+    if: ${{ !cancelled() && inputs.gpt2_shape != 'wide' && inputs.gpt2_shape != 'n64' && (needs.changes.result != 'success' || needs.changes.outputs.hardware == 'true') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    env:
+      CONFIG: MultiAccelRocketConfig
+      LOADMEM: '1'
+      RANDOM_SEED: '1'
+      MAKEFLAGS: '-j2 VERILATOR_THREADS=2'
+      timeout_cycles: '12000000'
+
+    steps:
+      - name: Require successful change classification
+        if: needs.changes.result != 'success'
+        run: exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Install compiler build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld cmake ninja-build ccache
+          git submodule sync -- amoeba
+          git submodule update --init -- amoeba
+
+      - name: Cache pinned LLVM and MLIR
+        uses: actions/cache@v4
+        with:
+          path: build/llvm-project
+          key: llvm-mlir-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/scripts/setup-amoeba.sh') }}
+
+      - name: Build Amoeba SoC compiler
+        run: .github/scripts/setup-amoeba.sh 2>&1 | tee runtime-compiler.log
+
+      - name: Check SoC compiler
+        run: build/llvm-project/build/bin/llvm-lit -sv --filter='Backend/SoC|TaskflowDialect' amoeba/build/test 2>&1 | tee runtime-compiler-tests.log
+
+      - name: Configure Chipyard and VectorCGRA environment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/setup-cgra-soc-env.sh --skip-openfpga
+
+      - name: Generate runtime hardware
+        run: |
+          .venv/bin/python scripts/generate_single_cgra.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml
+          for generator in gemmini_ext_spm cgra_link_control auto_links accels cgra_spm_window; do
+            .venv/bin/python "scripts/generate_${generator}.py" --soc-yaml configs/soc/autolink/runtime.yaml
+          done
+
+      - name: Build shared runtime simulator
+        run: |
+          source chipyard/env.sh
+          export LD_LIBRARY_PATH="$PWD/chipyard/.conda-env/lib:${LD_LIBRARY_PATH:-}"
+          make -C chipyard/sims/verilator CONFIG="$CONFIG" 2>&1 | tee runtime-build.log
+
+      - name: Export native interfaces and compile small application plans
+        run: |
+          make -C runtime/planning
+          kernels=(
+            configs/kernels/kernel_{relu_runtime,add_relu_runtime,softmax_max,softmax_exp,softmax_norm,block_requant,block_activation,block_residual,attention_max,attention_exp,attention_norm,gcn}_4x4.yaml
+            configs/kernels/kernel_block_ln_*_4x4.yaml
+          )
+          .venv/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml "${kernels[@]}"
+          .venv/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml \
+            --output tests/generated/runtime_target.yaml configs/kernels/gemmini_{tile,conv,matrix,copy}.yaml configs/kernels/pool.yaml "${kernels[@]}"
+          for app in resnet gcn gpt2; do
+            .venv/bin/python "scripts/${app}_plan.py" "tests/runtime/${app}.json" --dma-bytes 16 \
+              --output "tests/generated/runtime_${app}.mlir" --header "tests/generated/runtime_${app}_data.h"
+            amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt "tests/generated/runtime_${app}.mlir" \
+              --soc-assign=target=tests/generated/runtime_target.yaml --soc-emit-plan="output=tests/generated/runtime_${app}.h" -o /dev/null
+          done
+
+      - name: Check runtime host behavior
+        run: .venv/bin/python -m unittest discover -s scripts/tests -p 'runtime_*_test.py' -v 2>&1 | tee runtime-host-tests.log
+
+      - name: Run small applications in Manual, Hybrid and Auto
+        run: |
+          for app in resnet gcn gpt2; do
+            ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml \
+              --soc-yaml configs/soc/autolink/runtime.yaml "tests/runtime/${app}.c" 2>&1 | tee "runtime-${app}.log"
+            grep -Fxq 'PASS' "runtime-${app}.log"
+          done
+
+      - name: Upload compiler and runtime results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-small-applications
+          path: |
+            runtime-*.log
+            tests/generated/runtime_*.mlir
+            tests/generated/runtime_*.h
+            tests/generated/runtime_target.yaml
+            chipyard/build-setup.log
+          if-no-files-found: ignore
+
   gpt2-dispatch-tests:
     name: GPT-2 ${{ inputs.gpt2_shape }} / ${{ matrix.mode }}
     needs: changes

@@ -7,6 +7,7 @@ CGRA-SoC is the top-level integration and runtime repository for VectorCGRA, Ope
 - [Setup](#setup)
 - [Repository Layout](#repository-layout)
 - [Code Format Style](#code-format-style)
+- [Compiler and Runtime](#compiler-and-runtime)
 - [Supported Flows](#supported-flows)
   - [CGRA](#cgra)
   - [CGRA + FPGA](#cgra--fpga)
@@ -21,7 +22,9 @@ See [docs/Setup.md](./docs/Setup.md).
 - `configs/`
 - `scripts/`
 - `tests/`
+- `runtime/`
 - `docs/`
+- `amoeba/`
 - `VectorCGRA/`
 - `OpenFPGA/`
 - `chipyard/`
@@ -36,6 +39,95 @@ $ black scripts
 ```
 
 Generated files are excluded by `.clang-format-ignore`. VectorCGRA, Chipyard, and OpenFPGA keep their own formatting rules.
+
+## Compiler and Runtime
+
+Amoeba compiles Taskflow kernel calls and buffer dependencies into C execution plans. Each task names a registered native kernel interface; existing native implementations supply computation. The compiler derives placement, storage, tiles, parameter bindings and dependency graphs from the input and exported hardware/kernel metadata. The CPU runtime executes those descriptors without application-specific logic. Manual submits tasks on the CPU; Hybrid follows optional task regions; Auto launches compiler-planned batches and drains each before reusing configuration caches.
+
+Runtime headers are in `runtime/include/`, private driver declarations in `runtime/include/internal/`, and C implementations in `runtime/src/`. Applications include `soc_runtime.h`; generated plans use `soc_plan.h`. Call `soc_prepare` with the selected plan, then its matching `soc_execute_manual`, `soc_execute_hybrid` or `soc_execute_auto` entry point.
+
+Build the SoC backend using the LLVM revision documented in [Amoeba](amoeba/README.md). Neura is optional for this path:
+
+```shell
+$ cmake -S amoeba -B amoeba/build -G Ninja -DAMOEBA_ENABLE_NEURA=OFF -DCMAKE_BUILD_TYPE=Release -DMLIR_DIR=/path/to/llvm-project/build/lib/cmake/mlir -DLLVM_DIR=/path/to/llvm-project/build/lib/cmake/llvm
+$ cmake --build amoeba/build --target mlir-amoeba-opt -j8
+$ mkdir -p build tests/generated
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ chipyard/.conda-env/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml --output tests/generated/runtime_target.yaml configs/kernels/gemmini_tile.yaml configs/kernels/kernel_relu_runtime_4x4.yaml configs/kernels/kernel_add_relu_runtime_4x4.yaml
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/pipeline.mlir --soc-assign="target=tests/generated/runtime_target.yaml" --soc-emit-plan="output=tests/generated/runtime_plan.h" -o /dev/null
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/gemm_relu_gemm.c
+```
+
+Omit `--rebuild` only when reusing a simulator for this same design. The test checks two consecutive inputs in each mode against a CPU reference, then returns to Manual to check mode transitions. It reports preparation, execution and total target cycles, plus automatic launches and CPU task submissions. Preparation includes initial configuration and preloads. Execution includes scheduled input/output DMA, deferred batch capture and completion collection. Reference computation and output checking are outside timing. Interface and supported-shape details are in [the runtime contract](docs/contracts.md#compiler-and-runtime).
+
+The target export uses the selected SoC and architecture after hardware generation; it is generated data, not another configuration to maintain. Regenerate the fast API and target when their sources change. The runner checks that target resources and kernel metadata still match; `RUNTIME_TARGET` selects a different export path. Add `tile-rows=N` to `soc-assign` to override kernel defaults.
+
+A second example uses a 12×8 GEMM followed by terminal CGRA ReLU, with a four-row tile override and packed output DMA, on the same hardware:
+
+```shell
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/terminal.mlir --soc-assign="target=tests/generated/runtime_target.yaml tile-rows=4" --soc-emit-plan="output=tests/generated/runtime_terminal.h" -o /dev/null
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/gemm_relu.c
+```
+
+The shared-CGRA example runs ReLU→GEMM→AddReLU, with host input preloads and two mappings on one CGRA:
+
+```shell
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/shared.mlir --soc-assign="target=tests/generated/runtime_target.yaml tile-rows=4" --soc-emit-plan="output=tests/generated/runtime_shared.h" -o /dev/null
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/gpt2.yaml tests/runtime/relu_gemm_add_relu.c
+```
+
+The LayerNorm example supplies seven existing kernels as a dependency graph, using 4×8 input and two-row tiles. It checks integer reference outputs in Manual, Hybrid and Auto, including a Hybrid region boundary. Its test configuration expands graph capacity to seven stages and eight edges:
+
+```shell
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml configs/kernels/kernel_block_ln_*_4x4.yaml configs/kernels/kernel_block_requant_4x4.yaml
+$ chipyard/.conda-env/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml --output tests/generated/runtime_target.yaml configs/kernels/kernel_block_ln_*_4x4.yaml configs/kernels/kernel_block_requant_4x4.yaml
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt amoeba/test/Backend/SoC/layernorm.mlir --soc-assign="target=tests/generated/runtime_target.yaml tile-rows=2" --soc-emit-plan="output=tests/generated/runtime_layernorm.h" -o /dev/null
+$ MAKEFLAGS=-j8 CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml tests/runtime/layernorm.c
+```
+
+For a small single-layer GCN, supply fixed CSR topology and Q15 edge weights as JSON. Feature tensors and dense projection weights remain runtime inputs. Changing topology regenerates the workload and plan. Projection uses the native Matrix interface; the compiler queries legal tiles and checks graph, storage and counter capacities.
+
+Native Conv, Matrix and Copy planning uses a host query library built from the selected design's generated Gemmini parameters. Generate that design first, then run `make -C runtime/planning`; repeat this build after changing the Gemmini configuration. The library is a build artifact, not a substitute for hardware generation.
+
+```shell
+$ make -C runtime/planning
+$ python3 scripts/gcn_plan.py tests/runtime/gcn.json --dma-bytes 16 --output tests/generated/runtime_gcn.mlir --header tests/generated/runtime_gcn_data.h
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml configs/kernels/kernel_gcn_4x4.yaml
+$ chipyard/.conda-env/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml --output tests/generated/runtime_target.yaml configs/kernels/gemmini_matrix.yaml configs/kernels/gemmini_copy.yaml configs/kernels/kernel_gcn_4x4.yaml
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt tests/generated/runtime_gcn.mlir --soc-assign="target=tests/generated/runtime_target.yaml" --soc-emit-plan="output=tests/generated/runtime_gcn.h" -o /dev/null
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=3000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml tests/runtime/gcn.c
+```
+
+The example uses the same hardware as LayerNorm above; add `--rebuild` if that simulator has not been built. Set `--dma-bytes` to the exported target's `fabric.alignment` (16 for this configuration).
+
+
+Small application callers are in `scripts/resnet_plan.py` and `scripts/gpt2_plan.py`. ResNet uses the complete synthetic ResNet-8 path, including Pool, biased FC and Softmax. GPT-2 uses the existing single Transformer block, without embedding or an LM head. Model JSON controls the caller's supported dimensions; native kernel and storage limits still apply.
+
+The default test sizes are:
+
+| Caller | Input and model size |
+| --- | --- |
+| ResNet-8 | 8×8 RGB input, block widths 4/8/16, 10 classes |
+| GPT-2 block | Sequence length 2, two 64-channel heads, 512-channel MLP |
+
+With the selected hardware and Gemmini parameters already generated, build the query library and shared kernel APIs, export the target, then compile either caller:
+
+```shell
+$ make -C runtime/planning
+$ app_kernels=(configs/kernels/kernel_{relu_runtime,add_relu_runtime,softmax_max,softmax_exp,softmax_norm,block_requant,block_activation,block_residual,attention_max,attention_exp,attention_norm}_4x4.yaml configs/kernels/kernel_block_ln_*_4x4.yaml)
+$ chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml "${app_kernels[@]}"
+$ chipyard/.conda-env/bin/python scripts/runtime_target.py --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml --output tests/generated/runtime_target.yaml configs/kernels/gemmini_{tile,conv,matrix,copy}.yaml configs/kernels/pool.yaml "${app_kernels[@]}"
+$ python3 scripts/resnet_plan.py tests/runtime/resnet.json --dma-bytes 16 --output tests/generated/runtime_resnet.mlir --header tests/generated/runtime_resnet_data.h
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt tests/generated/runtime_resnet.mlir --soc-assign="target=tests/generated/runtime_target.yaml" --soc-emit-plan="output=tests/generated/runtime_resnet.h" -o /dev/null
+$ MAKEFLAGS=-j8 CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=10000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --rebuild --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml tests/runtime/resnet.c
+$ python3 scripts/gpt2_plan.py tests/runtime/gpt2.json --dma-bytes 16 --output tests/generated/runtime_gpt2.mlir --header tests/generated/runtime_gpt2_data.h
+$ amoeba/build/tools/mlir-amoeba-opt/mlir-amoeba-opt tests/generated/runtime_gpt2.mlir --soc-assign="target=tests/generated/runtime_target.yaml" --soc-emit-plan="output=tests/generated/runtime_gpt2.h" -o /dev/null
+$ CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=10000000 ./run-chipyard-cgra-gemmini-demo.sh --runtime --arch-yaml configs/arch/attention.yaml --soc-yaml configs/soc/autolink/runtime.yaml tests/runtime/gpt2.c
+```
+
+These tests compare two samples in Manual, Hybrid, Auto and a return to Manual. Auto launch counts must match `SOC_PLAN_AUTO_LAUNCHES`, with no CPU task submissions. ABI 8 plans declare aligned caller-owned DRAM workspace through `SOC_PLAN_WORKSPACE_BYTES` and `SOC_PLAN_ALIGNMENT`; the callers supply it in `soc_context_t`. The compiler reuses SPM after the last reader and can spill supported intermediates when capacity is insufficient. Native queries provide tile constraints and access ranges. CGRA tasks use row tiles; explicitly declared elementwise kernels also permit linear chunks.
+
+The GPT-2 caller supports multiple heads through static tensor views and a join, with each head's computation expressed in the application DAG. Its optional `head_dim` is currently 64, matching the existing native reference. Larger multihead plans still need end-to-end hardware validation; successful compilation alone does not establish support. Automatic raw INT32 CGRA spill and cross-operator tile pipelines remain unsupported.
 
 ## Supported Flows
 
@@ -415,6 +507,8 @@ Host runner times were 7,365.33 s for Auto, 8,636.46 s for Hybrid and 9,487.37 s
 #### Application CI
 
 The [SoC workflow](.github/workflows/cgra-soc-tests.yml) groups application regressions into `App / resnet`, `App / gpt2` and `App / gcn`. Each job checks only its application's references, generates its fixtures and APIs, then runs its modes sequentially with one simulator rebuild. Shared configuration checks run once in a separate job; application jobs skip OpenFPGA setup. Integration tests remain separate.
+
+`Compiler and runtime / small applications` builds the pinned [HobbitQia/Amoeba](https://github.com/HobbitQia/amoeba) submodule with cached LLVM/MLIR and Neura disabled. It runs the SoC compiler and runtime host tests, compiles the small ResNet, GCN and GPT-2 fixtures in `tests/runtime/`, then checks Manual, Hybrid, Auto and return-to-Manual execution against references on one shared simulator. Logs and generated plans are uploaded as `runtime-small-applications`.
 
 - ResNet-8 runs Manual and Hybrid; whole-network Auto is not implemented.
 - GPT-2 runs Manual (`gpt2.c`, `0 spm bench`), whole-block Auto (`auto_block.c`, `0`) and operator-level Hybrid (`hybrid_block.c`). PR and push runs use N=16, hidden=128, two heads and FF=512, with the same seed-0 pair of inputs in every mode. Both inputs run without accelerator reset.

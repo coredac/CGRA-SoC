@@ -1,0 +1,7 @@
+{
+  "rows": 8,
+  "columns": 8,
+  "inputs": 3,
+  "channels": [4, 8, 16],
+  "classes": 10
+}

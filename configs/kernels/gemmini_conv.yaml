@@ -1,0 +1,32 @@
+# Complete native NHWC convolution; workspace follows native scratch IDs 1/1.
+kind: gemmini_conv
+kernel:
+  name: gemmini_conv_i8
+runtime:
+  query:
+    library: ../../build/native-query.so
+    symbol: amoeba_query_conv
+  input_bits: [[8], [8]]
+  output_bits: [[8]]
+  input_shapes: [[p, ic], [k, oc]]
+  output_shapes: [[q, oc]]
+  tile_rows: 1
+  max_tile_rows: 65535
+  shape_limits: {}
+  whole_inputs: [0, 1]
+  complete: true
+  workspace_divisor: 2
+  commands: 9
+  patches: 0
+  parameters:
+    - input_rows
+    - input_columns
+    - input_channels
+    - output_rows
+    - output_columns
+    - output_channels
+    - kernel
+    - stride
+    - dilation
+    - padding_top
+    - padding_left
