@@ -1,16 +1,26 @@
+kind: cgra
 kernel:
   name: attention_exp
   kernel_yaml: VectorCGRA/validation/test/attention_exp.yaml
   required_words: 12416
   bindings: {arg0: 0, arg1: 4096, arg2: 4160, arg3: 8256, arg4: 128, arg5: 0, arg6: 2048}
 runtime:
+  input_bits: [[32], [32]]
+  output_bits: [[32], [32]]
+  input_shapes: [[m, n], [m, s]]
+  output_shapes: [[m, n], [m, s]]
+  iteration_shape: [m, n]
+  tile_rows: 4
+  max_tile_rows: 65535
+  shape_limits: {s: 1}
+  whole_inputs: []
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: input1}
     - {symbol: arg2, kind: spm_word, role: output}
     - {symbol: arg3, kind: spm_word, role: output1}
     - {symbol: arg4, kind: count, role: columns}
-    - {symbol: arg5, kind: count, role: row}
+    - {symbol: arg5, kind: count, role: row, row_stride: 1}
     - {symbol: arg6, kind: count, role: elements}
 execution:
   ctrl_base: 16

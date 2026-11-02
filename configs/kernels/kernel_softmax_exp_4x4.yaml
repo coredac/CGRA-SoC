@@ -1,3 +1,4 @@
+kind: cgra
 kernel:
   name: softmax_exp
   kernel_yaml: VectorCGRA/validation/test/softmax_exp.yaml
@@ -7,8 +8,26 @@ kernel:
     arg1: 16
     arg2: 32
     arg3: 48
+    steps: 10
 
+runtime:
+  input_bits: [[32], [32]]
+  output_bits: [[32], [32]]
+  input_shapes: [[m, n], [m, s]]
+  output_shapes: [[m, n], [m, s]]
+  iteration_shape: [m, n]
+  tile_rows: 1
+  max_tile_rows: 1
+  shape_limits: {m: 1, s: 1}
+  whole_inputs: []
+  symbols:
+    - {symbol: arg0, kind: spm_word, role: input0}
+    - {symbol: arg1, kind: spm_word, role: input1}
+    - {symbol: arg2, kind: spm_word, role: output}
+    - {symbol: arg3, kind: spm_word, role: output1}
+    - {symbol: steps, kind: count, role: elements}
 execution:
   compiled_ii: 16
   loop_times: 160
   expected_completes: 2
+  runtime_count: {symbol: steps, scale: 16, offset: 0}

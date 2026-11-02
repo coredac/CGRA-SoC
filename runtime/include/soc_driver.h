@@ -14,6 +14,10 @@ typedef struct {
 } soc_driver_t;
 
 extern const soc_driver_t soc_gemmini_driver;
+extern const soc_driver_t soc_conv_driver;
+extern const soc_driver_t soc_matrix_driver;
+extern const soc_driver_t soc_copy_driver;
+extern const soc_driver_t soc_pool_driver;
 extern const soc_driver_t soc_cgra_driver;
 
 #endif

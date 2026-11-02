@@ -24,6 +24,7 @@ MOCK = r"""
 typedef uint64_t cgra_dma_desc_t;
 static cgra_packet_t sent[32], pending;
 static unsigned sent_count, selections, expected_count, dma_waits, dma_loads, fail_dma;
+static unsigned static_packets, full_captures, fail_capture, fail_config;
 #undef accel_commands
 #define accel_commands(device, ...) do { (void)(device); ++selections; __VA_ARGS__ } while (0)
 #define CGRA_RAW_PKT_LO(value) (pending.lo = (value))
@@ -49,6 +50,25 @@ SOURCE = r"""
 #include <stdio.h>
 #include <string.h>
 #include "runtime/src/cgra.c"
+
+int cgra_job_full_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel,
+                     const cgra_link_symbol_t *symbols, uint32_t next) {
+  (void)base; (void)job; (void)symbols; (void)next;
+  ++full_captures;
+  return kernel->static_count != 2 || fail_capture;
+}
+
+int cgra_job_config_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel,
+                       const cgra_link_symbol_t *symbols) {
+  (void)base; (void)job; (void)symbols;
+  static_packets += kernel->static_count;
+  return fail_capture;
+}
+
+uint32_t cgra_link_read_at(uintptr_t base, uintptr_t offset) {
+  (void)base;
+  return offset == CGRA_LINK_CONTROL_CONFIG_DONE ? 1 : fail_config;
+}
 
 static int reference(const soc_task_t *task, unsigned tile, cgra_run_t mode) {
   cgra_kernel_t kernel = *task->kernel;
@@ -153,6 +173,52 @@ int main(void) {
   if (soc_cgra_init(&context, &task) == 0 || selections != 1 || dma_loads != 2 || dma_waits != 2) {
     fprintf(stderr, "preload did not stop after DMA failure\n");
     return 1;
+  }
+  fail_dma = 0;
+  task.preload_count = 0;
+  cgra_kernel_t alternate = kernel;
+  alternate.static_count = 2;
+  other.kernel = &alternate;
+  soc_task_t full = other;
+  full.full_config = 1;
+  soc_task_t remote = task;
+  remote.endpoint = 1;
+  const accel_t second = {.id = 3};
+  const accel_t *pair[] = {&device, &second};
+  const soc_plan_t paired = {.device_count = 2, .devices = pair};
+  soc_state_t states[2] = {0};
+  context.plan = &paired;
+  context.states = states;
+  const struct {
+    const soc_task_t *task;
+    unsigned packets, full, invalidate;
+  } captures[] = {
+    {&task, 1, 0, 0}, {&task, 1, 0, 0},
+    {&other, 3, 0, 0}, {&task, 4, 0, 0},
+    {&full, 4, 1, 0}, {&task, 4, 1, 0},
+    {&task, 5, 1, 1}, {&task, 6, 1, 2},
+    {&remote, 7, 1, 0}, {&task, 7, 1, 0}
+  };
+  for (unsigned index = 0; index < sizeof(captures) / sizeof(*captures); ++index) {
+    if (captures[index].invalidate == 1) complete(&context, &full);
+    if (captures[index].invalidate == 2 && soc_cgra_init(&context, &task)) return 1;
+    if (soc_cgra_capture(&context, captures[index].task) ||
+        static_packets != captures[index].packets || full_captures != captures[index].full) {
+      fprintf(stderr, "resident capture mismatch step=%u packets=%u full=%u\n", index, static_packets, full_captures);
+      return 1;
+    }
+  }
+  for (unsigned failure = 0; failure < 2; ++failure) {
+    fail_capture = failure == 0;
+    fail_config = failure == 1;
+    if (!soc_cgra_capture(&context, &other) || states[0].loaded) {
+      fprintf(stderr, "failed capture retained residency failure=%u\n", failure);
+      return 1;
+    }
+    fail_capture = fail_config = 0;
+    const unsigned before = static_packets;
+    if (soc_cgra_capture(&context, &other) || static_packets != before + 2 || states[0].loaded != &alternate) return 1;
+    if (soc_cgra_capture(&context, &task) || states[0].loaded != &kernel) return 1;
   }
   return 0;
 }

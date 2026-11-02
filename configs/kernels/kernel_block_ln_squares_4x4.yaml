@@ -1,9 +1,20 @@
+kind: cgra
 kernel:
   name: block_ln_squares
   kernel_yaml: VectorCGRA/validation/test/block_ln_squares.yaml
   required_words: 4096
   bindings: {arg0: 0, arg1: 4091, arg2: 4092, arg3: 768, arg4: 768}
 runtime:
+  input_bits: [[8], [32]]
+  output_bits: [[32]]
+  input_shapes: [[m, n], [m, s]]
+  output_shapes: [[m, s]]
+  iteration_shape: [m, n]
+  tile_rows: 2
+  max_tile_rows: 65535
+  # UINT32 sum bound: n * (255^2 * 64 + 1/16), with INT8 input and Q6 mean.
+  shape_limits: {n: 1032, s: 1}
+  whole_inputs: []
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: input1}

@@ -47,7 +47,7 @@ static inline int cgra_link_begin_at(uintptr_t base, uint32_t job, uint32_t pack
   return cgra_link_read_at(base, CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
 }
 
-static inline void cgra_link_patches_at(uintptr_t base, const cgra_kernel_t *kernel, const cgra_link_symbol_t *symbols, uint32_t count) {
+static inline void cgra_link_patches_at(uintptr_t base, const cgra_kernel_t *kernel, const cgra_link_symbol_t *symbols, uint32_t count, uint32_t packet_offset) {
   for (uint32_t index = 0; index < count; ++index) {
     const cgra_patch_t *patch = &kernel->patches[index];
     const cgra_link_symbol_t *symbol = &symbols[patch->symbol_index];
@@ -55,7 +55,7 @@ static inline void cgra_link_patches_at(uintptr_t base, const cgra_kernel_t *ker
     // Fold the payload affine expression with native uint32_t wraparound.
     const uint32_t coefficient = elements ? patch->scale : symbol->stride * patch->scale;
     const uint32_t bias = elements ? patch->offset : symbol->base * patch->scale + patch->offset;
-    cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_PACKET, patch->packet_index);
+    cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_PACKET, patch->packet_index + packet_offset);
     cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_SOURCE, symbol->source);
     cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_COEFFICIENT, coefficient);
     cgra_link_write_at(base, CGRA_LINK_CONTROL_PATCH_BIAS, bias);
@@ -80,7 +80,7 @@ static inline int cgra_link_capture_at(uintptr_t base, uint32_t job, const cgra_
   if (cgra_link_begin_at(base, job, kernel->config_count + kernel->launch_count, kernel->expected_completes, patch_count, kernel->rearm_count, kernel->setup_count, next_job) != 0) {
     return 1;
   }
-  cgra_link_patches_at(base, kernel, bindings, patch_count);
+  cgra_link_patches_at(base, kernel, bindings, patch_count, 0);
   for (uint32_t index = 0; index < kernel->config_count; ++index) {
     cgra_link_queue(kernel->config_packets[index]);
   }
@@ -97,29 +97,25 @@ static inline int cgra_job_config(uint32_t job, const cgra_kernel_t *kernel, con
 // Cache static controls with fixed setup so overlapping kernels restore on a job switch.
 // next_job is zero for the final phase, otherwise the next job ID plus one.
 static inline int cgra_job_full_at(uintptr_t base, uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings, uint32_t next_job) {
-  cgra_kernel_t full = *kernel;
-  cgra_packet_t packets[kernel->config_count + kernel->static_count];
-  cgra_patch_t patches[kernel->patch_count + 1];
-  uint32_t count = 0;
+  const uint32_t patch_count = bindings == NULL ? 0 : kernel->patch_count;
+  if (cgra_link_begin_at(base, job, kernel->config_count + kernel->static_count + kernel->launch_count, kernel->expected_completes, patch_count, kernel->rearm_count,
+                         kernel->setup_count + kernel->static_count, next_job) != 0) {
+    return 1;
+  }
+  cgra_link_patches_at(base, kernel, bindings, patch_count, kernel->static_count);
   for (uint32_t index = 0; index < kernel->rearm_count; ++index) {
-    packets[count++] = kernel->config_packets[index];
+    cgra_link_queue(kernel->config_packets[index]);
   }
   for (uint32_t index = 0; index < kernel->static_count; ++index) {
-    packets[count++] = kernel->static_packets[index];
+    cgra_link_queue(kernel->static_packets[index]);
   }
   for (uint32_t index = kernel->rearm_count; index < kernel->config_count; ++index) {
-    packets[count++] = kernel->config_packets[index];
+    cgra_link_queue(kernel->config_packets[index]);
   }
-  for (uint32_t index = 0; index < kernel->patch_count; ++index) {
-    patches[index] = kernel->patches[index];
-    patches[index].packet_index += kernel->static_count;
+  for (uint32_t index = 0; index < kernel->launch_count; ++index) {
+    cgra_link_queue(kernel->launch_packets[index]);
   }
-  full.static_count = 0;
-  full.config_packets = packets;
-  full.config_count = count;
-  full.setup_count += kernel->static_count;
-  full.patches = patches;
-  return cgra_link_capture_at(base, job, &full, bindings, next_job);
+  return 0;
 }
 
 static inline int cgra_job_full(uint32_t job, const cgra_kernel_t *kernel, const cgra_link_symbol_t *bindings, uint32_t next_job) {

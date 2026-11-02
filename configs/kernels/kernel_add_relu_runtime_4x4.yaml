@@ -1,3 +1,4 @@
+kind: cgra
 kernel:
   name: add_relu_runtime
   kernel_yaml: runtime/add_relu.yaml
@@ -9,9 +10,14 @@ kernel:
     arg3: 1
 
 runtime:
-  input_bits: [32, 32]
-  output_bits: [8, 32]
+  input_bits: [[8, 32], [8, 32]]
+  output_bits: [[8, 32]]
+  input_shapes: [[m, n], [m, n]]
+  output_shapes: [[m, n]]
   tile_rows: 2
+  max_tile_rows: 65535
+  shape_limits: {}
+  whole_inputs: []
   symbols:
     - symbol: arg0
       kind: spm_word

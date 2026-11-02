@@ -10,6 +10,8 @@ static inline uint64_t soc_operand(const soc_context_t *context, soc_operand_t o
     return operand.value;
   case SOC_ARGUMENT:
     return context->arguments[operand.index] + operand.value;
+  case SOC_WORKSPACE:
+    return context->workspace + operand.value;
   case SOC_SPM:
     return context->plan->devices[operand.index]->spm + operand.value;
   }

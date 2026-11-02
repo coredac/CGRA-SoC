@@ -1,9 +1,19 @@
+kind: cgra
 kernel:
   name: block_requant
   kernel_yaml: VectorCGRA/validation/test/block_requant.yaml
   required_words: 4096
   bindings: {arg0: 0, arg1: 3072, arg2: 4, arg3: 768}
 runtime:
+  flat: true
+  input_bits: [[32]]
+  output_bits: [[8, 32]]
+  input_shapes: [[m, n]]
+  output_shapes: [[m, n]]
+  tile_rows: 2
+  max_tile_rows: 65535
+  shape_limits: {}
+  whole_inputs: []
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: output}

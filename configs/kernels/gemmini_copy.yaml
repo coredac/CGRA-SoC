@@ -1,0 +1,21 @@
+# Strided native copy; tile legality and workspace come from the native query.
+kind: gemmini_copy
+kernel:
+  name: gemmini_copy
+runtime:
+  query:
+    library: ../../build/native-query.so
+    symbol: amoeba_query_copy
+  input_bits: [[8, 32]]
+  output_bits: [[8, 32]]
+  input_shapes: [[m, n]]
+  output_shapes: [[m, n]]
+  tile_rows: 1
+  max_tile_rows: 65535
+  shape_limits: {}
+  whole_inputs: [0]
+  parameters: []
+  complete: true
+  workspace_divisor: 2
+  commands: 4
+  patches: 0

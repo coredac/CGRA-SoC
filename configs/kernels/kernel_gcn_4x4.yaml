@@ -1,9 +1,19 @@
+kind: cgra
 kernel:
   name: gcn
   kernel_yaml: VectorCGRA/validation/test/gcn.yaml
   required_words: 32768
   bindings: {arg0: 0, arg1: 24576, arg2: 26624, arg3: 28672, arg4: 4, arg5: 0, arg6: 512, arg7: 128}
 runtime:
+  input_bits: [[32], [32], [32]]
+  output_bits: [[32]]
+  input_shapes: [[v, n], [s, e], [s, e]]
+  output_shapes: [[m, n]]
+  iteration_shape: [m, columns, n]
+  tile_rows: 1
+  max_tile_rows: 1
+  shape_limits: {m: 1, s: 1}
+  whole_inputs: [0, 1, 2]
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: input1}

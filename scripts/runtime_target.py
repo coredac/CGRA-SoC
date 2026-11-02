@@ -2,6 +2,7 @@
 """Export the generated SoC resources and kernel metadata for Amoeba."""
 
 import argparse
+import re
 from pathlib import Path
 
 import yaml
@@ -22,21 +23,127 @@ from generate_auto_links import (
     load_config,
 )
 from generate_gemmini_ext_spm import write
+from util.schema import require_int
+
+# The runtime runner selects this config; its SystemBus width sets Pool DMA lanes.
+ROCC_CONFIG = (
+    DEFAULT_CGRA_SCALA.parent.parent / "config" / "RoCCAcceleratorConfigs.scala"
+)
+
+
+def pool_lanes(element_bits, config_path=ROCC_CONFIG):
+    config = re.search(
+        r"^class MultiAccelRocketConfig extends Config\((.*?)(?=^(?:class|object) |\Z)",
+        config_path.read_text(),
+        re.M | re.S,
+    )
+    widths = (
+        re.findall(r"WithSystemBusWidth\(([^)]*)\)", config.group(1)) if config else []
+    )
+    if len(widths) != 1 or not widths[0].strip().isdigit():
+        raise ValueError(
+            f"{config_path}: MultiAccelRocketConfig requires one literal SystemBus width"
+        )
+    width = int(widths[0])
+    if width <= 0 or element_bits <= 0 or width % element_bits:
+        raise ValueError("Pool element width must divide the SystemBus width")
+    return width // element_bits
 
 
 def kernel_metadata(path, arch_path, soc_path):
+    source = yaml.safe_load(path.read_text())
+    kind = source["kind"]
+    runtime = source["runtime"]
+    if "flat" in runtime and (
+        not isinstance(runtime["flat"], bool) or runtime["flat"] and kind != "cgra"
+    ):
+        raise ValueError(f"{path}: flat tiling requires a CGRA boolean capability")
+    metadata = {
+        "name": source["kernel"]["name"],
+        "kind": kind,
+        **{
+            field: runtime[field]
+            for field in (
+                "input_bits",
+                "output_bits",
+                "input_shapes",
+                "output_shapes",
+                "tile_rows",
+                "max_tile_rows",
+                "shape_limits",
+                "whole_inputs",
+            )
+        },
+    }
+    if "query" in runtime:
+        query = runtime["query"]
+        metadata["query"] = {
+            "library": str((path.parent / query["library"]).resolve()),
+            "symbol": query["symbol"],
+        }
+    if kind == "pool":
+        return {
+            **metadata,
+            "complete": runtime["complete"],
+            "parameters": runtime["parameters"],
+        }
+    if kind in ("gemmini", "gemmini_conv", "gemmini_matrix", "gemmini_copy"):
+        return {
+            **metadata,
+            "commands": runtime["commands"],
+            "patches": runtime["patches"],
+            **{
+                field: runtime[field]
+                for field in ("parameters", "complete", "workspace_divisor")
+                if field in runtime
+            },
+        }
+    if kind != "cgra":
+        raise ValueError(f"unsupported kernel interface: {kind}")
+    if "flat" in runtime:
+        flat = runtime["flat"]
+        shape = runtime.get("iteration_shape", runtime["output_shapes"][0])
+        if flat and (
+            len(shape) != 2
+            or runtime["whole_inputs"]
+            or any(item != shape for item in runtime["input_shapes"])
+            or any(item != shape for item in runtime["output_shapes"])
+            or any("row_stride" in item for item in runtime["symbols"])
+        ):
+            raise ValueError(
+                f"{path}: flat tiling requires matching elementwise shapes without whole inputs or row strides"
+            )
+        metadata["flat"] = flat
     config = load_kernel_config(path, arch_path, soc_path)
-    runtime = yaml.safe_load(path.read_text())["runtime"]
+    parameters = [
+        item.role
+        for item in config.runtime_symbols
+        if item.kind == "count" and item.role != "elements"
+    ]
+    if parameters:
+        metadata["parameters"] = parameters
+    steps = {}
+    for item in runtime["symbols"]:
+        if "row_stride" not in item:
+            continue
+        stride = require_int(item, "row_stride", path)
+        if item["role"] not in parameters or not 0 <= stride <= 0xFFFFFFFF:
+            raise ValueError(
+                f"{path}: row_stride requires a scalar parameter and uint32 step"
+            )
+        steps[item["role"]] = stride
+    if steps:
+        metadata["parameter_steps"] = steps
     types = build_packet_types(config)
     packets = ordered_packets(config, make_vector_cgra_packets(config, types))
     static, captured, _, _, _ = split_packets(config, packets, types)
     return {
-        "name": config.name,
+        **metadata,
         "header": f"generated/cgra_{config.name}_fast_api.h",
         "symbol": config.name.upper(),
-        "input_bits": runtime["input_bits"],
-        "output_bits": runtime["output_bits"],
-        "tile_rows": runtime["tile_rows"],
+        "iteration_shape": list(
+            runtime.get("iteration_shape", runtime["output_shapes"][0])
+        ),
         "symbols": [item.role for item in config.runtime_symbols],
         "packets": len(captured),
         "static_packets": len(static),
@@ -56,6 +163,18 @@ def target_metadata(soc_path, arch_path, kernels):
         gemmini = layout.gemminis.get(device.name, {})
         devices.append(
             {
+                **(
+                    {
+                        "pool_lanes": pool_lanes(
+                            layout.pools[device.name]["element_bits"]
+                        ),
+                        "pool_line_entries": layout.pools[device.name][
+                            "line_buffer_entries"
+                        ],
+                    }
+                    if device.kind == "pool"
+                    else {}
+                ),
                 "name": device.name,
                 "kind": device.kind,
                 "id": device.id,

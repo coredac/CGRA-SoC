@@ -75,37 +75,48 @@ def softmax(logits):
     return [(value * (1 << 15) + total // 2) // total for value in exponents]
 
 
-def reference():
-    source = [
-        (row * 7 + column * 3 + channel * 5 + row * column) % 17 - 8
-        for row in range(INPUT_H)
-        for column in range(INPUT_W)
-        for channel in range(INPUT_CHANNELS)
+def input_data(rows, columns, channels, sample=0):
+    return [
+        (row * 7 + column * 3 + channel * 5 + row * column + sample * 5) % 17 - 8
+        for row in range(rows)
+        for column in range(columns)
+        for channel in range(channels)
     ]
-    stem_weights = weights(INPUT_CHANNELS, CHANNELS[0], KERNEL, 1)
+
+
+def reference(
+    input_rows=INPUT_H,
+    input_columns=INPUT_W,
+    input_channels=INPUT_CHANNELS,
+    channels=CHANNELS,
+    classes=CLASSES,
+    sample=0,
+):
+    source = input_data(input_rows, input_columns, input_channels, sample)
+    stem_weights = weights(input_channels, channels[0], KERNEL, 1 + sample * 11)
     stem = [
         max(0, value)
         for value in conv(
             source,
             stem_weights,
-            INPUT_H,
-            INPUT_W,
-            INPUT_CHANNELS,
-            CHANNELS[0],
+            input_rows,
+            input_columns,
+            input_channels,
+            channels[0],
             KERNEL,
             1,
         )
     ]
     tensors = {"stem_weights": stem_weights, "expected_stem": stem}
     source = stem
-    rows, columns, inputs = INPUT_H, INPUT_W, CHANNELS[0]
+    rows, columns, inputs = input_rows, input_columns, channels[0]
     blocks = []
-    for index, outputs in enumerate(CHANNELS):
+    for index, outputs in enumerate(channels):
         stride = 1 if index == 0 else 2
-        height, width = rows // stride, columns // stride
+        height, width = (rows + stride - 1) // stride, (columns + stride - 1) // stride
         blocks.append((rows, columns, inputs, height, width, outputs, stride))
-        first_weights = weights(inputs, outputs, KERNEL, index * 3 + 2)
-        second_weights = weights(outputs, outputs, KERNEL, index * 3 + 3)
+        first_weights = weights(inputs, outputs, KERNEL, index * 3 + 2 + sample * 11)
+        second_weights = weights(outputs, outputs, KERNEL, index * 3 + 3 + sample * 11)
         first = [
             max(0, value)
             for value in conv(
@@ -115,7 +126,7 @@ def reference():
         main = conv(first, second_weights, height, width, outputs, outputs, KERNEL, 1)
         skip = source
         if index != 0:
-            projection = weights(inputs, outputs, 1, index * 3 + 4)
+            projection = weights(inputs, outputs, 1, index * 3 + 4 + sample * 11)
             tensors[f"projection_{index}"] = projection
             skip = conv(source, projection, rows, columns, inputs, outputs, 1, stride)
         source = [min(127, max(0, value + bypass)) for value, bypass in zip(main, skip)]
@@ -129,18 +140,18 @@ def reference():
         for channel in range(inputs)
     ]
     fc_weights = [
-        (channel * 3 + out * 7 + channel * out) % 5 - 2
+        (channel * 3 + out * 7 + channel * out + sample) % 5 - 2
         for channel in range(inputs)
-        for out in range(CLASSES)
+        for out in range(classes)
     ]
-    bias = [out * 3 - 11 for out in range(CLASSES)]
+    bias = [out * 3 - 11 + sample * 3 for out in range(classes)]
     logits = [
         bias[out]
         + sum(
-            pooled[channel] * fc_weights[channel * CLASSES + out]
+            pooled[channel] * fc_weights[channel * classes + out]
             for channel in range(inputs)
         )
-        for out in range(CLASSES)
+        for out in range(classes)
     ]
     tensors.update(
         expected_pool=pooled,

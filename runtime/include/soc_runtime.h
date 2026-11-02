@@ -21,6 +21,9 @@ struct soc_context {
   const soc_plan_t *plan;
   const uintptr_t *arguments;
   soc_state_t *states;
+  /* Caller-owned DRAM retained through execution. */
+  uintptr_t workspace;
+  uint64_t workspace_bytes;
   soc_stats_t stats;
 };
 

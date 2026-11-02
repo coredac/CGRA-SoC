@@ -1,9 +1,19 @@
+kind: cgra
 kernel:
   name: block_ln_sum
   kernel_yaml: VectorCGRA/validation/test/block_ln_sum.yaml
   required_words: 4096
   bindings: {arg0: 0, arg1: 4090, arg2: 768, arg3: 768}
 runtime:
+  input_bits: [[8]]
+  output_bits: [[32]]
+  input_shapes: [[m, n]]
+  output_shapes: [[m, s]]
+  iteration_shape: [m, n]
+  tile_rows: 2
+  max_tile_rows: 65535
+  shape_limits: {s: 1}
+  whole_inputs: []
   symbols:
     - {symbol: arg0, kind: spm_word, role: input0}
     - {symbol: arg1, kind: spm_word, role: output}

@@ -59,19 +59,31 @@ static void prepare(const soc_task_t *task, cgra_run_t mode, unsigned tile, unsi
 
 int soc_cgra_capture(const soc_context_t *context, const soc_task_t *task) {
   const accel_t device = *context->plan->devices[task->endpoint];
+  soc_state_t *state = &context->states[task->endpoint];
+  cgra_kernel_t kernel;
+  const cgra_kernel_t *capture = task->kernel;
+  if (!task->full_config && state->loaded == task->kernel) {
+    kernel = *task->kernel;
+    kernel.static_count = 0;
+    capture = &kernel;
+  }
   int status = 0;
-  accel_commands(device, {
-    status = task->full_config ? cgra_job_full_at(device.control, task->job, task->kernel, task->symbols, 0) : cgra_job_config_at(device.control, task->job, task->kernel, task->symbols);
-  });
+  accel_commands(device,
+                 { status = task->full_config ? cgra_job_full_at(device.control, task->job, capture, task->symbols, 0) : cgra_job_config_at(device.control, task->job, capture, task->symbols); });
   if (status != 0) {
+    state->loaded = NULL;
     return status;
   }
   while (cgra_link_read_at(device.control, CGRA_LINK_CONTROL_CONFIG_DONE) == 0) {
   }
-  if (!task->full_config) {
-    context->states[task->endpoint].loaded = task->kernel;
+  if (cgra_link_read_at(device.control, CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS) {
+    state->loaded = NULL;
+    return 1;
   }
-  return cgra_link_read_at(device.control, CGRA_LINK_CONTROL_CONFIG_STATUS) != AUTO_LINK_STATUS_SUCCESS;
+  if (!task->full_config) {
+    state->loaded = task->kernel;
+  }
+  return 0;
 }
 
 static cgra_dma_desc_t descriptor(unsigned word, unsigned bytes, unsigned tag) {

@@ -4,6 +4,7 @@
 #include "auto_link_generated.h"
 #include "cgra_link_control_generated.h"
 
+#include <stddef.h>
 #include <stdint.h>
 
 static inline void auto_link_transfer(unsigned task, uintptr_t source_offset, uintptr_t destination_offset, uintptr_t source_stride, uintptr_t destination_stride, uint32_t bytes_per_pixel) {
@@ -78,6 +79,82 @@ static inline void auto_link_load(const auto_link_graph_t *graph, const uintptr_
     *(volatile uint64_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_SOURCE_BASE) = auto_link_address(edge->address, bindings);
     auto_link_transfer(index, edge->source_offset, edge->destination_offset, edge->source_stride, edge->destination_stride, edge->pixel_bytes);
     *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_FLAGS) = edge->flags;
+  }
+  __asm__ volatile("fence iorw, iorw" ::: "memory");
+}
+
+static inline void auto_link_update32(uintptr_t offset, uint32_t value, uint32_t previous, int fresh) {
+  if (fresh || value != previous) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + offset) = value;
+  }
+}
+
+static inline void auto_link_update64(uintptr_t offset, uint64_t value, uint64_t previous, int fresh) {
+  if (fresh || value != previous) {
+    *(volatile uint64_t *)(AUTO_LINK_BASE + offset) = value;
+  }
+}
+
+static inline void auto_link_update_stage(unsigned index, const auto_link_stage_t *stage, const auto_link_stage_t *previous, const uintptr_t *bindings) {
+  const auto_link_stage_t empty = {.output = {.address = {.binding = -1}}};
+  const int fresh = previous == NULL;
+  const auto_link_stage_t *old = fresh ? &empty : previous;
+  const auto_link_output_t *output = &stage->output;
+  const auto_link_output_t *before = &old->output;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_STAGE) = index;
+  if (fresh) {
+    auto_link_region(index, 0, 0, 0, 0, 0, 0, 0, 0);
+  }
+  auto_link_update32(AUTO_LINK_JOB, stage->job, old->job, fresh);
+  auto_link_update32(AUTO_LINK_ENDPOINT, stage->endpoint, old->endpoint, fresh);
+  auto_link_update32(AUTO_LINK_OUTPUT_FLAGS, output->flags, before->flags, fresh);
+  auto_link_update32(AUTO_LINK_OUTPUT_PIXEL_BYTES, output->pixel_bytes, before->pixel_bytes, fresh);
+  auto_link_update64(AUTO_LINK_OUTPUT_ADDRESS, auto_link_address(output->address, bindings), auto_link_address(before->address, bindings), fresh);
+  auto_link_update64(AUTO_LINK_OUTPUT_STRIDE, output->stride, before->stride, fresh);
+  auto_link_update32(AUTO_LINK_OUTPUT_BYTES, output->bytes, before->bytes, fresh);
+  if (fresh) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_ENABLE) = 1;
+  }
+}
+
+static inline void auto_link_update_edge(unsigned index, const auto_link_edge_t *edge, const auto_link_edge_t *previous, const uintptr_t *bindings) {
+  const auto_link_edge_t empty = {.address = {.binding = -1}};
+  const int fresh = previous == NULL;
+  const auto_link_edge_t *old = fresh ? &empty : previous;
+  const uintptr_t transfer = AUTO_LINK_TRANSFER_BASE + index * AUTO_LINK_TRANSFER_STRIDE;
+  *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE) = index;
+  auto_link_update32(AUTO_LINK_EDGE_SOURCE, edge->source, old->source, fresh);
+  auto_link_update32(AUTO_LINK_EDGE_DESTINATION, edge->destination, old->destination, fresh);
+  auto_link_update32(AUTO_LINK_EDGE_BYTES, edge->bytes, old->bytes, fresh);
+  auto_link_update32(AUTO_LINK_EDGE_EXPANSION, edge->expansion, old->expansion, fresh);
+  auto_link_update64(AUTO_LINK_EDGE_SOURCE_BASE, auto_link_address(edge->address, bindings), auto_link_address(old->address, bindings), fresh);
+  auto_link_update64(transfer, edge->source_offset, old->source_offset, fresh);
+  auto_link_update64(transfer + 8, edge->destination_offset, old->destination_offset, fresh);
+  auto_link_update64(transfer + 16, edge->source_stride, old->source_stride, fresh);
+  auto_link_update64(transfer + 24, edge->destination_stride, old->destination_stride, fresh);
+  auto_link_update64(transfer + 32, edge->pixel_bytes, old->pixel_bytes, fresh);
+  auto_link_update32(AUTO_LINK_EDGE_FLAGS, edge->flags, old->flags, fresh);
+}
+
+/* Previous staging and bindings stay owned by one paired prepare/execute interval. */
+static inline void auto_link_update(const auto_link_graph_t *graph, const auto_link_graph_t *previous, const uintptr_t *bindings) {
+  if (previous == NULL) {
+    auto_link_load(graph, bindings);
+    return;
+  }
+  for (unsigned index = graph->stage_count; index < previous->stage_count; ++index) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_STAGE) = index;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_ENABLE) = 0;
+  }
+  for (unsigned index = graph->edge_count; index < previous->edge_count; ++index) {
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE) = index;
+    *(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_EDGE_FLAGS) = 0;
+  }
+  for (unsigned index = 0; index < graph->stage_count; ++index) {
+    auto_link_update_stage(index, &graph->stages[index], index < previous->stage_count ? &previous->stages[index] : NULL, bindings);
+  }
+  for (unsigned index = 0; index < graph->edge_count; ++index) {
+    auto_link_update_edge(index, &graph->edges[index], index < previous->edge_count ? &previous->edges[index] : NULL, bindings);
   }
   __asm__ volatile("fence iorw, iorw" ::: "memory");
 }
