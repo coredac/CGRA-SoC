@@ -1,0 +1,49 @@
+{
+  "status": "analytical_estimates_not_new_measurements",
+  "baseline": "The previously derived policy-cost area model and the original P1 execution cycles. All original results remain unchanged.",
+  "configuration": "Two equal-sized configuration regions, each sized for the largest segment of this workload; both share original dual-port SRAM macros. This is a proposed implementation, not the archived RTL.",
+  "area": {
+    "scope": "Selected accelerator components, identical scope to policy-cost. Values are library area units, not independently verified mm^2.",
+    "rules": [
+      "Reduce only native command/patch SRAM and CGRA packet SRAM banks using existing macro depth/width and integer rounding.",
+      "Retain core SRAM, SPM, compute, adapters and original control logic from the prior policy-specific model.",
+      "Two configuration regions share a dual-port macro address space; they are not separately padded physical SRAM banks.",
+      "Profile slots decrease but existing minimum macro depths save no depth bank. Keep the already policy-adjusted word width.",
+      "Do not scale total hardware area by the number of live configurations.",
+      "New buffer ownership, address remapping and concurrent configuration/replay logic are not synthesized or separately priced. Retained logic does not prove these functions fit."
+    ],
+    "capacity": {
+      "ResNet": "Native6n; CGRA4 per IP; profiles2. For n=4 this holds all H configurations.",
+      "GPT2": "Native32; CGRA24 per IP; profiles16, twice peaks16/12/8 verified by archived host plan.",
+      "GCN": "Two segments already fill the complete existing H cache; no additional capacity saving."
+    }
+  },
+  "performance": {
+    "main_boundary": "Execution-focused, initial segment prepared before timing. Later required refills are counted. Where two buffers retain the complete graph, reuse them across repetitions without gratuitous reloads.",
+    "symbols": "T=original H total, E=original H execute, O=T-E, C=measured original full capture, K=segments.",
+    "resnet_point": "T+(K-1)*max(0,(C-E)/K), assuming equal configuration/execution cost per segment. Initial C/K is outside timing. Applies n=1,2; n=4 retains whole schedule.",
+    "resnet_sensitivity": "O+max(E,C*(K-1)/K) through T+C*(K-1)/K, under the stated unchanged-work and overlap assumptions.",
+    "gpt_sensitivity": "T through T+ceil(C*36/32). 36 job reloads vs32 unique jobs; packets3293 vs2999 per IP. Native commands and profiles do not duplicate. Inflating all C by36/32 is a deliberately loose linear-cost scenario; no segment timestamps support a point estimate.",
+    "full_reload_columns": "Separate sensitivity columns include all configuration loading: O+max(E,C_model) through T+C_model. Do not compare these to original setup-excluded policies as if boundaries were equal.",
+    "assumptions": [
+      "Same clock and compute schedule.",
+      "Same configuration write throughput as old capture.",
+      "No added CPU/MMIO/interconnect contention or buffer-switch overhead.",
+      "Two-region refill requires RTL support; not validated in archived hardware.",
+      "The recorded execution interval includes launch/synchronization, so treating it as available overlap time is optimistic."
+    ],
+    "limitations": "No per-segment cycle trace, new simulation or timing closure. These are conditional model/sensitivity values, not confidence intervals or guaranteed physical upper/lower bounds. Original synthesis capacity/SRAM adaptations differ from simulated hardware and the original component synthesis did not close the10ns target."
+  },
+  "validation": [
+    "40 data consistency checks passed: nine H settings,27 unique comparisons, SRAM integer counts and deduction sums, interval ordering, unchanged Manual/Auto rows, source hashes.",
+    "Independent timing arithmetic and measurement-boundary review passed.",
+    "GPT per-segment resources extracted using archived host harness for1/2/4C."
+  ],
+  "files": {
+    "hybrid.csv": "Nine H area and timing estimates with baseline, capacities and timing boundaries.",
+    "comparison27.csv": "All27 policy/configuration rows with modeled AE and speedup sensitivity. Manual/Auto retain prior derived area and original cycles.",
+    "memory.csv": "Every additional SRAM bank deduction, source layer and macro count.",
+    "sources.json": "Source SHA256 hashes.",
+    "evidence": "Archived timing extraction and host-plan outputs."
+  }
+}

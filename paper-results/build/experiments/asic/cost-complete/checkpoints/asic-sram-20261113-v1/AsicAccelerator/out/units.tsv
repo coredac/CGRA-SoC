@@ -1,0 +1,10 @@
+AsicCore	1
+Gcn	1
+Vector	1
+GptNorm	1
+GptSoftmax	1
+GptVector	1
+AsicLinkAdapter	1
+AsicDma	1
+AsicMemoryPort	1
+CgraSpmManager_1	1

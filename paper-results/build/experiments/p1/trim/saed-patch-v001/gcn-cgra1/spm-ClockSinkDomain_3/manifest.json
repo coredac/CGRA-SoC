@@ -1,0 +1,445 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gcn-cgra1",
+  "component": "spm",
+  "top": "ClockSinkDomain_3",
+  "soc_instances": 1,
+  "archive_sha256": "62f907284df255ac775676a1b1c08f625dfd0c8259f3c36a6eb5e696d7dcf164",
+  "source_modules": 57,
+  "sram_required": true,
+  "expected_macro_instances": 1024,
+  "macro_counts": {
+    "SRAM2RW64x8": 1024
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 64,
+      "width": 2048,
+      "mask_lanes": 256,
+      "macro": "SRAM2RW64x8",
+      "macro_depth": 64,
+      "macro_width": 8,
+      "depth_banks": 1,
+      "width_slices_per_lane": 1,
+      "macro_instances_per_module": 256,
+      "logical_bits": 131072,
+      "physical_bits_per_module": 131072,
+      "macro_area_per_module": 487375.977984,
+      "module": "mem_ext",
+      "original_module_sha256": "48b9ffb95b9c941061fa0c6b524ce60c6e48607baf47f57a0176ecd6f4be6d59",
+      "module_instances": 4
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 1949503.911936,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/ClockSinkDomain_2.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ClockSinkDomain_2.sv",
+      "original_sha256": "39150458018da477ec2770eb0d43308d91b1369e89049f4ef756de9ed1e10e31",
+      "staged_sha256": "39150458018da477ec2770eb0d43308d91b1369e89049f4ef756de9ed1e10e31",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockSinkDomain_3.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ClockSinkDomain_3.sv",
+      "original_sha256": "64d7ba0c3d649d5db588ff9b5b3e50b60a98d85cf28665dae4a792172b54ffbc",
+      "staged_sha256": "64d7ba0c3d649d5db588ff9b5b3e50b60a98d85cf28665dae4a792172b54ffbc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a31d512s5k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Queue2_TLBundleA_a31d512s5k1z4u.sv",
+      "original_sha256": "54f1075cce4fb3a7315165fe20a297391eee563ec6797e349e3318edf9a6b699",
+      "staged_sha256": "54f1075cce4fb3a7315165fe20a297391eee563ec6797e349e3318edf9a6b699",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a31d2048s8k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Queue2_TLBundleD_a31d2048s8k1z4u.sv",
+      "original_sha256": "dbe5334a9ea34d655c23649600a5fbaa6f8213a32dc8ddd1d79a69b89c49e237",
+      "staged_sha256": "dbe5334a9ea34d655c23649600a5fbaa6f8213a32dc8ddd1d79a69b89c49e237",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a31d256s10k1z3u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Queue2_TLBundleD_a31d256s10k1z3u.sv",
+      "original_sha256": "59ae77ee0eab026a9af9ea36170f4faaacdbc06031778a0977698e1b04efa281",
+      "staged_sha256": "59ae77ee0eab026a9af9ea36170f4faaacdbc06031778a0977698e1b04efa281",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a31d512s5k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Queue2_TLBundleD_a31d512s5k1z4u.sv",
+      "original_sha256": "0d28477995b3042dd0ffc8fabcc310c72677f443af8a3c95ac8680a28f9c5423",
+      "staged_sha256": "0d28477995b3042dd0ffc8fabcc310c72677f443af8a3c95ac8680a28f9c5423",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a31d512s7k1z3u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Queue2_TLBundleD_a31d512s7k1z3u.sv",
+      "original_sha256": "d92942d70cd0351dd8348848848cca8137fd439f9e665d7c400db14d0851eec7",
+      "staged_sha256": "d92942d70cd0351dd8348848848cca8137fd439f9e665d7c400db14d0851eec7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleD_a31d2048s5k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/Repeater_TLBundleD_a31d2048s5k1z4u.sv",
+      "original_sha256": "74789ac56d3ee9453ac2597d1be22c257d2ffe17c328db186bc5d0a7ff856dec",
+      "staged_sha256": "74789ac56d3ee9453ac2597d1be22c257d2ffe17c328db186bc5d0a7ff856dec",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a31d512s5k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLBuffer_a31d512s5k1z4u.sv",
+      "original_sha256": "4bb3839ed932224354139b47722c16fa35d4ab2685d1a1aa53c56ee228d37738",
+      "staged_sha256": "4bb3839ed932224354139b47722c16fa35d4ab2685d1a1aa53c56ee228d37738",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLFIFOFixer_6.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLFIFOFixer_6.sv",
+      "original_sha256": "296aa33b23e8f3d237bf1cbd532e0509d0c6b86957eaf18bd70417b844d0c18c",
+      "staged_sha256": "296aa33b23e8f3d237bf1cbd532e0509d0c6b86957eaf18bd70417b844d0c18c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_100.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_100.sv",
+      "original_sha256": "ed5fa69c515f2de50db0fc0769e891896e9058b54833adab36280bb7b2c8a1fb",
+      "staged_sha256": "ed5fa69c515f2de50db0fc0769e891896e9058b54833adab36280bb7b2c8a1fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_101.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_101.sv",
+      "original_sha256": "b2859b8a7123cf4a7a8bee535bb7d961bfc46641f3ef8ac992ba2f0bda49088c",
+      "staged_sha256": "b2859b8a7123cf4a7a8bee535bb7d961bfc46641f3ef8ac992ba2f0bda49088c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_102.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_102.sv",
+      "original_sha256": "09faef4e6d11a9182a5a8aa90c06edf01bad8407766ab52e8f0ecea5b937273c",
+      "staged_sha256": "09faef4e6d11a9182a5a8aa90c06edf01bad8407766ab52e8f0ecea5b937273c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_103.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_103.sv",
+      "original_sha256": "30f8959b9d613c91939598f318643141d561353996651c41d60258c14a26b951",
+      "staged_sha256": "30f8959b9d613c91939598f318643141d561353996651c41d60258c14a26b951",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_104.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_104.sv",
+      "original_sha256": "b138a261cf28775e25df4520ee5af59f722f1e13bc19308ab08180b31b2f5fdb",
+      "staged_sha256": "b138a261cf28775e25df4520ee5af59f722f1e13bc19308ab08180b31b2f5fdb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_105.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_105.sv",
+      "original_sha256": "2b55ed8cb680a9a2575aa9d2367b5336d4f7069355fec6316234435c252af502",
+      "staged_sha256": "2b55ed8cb680a9a2575aa9d2367b5336d4f7069355fec6316234435c252af502",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_106.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_106.sv",
+      "original_sha256": "f171f03b287a7ef59862c231f49e54d5b01ba31d4e58dc4649eb59c84af60096",
+      "staged_sha256": "f171f03b287a7ef59862c231f49e54d5b01ba31d4e58dc4649eb59c84af60096",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_107.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_107.sv",
+      "original_sha256": "a4e04a52a02e521262dd1d77c2c676151b3f83e3f96b23beed3c4b6f5f47d76d",
+      "staged_sha256": "a4e04a52a02e521262dd1d77c2c676151b3f83e3f96b23beed3c4b6f5f47d76d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_108.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_108.sv",
+      "original_sha256": "7a2658b8b3cd261ec7a72b95ccf3b99da95d631d65ba80219156004d5856a904",
+      "staged_sha256": "7a2658b8b3cd261ec7a72b95ccf3b99da95d631d65ba80219156004d5856a904",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_109.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_109.sv",
+      "original_sha256": "4ee8fe4d8235971ee139c9d087bb20c02a36bd0d909029c6f7e0d005674fc494",
+      "staged_sha256": "4ee8fe4d8235971ee139c9d087bb20c02a36bd0d909029c6f7e0d005674fc494",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_110.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_110.sv",
+      "original_sha256": "6e8ee6b080d017a65c665087b72ba10c7006b854cfccff2a98bd7c8decd316f5",
+      "staged_sha256": "6e8ee6b080d017a65c665087b72ba10c7006b854cfccff2a98bd7c8decd316f5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_111.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_111.sv",
+      "original_sha256": "915382a02bb9484781d686c36a66496910aab9980c8d929af3b9695b3d581388",
+      "staged_sha256": "915382a02bb9484781d686c36a66496910aab9980c8d929af3b9695b3d581388",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_112.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_112.sv",
+      "original_sha256": "c7a14476727a2bfd417d2e76182e8b5333033d2a425829e6756fe78ffe4ca3d1",
+      "staged_sha256": "c7a14476727a2bfd417d2e76182e8b5333033d2a425829e6756fe78ffe4ca3d1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_113.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_113.sv",
+      "original_sha256": "707828baa412bbf53c46015a28c609240a3ceabd1bff27da0a7ebc080224eedf",
+      "staged_sha256": "707828baa412bbf53c46015a28c609240a3ceabd1bff27da0a7ebc080224eedf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_114.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_114.sv",
+      "original_sha256": "5f77ecfcff98ff1ee842d6ebde5a352203a183021f22e05e5d56668e6f2f29ca",
+      "staged_sha256": "5f77ecfcff98ff1ee842d6ebde5a352203a183021f22e05e5d56668e6f2f29ca",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_115.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_115.sv",
+      "original_sha256": "9e4f49f008f4f56f7d1bf2ac0bd1ddb90323d51ae9877a6b35e3783966d39e12",
+      "staged_sha256": "9e4f49f008f4f56f7d1bf2ac0bd1ddb90323d51ae9877a6b35e3783966d39e12",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_116.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_116.sv",
+      "original_sha256": "5077b9dd2d245c83c606f5bedfde0f6b19c4e1a5dd77a51daed574be53888b6c",
+      "staged_sha256": "5077b9dd2d245c83c606f5bedfde0f6b19c4e1a5dd77a51daed574be53888b6c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_85.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_85.sv",
+      "original_sha256": "45dfb54a52564277f80d7c0c67d1ecc3a562e275f16dd29bce73042b9188ac33",
+      "staged_sha256": "45dfb54a52564277f80d7c0c67d1ecc3a562e275f16dd29bce73042b9188ac33",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_86.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_86.sv",
+      "original_sha256": "b7d6cbd9ffc69efd7672fe25d37a7ed0adcc0b67ad26fa2177b46d88a14fab42",
+      "staged_sha256": "b7d6cbd9ffc69efd7672fe25d37a7ed0adcc0b67ad26fa2177b46d88a14fab42",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_87.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_87.sv",
+      "original_sha256": "b102d18274e048edf66a8642c7274d1e5873f4b35d9b380c9658851ed16dfaf3",
+      "staged_sha256": "b102d18274e048edf66a8642c7274d1e5873f4b35d9b380c9658851ed16dfaf3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_88.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_88.sv",
+      "original_sha256": "d94cc692392428577d9db3b4dfc1adf3889b23187311dd3901caf855b3dbc78e",
+      "staged_sha256": "d94cc692392428577d9db3b4dfc1adf3889b23187311dd3901caf855b3dbc78e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_89.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_89.sv",
+      "original_sha256": "060eb86505dad524dd58fd4d0ec08fc551c86d83fb97acdb34467cd5dccc19aa",
+      "staged_sha256": "060eb86505dad524dd58fd4d0ec08fc551c86d83fb97acdb34467cd5dccc19aa",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_90.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_90.sv",
+      "original_sha256": "a2376e0bd5f0fe7a2d4116ba4a13b7cfea8d1bb9d958fb57008c07d055d2b5b2",
+      "staged_sha256": "a2376e0bd5f0fe7a2d4116ba4a13b7cfea8d1bb9d958fb57008c07d055d2b5b2",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_91.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_91.sv",
+      "original_sha256": "652c6473b3629cf5def98ce374303d09db4717c150af4becacbd44d10d2084a0",
+      "staged_sha256": "652c6473b3629cf5def98ce374303d09db4717c150af4becacbd44d10d2084a0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_92.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_92.sv",
+      "original_sha256": "7a2f22e4f61dcfebf3853ec42b1012778970d8abb6aa2be24ae50dfc7750b3bc",
+      "staged_sha256": "7a2f22e4f61dcfebf3853ec42b1012778970d8abb6aa2be24ae50dfc7750b3bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_93.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_93.sv",
+      "original_sha256": "42395897b84345ef0a1988408d5afed0369c3ccb6d9e01acbdf4b6128997b37c",
+      "staged_sha256": "42395897b84345ef0a1988408d5afed0369c3ccb6d9e01acbdf4b6128997b37c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_94.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_94.sv",
+      "original_sha256": "b4a8bfb7de06e462789e08b6e1df3ca302b74fe96a95d38ae1d9c15bb08b662b",
+      "staged_sha256": "b4a8bfb7de06e462789e08b6e1df3ca302b74fe96a95d38ae1d9c15bb08b662b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_95.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_95.sv",
+      "original_sha256": "8963aa971a88ca2822120d509ea52aae2b43156d993758d71daa8cd055bcb57a",
+      "staged_sha256": "8963aa971a88ca2822120d509ea52aae2b43156d993758d71daa8cd055bcb57a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_96.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_96.sv",
+      "original_sha256": "39ba43ff591060c48138cf2fbbebf88bb00869e24afc15926ec155afe2965ab1",
+      "staged_sha256": "39ba43ff591060c48138cf2fbbebf88bb00869e24afc15926ec155afe2965ab1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_97.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_97.sv",
+      "original_sha256": "3977d5c090ea90afbbc4237bb0ef8785735093bf55c670b22d9c83b235e585fb",
+      "staged_sha256": "3977d5c090ea90afbbc4237bb0ef8785735093bf55c670b22d9c83b235e585fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_98.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_98.sv",
+      "original_sha256": "89ba2ff212f920fd471aa676341a9b16d6eaa58b8d30787aa85d3014299306b3",
+      "staged_sha256": "89ba2ff212f920fd471aa676341a9b16d6eaa58b8d30787aa85d3014299306b3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_99.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLMonitor_99.sv",
+      "original_sha256": "fb45d13cc179cb196f8ea028a04f5d76edd4c86d431fe697bad0128b138b08ce",
+      "staged_sha256": "fb45d13cc179cb196f8ea028a04f5d76edd4c86d431fe697bad0128b138b08ce",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLWidthWidget64.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLWidthWidget64.sv",
+      "original_sha256": "ca3f325ae7759457fe109f3c083a6f776fcbf3d7e576d963e03907844c9408ce",
+      "staged_sha256": "ca3f325ae7759457fe109f3c083a6f776fcbf3d7e576d963e03907844c9408ce",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i2_o4_a31d256s10k1z3u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLXbar_i2_o4_a31d256s10k1z3u.sv",
+      "original_sha256": "903028b56f31dd453bad41e4a47f51b5e5ee864d04ec24e3b8db0b676a9d8b69",
+      "staged_sha256": "903028b56f31dd453bad41e4a47f51b5e5ee864d04ec24e3b8db0b676a9d8b69",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i4_o4_a31d512s7k1z3u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLXbar_i4_o4_a31d512s7k1z3u.sv",
+      "original_sha256": "28351a604e59751748cbfaa13d855b68392e1f38c5b6e1b5bb8959e44de24878",
+      "staged_sha256": "28351a604e59751748cbfaa13d855b68392e1f38c5b6e1b5bb8959e44de24878",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i5_o4_a31d2048s8k1z4u.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/TLXbar_i5_o4_a31d2048s8k1z4u.sv",
+      "original_sha256": "795ad3e6c93c71fda62ad5c462d4ef2255548aae6a171ccdf6e462325ad66ad8",
+      "staged_sha256": "795ad3e6c93c71fda62ad5c462d4ef2255548aae6a171ccdf6e462325ad66ad8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "e747d5f6f36d17a2178586dc647facd09bafaf3ddca78111780e4b10f0900444",
+      "staged_sha256": "bf7eef96c05dff8d75d66ccd7d3f22290eaf301e4816290b580744994f893944",
+      "changes": [
+        "Map mem_ext to physical SRAM2RW64x8 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/mem_1.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/mem_1.sv",
+      "original_sha256": "6435a0f9827cba44ff222628c1643ef2542cc2da96282672c6d8e6e7a3a4ec76",
+      "staged_sha256": "6435a0f9827cba44ff222628c1643ef2542cc2da96282672c6d8e6e7a3a4ec76",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/mem_1_0.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/mem_1_0.sv",
+      "original_sha256": "bd736728274e5d5664f13a2ef1e7eea5072b2b0cef918bb7bb32b6bcd31eff00",
+      "staged_sha256": "bd736728274e5d5664f13a2ef1e7eea5072b2b0cef918bb7bb32b6bcd31eff00",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/mem_2.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/mem_2.sv",
+      "original_sha256": "e8c494db174dd31da95f1f41d04ddf2439d59a69602c2015b2afb8249727965c",
+      "staged_sha256": "e8c494db174dd31da95f1f41d04ddf2439d59a69602c2015b2afb8249727965c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/mem_3.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/mem_3.sv",
+      "original_sha256": "0aa82d77dad70b748c776ae94d563c98ab01e0aa50f5cdd664f8efbc6a12f530",
+      "staged_sha256": "0aa82d77dad70b748c776ae94d563c98ab01e0aa50f5cdd664f8efbc6a12f530",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x17.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ram_2x17.sv",
+      "original_sha256": "3dc43b87b2da978cd4c044a435b91377a505fe163797c1097e7a0282c92ec352",
+      "staged_sha256": "3dc43b87b2da978cd4c044a435b91377a505fe163797c1097e7a0282c92ec352",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x20.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ram_2x20.sv",
+      "original_sha256": "b91730812517d9b23d04ef93a88313a0bb6eb9210b2c91f88d6a0400314b6a6b",
+      "staged_sha256": "b91730812517d9b23d04ef93a88313a0bb6eb9210b2c91f88d6a0400314b6a6b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x277.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ram_2x277.sv",
+      "original_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "staged_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x530.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ram_2x530.sv",
+      "original_sha256": "10f84684f435a14df7bba91a2311c195302b642f7129edabde1b4ee0cd46d734",
+      "staged_sha256": "10f84684f435a14df7bba91a2311c195302b642f7129edabde1b4ee0cd46d734",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x623.sv",
+      "staged": "gcn-cgra1/spm-ClockSinkDomain_3/src/ram_2x623.sv",
+      "original_sha256": "111c2b7ff2f631b0a416d76f746a10959fe900260069173816396bcc47e30e9b",
+      "staged_sha256": "111c2b7ff2f631b0a416d76f746a10959fe900260069173816396bcc47e30e9b",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

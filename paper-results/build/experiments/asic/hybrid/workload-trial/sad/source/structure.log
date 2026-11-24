@@ -1,0 +1,1004 @@
+
+-- Running command `read_verilog build/experiments/asic/hybrid/workload-trial/sad/source/all.v; hierarchy -check -top ExpandedSad; proc; opt; check; stat; write_json build/experiments/asic/hybrid/workload-trial/sad/source/structure.json' --
+
+1. Executing Verilog-2005 frontend: build/experiments/asic/hybrid/workload-trial/sad/source/all.v
+Parsing Verilog input from `build/experiments/asic/hybrid/workload-trial/sad/source/all.v' to AST representation.
+Generating RTLIL representation for module `\ExpandedSad'.
+Generating RTLIL representation for module `\Restoring'.
+Generating RTLIL representation for module `\ArithmeticLane'.
+Generating RTLIL representation for module `\PrimitiveBank'.
+Successfully finished Verilog frontend.
+
+2. Executing HIERARCHY pass (managing design hierarchy).
+
+2.1. Analyzing design hierarchy..
+Top module:  \ExpandedSad
+Used module:     \PrimitiveBank
+Used module:         \ArithmeticLane
+Used module:             \Restoring
+
+2.2. Analyzing design hierarchy..
+Top module:  \ExpandedSad
+Used module:     \PrimitiveBank
+Used module:         \ArithmeticLane
+Used module:             \Restoring
+Removed 0 unused modules.
+
+3. Executing PROC pass (convert processes to netlists).
+
+3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132'.
+Found and cleaned up 1 empty switch in `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+Found and cleaned up 1 empty switch in `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+Cleaned up 3 empty switches.
+
+3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166 in module PrimitiveBank.
+Marked 3 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152 in module ArithmeticLane.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132 in module ArithmeticLane.
+Marked 2 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81 in module Restoring.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72 in module Restoring.
+Marked 3 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49 in module ExpandedSad.
+Removed 1 dead cases from process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16 in module ExpandedSad.
+Marked 4 switch rules as full_case in process $proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16 in module ExpandedSad.
+Removed a total of 1 dead cases.
+
+3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 19 assignments to connections.
+
+3.4. Executing PROC_INIT pass (extract init attributes).
+
+3.5. Executing PROC_ARST pass (detect async resets in processes).
+
+3.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~32 debug messages>
+
+3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166'.
+     1/2: $0\busy[0:0]
+     2/2: $0\active[15:0]
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:494$157'.
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+     1/8: $0\partial[31:0]
+     2/8: $0\stride[31:0]
+     3/8: $0\x[31:0]
+     4/8: $0\op[4:0]
+     5/8: $0\out_data[31:0]
+     6/8: $0\state[2:0]
+     7/8: $0\z[31:0]
+     8/8: $0\y[31:0]
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132'.
+     1/1: $1\fast_value[31:0]
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:317$106'.
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+     1/10: $0\done[0:0]
+     2/10: $0\negative[0:0]
+     3/10: $0\take_remainder[0:0]
+     4/10: $0\square_root[0:0]
+     5/10: $0\count[5:0]
+     6/10: $0\remainder[32:0]
+     7/10: $0\divisor[31:0]
+     8/10: $0\quotient[31:0]
+     9/10: $0\busy[0:0]
+    10/10: $0\result[31:0]
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+     1/2: $1\subtract[32:0]
+     2/2: $1\trial[32:0]
+Creating decoders for process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:233$71'.
+Creating decoders for process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+     1/24: $0\values[511:0] [511:480]
+     2/24: $0\values[511:0] [447:416]
+     3/24: $0\values[511:0] [415:384]
+     4/24: $0\values[511:0] [383:352]
+     5/24: $0\values[511:0] [351:320]
+     6/24: $0\values[511:0] [319:288]
+     7/24: $0\values[511:0] [287:256]
+     8/24: $0\values[511:0] [255:224]
+     9/24: $0\values[511:0] [223:192]
+    10/24: $0\values[511:0] [191:160]
+    11/24: $0\values[511:0] [159:128]
+    12/24: $0\values[511:0] [127:96]
+    13/24: $0\values[511:0] [95:64]
+    14/24: $0\values[511:0] [63:32]
+    15/24: $0\values[511:0] [31:0]
+    16/24: $0\values[511:0] [479:448]
+    17/24: $3\sv2v_autoblock_3.i[31:0]
+    18/24: $1\sv2v_autoblock_3.i[31:0]
+    19/24: $0\last_block[0:0]
+    20/24: $0\accumulator[31:0]
+    21/24: $2\sv2v_autoblock_3.i[31:0]
+    22/24: $0\active[15:0]
+    23/24: $0\state[3:0]
+    24/24: $0\round[1:0]
+Creating decoders for process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+     1/71: $1\bank_b[511:0] [511:480]
+     2/71: $1\bank_b[511:0] [447:416]
+     3/71: $1\bank_b[511:0] [383:352]
+     4/71: $1\bank_a[511:0] [383:352]
+     5/71: $1\bank_operation[79:0] [59:55]
+     6/71: $1\bank_b[511:0] [351:320]
+     7/71: $1\bank_a[511:0] [351:320]
+     8/71: $1\bank_operation[79:0] [54:50]
+     9/71: $1\bank_b[511:0] [319:288]
+    10/71: $1\bank_a[511:0] [319:288]
+    11/71: $1\bank_operation[79:0] [49:45]
+    12/71: $1\bank_b[511:0] [287:256]
+    13/71: $1\bank_a[511:0] [287:256]
+    14/71: $1\bank_operation[79:0] [44:40]
+    15/71: $1\bank_b[511:0] [255:224]
+    16/71: $1\bank_a[511:0] [255:224]
+    17/71: $1\bank_operation[79:0] [39:35]
+    18/71: $1\bank_b[511:0] [223:192]
+    19/71: $1\bank_a[511:0] [223:192]
+    20/71: $1\bank_operation[79:0] [34:30]
+    21/71: $1\bank_a[511:0] [447:416]
+    22/71: $1\bank_operation[79:0] [69:65]
+    23/71: $1\bank_operation[79:0] [29:25]
+    24/71: $1\bank_b[511:0] [191:160]
+    25/71: $1\bank_a[511:0] [191:160]
+    26/71: $1\bank_operation[79:0] [24:20]
+    27/71: $1\bank_b[511:0] [159:128]
+    28/71: $1\bank_a[511:0] [159:128]
+    29/71: $1\bank_operation[79:0] [19:15]
+    30/71: $1\bank_b[511:0] [127:96]
+    31/71: $1\bank_a[511:0] [127:96]
+    32/71: $1\bank_operation[79:0] [14:10]
+    33/71: $1\bank_b[511:0] [95:64]
+    34/71: $1\bank_a[511:0] [95:64]
+    35/71: $1\bank_operation[79:0] [9:5]
+    36/71: $1\bank_b[511:0] [63:32]
+    37/71: $1\bank_a[511:0] [63:32]
+    38/71: $1\bank_operation[79:0] [4:0]
+    39/71: $1\bank_b[511:0] [31:0]
+    40/71: $1\bank_a[511:0] [31:0]
+    41/71: $1\bank_b[511:0] [479:448]
+    42/71: $1\bank_a[511:0] [479:448]
+    43/71: $1\bank_operation[79:0] [74:70]
+    44/71: $4\bank_mask[15:0]
+    45/71: $1\bank_a[511:0] [511:480]
+    46/71: $1\bank_operation[79:0] [79:75]
+    47/71: $1\bank_b[511:0] [415:384]
+    48/71: $3\bank_c[511:0]
+    49/71: $3\bank_b[511:0]
+    50/71: $3\bank_a[511:0]
+    51/71: $3\bank_operation[79:0]
+    52/71: $3\bank_mask[15:0]
+    53/71: $3\bank_valid[0:0]
+    54/71: $2\bank_d[511:0]
+    55/71: $2\bank_c[511:0]
+    56/71: $2\bank_b[511:0]
+    57/71: $2\bank_a[511:0]
+    58/71: $2\bank_operation[79:0]
+    59/71: $2\bank_mask[15:0]
+    60/71: $2\bank_valid[0:0]
+    61/71: $2\bank_rsp_ready[0:0]
+    62/71: $1\bank_d[511:0]
+    63/71: $1\bank_c[511:0]
+    64/71: $1\bank_a[511:0] [415:384]
+    65/71: $1\bank_operation[79:0] [64:60]
+    66/71: $3\bank_d[511:0]
+    67/71: $1\bank_mask[15:0]
+    68/71: $1\bank_rsp_ready[0:0]
+    69/71: $1\bank_valid[0:0]
+    70/71: $1\sv2v_autoblock_2.i[31:0]
+    71/71: $1\sv2v_autoblock_1.i[31:0]
+
+3.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\ArithmeticLane.\_sv2v_0' from process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:494$157'.
+No latch inferred for signal `\ArithmeticLane.\fast_value' from process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132'.
+No latch inferred for signal `\Restoring.\_sv2v_0' from process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:317$106'.
+No latch inferred for signal `\Restoring.\subtract' from process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+No latch inferred for signal `\Restoring.\trial' from process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+No latch inferred for signal `\Restoring.\next_quotient' from process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+No latch inferred for signal `\Restoring.\next_remainder' from process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+No latch inferred for signal `\ExpandedSad.\_sv2v_0' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:233$71'.
+No latch inferred for signal `\ExpandedSad.\bank_valid' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_rsp_ready' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_mask' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_operation' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_a' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_b' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_c' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+No latch inferred for signal `\ExpandedSad.\bank_d' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+Latch inferred for signal `\ExpandedSad.\sv2v_autoblock_1.i' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16': $auto$proc_dlatch.cc:439:proc_dlatch$1383
+Latch inferred for signal `\ExpandedSad.\sv2v_autoblock_2.i' from process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16': $auto$proc_dlatch.cc:439:proc_dlatch$1394
+
+3.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\PrimitiveBank.\active' using process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166'.
+  created $dff cell `$procdff$1395' with positive edge clock.
+Creating register for signal `\PrimitiveBank.\busy' using process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166'.
+  created $dff cell `$procdff$1396' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\y' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1397' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\z' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1398' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\state' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1399' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\out_data' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1400' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\op' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1401' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\x' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1402' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\stride' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1403' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\partial' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+  created $dff cell `$procdff$1404' with positive edge clock.
+Creating register for signal `\Restoring.\result' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1405' with positive edge clock.
+Creating register for signal `\Restoring.\busy' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1406' with positive edge clock.
+Creating register for signal `\Restoring.\done' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1407' with positive edge clock.
+Creating register for signal `\Restoring.\quotient' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1408' with positive edge clock.
+Creating register for signal `\Restoring.\divisor' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1409' with positive edge clock.
+Creating register for signal `\Restoring.\remainder' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1410' with positive edge clock.
+Creating register for signal `\Restoring.\count' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1411' with positive edge clock.
+Creating register for signal `\Restoring.\square_root' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1412' with positive edge clock.
+Creating register for signal `\Restoring.\take_remainder' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1413' with positive edge clock.
+Creating register for signal `\Restoring.\negative' using process `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+  created $dff cell `$procdff$1414' with positive edge clock.
+Creating register for signal `\ExpandedSad.\round' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1415' with positive edge clock.
+Creating register for signal `\ExpandedSad.\state' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1416' with positive edge clock.
+Creating register for signal `\ExpandedSad.\active' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1417' with positive edge clock.
+Creating register for signal `\ExpandedSad.\values' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1418' with positive edge clock.
+Creating register for signal `\ExpandedSad.\accumulator' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1419' with positive edge clock.
+Creating register for signal `\ExpandedSad.\last_block' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1420' with positive edge clock.
+Creating register for signal `\ExpandedSad.\sv2v_autoblock_3.i' using process `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+  created $dff cell `$procdff$1421' with positive edge clock.
+
+3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 3 empty switches in `\PrimitiveBank.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166'.
+Removing empty process `PrimitiveBank.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:582$166'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:494$157'.
+Found and cleaned up 6 empty switches in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:445$152'.
+Found and cleaned up 1 empty switch in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:416$132'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:317$106'.
+Found and cleaned up 5 empty switches in `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:281$81'.
+Found and cleaned up 1 empty switch in `\Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:269$72'.
+Removing empty process `ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:233$71'.
+Found and cleaned up 12 empty switches in `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+Removing empty process `ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:174$49'.
+Found and cleaned up 4 empty switches in `\ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+Removing empty process `ExpandedSad.$proc$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:102$16'.
+Cleaned up 32 empty switches.
+
+3.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+<suppressed ~16 debug messages>
+Optimizing module ArithmeticLane.
+<suppressed ~9 debug messages>
+Optimizing module Restoring.
+<suppressed ~4 debug messages>
+Optimizing module ExpandedSad.
+<suppressed ~91 debug messages>
+
+4. Executing OPT pass (performing simple optimizations).
+
+4.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedSad.
+
+4.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 64 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Computing hashes of 48 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+<suppressed ~48 debug messages>
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 122 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Computing hashes of 107 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+<suppressed ~45 debug messages>
+Finding identical cells in module `\Restoring'.
+Computing hashes of 71 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Computing hashes of 67 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+<suppressed ~12 debug messages>
+Finding identical cells in module `\ExpandedSad'.
+Computing hashes of 642 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 362 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 291 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+<suppressed ~1053 debug messages>
+Removed a total of 386 cells.
+
+4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:438$150: \x -> { 1'0 \x [30:0] }
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $procmux$426: \busy -> 1'0
+      Replacing known input bits on port A of cell $procmux$424: \busy -> 1'1
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedSad..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$38: \values [351:320] -> { 1'0 \values [350:320] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$32: \values [255:224] -> { 1'0 \values [254:224] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$40: \values [383:352] -> { 1'0 \values [382:352] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$20: \values [63:32] -> { 1'0 \values [62:32] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$22: \values [95:64] -> { 1'0 \values [94:64] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$46: \values [479:448] -> { 1'0 \values [478:448] }
+      Replacing known input bits on port B of cell $procmux$1220: \cmd_valid -> 1'1
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$30: \values [223:192] -> { 1'0 \values [222:192] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$34: \values [287:256] -> { 1'0 \values [286:256] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$44: \values [447:416] -> { 1'0 \values [446:416] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$24: \values [127:96] -> { 1'0 \values [126:96] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$48: \values [511:480] -> { 1'0 \values [510:480] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$26: \values [159:128] -> { 1'0 \values [158:128] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$36: \values [319:288] -> { 1'0 \values [318:288] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$28: \values [191:160] -> { 1'0 \values [190:160] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$18: \values [31:0] -> { 1'0 \values [30:0] }
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:142$42: \values [415:384] -> { 1'0 \values [414:384] }
+  Analyzing evaluation results.
+    dead port 2/2 on $mux $procmux$1274.
+    dead port 2/2 on $mux $procmux$1264.
+    dead port 2/2 on $mux $procmux$1304.
+    dead port 2/2 on $mux $procmux$1254.
+    dead port 2/2 on $mux $procmux$1244.
+    dead port 2/2 on $mux $procmux$1234.
+    dead port 2/2 on $mux $procmux$1343.
+    dead port 1/2 on $mux $procmux$798.
+    dead port 2/2 on $mux $procmux$1224.
+    dead port 2/2 on $mux $procmux$1294.
+    dead port 1/2 on $mux $procmux$752.
+    dead port 2/2 on $mux $procmux$749.
+    dead port 2/2 on $mux $procmux$1222.
+    dead port 2/2 on $mux $procmux$1211.
+    dead port 2/2 on $mux $procmux$1341.
+    dead port 2/2 on $mux $procmux$1209.
+    dead port 2/2 on $mux $procmux$1198.
+    dead port 2/2 on $mux $procmux$1196.
+    dead port 2/2 on $mux $procmux$1185.
+    dead port 2/2 on $mux $procmux$1128.
+    dead port 2/2 on $mux $procmux$1183.
+    dead port 2/2 on $mux $procmux$1172.
+    dead port 2/2 on $mux $procmux$1284.
+    dead port 2/2 on $mux $procmux$1170.
+    dead port 2/2 on $mux $procmux$1159.
+    dead port 2/2 on $mux $procmux$1157.
+Removed 26 multiplexer ports.
+<suppressed ~685 debug messages>
+
+4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedSad.
+    New ctrl vector for $pmux cell $procmux$1359: { $auto$opt_reduce.cc:135:opt_pmux$1423 $procmux$988_CTRL }
+    New ctrl vector for $pmux cell $procmux$1092: { $auto$opt_reduce.cc:135:opt_pmux$1425 $procmux$1367_CMP $procmux$988_CTRL }
+  Optimizing cells in module \ExpandedSad.
+Performed a total of 2 changes.
+
+4.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 48 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 107 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 67 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedSad'.
+Computing hashes of 267 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 251 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+<suppressed ~48 debug messages>
+Removed a total of 16 cells.
+
+4.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding SRST signal on $procdff$1396 ($dff) from module PrimitiveBank (D = $procmux$216_Y, Q = \busy, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$1426 ($sdff) from module PrimitiveBank (D = 1'1, Q = \busy).
+Adding SRST signal on $procdff$1395 ($dff) from module PrimitiveBank (D = $procmux$223_Y, Q = \active, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$1430 ($sdff) from module PrimitiveBank (D = \mask, Q = \active).
+Adding SRST signal on $procdff$1397 ($dff) from module ArithmeticLane (D = $procmux$335_Y, Q = \y, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1432 ($sdff) from module ArithmeticLane (D = \b, Q = \y).
+Adding SRST signal on $procdff$1398 ($dff) from module ArithmeticLane (D = $procmux$322_Y, Q = \z, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1436 ($sdff) from module ArithmeticLane (D = \c, Q = \z).
+Adding SRST signal on $procdff$1399 ($dff) from module ArithmeticLane (D = $procmux$297_Y, Q = \state, rval = 3'000).
+Adding EN signal on $auto$ff.cc:337:slice$1440 ($sdff) from module ArithmeticLane (D = $procmux$297_Y, Q = \state).
+Adding SRST signal on $procdff$1400 ($dff) from module ArithmeticLane (D = $procmux$284_Y, Q = \out_data, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1450 ($sdff) from module ArithmeticLane (D = $procmux$284_Y, Q = \out_data).
+Adding SRST signal on $procdff$1401 ($dff) from module ArithmeticLane (D = $procmux$275_Y, Q = \op, rval = 5'00000).
+Adding EN signal on $auto$ff.cc:337:slice$1460 ($sdff) from module ArithmeticLane (D = \operation, Q = \op).
+Adding SRST signal on $procdff$1402 ($dff) from module ArithmeticLane (D = $procmux$262_Y, Q = \x, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1464 ($sdff) from module ArithmeticLane (D = \a, Q = \x).
+Adding SRST signal on $procdff$1403 ($dff) from module ArithmeticLane (D = $procmux$249_Y, Q = \stride, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1468 ($sdff) from module ArithmeticLane (D = \d, Q = \stride).
+Adding SRST signal on $procdff$1404 ($dff) from module ArithmeticLane (D = $procmux$232_Y, Q = \partial, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1472 ($sdff) from module ArithmeticLane (D = $procmux$232_Y, Q = \partial).
+Adding SRST signal on $procdff$1414 ($dff) from module Restoring (D = $procmux$373_Y, Q = \negative, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$1480 ($sdff) from module Restoring (D = $logic_and$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:298$87_Y, Q = \negative).
+Adding SRST signal on $procdff$1413 ($dff) from module Restoring (D = $procmux$379_Y, Q = \take_remainder, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$1482 ($sdff) from module Restoring (D = $eq$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:297$85_Y, Q = \take_remainder).
+Adding SRST signal on $procdff$1412 ($dff) from module Restoring (D = $procmux$385_Y, Q = \square_root, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$1484 ($sdff) from module Restoring (D = $eq$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:296$84_Y, Q = \square_root).
+Adding SRST signal on $procdff$1407 ($dff) from module Restoring (D = $procmux$362_Y, Q = \done, rval = 1'0).
+Adding SRST signal on $procdff$1408 ($dff) from module Restoring (D = $procmux$419_Y, Q = \quotient, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1491 ($sdff) from module Restoring (D = $procmux$419_Y, Q = \quotient).
+Adding SRST signal on $procdff$1409 ($dff) from module Restoring (D = $procmux$411_Y, Q = \divisor, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1495 ($sdff) from module Restoring (D = $procmux$411_Y, Q = \divisor).
+Adding SRST signal on $procdff$1410 ($dff) from module Restoring (D = $procmux$398_Y, Q = \remainder, rval = 33'000000000000000000000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$1503 ($sdff) from module Restoring (D = \next_remainder, Q = \remainder).
+Adding SRST signal on $procdff$1411 ($dff) from module Restoring (D = $procmux$393_Y, Q = \count, rval = 6'000000).
+Adding EN signal on $auto$ff.cc:337:slice$1507 ($sdff) from module Restoring (D = $procmux$393_Y, Q = \count).
+Adding SRST signal on $procdff$1405 ($dff) from module Restoring (D = $procmux$439_Y, Q = \result, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1511 ($sdff) from module Restoring (D = $ternary$build/experiments/asic/hybrid/workload-trial/sad/source/all.v:313$105_Y, Q = \result).
+Adding SRST signal on $procdff$1406 ($dff) from module Restoring (D = $procmux$429_Y, Q = \busy, rval = 1'0).
+Adding EN signal on $procdff$1421 ($dff) from module ExpandedSad (D = $2\sv2v_autoblock_3.i[31:0], Q = \sv2v_autoblock_3.i).
+Adding SRST signal on $procdff$1416 ($dff) from module ExpandedSad (D = $procmux$819_Y, Q = \state, rval = 4'0000).
+Adding EN signal on $auto$ff.cc:337:slice$1519 ($sdff) from module ExpandedSad (D = $procmux$819_Y, Q = \state).
+Adding SRST signal on $procdff$1415 ($dff) from module ExpandedSad (D = $procmux$855_Y, Q = \round, rval = 2'00).
+Adding EN signal on $auto$ff.cc:337:slice$1541 ($sdff) from module ExpandedSad (D = $procmux$855_Y, Q = \round).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$456_Y, Q = \values [511:480], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$474_Y, Q = \values [447:416], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$492_Y, Q = \values [415:384], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$510_Y, Q = \values [383:352], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$528_Y, Q = \values [351:320], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$546_Y, Q = \values [319:288], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$564_Y, Q = \values [287:256], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$582_Y, Q = \values [255:224], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$600_Y, Q = \values [223:192], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$618_Y, Q = \values [191:160], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$636_Y, Q = \values [159:128], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$654_Y, Q = \values [127:96], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$672_Y, Q = \values [95:64], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$690_Y, Q = \values [63:32], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$708_Y, Q = \values [31:0], rval = 0).
+Adding SRST signal on $procdff$1418 ($dff) from module ExpandedSad (D = $procmux$726_Y, Q = \values [479:448], rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1566 ($sdff) from module ExpandedSad (D = $procmux$726_Y, Q = \values [479:448]).
+Adding EN signal on $auto$ff.cc:337:slice$1565 ($sdff) from module ExpandedSad (D = $procmux$708_Y, Q = \values [31:0]).
+Adding EN signal on $auto$ff.cc:337:slice$1564 ($sdff) from module ExpandedSad (D = $procmux$690_Y, Q = \values [63:32]).
+Adding EN signal on $auto$ff.cc:337:slice$1563 ($sdff) from module ExpandedSad (D = $procmux$672_Y, Q = \values [95:64]).
+Adding EN signal on $auto$ff.cc:337:slice$1562 ($sdff) from module ExpandedSad (D = $procmux$654_Y, Q = \values [127:96]).
+Adding EN signal on $auto$ff.cc:337:slice$1561 ($sdff) from module ExpandedSad (D = $procmux$636_Y, Q = \values [159:128]).
+Adding EN signal on $auto$ff.cc:337:slice$1560 ($sdff) from module ExpandedSad (D = $procmux$618_Y, Q = \values [191:160]).
+Adding EN signal on $auto$ff.cc:337:slice$1559 ($sdff) from module ExpandedSad (D = $procmux$600_Y, Q = \values [223:192]).
+Adding EN signal on $auto$ff.cc:337:slice$1558 ($sdff) from module ExpandedSad (D = $procmux$582_Y, Q = \values [255:224]).
+Adding EN signal on $auto$ff.cc:337:slice$1557 ($sdff) from module ExpandedSad (D = $procmux$564_Y, Q = \values [287:256]).
+Adding EN signal on $auto$ff.cc:337:slice$1556 ($sdff) from module ExpandedSad (D = $procmux$546_Y, Q = \values [319:288]).
+Adding EN signal on $auto$ff.cc:337:slice$1555 ($sdff) from module ExpandedSad (D = $procmux$528_Y, Q = \values [351:320]).
+Adding EN signal on $auto$ff.cc:337:slice$1554 ($sdff) from module ExpandedSad (D = $procmux$510_Y, Q = \values [383:352]).
+Adding EN signal on $auto$ff.cc:337:slice$1553 ($sdff) from module ExpandedSad (D = $procmux$492_Y, Q = \values [415:384]).
+Adding EN signal on $auto$ff.cc:337:slice$1552 ($sdff) from module ExpandedSad (D = $procmux$474_Y, Q = \values [447:416]).
+Adding EN signal on $auto$ff.cc:337:slice$1551 ($sdff) from module ExpandedSad (D = $procmux$456_Y, Q = \values [511:480]).
+Adding SRST signal on $procdff$1419 ($dff) from module ExpandedSad (D = $procmux$777_Y, Q = \accumulator, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$1679 ($sdff) from module ExpandedSad (D = $procmux$777_Y, Q = \accumulator).
+Adding SRST signal on $procdff$1417 ($dff) from module ExpandedSad (D = $procmux$811_Y, Q = \active, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$1691 ($sdff) from module ExpandedSad (D = \native_mask, Q = \active).
+Adding SRST signal on $procdff$1420 ($dff) from module ExpandedSad (D = $procmux$768_Y, Q = \last_block, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$1695 ($sdff) from module ExpandedSad (D = \native_last, Q = \last_block).
+Setting constant 0-bit at position 0 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 1 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 2 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 3 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 1-bit at position 4 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 5 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 6 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 7 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 8 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 9 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 10 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 11 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 12 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 13 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 14 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 15 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 16 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 17 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 18 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 19 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 20 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 21 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 22 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 23 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 24 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 25 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 26 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 27 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 28 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 29 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 30 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 31 on $auto$proc_dlatch.cc:439:proc_dlatch$1383 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 0 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 1 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 2 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 1-bit at position 3 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 4 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 5 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 6 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 7 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 8 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 9 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 10 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 11 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 12 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 13 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 14 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 15 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 16 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 17 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 18 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 19 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 20 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 21 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 22 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 23 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 24 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 25 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 26 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 27 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 28 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 29 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 30 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+Setting constant 0-bit at position 31 on $auto$proc_dlatch.cc:439:proc_dlatch$1394 ($dlatch) from module ExpandedSad.
+
+4.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedSad..
+Removed 74 unused cells and 781 unused wires.
+<suppressed ~79 debug messages>
+
+4.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+<suppressed ~2 debug messages>
+Optimizing module Restoring.
+<suppressed ~4 debug messages>
+Optimizing module ExpandedSad.
+<suppressed ~18 debug messages>
+
+4.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedSad..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~428 debug messages>
+
+4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedSad.
+    New ctrl vector for $pmux cell $procmux$726: { $auto$opt_reduce.cc:135:opt_pmux$1700 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$708: { $auto$opt_reduce.cc:135:opt_pmux$1702 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$690: { $auto$opt_reduce.cc:135:opt_pmux$1704 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$672: { $auto$opt_reduce.cc:135:opt_pmux$1706 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$654: { $auto$opt_reduce.cc:135:opt_pmux$1708 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$636: { $auto$opt_reduce.cc:135:opt_pmux$1710 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$618: { $auto$opt_reduce.cc:135:opt_pmux$1712 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$600: { $auto$opt_reduce.cc:135:opt_pmux$1714 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$582: { $auto$opt_reduce.cc:135:opt_pmux$1716 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$564: { $auto$opt_reduce.cc:135:opt_pmux$1718 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$546: { $auto$opt_reduce.cc:135:opt_pmux$1720 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$528: { $auto$opt_reduce.cc:135:opt_pmux$1722 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$510: { $auto$opt_reduce.cc:135:opt_pmux$1724 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$492: { $auto$opt_reduce.cc:135:opt_pmux$1726 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$474: { $auto$opt_reduce.cc:135:opt_pmux$1728 $procmux$1356_CMP [0] }
+    New ctrl vector for $pmux cell $procmux$456: { $auto$opt_reduce.cc:135:opt_pmux$1730 $procmux$1356_CMP [0] }
+  Optimizing cells in module \ExpandedSad.
+Performed a total of 16 changes.
+
+4.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 105 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+<suppressed ~15 debug messages>
+Finding identical cells in module `\Restoring'.
+Computing hashes of 57 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+<suppressed ~6 debug messages>
+Finding identical cells in module `\ExpandedSad'.
+Computing hashes of 318 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 267 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 252 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+<suppressed ~198 debug messages>
+Removed a total of 73 cells.
+
+4.13. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $auto$ff.cc:337:slice$1658 ($sdffe) from module ExpandedSad (D = $procmux$492_Y, Q = \values [415:384]).
+Adding EN signal on $auto$ff.cc:337:slice$1651 ($sdffe) from module ExpandedSad (D = $procmux$510_Y, Q = \values [383:352]).
+Adding EN signal on $auto$ff.cc:337:slice$1644 ($sdffe) from module ExpandedSad (D = $procmux$528_Y, Q = \values [351:320]).
+Adding EN signal on $auto$ff.cc:337:slice$1637 ($sdffe) from module ExpandedSad (D = $procmux$546_Y, Q = \values [319:288]).
+Adding EN signal on $auto$ff.cc:337:slice$1630 ($sdffe) from module ExpandedSad (D = $procmux$564_Y, Q = \values [287:256]).
+Adding EN signal on $auto$ff.cc:337:slice$1623 ($sdffe) from module ExpandedSad (D = $procmux$582_Y, Q = \values [255:224]).
+Adding EN signal on $auto$ff.cc:337:slice$1567 ($sdffe) from module ExpandedSad (D = $procmux$726_Y, Q = \values [479:448]).
+Adding EN signal on $auto$ff.cc:337:slice$1616 ($sdffe) from module ExpandedSad (D = $procmux$600_Y, Q = \values [223:192]).
+Adding EN signal on $auto$ff.cc:337:slice$1609 ($sdffe) from module ExpandedSad (D = $procmux$618_Y, Q = \values [191:160]).
+Adding EN signal on $auto$ff.cc:337:slice$1602 ($sdffe) from module ExpandedSad (D = $procmux$636_Y, Q = \values [159:128]).
+Adding EN signal on $auto$ff.cc:337:slice$1665 ($sdffe) from module ExpandedSad (D = $procmux$474_Y, Q = \values [447:416]).
+Adding EN signal on $auto$ff.cc:337:slice$1595 ($sdffe) from module ExpandedSad (D = $procmux$654_Y, Q = \values [127:96]).
+Adding EN signal on $auto$ff.cc:337:slice$1588 ($sdffe) from module ExpandedSad (D = $procmux$672_Y, Q = \values [95:64]).
+Adding EN signal on $auto$ff.cc:337:slice$1581 ($sdffe) from module ExpandedSad (D = $procmux$690_Y, Q = \values [63:32]).
+Adding EN signal on $auto$ff.cc:337:slice$1574 ($sdffe) from module ExpandedSad (D = $procmux$708_Y, Q = \values [31:0]).
+Adding EN signal on $auto$ff.cc:337:slice$1672 ($sdffe) from module ExpandedSad (D = $procmux$456_Y, Q = \values [511:480]).
+
+4.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedSad..
+Removed 0 unused cells and 73 unused wires.
+<suppressed ~3 debug messages>
+
+4.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedSad.
+
+4.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedSad..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~412 debug messages>
+
+4.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedSad.
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1735: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1732 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1740: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1737 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1745: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1742 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1750: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1747 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1755: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1752 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1760: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1757 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1765: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1762 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1770: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1767 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1775: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1772 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1780: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1777 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1785: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1782 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1790: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1787 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1795: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1792 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1800: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1797 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1805: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1802 }
+    New input vector for $reduce_and cell $auto$opt_dff.cc:252:make_patterns_logic$1810: { $auto$opt_dff.cc:234:make_patterns_logic$1529 $auto$opt_dff.cc:234:make_patterns_logic$1570 $auto$opt_dff.cc:234:make_patterns_logic$1807 }
+  Optimizing cells in module \ExpandedSad.
+Performed a total of 16 changes.
+
+4.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedSad'.
+Computing hashes of 284 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 268 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Computing hashes of 253 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+<suppressed ~93 debug messages>
+Removed a total of 31 cells.
+
+4.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedSad..
+Removed 1 unused cells and 32 unused wires.
+<suppressed ~2 debug messages>
+
+4.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedSad.
+
+4.23. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.24. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedSad..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~414 debug messages>
+
+4.25. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedSad.
+Performed a total of 0 changes.
+
+4.26. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedSad'.
+Computing hashes of 252 cells of `\ExpandedSad'.
+Finding duplicate cells in `\ExpandedSad'.
+Removed a total of 0 cells.
+
+4.27. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.28. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedSad..
+
+4.29. Executing OPT_EXPR pass (perform const folding).
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedSad.
+
+4.30. Finished fast OPT passes. (There is nothing left to do.)
+
+5. Executing CHECK pass (checking for obvious problems).
+Checking module PrimitiveBank...
+Checking module ArithmeticLane...
+Checking module Restoring...
+Checking module ExpandedSad...
+Found and reported 0 problems.
+
+6. Printing statistics.
+
+=== PrimitiveBank ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       96 wires
+     3409 wire bits
+       73 public wires
+     3356 public wire bits
+       21 ports
+     2763 port bits
+       28 cells
+       20   $logic_and
+        1   $logic_not
+        1   $not
+        1   $or
+        2   $reduce_and
+        1   $reduce_or
+        2   $sdffe
+       16 submodules
+       16   ArithmeticLane
+
+=== ArithmeticLane ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      116 wires
+     1288 wire bits
+       33 public wires
+      509 public wire bits
+       19 ports
+      271 port bits
+       99 cells
+        4   $add
+        1   $and
+       30   $eq
+        1   $ge
+        1   $gt
+        5   $logic_and
+        5   $logic_not
+        3   $logic_or
+        1   $lt
+        1   $mul
+       16   $mux
+        6   $ne
+        1   $not
+        1   $or
+        4   $pmux
+        4   $reduce_and
+        2   $reduce_bool
+        8   $sdffe
+        1   $shl
+        1   $shr
+        1   $sshr
+        1   $sub
+        1   $xor
+        1 submodules
+        1   Restoring
+
+=== Restoring ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       63 wires
+      901 wire bits
+       22 public wires
+      342 public wire bits
+       10 ports
+      104 port bits
+       55 cells
+        3   $eq
+        1   $ge
+        4   $logic_and
+        1   $logic_not
+       21   $mux
+        1   $ne
+        3   $neg
+        2   $not
+        1   $or
+        2   $reduce_and
+        2   $reduce_bool
+        2   $reduce_or
+        2   $sdff
+        8   $sdffe
+        2   $sub
+
+=== ExpandedSad ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      213 wires
+    14173 wire bits
+       46 public wires
+     7035 public wire bits
+       23 ports
+     3740 port bits
+      251 cells
+        1   $add
+       12   $eq
+        5   $logic_and
+        3   $logic_not
+        1   $logic_or
+      112   $mux
+       11   $ne
+       71   $pmux
+        5   $reduce_and
+        4   $reduce_bool
+        5   $reduce_or
+       21   $sdffe
+        1 submodules
+        1   PrimitiveBank
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     2743 ExpandedSad
+       28 PrimitiveBank
+       99   ArithmeticLane
+       55     Restoring
+
+        +----------Count including submodules.
+        | 
+     3173 wires
+    52606 wire bits
+      999 public wires
+    24007 public wire bits
+      508 ports
+    12503 port bits
+        - memories
+        - memory bits
+        - processes
+     2743 cells
+       65   $add
+       16   $and
+      540   $eq
+       32   $ge
+       16   $gt
+      169   $logic_and
+      100   $logic_not
+       49   $logic_or
+       16   $lt
+       16   $mul
+      704   $mux
+      123   $ne
+       48   $neg
+       49   $not
+       33   $or
+      135   $pmux
+      103   $reduce_and
+       68   $reduce_bool
+       38   $reduce_or
+       32   $sdff
+      279   $sdffe
+       16   $shl
+       16   $shr
+       16   $sshr
+       48   $sub
+       16   $xor
+        1 submodules
+        1   PrimitiveBank
+
+7. Executing JSON backend.

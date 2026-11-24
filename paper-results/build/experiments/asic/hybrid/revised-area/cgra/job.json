@@ -1,0 +1,10 @@
+{
+  "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+  "remote": "/tmp/cgra-revised-core-gWAZjcEc",
+  "top": "CgraCompute",
+  "cores": 2,
+  "clock_ns": 2,
+  "source_sha256": "891fe96e764a8d1fb40ea59e230d437bae9c6524e2c4f4e7730d48c51f58f47a",
+  "constraints_sha256": "c02d6abcab58e49d63a29858aab05cfddbdfea324d1c681a322cd9628fbba642",
+  "boundary": "Complete modified CGRA with only external data_mem instance removed; its signals become explicit top ports. DMA shell was outside the selected original core. Local arrays, native access logic, all PE routing and control remain."
+}

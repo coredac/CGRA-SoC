@@ -1,0 +1,151 @@
+{
+  "scope": "Complete modified CGRA compute core, external data_mem instance and DMA shell excluded; named static storage cells subtracted after mapping.",
+  "complete": true,
+  "area_unit": "SAED14 library area units",
+  "clock_ns": 2,
+  "total_cell_area": 544538.068098,
+  "static_storage_area": 131234.5008,
+  "area_excluding_static_storage": 413303.567298,
+  "leaf_area_sum": 544538.0724,
+  "report_minus_leaf_area": -0.004302,
+  "retained_group_area": {
+    "bypass_queue": 427.7496,
+    "controller": 9597.948,
+    "ctrl_ring": 6347.3796,
+    "const_mem": 30097.9164,
+    "ctrl_mem": 93878.8716,
+    "element": 114210.2088,
+    "fu_crossbar": 19307.9172,
+    "register_cluster": 45412.1868,
+    "routing_crossbar": 82770.3912,
+    "tile_channels": 8516.0088,
+    "tile_local_control": 2722.6968,
+    "core_local_control": 14.2968
+  },
+  "retained_group_cell_counts": {
+    "bypass_queue": 934,
+    "controller": 22285,
+    "ctrl_ring": 13997,
+    "const_mem": 100788,
+    "ctrl_mem": 307747,
+    "element": 309609,
+    "fu_crossbar": 54499,
+    "register_cluster": 103686,
+    "routing_crossbar": 223227,
+    "tile_channels": 20253,
+    "tile_local_control": 9677,
+    "core_local_control": 53
+  },
+  "functional_unit_area": {
+    "add_subtract": 6332.2392,
+    "multiply": 23824.1964,
+    "divide_remainder_sqrt": 7549.332,
+    "logic": 4159.5696,
+    "shift": 7039.0872,
+    "compare": 5437.3128,
+    "select": 2833.2528,
+    "grant": 5050.056,
+    "phi": 6516.8544,
+    "pe_load_store": 3397.71,
+    "return": 4471.7016,
+    "address_generation": 29167.3812,
+    "nop": 936.3072,
+    "fu_selection_and_control": 7495.2084
+  },
+  "static_storage": {
+    "constants": {
+      "cells": 32480,
+      "area": 30284.352
+    },
+    "instructions": {
+      "cells": 85248,
+      "area": 79467.6528
+    },
+    "fu_crossbar_prologue": {
+      "cells": 4608,
+      "area": 4296.4992
+    },
+    "routing_prologue": {
+      "cells": 18432,
+      "area": 17185.9968
+    }
+  },
+  "static_storage_patterns": {
+    "instructions": "tile__\\d+/ctrl_mem/reg_file/regs_reg\\[",
+    "constants": "tile__\\d+/const_mem/reg_file/regs_reg\\[",
+    "routing_prologue": "tile__\\d+/ctrl_mem/prologue_count_reg_routing_crossbar_reg\\[",
+    "fu_crossbar_prologue": "tile__\\d+/ctrl_mem/prologue_count_reg_fu_crossbar_reg\\["
+  },
+  "worst_setup_slack_ns": -0.962234,
+  "violating_setup_paths": 15156,
+  "no_violated_constraints": false,
+  "worst_startpoint": "clk[0] (clock source 'core')",
+  "worst_endpoint": "data_mem__clk[0]",
+  "reported_setup_paths": [
+    {
+      "startpoint": "clk[0] (clock source 'core')",
+      "endpoint": "data_mem__clk[0]",
+      "slack_ns": -0.962234
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__1/register_cluster/reg_bank__2/reg_file/regs_reg[7][34]",
+      "slack_ns": -0.759389
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__0/tile_in_channel__3/queues__0/dpath/rf/regs_reg[0][34]",
+      "slack_ns": -0.759173
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__1/register_cluster/reg_bank__3/reg_file/regs_reg[7][34]",
+      "slack_ns": -0.758832
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__0/tile_in_channel__3/queues__0/dpath/rf/regs_reg[1][34]",
+      "slack_ns": -0.758352
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__1/register_cluster/reg_bank__0/reg_file/regs_reg[7][34]",
+      "slack_ns": -0.757064
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__5/tile_in_channel__1/queues__0/dpath/rf/regs_reg[1][34]",
+      "slack_ns": -0.756657
+    },
+    {
+      "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+      "endpoint": "tile__2/tile_in_channel__2/queues__0/dpath/rf/regs_reg[1][34]",
+      "slack_ns": -0.756619
+    },
+    {
+      "startpoint": "tile__7/ctrl_mem/reg_file__raddr_reg[2]",
+      "endpoint": "tile__6/tile_in_channel__3/queues__0/dpath/rf/regs_reg[1][34]",
+      "slack_ns": -0.756337
+    },
+    {
+      "startpoint": "tile__7/ctrl_mem/reg_file__raddr_reg[2]",
+      "endpoint": "tile__7/register_cluster/reg_bank__0/reg_file/regs_reg[7][34]",
+      "slack_ns": -0.756062
+    }
+  ],
+  "worst_reported_data_path": {
+    "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+    "endpoint": "tile__1/register_cluster/reg_bank__2/reg_file/regs_reg[7][34]",
+    "slack_ns": -0.759389
+  },
+  "source_sha256": "891fe96e764a8d1fb40ea59e230d437bae9c6524e2c4f4e7730d48c51f58f47a",
+  "constraints_sha256": "c02d6abcab58e49d63a29858aab05cfddbdfea324d1c681a322cd9628fbba642",
+  "report_provenance": "reports.json",
+  "limits": [
+    "Runtime prologue counters, operand registers, pipeline state and queues remain charged.",
+    "All instruction/constant read-write selection and native compute routing remain charged.",
+    "Ideal-clock wire-load synthesis is not physical signoff.",
+    "No simulator or performance rerun; old workload results do not validate the modified control transport.",
+    "Raw worst setup includes a forwarded-clock output constrained as data; genuine internal data paths also fail 2 ns. No timing exception or remapping is applied to these frozen results."
+  ]
+}

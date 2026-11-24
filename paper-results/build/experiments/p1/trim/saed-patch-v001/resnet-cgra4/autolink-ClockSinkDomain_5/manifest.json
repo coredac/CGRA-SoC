@@ -1,0 +1,95 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "resnet-cgra4",
+  "component": "autolink",
+  "top": "ClockSinkDomain_5",
+  "soc_instances": 1,
+  "archive_sha256": "25890058bd7a0823703262ad76825d91f513c69d239bf5c502f69d31526f754c",
+  "source_modules": 7,
+  "sram_required": true,
+  "expected_macro_instances": 643,
+  "macro_counts": {
+    "SRAM2RW16x32": 643
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 3,
+      "width": 20554,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW16x32",
+      "macro_depth": 16,
+      "macro_width": 32,
+      "depth_banks": 1,
+      "width_slices_per_lane": 643,
+      "macro_instances_per_module": 643,
+      "logical_bits": 61662,
+      "physical_bits_per_module": 329216,
+      "macro_area_per_module": 911462.619534,
+      "module": "descriptions_ext",
+      "original_module_sha256": "b5abf68964d28e502b14c2188db8b1b7cae62025c23e96c28e9962697488036d",
+      "module_instances": 1
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 911462.619534,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/ClockSinkDomain_5.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/ClockSinkDomain_5.sv",
+      "original_sha256": "18efdd8cb16e46f55163045b08838269a4a4672927d01cd5af25efc67d3f6261",
+      "staged_sha256": "18efdd8cb16e46f55163045b08838269a4a4672927d01cd5af25efc67d3f6261",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_AutoRun.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/Queue1_AutoRun.sv",
+      "original_sha256": "17de716586ea33258b62d9254616c0edec2cc272b1d5ecb54b6e9bc44310a02d",
+      "staged_sha256": "17de716586ea33258b62d9254616c0edec2cc272b1d5ecb54b6e9bc44310a02d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_RegMapperInput_i9_m8.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/Queue1_RegMapperInput_i9_m8.sv",
+      "original_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "staged_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_138.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/TLMonitor_138.sv",
+      "original_sha256": "84fa067a16beb91779bec9f2aec6836c0aea52ce891a270d5b8b61f9f14a8d43",
+      "staged_sha256": "84fa067a16beb91779bec9f2aec6836c0aea52ce891a270d5b8b61f9f14a8d43",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "4ab93fe18c6468eb3f6892d0b0fce009847a36597e92d9ad75d6b47dc421c5ea",
+      "staged_sha256": "7de41fedec308ba184be983270b1c0f8c466bc3b570c195a1f4d9eed7b2bbbd1",
+      "changes": [
+        "Map descriptions_ext to physical SRAM2RW16x32 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/descriptions.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/descriptions.sv",
+      "original_sha256": "216e954873434d6b12558549cc24b3de229530c3e4bd1b45223ab26b0cafe3e9",
+      "staged_sha256": "216e954873434d6b12558549cc24b3de229530c3e4bd1b45223ab26b0cafe3e9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_5/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

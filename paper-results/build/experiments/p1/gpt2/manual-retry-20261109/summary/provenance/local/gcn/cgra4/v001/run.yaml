@@ -1,0 +1,113 @@
+status: completed_small_and_large
+large_results:
+  completed_utc: '2026-11-04 14:59'
+  session: 64441
+  exit_code: 0
+  performance: large-performance.json
+  raw_log: large-results.log
+  raw_log_sha256: e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a
+  completed_inferences: 6
+  checked_inferences: 0
+  manual: {cold: 536021, warm: 520148}
+  hybrid: {cold: 1390099, warm: 311370}
+  auto: {cold: 786322, warm: 230602}
+  status_errors: 0
+  interpretation: Auto warm latency25.9396percent below Hybrid. Cold Manual remains fastest. Allsix completion/status checks passed; numerical checking disabled for large as requested. Same simulator/ELF hashes verified after completion. Equal contiguous row partitions unchanged; no variance claim.
+sessions: Small8169 and large64441 fully drained with exit0.
+cleanup: After both runs completed and results were archived, removed only soc-build/chipyard.harness.TestHarness.MultiAccelRocketConfig generated C++/object/precompiled-header intermediates, approximately1.8GiB, before the next build. Simulator, RTL/gen-collateral, source/interfaces, firmware and allresults remain. Removed files are regenerable.
+build_log: small-build.log
+build_isolation:
+  build_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/soc-build
+  sim: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/simulator
+  output_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/output
+  tmpdir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/tmp
+  make_jobs: 2
+  verilator_threads: 4
+  ownership: Root exclusively owns shared generation/build. Six frozen GPT2 runs retain their original simulator, ELFs, runtime libraries and logs. Completed GCN2 archives are preserved. No clean targets or runtime library rebuilds.
+validation: Matching per-CGRA translated compact-memory reference passed36jobs/2305exactreads. Loaders, isolated fixture/API generation and hashes passed; see reference/manifest.json and preflight/handoff.json. Full four-CGRA SoC generation, rebuild and firmware compilation completed; the small numerical gate passed all12 inferences and exited0. Star64 timing completed on the same simulator/ELF, with allsix status checks passing and exit0; see large_results.
+small_results:
+  exit_code: 0
+  session: 8169
+  performance: small-performance.json
+  raw_log: small-results.log
+  checked_inferences: 12
+  outputs_per_inference: 2048
+  manual: {cold: 142879, warm: [129586, 129439, 129455], median: 129455}
+  hybrid: {cold: 361558, warm: [77641, 77518, 77399], median: 77518}
+  auto: {cold: 205964, warm: [56843, 56874, 56816], median: 56843}
+  mismatches: 0
+  status_errors: 0
+  auto_vs_hybrid_warm_percent: 26.671224747800515
+  interpretation: Warm Manual > Hybrid > Auto; cold Manual < Auto < Hybrid. Three consecutive warm samples per mode are not randomized trials or statistical-significance evidence.
+large_run:
+  session: 64441
+  log: large.log
+  status: completed
+  exit_code: 0
+  numerical_check: false
+artifacts:
+  rtl: rtl/soc-sim.tar.gz
+  rtl_sha256: ae61e6b807717f4cfdb2b23ea0cee926a288124225018bd862280465b12c9ecb
+  simulator: simulator
+  simulator_sha256: e72200a3712ec386b2840293c949e03182f705015d5495e41bdb95c164d5c4e2
+  binary: p1.riscv
+  binary_sha256: 1f31d25a103059810333ad1fd6fa638b328528992728ba3b75f93f4e1dc05992
+  source: source/p1.c
+  interfaces: source/interfaces.tar.gz
+  interfaces_sha256: 411201f7ceb85ff26caf207e382eae725d775b05225a5ecb1e9ce66243f28dd5
+  generated: generated/
+  api_sha256: 0b5414738654d78de59eaf379fe54609ecd3deef63de3fd16287ebd1af542fcb
+gate: Run the checked ring-chords16 case before star64 timing. Serialize shared generators, headers, RTL and simulator builds with every other experiment.
+hardware: config/soc.yaml
+arch: config/arch.yaml
+kernel: config/kernel.yaml
+source: p1.c
+shared_source: tests/cgra-gemmini/gcn/p1.c
+fixture: {source: scripts/gcn_data.py, seed: 0, star_nodes: 64, row_align: 64}
+design: One unchanged Gemmini64 with 4 independent homogeneous 4x4 single-CGRA instances; the native architecture remains a 1x1 array.
+partition: Equal contiguous node rows, using floor(nodes*index/4) boundaries from the shared source.
+small: ring-chords16, one cold and three checked warm runs per mode.
+large: star64, one cold and one warm timing-only run per mode after the small gate; completion/status checks retained.
+resources:
+  input_words: 4096
+  indices_words: 192
+  weights_words: 192
+  output_words_per_cgra: 2048
+  live_words_per_cgra: 6528
+  allocated_words_per_cgra: 8192
+  allocation_reason: Native DataMemControllerRTL requires power-of-two global and per-bank capacities; eight banks retain the current memory organization.
+  bank_words: 1024
+  hybrid_jobs_per_cgra: 32
+  auto_jobs_per_cgra: 16
+  packets_per_job: 46
+  packet_count_formula: 51 configuration + 5 launch - 10 fixed setup, preloaded once per cold inference.
+  packet_width_bits: 194
+  gemmini_jobs: 1
+  gemmini_commands: 12
+  gemmini_actual_patches: 1
+  gemmini_patch_capacity: 2
+  profiles: 2
+  stages: 5
+  dependencies: 5
+  result_capacity: 5
+  max_control_steps: 40960
+  total_cached_packet_slots: 5888
+  cache_storage_note: 128 total CGRA job slots across endpoints; 46 native packet slots per job plus the existing 67-bit patch entry and validity bit. Excludes metadata/logic; no area claim.
+star_partition:
+  rows_per_cgra: 16
+  edges_first_cgra: 94
+  edges_other_cgras: 32
+  control_steps_first_cgra_per_band: 60160
+  control_steps_other_cgras_per_band: 20480
+  note: The degree-64 center remains in the first equal-row partition. Its row takes 40960 steps versus 1280 for a leaf; equal row counts therefore retain a work imbalance. These are source-derived step counts, not predicted cycles or a performance ranking.
+memory_note: Synchronous inferred 1R1W memory; technology SRAM mapping and area remain unverified.
+generated_audit: Independent read-only review found four CGRA instances, Gemmini64, 8192 words per device in eight synchronous 1024-word banks, ten controls, 194-bit packets, 1472 packet/patch entries per adapter and Queue5 results. ELF devices table contains four matching endpoints; archived and running ELF hashes match. Simulator uses four threads. No numerical-pass or technology-SRAM claim follows from this audit.
+source_sha256: 598b00fa6408c9b9442ffed6f23804621d451c66b7fd1b4c9de0d5df42ecb026
+fixture_sha256: a44a93a395b6b4a03a5c58c24ba0ea3e8e5b07adc3975f76b1a49f6bd27a96b7
+schedule_sha256: a868821308f6ca33be2c2b4b33fac5ee6f8788676eb5af076f92d49cfec202be
+artifact_policy: Stage logs, generated RTL snapshots and result files in this directory. Publishing to /home/jjqin/data remains blocked by the read-only filesystem boundary.
+commands:
+  fixture: chipyard/.conda-env/bin/python scripts/gcn_data.py --seed 0 --star-nodes 64 --row-align 64 --output tests/generated/gcn_data.h --report build/experiments/p1/gcn/cgra4/v001/data.json
+  api: chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml build/experiments/p1/gcn/cgra4/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra4/v001/config/soc.yaml build/experiments/p1/gcn/cgra4/v001/config/kernel.yaml
+  small: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=12000000 BINARY_ARGS='1 -1 3 0' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml build/experiments/p1/gcn/cgra4/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra4/v001/config/soc.yaml build/experiments/p1/gcn/cgra4/v001/p1.c
+  large: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=24000000 BINARY_ARGS='2 -1 1 1' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml build/experiments/p1/gcn/cgra4/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra4/v001/config/soc.yaml build/experiments/p1/gcn/cgra4/v001/p1.c

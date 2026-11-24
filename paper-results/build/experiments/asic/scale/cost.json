@@ -1,0 +1,240 @@
+{
+  "status": "resource_reuse_area_advantage_not_demonstrated",
+  "scope": "Read-only audit of existing reports; no RTL, generator, configuration or synthesis changes. Split Add/ReLU and general five-unit ASIC are distinct installed baselines.",
+  "units": {
+    "area": "Raw SAED14 library area units from report_area; do not use wire-load Total area as silicon area. report_units explicitly declares time/capacitance but not area.",
+    "timing": "ns",
+    "fixed_flow": "2 ns, SAED14 RVT TT 0.8V 25C; medium then incremental Ultra; ideal clock and wire-load, not physical signoff.",
+    "historical_cgra_flow": "10 ns, same library hashes, low-effort compile; cached native subtree held dont_touch in enclosing endpoint. Timing not closed; macro substitution only statically validated."
+  },
+  "fixed_asic_endpoints": [
+    {
+      "top": "AsicAccelerator",
+      "operation": "Add",
+      "total_cell_area": 691068.177911,
+      "breakdown": {
+        "sram_macros": 674502.9375,
+        "memory_pipeline_decode_mux_registers": 11555.01119999995,
+        "core_arithmetic_control": 563.4360000001034,
+        "adapter_and_descriptor_config": 2025.4392,
+        "dma": 1251.5028,
+        "publication_manager": 453.324,
+        "host_memory_port": 93.3732,
+        "tilelink_fragmenter": 134.7984,
+        "remaining_endpoint_logic_and_queues": 488.3556109999772
+      },
+      "logical_payload_bytes": 65536,
+      "sram_macro_count": 128,
+      "sram_macro": "SRAM2RW128x32",
+      "cached_descriptors": 4,
+      "setup_slack_ns": 0.0001,
+      "hold_slack_ns": 0.008,
+      "constraint_violations": {
+        "min_capacitance": 2013,
+        "max_leakage_power": 1
+      },
+      "report": "build/experiments/asic/retimed/endpoints-v5/AsicAccelerator/incremental/out/area.rpt",
+      "source_manifest": "build/experiments/asic/retimed/endpoints-v5/AsicAccelerator/manifest.json",
+      "endpoint_sha256": "2d8836637657bc697e143d1f425227717860fb028ca499031d6f9d0f01628493",
+      "ddc_sha256": "fcaa53ced98c0112a82a76ac0447f629ac490891b77c08f00ede1a8b8d8b4774"
+    },
+    {
+      "top": "AsicAccelerator_1",
+      "operation": "ReLU",
+      "total_cell_area": 690905.185578,
+      "breakdown": {
+        "sram_macros": 674502.9375,
+        "memory_pipeline_decode_mux_registers": 11711.432499999995,
+        "core_arithmetic_control": 305.7828000000445,
+        "adapter_and_descriptor_config": 1944.1872,
+        "dma": 1260.1164,
+        "publication_manager": 464.1132,
+        "host_memory_port": 91.6416,
+        "tilelink_fragmenter": 134.0436,
+        "remaining_endpoint_logic_and_queues": 490.9307780000381
+      },
+      "logical_payload_bytes": 65536,
+      "sram_macro_count": 128,
+      "sram_macro": "SRAM2RW128x32",
+      "cached_descriptors": 4,
+      "setup_slack_ns": 0.0003,
+      "hold_slack_ns": 0.0092,
+      "constraint_violations": {
+        "min_capacitance": 1069,
+        "max_leakage_power": 1
+      },
+      "report": "build/experiments/asic/retimed/endpoints-v5/AsicAccelerator_1/incremental2/out/area.rpt",
+      "source_manifest": "build/experiments/asic/retimed/endpoints-v5/AsicAccelerator_1/manifest.json",
+      "endpoint_sha256": "17fec0ae85b0e970c1b7c77a305ee7a27ca8b151dcd3bd639c2b73a1d0e880bb",
+      "ddc_sha256": "ccaa244bc7515974701c00c75188b74de90f69b0394b3486617ea4a8d74362b2"
+    }
+  ],
+  "fixed_pair_totals": {
+    "cell_area": 1381973.3634890001,
+    "sram_area": 1349005.875,
+    "standard_cell_area": 32967.48848900001,
+    "logical_payload_bytes": 131072,
+    "macro_count": 256,
+    "endpoint_count": 2,
+    "scope": "Complete two endpoint closures. Excludes upstream shared AutoLink fabric, Rocket/RoCC selection, shared Gemminis and physical place/route."
+  },
+  "cgra": {
+    "architecture": "Attention 4x4, 48 control entries per PE, 128 KiB payload SPM, eight banks",
+    "source_hash_comparison": [
+      {
+        "file": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/IntegratedCgraWithDmaRTL_single__pickled.v",
+        "historical_original_sha256": "0ac9a6888b9b7f968eeefc859d6d68933436edb74ac8a594e6db174a2e8258ed",
+        "current_sha256": "0ac9a6888b9b7f968eeefc859d6d68933436edb74ac8a594e6db174a2e8258ed",
+        "matches": true
+      },
+      {
+        "file": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/CGRAAccelerator.sv",
+        "historical_original_sha256": "3bab6b85bcb398f623434c84d4a44258a583f650ac02fecea010b7c236d892d8",
+        "current_sha256": "85e879e92707c2cf2d4d4aebe424bb3e2193434a60dc430d7cfb90fddc6bbfaf",
+        "matches": false
+      },
+      {
+        "file": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/CGRATileLinkDmaAdapter.sv",
+        "historical_original_sha256": "f84f0eb4bad57f872e63bbc6f6f84b53dbb81a65ab122d8d52a7cd77666c672a",
+        "current_sha256": "408ee5c36974062f24e6472fcfa2778c73710106a0f05c60ae63734a9b5c09d9",
+        "matches": false
+      },
+      {
+        "file": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/CgraLinkAdapter.sv",
+        "historical_original_sha256": "ceadb337d7760c52af1d91390d40c2c52e672431f4c2c2f243578971113d24e0",
+        "current_sha256": "224b41a09c6c20242a2f33277387081c54f60c47eb46d904d2342d4e1337c684",
+        "matches": false
+      },
+      {
+        "file": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/CgraSpmManager.sv",
+        "historical_original_sha256": "8b9b8be600b8efd6cba9ac5eab802bc562a0b486826901a3a418ba643f70a3a0",
+        "current_sha256": "96b03e31825624f6110609ba3b148e283bd2c157a529153e50a336e029eca236",
+        "matches": false
+      }
+    ],
+    "native_subtree": {
+      "total_cell_area": 4014065.131572,
+      "sram_area": 2698011.75,
+      "non_sram_area": 1316053.3815720002,
+      "macro_count": 512,
+      "macro": "SRAM2RW128x32",
+      "macro_area_per_instance": 5269.55419921875,
+      "logical_bank_depth": 4096,
+      "logical_bank_width": 35,
+      "bank_count": 8,
+      "depth_macros_per_bank": 32,
+      "width_slices_per_bank": 2,
+      "logical_payload_bytes": 131072,
+      "logical_payload_plus_metadata_bytes": 143360,
+      "physical_sram_bytes": 262144,
+      "reason_for_512_macros": "Width padding: each 35-bit word occupies two 32-bit SRAM slices. Not read-port replication. Metadata/storage semantics must be retained in any alternative mapping.",
+      "worst_setup_slack_ns": -23.38,
+      "period_ns": 10,
+      "report": "jjqin25@hpc6.cse.cuhk.edu.hk:/tmp/p1-saed14-reuse-repair-20261106-v001/jobs/51fae320f6b08e381378356d9e6c149059f02de5d4358f25cba1a0238927d003/out/area.rpt",
+      "local_qor": "build/experiments/asic/clock-audit/cgra/qor.rpt",
+      "mapping_limitation": "35-to-64-bit padding is overhead of the chosen SRAM mapping and available macro width, not a universal CGRA architectural requirement. A different memory compiler or separate metadata implementation may reduce padding, but requires a new functionally validated and timing-qualified mapping.",
+      "wrapper_validation": "The original behavioral native RTL hash matches current RTL. Its historical SRAM-substituted wrapper has static-generation validation only; it is not the cycle-validated current fixed-ASIC wrapper and has not passed common 2 ns timing."
+    },
+    "historical_full_endpoint": {
+      "total_cell_area": 5441829.536087,
+      "sram_area": 4073363.863281,
+      "macro_counts": {
+        "SRAM2RW128x32": 512,
+        "SRAM2RW64x128": 178
+      },
+      "trimmed_packet_depth": 5696,
+      "packet_width": 198,
+      "current_compatible": false,
+      "report": "jjqin25@hpc6.cse.cuhk.edu.hk:/tmp/p1-saed14-reuse-repair-20261106-v001/jobs/53966f7a64030424968372c5205abf5cb33c19f82c327ed189f562173c97cbca/out/area.rpt",
+      "manifest": "build/experiments/p1/trim/saed-patch-v001/gpt2-rows-cgra1/cgra-CGRAAccelerator/manifest.json"
+    },
+    "current_config_storage": {
+      "packet_depth": 6144,
+      "packet_width": 198,
+      "patch_depth": 6144,
+      "patch_width": 67,
+      "combined_logical_bytes": 203520,
+      "cached_jobs": 32,
+      "packets_per_job": 192,
+      "source": "chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.conf",
+      "measurement": "No current complete endpoint mapping. Historical trimmed packet-only SRAM inventory cannot replace current packet and patch storage."
+    }
+  },
+  "general_asic_cross_workload_inventory": {
+    "source": "rtl/asic/Core.sv",
+    "units": [
+      {
+        "unit": "Gcn",
+        "instances": 1,
+        "source": "rtl/asic/vector/Gcn.sv",
+        "declared_local_array_bytes": 10308,
+        "capacity": "16 nodes, 256 edges, 128 channels",
+        "mapped_area": null,
+        "current_source_sha256": "71794532b4ec9fde0c18d00ebebce3f7db2ac1e7f3c604314de1658d09c19409"
+      },
+      {
+        "unit": "Vector",
+        "instances": 1,
+        "source": "rtl/asic/vector/Vector.sv",
+        "declared_local_array_bytes": 0,
+        "mapped_area": 416.871602,
+        "period_ns": 10,
+        "report": "build/experiments/asic/synthesis/Vector/out/area.rpt",
+        "current_source_sha256": "9f45b61bf31d98b3f0fae8224e6c13355534445b4ee3dd32bb48249137c2cdfa"
+      },
+      {
+        "unit": "GptNorm",
+        "instances": 1,
+        "source": "rtl/asic/gpt/norm.sv",
+        "declared_local_array_bytes": 2048,
+        "capacity": "128 elements",
+        "mapped_area": 50632.028333,
+        "period_ns": 10,
+        "report": "build/experiments/asic/synthesis/iterative/GptNorm/out/area.rpt",
+        "current_source_sha256": "228c0611339df813aed0f37d90f93aa0d9b2ffbf60b65acca8a2b178fc0c012f"
+      },
+      {
+        "unit": "GptSoftmax",
+        "instances": 1,
+        "source": "rtl/asic/gpt/softmax.sv",
+        "declared_local_array_bytes": 24,
+        "capacity": "2 columns",
+        "mapped_area": 2755.330742,
+        "period_ns": 10,
+        "report": "build/experiments/asic/synthesis/iterative/GptSoftmax/out/area.rpt",
+        "current_source_sha256": "a4eb5bc0ddeb62c60c1ffac36bf54d0c2213303a6530b6ef598bc849e98ec0e1"
+      },
+      {
+        "unit": "GptVector",
+        "instances": 1,
+        "source": "rtl/asic/gpt/vector.sv",
+        "declared_local_array_bytes": 12288,
+        "capacity": "1024 elements",
+        "mapped_area": null,
+        "current_source_sha256": "93834e8e5db1413e07bc9e0274c8fc7f7fd61c54da9e23d95cf709c53b3bedb1"
+      }
+    ],
+    "common_spm_bytes": 131072,
+    "unit_local_arrays_bytes": 24668,
+    "common_plus_unit_arrays_bytes": 155740,
+    "divider_instances": 3,
+    "cached_descriptors": 32,
+    "total_installed_area": null,
+    "notes": [
+      "All five units are physically instantiated once, irrespective of runtime unit selection. Count shared units once across workloads; do not sum independent per-workload installations.",
+      "Unit-local arrays are additional to common SPM. Descriptor/config, DMA, shell, interconnect and shared controller also count.",
+      "Available standalone mappings use 10 ns standard-cell arrays and exclude common SPM and shell; they cannot be summed with the 2 ns fixed-endpoint SRAM result.",
+      "Gcn has no completed area report; GptVector synthesis was intentionally deferred without a mapped result. Norm/Softmax/Vector available snapshots match current arithmetic source files.",
+      "The current split Add/ReLU baseline does not cover GCN/GPT. The earlier general ASIC supports staged/fused operation and resource reuse of its installed units; those results are not measurements of a collection of isolated per-operator ASICs."
+    ]
+  },
+  "fair_comparison_requirements": [
+    "Measure both complete installed backends at the same clock, PVT, implementation effort, numeric semantics and workload coverage; retain setup/hold and DRC outcomes.",
+    "Include all local data, metadata, unit-local arrays, configuration and patch storage, adapter/DMA and endpoint-dependent shared control. Report physical macro granularity separately from logical payload capacity.",
+    "Use only one frozen CGRA across workloads and one frozen ASIC inventory covering their union; distinguish per-workload subset area from installed union area.",
+    "Count common CPU/Gemmini/fabric consistently, or subtract only proven common identical hardware. The co-installed validation SoC is not either deployment alone.",
+    "Account for current unequal cache capacity: CGRA 32 jobs \u00d7192 packets plus patches versus split ASIC 4 descriptors per endpoint. Choose capacity from required workload schedules, not from desired result."
+  ],
+  "conclusion": "Existing measurements do not establish CGRA cost savings. The known split-ASIC endpoints are small outside their SRAM, while historical CGRA area is larger and physically padded; those numbers have incompatible timing/endpoint/configuration scope and are not a normalized ratio. Cross-workload installed ASIC total and current complete CGRA cost remain unmeasured. Resource reuse is functionally demonstrated by one frozen CGRA executing several kernels, but net silicon-area benefit requires the missing matched inventory and implementation measurements.",
+  "bounded_followup": "No credible <=10-minute complete 2 ns CGRA synthesis closure: historical native subtree synthesis took about 10971 seconds and failed timing. A cached-subtree shell estimate could update only the shell and would still not establish equal-frequency total cost."
+}

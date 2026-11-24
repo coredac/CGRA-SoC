@@ -1,0 +1,38 @@
+{
+  "sv2v": {
+    "exit_code": 0,
+    "command": "/home/jjqin/.local/bin/sv2v build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv > build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.v 2> build/experiments/asic/hybrid/revised-area/cgra/source/sv2v.log",
+    "log_empty": true
+  },
+  "verilator": {
+    "exit_code": 0,
+    "command": "chipyard/.conda-env/bin/verilator --lint-only -Wno-fatal --top-module CgraCompute build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv > build/experiments/asic/hybrid/revised-area/cgra/source/lint.log 2>&1",
+    "warning_counts": {
+      "WIDTHEXPAND": 143,
+      "WIDTHTRUNC": 2,
+      "UNOPTFLAT": 9
+    },
+    "unoptflat_signals": [
+      "CgraCompute.tile__0.element.fu__recv_in__val",
+      "CgraCompute.tile__0.element.fu__send_out__rdy",
+      "CgraCompute.tile__0.register_cluster.reg_bank__0.reg_file__raddr",
+      "CgraCompute.tile__0.register_cluster.reg_bank__1.reg_file__raddr",
+      "CgraCompute.tile__0.register_cluster.reg_bank__2.reg_file__raddr",
+      "CgraCompute.tile__0.register_cluster.reg_bank__3.reg_file__raddr",
+      "CgraCompute.tile__0.register_cluster.reg_bank__outport_wr_rdy",
+      "CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val",
+      "CgraCompute.tile__0.routing_crossbar.recv_data_val"
+    ],
+    "matches_trial_unoptflat_set": true
+  },
+  "files_sha256": {
+    "extract.py": "0ef953507d902f1024d06f689ba31398f9ff44f017920e2e543928da5a4d95b7",
+    "CgraCompute.sv": "23d7860bbfd70e65595ffec06a914af19215e72afb7709f5ba3337e1e1feb500",
+    "CgraCompute.v": "891fe96e764a8d1fb40ea59e230d437bae9c6524e2c4f4e7730d48c51f58f47a",
+    "sv2v.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint.log": "c39eeacc426e5f269eecd8ff5f214fb545a71ceae7906ee8bc5baf720474eb49"
+  },
+  "simulation_run": false,
+  "performance_run": false,
+  "synthesis_run_by_extractor": false
+}

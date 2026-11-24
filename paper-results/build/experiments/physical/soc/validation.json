@@ -1,0 +1,49 @@
+{
+  "variant": "no L2, TileLink broadcast coherence, verification-only TLMonitors disabled",
+  "scala_compile": {
+    "exit_code": 0,
+    "log": "compile.log"
+  },
+  "elaboration_and_rtl": {
+    "exit_code": 0,
+    "logs": [
+      "elaborate.log",
+      "verilog.log"
+    ]
+  },
+  "lint": {
+    "exit_code": 0,
+    "command": "verilator --lint-only --top-module ChipTop -DSYNTHESIS -Wno-fatal -f lint.f",
+    "warnings": {
+      "TIMESCALEMOD": 157,
+      "WIDTHEXPAND": 242,
+      "WIDTHTRUNC": 2,
+      "LATCH": 1,
+      "UNOPTFLAT": 9
+    },
+    "log": "lint.log"
+  },
+  "structure": {
+    "TLBroadcast": 1,
+    "InclusiveCache": 0,
+    "TLMonitor": 0,
+    "l2_memory_instances": 0,
+    "memory_types": 10,
+    "chisel_memory_instances": 24,
+    "payload_kib": 88
+  },
+  "cgra_wrapper": {
+    "export_sha256": "7b49c7b85149ab6788b4bf2da52f286b2866e55a537ee8cafbbddba224938235",
+    "emitted_sha256": "44395afaba015a360a1c63a4828df0cb4f73eab2dede004a6120d9706170ca6d",
+    "equal_ignoring_final_whitespace": true
+  },
+  "initial_monitor_lint": {
+    "exit_code": 1,
+    "cause": "65551-bit literal exceeds Verilator implementation limit in verification-only TLMonitor",
+    "resolution": "existing WithoutTLMonitors configuration for physical-only variant",
+    "log": "lint-monitors.log"
+  },
+  "simulator": "not run per user request",
+  "performance": "not run per user request",
+  "timing": "not evaluated by these checks"
+}

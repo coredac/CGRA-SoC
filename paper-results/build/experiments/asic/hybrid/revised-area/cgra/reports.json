@@ -1,0 +1,26 @@
+{
+  "job": {
+    "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+    "remote": "/tmp/cgra-revised-core-gWAZjcEc",
+    "top": "CgraCompute",
+    "cores": 2,
+    "clock_ns": 2,
+    "source_sha256": "891fe96e764a8d1fb40ea59e230d437bae9c6524e2c4f4e7730d48c51f58f47a",
+    "constraints_sha256": "c02d6abcab58e49d63a29858aab05cfddbdfea324d1c681a322cd9628fbba642",
+    "boundary": "Complete modified CGRA with only external data_mem instance removed; its signals become explicit top ports. DMA shell was outside the selected original core. Local arrays, native access logic, all PE routing and control remain."
+  },
+  "files": {
+    "area.rpt": "3d73e73b5e51083fbfe0178d2572c4c120928b9460013e8b63aecc7f49d5a574",
+    "units.rpt": "e64494ded74809ad2474cf10f53d7ebe5df61d274f0f604b265497526b21d54d",
+    "setup.rpt": "d63b77453ab017ae6d8a3b3d70bf52ef7cbc92c747047acf333273f5d981b087",
+    "constraints.rpt": "e6568e2f68b1cb119911d96948e7891d77dc5c743bdf24bda075fb7add79cf77",
+    "qor.rpt": "64b13f76286cb06bbf74361851af2d3dd8d7ea8cd0da13ef7b22e0c976a65693",
+    "check.rpt": "2b9faedcdbe55f53c3de04911f3530894268b1d55a68ffc04b7a2b7b740a64b0",
+    "timing_check.rpt": "94bf7675a38cf2f7e109edbc8dc51e1112bf6d2b3427362c2e14197d434eaf38",
+    "design.rpt": "37fe34dd4a168f0bdb137d072785ea758fd7d7e3c6300720844f8d50d0374de9",
+    "leaves.tsv": "b9b31d44362bc617ca5fe2353ab1c6f8096da22ccf7d9c3d88281827de186ffd",
+    "SUCCESS": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1",
+    "exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "dc.log": "6108b6a788ffbb9f822f857ac372f84a98b804246afda96a0032c6eb5ca68e67"
+  }
+}

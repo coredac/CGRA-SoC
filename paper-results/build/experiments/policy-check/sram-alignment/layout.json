@@ -1,0 +1,58 @@
+{
+  "status": "compact-layout capacity projection, not implemented or validated on 1-CGRA hardware",
+  "shape": "N64,H128,heads2,FF512",
+  "method": "Apply the archived multicore P1_LOCAL/P1_ALIGN layout equations to 1, 2 and 4 lanes, then round each memory to a power-of-two word count. This is not a live-range allocator proof.",
+  "single_core_original": {
+    "affine_base_words": 16384,
+    "affine_words": 512,
+    "address_extent_words": 16896,
+    "capacity_kib": 128
+  },
+  "sources": [
+    "build/experiments/p1/gpt2/cgra1/v002/source/p1_native.h",
+    "build/experiments/p1/gpt2/cgra2/v001/source/p1_native.h"
+  ],
+  "cases": [
+    {
+      "cgras": 1,
+      "data_words": 2048,
+      "output_base": 2048,
+      "output_words": 2048,
+      "stats_base": 4096,
+      "affine_base": 4176,
+      "required_words": 4688,
+      "required_kib": 18.3125,
+      "capacity_each_kib": 32.0,
+      "capacity_total_kib": 32.0
+    },
+    {
+      "cgras": 2,
+      "data_words": 1024,
+      "output_base": 1024,
+      "output_words": 1024,
+      "stats_base": 2048,
+      "affine_base": 2096,
+      "required_words": 2608,
+      "required_kib": 10.1875,
+      "capacity_each_kib": 16.0,
+      "capacity_total_kib": 32.0
+    },
+    {
+      "cgras": 4,
+      "data_words": 512,
+      "output_base": 512,
+      "output_words": 512,
+      "stats_base": 1024,
+      "affine_base": 1056,
+      "required_words": 1568,
+      "required_kib": 6.125,
+      "capacity_each_kib": 8.0,
+      "capacity_total_kib": 32.0
+    }
+  ],
+  "conditions": [
+    "The existing multicore code only accepts 2 or 4 CGRAs. The 1-lane extension here evaluates capacity equations, not the runnable program.",
+    "To use this as an implementation result, relocate all single-core kernel, DMA and configuration addresses consistently and verify correctness, liveness and port/bank behavior.",
+    "Recompute all GPT AE values if changing the 1-CGRA per-task reference area. No accepted table or figure has been changed."
+  ]
+}

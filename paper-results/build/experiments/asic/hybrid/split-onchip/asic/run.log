@@ -1,0 +1,18 @@
+[UART] UART0 is here (stdin/stdout).
+== Loading device model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+SPLIT control=regional-Hybrid intermediate=SPM ASIC=independent-Add-ReLU aggregate_spm=131072 CGRA=resident-fused-AddReLU
+SPLIT shape input=16x16x8 output=8x8x16 words=1024
+SPLIT counters n=1024 input=0 add_active=5402 relu_active=27449 add_starts=1 relu_starts=2 add_cpu_starts=0 relu_cpu_starts=0 add_read=8192 relu_read=8192 relu_write=8192 add_config=6 relu_config=12
+SPLIT resnet backend=ASIC-split sample=0 input=0 phase=cold cycles=53975 staging=2675 setup=6389 conv1=4709 activation=10929 branches=4771 branch_load=3983 pair=13179 output=7340 add=13118 peer=0 relu=0 submissions=2 host_read=0 host_write=4096 peer_bytes=4096 onchip_bytes=16384 conversion_bytes=20480 checked=1024 errors=0 counter_errors=0 status=0
+SPLIT counters n=1024 input=1 add_active=5402 relu_active=27825 add_starts=1 relu_starts=2 add_cpu_starts=0 relu_cpu_starts=0 add_read=8192 relu_read=8192 relu_write=8192 add_config=0 relu_config=0
+SPLIT resnet backend=ASIC-split sample=1 input=1 phase=warm cycles=45571 staging=2646 setup=8 conv1=3688 activation=10344 branches=4228 branch_load=3912 pair=13133 output=7612 add=13120 peer=0 relu=0 submissions=2 host_read=0 host_write=4096 peer_bytes=4096 onchip_bytes=16384 conversion_bytes=20480 checked=1024 errors=0 counter_errors=0 status=0
+SPLIT counters n=1024 input=0 add_active=5402 relu_active=27824 add_starts=1 relu_starts=2 add_cpu_starts=0 relu_cpu_starts=0 add_read=8192 relu_read=8192 relu_write=8192 add_config=0 relu_config=0
+SPLIT resnet backend=ASIC-split sample=2 input=0 phase=warm cycles=44138 staging=1316 setup=5 conv1=3632 activation=10311 branches=4224 branch_load=3892 pair=13136 output=7622 add=13120 peer=0 relu=0 submissions=2 host_read=0 host_write=4096 peer_bytes=4096 onchip_bytes=16384 conversion_bytes=20480 checked=1024 errors=0 counter_errors=0 status=0
+SPLIT counters n=1024 input=1 add_active=5402 relu_active=27824 add_starts=1 relu_starts=2 add_cpu_starts=0 relu_cpu_starts=0 add_read=8192 relu_read=8192 relu_write=8192 add_config=0 relu_config=0
+SPLIT resnet backend=ASIC-split sample=3 input=1 phase=warm cycles=44071 staging=1275 setup=5 conv1=3639 activation=10303 branches=4208 branch_load=3895 pair=13130 output=7616 add=13117 peer=0 relu=0 submissions=2 host_read=0 host_write=4096 peer_bytes=4096 onchip_bytes=16384 conversion_bytes=20480 checked=1024 errors=0 counter_errors=0 status=0
+SPLIT: PASS
+- /home/jjqin/CGRA-SoC/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

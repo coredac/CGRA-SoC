@@ -1,0 +1,8 @@
+{
+  "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+  "remote": "/tmp/cgra-sad-area-i6gRUHww",
+  "source_sha256": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5",
+  "constraints_sha256": "2a86e9269d3ca3cc39a5198a09e36c2685a691d3cb93c65d7675d683004314c5",
+  "base_constraints_sha256": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+  "flow_difference": "Only top-level design name changes from ExpandedAsic to ExpandedSad."
+}

@@ -1,0 +1,9 @@
+{
+  "exit_ok": true,
+  "source_matches": true,
+  "constraints_match": true,
+  "reports_match": true,
+  "timing_check_clean": true,
+  "unique_leaves": true,
+  "leaf_area_reconciles": true
+}

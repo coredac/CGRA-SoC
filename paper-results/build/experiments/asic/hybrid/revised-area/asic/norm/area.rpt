@@ -1,0 +1,394 @@
+ 
+****************************************
+Report : area
+Design : ExpandedAsic
+Version: T-2022.03-SP5-6
+Date   : Sun Nov 15 23:13:16 2026
+****************************************
+
+Information: Updating design information... (UID-85)
+Warning: Design 'ExpandedAsic' contains 2 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Library(s) Used:
+
+    saed14rvt_tt0p8v25c (File: /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db)
+
+Number of ports:                        35541
+Number of nets:                        198955
+Number of cells:                       136939
+Number of combinational cells:         114316
+Number of sequential cells:             22338
+Number of macros/black boxes:               0
+Number of buf/inv:                      25798
+Number of references:                       9
+
+Combinational area:              44341.346985
+Buf/Inv area:                     5778.571232
+Noncombinational area:           20827.950936
+Macro/Black Box area:                0.000000
+Net Interconnect area:          121335.756772
+
+Total cell area:                 65169.297921
+Total area:                     186505.054693
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area            Local cell area
+                                  -------------------  ------------------------------ 
+Hierarchical cell                 Absolute    Percent  Combi-      Noncombi-   Black-
+                                  Total       Total    national    national    boxes   Design
+--------------------------------  ----------  -------  ----------  ----------  ------  ------------------------------------------
+ExpandedAsic                      65169.2979    100.0      9.1464      0.0000  0.0000  ExpandedAsic
+gpt.norm.kernel                   31605.1629     48.5  14156.3184  15754.7626  0.0000  GptNormNative
+gpt.norm.kernel/add_1116             32.4120      0.0     32.4120      0.0000  0.0000  GptNormNative_DW01_add_4
+gpt.norm.kernel/add_1142             32.4120      0.0     32.4120      0.0000  0.0000  GptNormNative_DW01_add_3
+gpt.norm.kernel/add_1187             32.4120      0.0     32.4120      0.0000  0.0000  GptNormNative_DW01_add_1
+gpt.norm.kernel/add_1206             22.3332      0.0     22.3332      0.0000  0.0000  GptNormNative_DW01_add_0
+gpt.norm.kernel/mult_1138           799.9548      1.2    799.9548      0.0000  0.0000  GptNormNative_DW02_mult_0
+gpt.norm.kernel/mult_1181           647.6184      1.0    647.6184      0.0000  0.0000  GptNormNative_DW02_mult_1
+gpt.norm.kernel/r232                  3.9516      0.0      3.9516      0.0000  0.0000  GptNormNative_DW01_inc_1
+gpt.norm.kernel/r233                 35.9196      0.1     35.9196      0.0000  0.0000  GptNormNative_DW01_sub_3
+gpt.norm.kernel/sub_1160             31.5240      0.0     31.5240      0.0000  0.0000  GptNormNative_DW01_sub_2
+gpt.norm.kernel/sub_1206             27.6168      0.0     27.6168      0.0000  0.0000  GptNormNative_DW01_sub_1
+gpt.norm.kernel/sub_1206_2           27.9276      0.0     27.9276      0.0000  0.0000  GptNormNative_DW01_sub_0
+primitives                        33554.9886     51.5     22.2000     15.8508  0.0000  PrimitiveBank
+primitives/lane[0].unit            2098.7880      3.2    347.4744    186.4800  0.0000  ArithmeticLane_0
+primitives/lane[0].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_0_DW01_add_2_DW01_add_53
+primitives/lane[0].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_0_DW01_inc_0_DW01_inc_17
+primitives/lane[0].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_0_DW01_add_1_DW01_add_52
+primitives/lane[0].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_0_DW01_add_0_DW01_add_51
+primitives/lane[0].unit/divider     458.9628      0.7    204.3288    129.6036  0.0000  Restoring_0
+primitives/lane[0].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_0_DW01_sub_3_DW01_sub_83
+primitives/lane[0].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_0_DW01_sub_2_DW01_sub_82
+primitives/lane[0].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_0_DW01_sub_1_DW01_sub_81
+primitives/lane[0].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_0_DW01_sub_0_DW01_sub_80
+primitives/lane[0].unit/mult_500    646.8636      1.0    646.8636      0.0000  0.0000  ArithmeticLane_0_DW02_mult_0_DW02_mult_17
+primitives/lane[0].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_0_DW01_cmp6_1_DW01_cmp6_31
+primitives/lane[0].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_0_DW01_cmp6_0_DW01_cmp6_30
+primitives/lane[0].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_0_DW01_ash_0_DW01_ash_15
+primitives/lane[0].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_0_DW_rash_0_DW_rash_30
+primitives/lane[0].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_0_DW_rash_1_DW_rash_31
+primitives/lane[0].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_0_DW01_sub_0_DW01_sub_79
+primitives/lane[10].unit           2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_6
+primitives/lane[10].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_6_DW01_add_2_DW01_add_23
+primitives/lane[10].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_6_DW01_inc_0_DW01_inc_7
+primitives/lane[10].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_6_DW01_add_1_DW01_add_22
+primitives/lane[10].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_6_DW01_add_0_DW01_add_21
+primitives/lane[10].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_6
+primitives/lane[10].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_6_DW01_sub_3_DW01_sub_33
+primitives/lane[10].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_6_DW01_sub_2_DW01_sub_32
+primitives/lane[10].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_6_DW01_sub_1_DW01_sub_31
+primitives/lane[10].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_6_DW01_sub_0_DW01_sub_30
+primitives/lane[10].unit/mult_500   647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_6_DW02_mult_0_DW02_mult_7
+primitives/lane[10].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_6_DW01_cmp6_1_DW01_cmp6_11
+primitives/lane[10].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_6_DW01_cmp6_0_DW01_cmp6_10
+primitives/lane[10].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_6_DW01_ash_0_DW01_ash_5
+primitives/lane[10].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_6_DW_rash_0_DW_rash_10
+primitives/lane[10].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_6_DW_rash_1_DW_rash_11
+primitives/lane[10].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_6_DW01_sub_0_DW01_sub_29
+primitives/lane[11].unit           2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_5
+primitives/lane[11].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_5_DW01_add_2_DW01_add_20
+primitives/lane[11].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_5_DW01_inc_0_DW01_inc_6
+primitives/lane[11].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_5_DW01_add_1_DW01_add_19
+primitives/lane[11].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_5_DW01_add_0_DW01_add_18
+primitives/lane[11].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_5
+primitives/lane[11].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_5_DW01_sub_3_DW01_sub_28
+primitives/lane[11].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_5_DW01_sub_2_DW01_sub_27
+primitives/lane[11].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_5_DW01_sub_1_DW01_sub_26
+primitives/lane[11].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_5_DW01_sub_0_DW01_sub_25
+primitives/lane[11].unit/mult_500   647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_5_DW02_mult_0_DW02_mult_6
+primitives/lane[11].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_5_DW01_cmp6_1_DW01_cmp6_9
+primitives/lane[11].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_5_DW01_cmp6_0_DW01_cmp6_8
+primitives/lane[11].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_5_DW01_ash_0_DW01_ash_4
+primitives/lane[11].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_5_DW_rash_0_DW_rash_8
+primitives/lane[11].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_5_DW_rash_1_DW_rash_9
+primitives/lane[11].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_5_DW01_sub_0_DW01_sub_24
+primitives/lane[12].unit           2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_4
+primitives/lane[12].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_4_DW01_add_2_DW01_add_17
+primitives/lane[12].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_4_DW01_inc_0_DW01_inc_5
+primitives/lane[12].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_4_DW01_add_1_DW01_add_16
+primitives/lane[12].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_4_DW01_add_0_DW01_add_15
+primitives/lane[12].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_4
+primitives/lane[12].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_4_DW01_sub_3_DW01_sub_23
+primitives/lane[12].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_4_DW01_sub_2_DW01_sub_22
+primitives/lane[12].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_4_DW01_sub_1_DW01_sub_21
+primitives/lane[12].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_4_DW01_sub_0_DW01_sub_20
+primitives/lane[12].unit/mult_500   647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_4_DW02_mult_0_DW02_mult_5
+primitives/lane[12].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_4_DW01_cmp6_1_DW01_cmp6_7
+primitives/lane[12].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_4_DW01_cmp6_0_DW01_cmp6_6
+primitives/lane[12].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_4_DW01_ash_0_DW01_ash_3
+primitives/lane[12].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_4_DW_rash_0_DW_rash_6
+primitives/lane[12].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_4_DW_rash_1_DW_rash_7
+primitives/lane[12].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_4_DW01_sub_0_DW01_sub_19
+primitives/lane[13].unit           2093.8152      3.2    343.0344    186.4800  0.0000  ArithmeticLane_3
+primitives/lane[13].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_3_DW01_add_2_DW01_add_14
+primitives/lane[13].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_3_DW01_inc_0_DW01_inc_4
+primitives/lane[13].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_3_DW01_add_1_DW01_add_13
+primitives/lane[13].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_3_DW01_add_0_DW01_add_12
+primitives/lane[13].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_3
+primitives/lane[13].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_3_DW01_sub_3_DW01_sub_18
+primitives/lane[13].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_3_DW01_sub_2_DW01_sub_17
+primitives/lane[13].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_3_DW01_sub_1_DW01_sub_16
+primitives/lane[13].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_3_DW01_sub_0_DW01_sub_15
+primitives/lane[13].unit/mult_500   646.8636      1.0    646.8636      0.0000  0.0000  ArithmeticLane_3_DW02_mult_0_DW02_mult_4
+primitives/lane[13].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_3_DW01_cmp6_1_DW01_cmp6_5
+primitives/lane[13].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_3_DW01_cmp6_0_DW01_cmp6_4
+primitives/lane[13].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_3_DW01_ash_0_DW01_ash_2
+primitives/lane[13].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_3_DW_rash_0_DW_rash_4
+primitives/lane[13].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_3_DW_rash_1_DW_rash_5
+primitives/lane[13].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_3_DW01_sub_0_DW01_sub_14
+primitives/lane[14].unit           2093.8152      3.2    343.0344    186.4800  0.0000  ArithmeticLane_2
+primitives/lane[14].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_2_DW01_add_2_DW01_add_11
+primitives/lane[14].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_2_DW01_inc_0_DW01_inc_3
+primitives/lane[14].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_2_DW01_add_1_DW01_add_10
+primitives/lane[14].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_2_DW01_add_0_DW01_add_9
+primitives/lane[14].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_2
+primitives/lane[14].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_2_DW01_sub_3_DW01_sub_13
+primitives/lane[14].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_2_DW01_sub_2_DW01_sub_12
+primitives/lane[14].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_2_DW01_sub_1_DW01_sub_11
+primitives/lane[14].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_2_DW01_sub_0_DW01_sub_10
+primitives/lane[14].unit/mult_500   646.8636      1.0    646.8636      0.0000  0.0000  ArithmeticLane_2_DW02_mult_0_DW02_mult_3
+primitives/lane[14].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_2_DW01_cmp6_1_DW01_cmp6_3
+primitives/lane[14].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_2_DW01_cmp6_0_DW01_cmp6_2
+primitives/lane[14].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_2_DW01_ash_0_DW01_ash_1
+primitives/lane[14].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_2_DW_rash_0_DW_rash_2
+primitives/lane[14].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_2_DW_rash_1_DW_rash_3
+primitives/lane[14].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_2_DW01_sub_0_DW01_sub_9
+primitives/lane[15].unit           2093.8152      3.2    343.0344    186.4800  0.0000  ArithmeticLane_1
+primitives/lane[15].unit/add_506     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_1_DW01_add_2_DW01_add_8
+primitives/lane[15].unit/add_525     20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_1_DW01_inc_0_DW01_inc_2
+primitives/lane[15].unit/add_562     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_1_DW01_add_1_DW01_add_7
+primitives/lane[15].unit/add_566     32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_1_DW01_add_0_DW01_add_6
+primitives/lane[15].unit/divider    458.4300      0.7    203.7960    129.6036  0.0000  Restoring_1
+primitives/lane[15].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_1_DW01_sub_3_DW01_sub_8
+primitives/lane[15].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_1_DW01_sub_2_DW01_sub_7
+primitives/lane[15].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_1_DW01_sub_1_DW01_sub_6
+primitives/lane[15].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_1_DW01_sub_0_DW01_sub_5
+primitives/lane[15].unit/mult_500   646.8636      1.0    646.8636      0.0000  0.0000  ArithmeticLane_1_DW02_mult_0_DW02_mult_2
+primitives/lane[15].unit/r109        19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_1_DW01_cmp6_1
+primitives/lane[15].unit/r110        43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_1_DW01_cmp6_0
+primitives/lane[15].unit/sll_514     84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_1_DW01_ash_0
+primitives/lane[15].unit/sra_516     80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_1_DW_rash_0
+primitives/lane[15].unit/srl_515     75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_1_DW_rash_1
+primitives/lane[15].unit/sub_507     38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_1_DW01_sub_0_DW01_sub_4
+primitives/lane[1].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_15
+primitives/lane[1].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_15_DW01_add_2_DW01_add_50
+primitives/lane[1].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_15_DW01_inc_0_DW01_inc_16
+primitives/lane[1].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_15_DW01_add_1_DW01_add_49
+primitives/lane[1].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_15_DW01_add_0_DW01_add_48
+primitives/lane[1].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_15
+primitives/lane[1].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_15_DW01_sub_3_DW01_sub_78
+primitives/lane[1].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_15_DW01_sub_2_DW01_sub_77
+primitives/lane[1].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_15_DW01_sub_1_DW01_sub_76
+primitives/lane[1].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_15_DW01_sub_0_DW01_sub_75
+primitives/lane[1].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_15_DW02_mult_0_DW02_mult_16
+primitives/lane[1].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_15_DW01_cmp6_1_DW01_cmp6_29
+primitives/lane[1].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_15_DW01_cmp6_0_DW01_cmp6_28
+primitives/lane[1].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_15_DW01_ash_0_DW01_ash_14
+primitives/lane[1].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_15_DW_rash_0_DW_rash_28
+primitives/lane[1].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_15_DW_rash_1_DW_rash_29
+primitives/lane[1].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_15_DW01_sub_0_DW01_sub_74
+primitives/lane[2].unit            2094.9696      3.2    343.3896    186.4800  0.0000  ArithmeticLane_14
+primitives/lane[2].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_14_DW01_add_2_DW01_add_47
+primitives/lane[2].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_14_DW01_inc_0_DW01_inc_15
+primitives/lane[2].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_14_DW01_add_1_DW01_add_46
+primitives/lane[2].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_14_DW01_add_0_DW01_add_45
+primitives/lane[2].unit/divider     458.6964      0.7    204.0624    129.6036  0.0000  Restoring_14
+primitives/lane[2].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_14_DW01_sub_3_DW01_sub_73
+primitives/lane[2].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_14_DW01_sub_2_DW01_sub_72
+primitives/lane[2].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_14_DW01_sub_1_DW01_sub_71
+primitives/lane[2].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_14_DW01_sub_0_DW01_sub_70
+primitives/lane[2].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_14_DW02_mult_0_DW02_mult_15
+primitives/lane[2].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_14_DW01_cmp6_1_DW01_cmp6_27
+primitives/lane[2].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_14_DW01_cmp6_0_DW01_cmp6_26
+primitives/lane[2].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_14_DW01_ash_0_DW01_ash_13
+primitives/lane[2].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_14_DW_rash_0_DW_rash_26
+primitives/lane[2].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_14_DW_rash_1_DW_rash_27
+primitives/lane[2].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_14_DW01_sub_0_DW01_sub_69
+primitives/lane[3].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_13
+primitives/lane[3].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_13_DW01_add_2_DW01_add_44
+primitives/lane[3].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_13_DW01_inc_0_DW01_inc_14
+primitives/lane[3].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_13_DW01_add_1_DW01_add_43
+primitives/lane[3].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_13_DW01_add_0_DW01_add_42
+primitives/lane[3].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_13
+primitives/lane[3].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_13_DW01_sub_3_DW01_sub_68
+primitives/lane[3].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_13_DW01_sub_2_DW01_sub_67
+primitives/lane[3].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_13_DW01_sub_1_DW01_sub_66
+primitives/lane[3].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_13_DW01_sub_0_DW01_sub_65
+primitives/lane[3].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_13_DW02_mult_0_DW02_mult_14
+primitives/lane[3].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_13_DW01_cmp6_1_DW01_cmp6_25
+primitives/lane[3].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_13_DW01_cmp6_0_DW01_cmp6_24
+primitives/lane[3].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_13_DW01_ash_0_DW01_ash_12
+primitives/lane[3].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_13_DW_rash_0_DW_rash_24
+primitives/lane[3].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_13_DW_rash_1_DW_rash_25
+primitives/lane[3].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_13_DW01_sub_0_DW01_sub_64
+primitives/lane[4].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_12
+primitives/lane[4].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_12_DW01_add_2_DW01_add_41
+primitives/lane[4].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_12_DW01_inc_0_DW01_inc_13
+primitives/lane[4].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_12_DW01_add_1_DW01_add_40
+primitives/lane[4].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_12_DW01_add_0_DW01_add_39
+primitives/lane[4].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_12
+primitives/lane[4].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_12_DW01_sub_3_DW01_sub_63
+primitives/lane[4].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_12_DW01_sub_2_DW01_sub_62
+primitives/lane[4].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_12_DW01_sub_1_DW01_sub_61
+primitives/lane[4].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_12_DW01_sub_0_DW01_sub_60
+primitives/lane[4].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_12_DW02_mult_0_DW02_mult_13
+primitives/lane[4].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_12_DW01_cmp6_1_DW01_cmp6_23
+primitives/lane[4].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_12_DW01_cmp6_0_DW01_cmp6_22
+primitives/lane[4].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_12_DW01_ash_0_DW01_ash_11
+primitives/lane[4].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_12_DW_rash_0_DW_rash_22
+primitives/lane[4].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_12_DW_rash_1_DW_rash_23
+primitives/lane[4].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_12_DW01_sub_0_DW01_sub_59
+primitives/lane[5].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_11
+primitives/lane[5].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_11_DW01_add_2_DW01_add_38
+primitives/lane[5].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_11_DW01_inc_0_DW01_inc_12
+primitives/lane[5].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_11_DW01_add_1_DW01_add_37
+primitives/lane[5].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_11_DW01_add_0_DW01_add_36
+primitives/lane[5].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_11
+primitives/lane[5].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_11_DW01_sub_3_DW01_sub_58
+primitives/lane[5].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_11_DW01_sub_2_DW01_sub_57
+primitives/lane[5].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_11_DW01_sub_1_DW01_sub_56
+primitives/lane[5].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_11_DW01_sub_0_DW01_sub_55
+primitives/lane[5].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_11_DW02_mult_0_DW02_mult_12
+primitives/lane[5].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_11_DW01_cmp6_1_DW01_cmp6_21
+primitives/lane[5].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_11_DW01_cmp6_0_DW01_cmp6_20
+primitives/lane[5].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_11_DW01_ash_0_DW01_ash_10
+primitives/lane[5].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_11_DW_rash_0_DW_rash_20
+primitives/lane[5].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_11_DW_rash_1_DW_rash_21
+primitives/lane[5].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_11_DW01_sub_0_DW01_sub_54
+primitives/lane[6].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_10
+primitives/lane[6].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_10_DW01_add_2_DW01_add_35
+primitives/lane[6].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_10_DW01_inc_0_DW01_inc_11
+primitives/lane[6].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_10_DW01_add_1_DW01_add_34
+primitives/lane[6].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_10_DW01_add_0_DW01_add_33
+primitives/lane[6].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_10
+primitives/lane[6].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_10_DW01_sub_3_DW01_sub_53
+primitives/lane[6].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_10_DW01_sub_2_DW01_sub_52
+primitives/lane[6].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_10_DW01_sub_1_DW01_sub_51
+primitives/lane[6].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_10_DW01_sub_0_DW01_sub_50
+primitives/lane[6].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_10_DW02_mult_0_DW02_mult_11
+primitives/lane[6].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_10_DW01_cmp6_1_DW01_cmp6_19
+primitives/lane[6].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_10_DW01_cmp6_0_DW01_cmp6_18
+primitives/lane[6].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_10_DW01_ash_0_DW01_ash_9
+primitives/lane[6].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_10_DW_rash_0_DW_rash_18
+primitives/lane[6].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_10_DW_rash_1_DW_rash_19
+primitives/lane[6].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_10_DW01_sub_0_DW01_sub_49
+primitives/lane[7].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_9
+primitives/lane[7].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_9_DW01_add_2_DW01_add_32
+primitives/lane[7].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_9_DW01_inc_0_DW01_inc_10
+primitives/lane[7].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_9_DW01_add_1_DW01_add_31
+primitives/lane[7].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_9_DW01_add_0_DW01_add_30
+primitives/lane[7].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_9
+primitives/lane[7].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_9_DW01_sub_3_DW01_sub_48
+primitives/lane[7].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_9_DW01_sub_2_DW01_sub_47
+primitives/lane[7].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_9_DW01_sub_1_DW01_sub_46
+primitives/lane[7].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_9_DW01_sub_0_DW01_sub_45
+primitives/lane[7].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_9_DW02_mult_0_DW02_mult_10
+primitives/lane[7].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_9_DW01_cmp6_1_DW01_cmp6_17
+primitives/lane[7].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_9_DW01_cmp6_0_DW01_cmp6_16
+primitives/lane[7].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_9_DW01_ash_0_DW01_ash_8
+primitives/lane[7].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_9_DW_rash_0_DW_rash_16
+primitives/lane[7].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_9_DW_rash_1_DW_rash_17
+primitives/lane[7].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_9_DW01_sub_0_DW01_sub_44
+primitives/lane[8].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_8
+primitives/lane[8].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_8_DW01_add_2_DW01_add_29
+primitives/lane[8].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_8_DW01_inc_0_DW01_inc_9
+primitives/lane[8].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_8_DW01_add_1_DW01_add_28
+primitives/lane[8].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_8_DW01_add_0_DW01_add_27
+primitives/lane[8].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_8
+primitives/lane[8].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_8_DW01_sub_3_DW01_sub_43
+primitives/lane[8].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_8_DW01_sub_2_DW01_sub_42
+primitives/lane[8].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_8_DW01_sub_1_DW01_sub_41
+primitives/lane[8].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_8_DW01_sub_0_DW01_sub_40
+primitives/lane[8].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_8_DW02_mult_0_DW02_mult_9
+primitives/lane[8].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_8_DW01_cmp6_1_DW01_cmp6_15
+primitives/lane[8].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_8_DW01_cmp6_0_DW01_cmp6_14
+primitives/lane[8].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_8_DW01_ash_0_DW01_ash_7
+primitives/lane[8].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_8_DW_rash_0_DW_rash_14
+primitives/lane[8].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_8_DW_rash_1_DW_rash_15
+primitives/lane[8].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_8_DW01_sub_0_DW01_sub_39
+primitives/lane[9].unit            2094.7032      3.2    343.3896    186.4800  0.0000  ArithmeticLane_7
+primitives/lane[9].unit/add_506      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_7_DW01_add_2_DW01_add_26
+primitives/lane[9].unit/add_525      20.6016      0.0     20.6016      0.0000  0.0000  ArithmeticLane_7_DW01_inc_0_DW01_inc_8
+primitives/lane[9].unit/add_562      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_7_DW01_add_1_DW01_add_25
+primitives/lane[9].unit/add_566      32.4120      0.0     32.4120      0.0000  0.0000  ArithmeticLane_7_DW01_add_0_DW01_add_24
+primitives/lane[9].unit/divider     458.4300      0.7    203.7960    129.6036  0.0000  Restoring_7
+primitives/lane[9].unit/divider/sub_363
+                                     38.1840      0.1     38.1840      0.0000  0.0000  Restoring_7_DW01_sub_3_DW01_sub_38
+primitives/lane[9].unit/divider/sub_384
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_7_DW01_sub_2_DW01_sub_37
+primitives/lane[9].unit/divider/sub_385
+                                     29.0376      0.0     29.0376      0.0000  0.0000  Restoring_7_DW01_sub_1_DW01_sub_36
+primitives/lane[9].unit/divider/sub_398
+                                     28.7712      0.0     28.7712      0.0000  0.0000  Restoring_7_DW01_sub_0_DW01_sub_35
+primitives/lane[9].unit/mult_500    647.3964      1.0    647.3964      0.0000  0.0000  ArithmeticLane_7_DW02_mult_0_DW02_mult_8
+primitives/lane[9].unit/r109         19.4028      0.0     19.4028      0.0000  0.0000  ArithmeticLane_7_DW01_cmp6_1_DW01_cmp6_13
+primitives/lane[9].unit/r110         43.4232      0.1     43.4232      0.0000  0.0000  ArithmeticLane_7_DW01_cmp6_0_DW01_cmp6_12
+primitives/lane[9].unit/sll_514      84.1380      0.1     84.1380      0.0000  0.0000  ArithmeticLane_7_DW01_ash_0_DW01_ash_6
+primitives/lane[9].unit/sra_516      80.1864      0.1     80.1864      0.0000  0.0000  ArithmeticLane_7_DW_rash_0_DW_rash_12
+primitives/lane[9].unit/srl_515      75.8352      0.1     75.8352      0.0000  0.0000  ArithmeticLane_7_DW_rash_1_DW_rash_13
+primitives/lane[9].unit/sub_507      38.1840      0.1     38.1840      0.0000  0.0000  ArithmeticLane_7_DW01_sub_0_DW01_sub_34
+--------------------------------  ----------  -------  ----------  ----------  ------  ------------------------------------------
+Total                                                  44341.3470  20827.9509  0.0000
+
+1

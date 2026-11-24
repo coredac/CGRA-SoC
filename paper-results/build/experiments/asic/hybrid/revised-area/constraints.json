@@ -1,0 +1,5 @@
+{
+  "identical_synthesis_flow_except_top_source_core_count": true,
+  "asic_flow_sha256": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+  "cgra_flow_sha256": "c02d6abcab58e49d63a29858aab05cfddbdfea324d1c681a322cd9628fbba642"
+}

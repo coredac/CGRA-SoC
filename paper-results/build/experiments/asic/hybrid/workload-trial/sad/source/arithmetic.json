@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "cases": 4222,
+  "fixture_result": 24,
+  "semantics": "B-A wraps to 32 bits before signed absolute value; all sums wrap to 32 bits",
+  "limit": "Software arithmetic identities only; no RTL or workload simulation"
+}

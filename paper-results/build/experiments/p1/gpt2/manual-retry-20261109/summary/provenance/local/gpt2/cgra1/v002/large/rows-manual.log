@@ -1,0 +1,25 @@
+make: Entering directory '/home/jjqin/CGRA-SoC/chipyard/sims/verilator'
+if [ "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv" != "none" ] && [ ! -f "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv" ]; then printf "\n\nBinary /home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/jjqin/CGRA-SoC/chipyard/sims/verilator/simulator-chipyard.harness-MultiAccelRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=200000000  +verilator+seed+1 +loadmem=/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv  \
+	+permissive-off \
+	/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv \
+	0 1 1 \
+	</dev/null | tee /home/jjqin/CGRA-SoC/chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-manual.log)
+== Loading device model file '[UART] UART0 is here (stdin/stdout).
+/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+P1 GPT2 N=64 hidden=128 heads=2 FF=512 DIM=64 chunk=192 retained_base=28672 retained_end=94208 cgras=1
+P1 GPT2 Hybrid caches the whole schedule; CPU launches one segment per operator. Input staging and native input/output DMA are timed.
+P1 GPT2 Auto projection_tiles=2 publication_bytes=24576/126976 source_stride=102400 required_native_slots=2 required_cgra_slots=1
+P1 GPT2 mode=Manual phase=cold repeat=0 input=0 cycles=18448100 checked=0 mismatches=0 status=0 captures=0/0/0
+P1 GPT2 staging_cycles=11522 setup_cycles=138057 capture_cycles=73 execute_cycles=18298448 total_cycles=18448100 cached_jobs=0/0 cached_profiles=0 reports=0 auto_launches=0 input_dma_bytes=8192 output_dma_bytes=8192 affine_dma_bytes=2048
+P1 GPT2 mode=Manual phase=warm repeat=1 input=1 cycles=18270931 checked=0 mismatches=0 status=0 captures=0/0/0
+P1 GPT2 staging_cycles=12175 setup_cycles=15 capture_cycles=4 execute_cycles=18258737 total_cycles=18270931 cached_jobs=0/0 cached_profiles=0 reports=0 auto_launches=0 input_dma_bytes=8192 output_dma_bytes=8192 affine_dma_bytes=0
+P1 GPT2: PASS
+- /home/jjqin/CGRA-SoC/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish
+make: Leaving directory '/home/jjqin/CGRA-SoC/chipyard/sims/verilator'

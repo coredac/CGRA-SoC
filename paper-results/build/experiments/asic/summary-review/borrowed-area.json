@@ -1,0 +1,78 @@
+{
+  "scope": "Requested exploratory summary: borrow area only for ResNet; retain existing GPT-2 and GCN results",
+  "not_a_unified_installed_design": true,
+  "physical_common_clock_qualified": false,
+  "area_scope": "Complete accelerator endpoints, including data/configuration storage, adapters and DMA; common Rocket/GEMM/upstream AutoLink excluded",
+  "area_units": "SAED14 library area units, not asserted to be mm^2",
+  "borrowed_resnet_area": "Use current CGRA complete endpoint as a proxy, shared with the other rows; use the archived two independent 64 KiB Add/ReLU endpoints as the ASIC proxy. No same-version ResNet AE measurement is claimed.",
+  "performance_scope": "Configuration-resident end-to-end RTL cycles, including execution transfers and visibility; three repeats per backend",
+  "formula": "Speedup = mean ASIC cycles / mean CGRA cycles. Relative cycle-area efficiency = Speedup * ASIC endpoint area / CGRA endpoint area.",
+  "rows": [
+    {
+      "workload": "ResNet",
+      "asic_baseline": "Independent Add/ReLU ASIC; on-chip intermediates",
+      "cgra_mean_cycles": 41298.333333333336,
+      "asic_mean_cycles": 44593.333333333336,
+      "cgra_area": 6326343.224047,
+      "asic_area": 1381973.3634890001,
+      "speedup": 1.0797853020703014,
+      "relative_cycle_area_efficiency": 0.235876314784181,
+      "evidence": "Conditional area estimate: borrowed current CGRA endpoint area and historical split ASIC area; not matched performance-area provenance"
+    },
+    {
+      "workload": "GPT-2",
+      "asic_baseline": "General ASIC, regional Hybrid",
+      "cgra_mean_cycles": 231670.66666666666,
+      "asic_mean_cycles": 236560.66666666666,
+      "cgra_area": 6326343.224047,
+      "asic_area": 1955667.273626,
+      "speedup": 1.0211075492221717,
+      "relative_cycle_area_efficiency": 0.31565575027223897,
+      "evidence": "Matched RTL cycles and mapped endpoint area; common physical target timing not met"
+    },
+    {
+      "workload": "GCN",
+      "asic_baseline": "General ASIC, regional Hybrid",
+      "cgra_mean_cycles": 93864.33333333333,
+      "asic_mean_cycles": 94282.66666666667,
+      "cgra_area": 6326343.224047,
+      "asic_area": 1955667.273626,
+      "speedup": 1.0044567869229706,
+      "relative_cycle_area_efficiency": 0.31050848750823073,
+      "evidence": "Matched RTL cycles and mapped endpoint area; common physical target timing not met"
+    }
+  ],
+  "arithmetic_average": {
+    "speedup": 1.0351165460718146,
+    "relative_cycle_area_efficiency": 0.28734685085488354,
+    "scope": "Equal-weight arithmetic mean of these three explicitly different baseline cases; includes ResNet borrowed area; not cross-workload reuse on a fixed ASIC inventory"
+  },
+  "resnet_pair": {
+    "cgra_cycles": 7723,
+    "asic_cycles": 13133,
+    "speedup": 1.7005049851094134,
+    "scope": "Add-to-ReLU region including execution and internal transfer, not end-to-end or pure arithmetic"
+  },
+  "sources": {
+    "resnet": {
+      "path": "build/experiments/asic/hybrid/split-onchip/results.json",
+      "sha256": "ed34f993b7120aaafffd16a249a1d3ab9465661e580202462e2dcb44d0d0656b"
+    },
+    "current_samples": {
+      "path": "build/experiments/asic/hybrid/current/samples.csv",
+      "sha256": "1c1e2ab9314bd25b2b42367440223edc7ea8a6ae2e200ab9aff8d954bc3e31c3"
+    },
+    "cgra_cost": {
+      "path": "build/experiments/asic/cgra-cost-complete/results.json",
+      "sha256": "d480ad3cbdabc39b0131a8c2ca38053f0119f16db699e425e252da2d0be6c527"
+    },
+    "general_asic_cost": {
+      "path": "build/experiments/asic/cost-complete/results.json",
+      "sha256": "b089567a85e8f7b05528d692692f4f1aa22b13b3e053e60174db111c0ce42d32"
+    },
+    "split_asic_cost": {
+      "path": "build/experiments/asic/scale/cost.json",
+      "sha256": "0635abe99714c3541c567d1843b7f63b49896abb5ea173db951c25653732c833"
+    }
+  }
+}

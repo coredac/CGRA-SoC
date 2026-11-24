@@ -1,0 +1,85 @@
+{
+  "ranges": [
+    {
+      "start": "0x0",
+      "end_exclusive": "0x1000",
+      "name": "debug-controller@0"
+    },
+    {
+      "start": "0x1000",
+      "end_exclusive": "0x2000",
+      "name": "boot-address-reg@1000"
+    },
+    {
+      "start": "0x3000",
+      "end_exclusive": "0x4000",
+      "name": "error-device@3000"
+    },
+    {
+      "start": "0x10000",
+      "end_exclusive": "0x20000",
+      "name": "rom@10000"
+    },
+    {
+      "start": "0x100000",
+      "end_exclusive": "0x101000",
+      "name": "clock-gater@100000"
+    },
+    {
+      "start": "0x110000",
+      "end_exclusive": "0x111000",
+      "name": "tile-reset-setter@110000"
+    },
+    {
+      "start": "0x2000000",
+      "end_exclusive": "0x2010000",
+      "name": "clint@2000000"
+    },
+    {
+      "start": "0x8000000",
+      "end_exclusive": "0x8004000",
+      "name": "memory@8000000"
+    },
+    {
+      "start": "0xc000000",
+      "end_exclusive": "0x10000000",
+      "name": "interrupt-controller@c000000"
+    },
+    {
+      "start": "0x10020000",
+      "end_exclusive": "0x10021000",
+      "name": "serial@10020000"
+    },
+    {
+      "start": "0x60000000",
+      "end_exclusive": "0x60004000",
+      "name": "gemmini-ext-spm@60000000"
+    },
+    {
+      "start": "0x60100000",
+      "end_exclusive": "0x60102000",
+      "name": "cgra-spm@60100000"
+    },
+    {
+      "start": "0x60102000",
+      "end_exclusive": "0x60103000",
+      "name": "cgra-link-control@60102000"
+    },
+    {
+      "start": "0x60103000",
+      "end_exclusive": "0x60104000",
+      "name": "gemmini-job@60103000"
+    },
+    {
+      "start": "0x60105000",
+      "end_exclusive": "0x60106000",
+      "name": "auto-link-root@60105000"
+    },
+    {
+      "start": "0x80000000",
+      "end_exclusive": "0x90000000",
+      "name": "memory@80000000"
+    }
+  ],
+  "overlaps": []
+}

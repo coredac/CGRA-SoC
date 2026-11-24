@@ -1,0 +1,636 @@
+{
+  "source": "build/experiments/asic/hybrid/control-trial/IntegratedTrial.sv",
+  "source_sha256": "63ef62d0f7ec15cdaa40f0b52f41a13cbfe6657864cfe98f62db4865b4f0a182",
+  "top": "CgraCompute",
+  "output_sha256": "23d7860bbfd70e65595ffec06a914af19215e72afb7709f5ba3337e1e1feb500",
+  "boundary": "Complete modified CGRA with only external data_mem instance removed; its signals become explicit top ports. DMA shell was outside the selected original core. Local arrays, native access logic, all PE routing and control remain.",
+  "clock_reset_boundary": "Memory clock/reset and address/id inputs are exported as driven output ports together with every other removed-instance input; no clock/reset behavior or constraints are changed by this extraction.",
+  "memory_ports": [
+    {
+      "name": "data_mem__address_lower",
+      "memory_port": "address_lower",
+      "direction": "output",
+      "type": "logic [14:0]",
+      "dimensions": "",
+      "declaration": "output logic [14:0] data_mem__address_lower"
+    },
+    {
+      "name": "data_mem__address_upper",
+      "memory_port": "address_upper",
+      "direction": "output",
+      "type": "logic [14:0]",
+      "dimensions": "",
+      "declaration": "output logic [14:0] data_mem__address_upper"
+    },
+    {
+      "name": "data_mem__cgra_id",
+      "memory_port": "cgra_id",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__cgra_id"
+    },
+    {
+      "name": "data_mem__clk",
+      "memory_port": "clk",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__clk"
+    },
+    {
+      "name": "data_mem__reset",
+      "memory_port": "reset",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__reset"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_rd_req__msg",
+      "memory_port": "recv_from_controller_spm_rd_req__msg",
+      "direction": "output",
+      "type": "DmaSpmReadReq_32__addr_32",
+      "dimensions": "",
+      "declaration": "output DmaSpmReadReq_32__addr_32 data_mem__recv_from_controller_spm_rd_req__msg"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_rd_req__rdy",
+      "memory_port": "recv_from_controller_spm_rd_req__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__recv_from_controller_spm_rd_req__rdy"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_rd_req__val",
+      "memory_port": "recv_from_controller_spm_rd_req__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__recv_from_controller_spm_rd_req__val"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_wr_req__msg",
+      "memory_port": "recv_from_controller_spm_wr_req__msg",
+      "direction": "output",
+      "type": "DmaSpmWriteReq_32_32__addr_32__data_32__mask_4",
+      "dimensions": "",
+      "declaration": "output DmaSpmWriteReq_32_32__addr_32__data_32__mask_4 data_mem__recv_from_controller_spm_wr_req__msg"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_wr_req__rdy",
+      "memory_port": "recv_from_controller_spm_wr_req__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__recv_from_controller_spm_wr_req__rdy"
+    },
+    {
+      "name": "data_mem__recv_from_controller_spm_wr_req__val",
+      "memory_port": "recv_from_controller_spm_wr_req__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__recv_from_controller_spm_wr_req__val"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_request__msg",
+      "memory_port": "recv_from_noc_load_request__msg",
+      "direction": "output",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "output InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__recv_from_noc_load_request__msg"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_request__rdy",
+      "memory_port": "recv_from_noc_load_request__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__recv_from_noc_load_request__rdy"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_request__val",
+      "memory_port": "recv_from_noc_load_request__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__recv_from_noc_load_request__val"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_response_pkt__msg",
+      "memory_port": "recv_from_noc_load_response_pkt__msg",
+      "direction": "output",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "output InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__recv_from_noc_load_response_pkt__msg"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_response_pkt__rdy",
+      "memory_port": "recv_from_noc_load_response_pkt__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__recv_from_noc_load_response_pkt__rdy"
+    },
+    {
+      "name": "data_mem__recv_from_noc_load_response_pkt__val",
+      "memory_port": "recv_from_noc_load_response_pkt__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__recv_from_noc_load_response_pkt__val"
+    },
+    {
+      "name": "data_mem__recv_from_noc_store_request__msg",
+      "memory_port": "recv_from_noc_store_request__msg",
+      "direction": "output",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "output InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__recv_from_noc_store_request__msg"
+    },
+    {
+      "name": "data_mem__recv_from_noc_store_request__rdy",
+      "memory_port": "recv_from_noc_store_request__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__recv_from_noc_store_request__rdy"
+    },
+    {
+      "name": "data_mem__recv_from_noc_store_request__val",
+      "memory_port": "recv_from_noc_store_request__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__recv_from_noc_store_request__val"
+    },
+    {
+      "name": "data_mem__recv_raddr__msg",
+      "memory_port": "recv_raddr__msg",
+      "direction": "output",
+      "type": "logic [14:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [14:0] data_mem__recv_raddr__msg [0:6]"
+    },
+    {
+      "name": "data_mem__recv_raddr__rdy",
+      "memory_port": "recv_raddr__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "input logic [0:0] data_mem__recv_raddr__rdy [0:6]"
+    },
+    {
+      "name": "data_mem__recv_raddr__val",
+      "memory_port": "recv_raddr__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [0:0] data_mem__recv_raddr__val [0:6]"
+    },
+    {
+      "name": "data_mem__recv_waddr__msg",
+      "memory_port": "recv_waddr__msg",
+      "direction": "output",
+      "type": "logic [14:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [14:0] data_mem__recv_waddr__msg [0:6]"
+    },
+    {
+      "name": "data_mem__recv_waddr__rdy",
+      "memory_port": "recv_waddr__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "input logic [0:0] data_mem__recv_waddr__rdy [0:6]"
+    },
+    {
+      "name": "data_mem__recv_waddr__val",
+      "memory_port": "recv_waddr__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [0:0] data_mem__recv_waddr__val [0:6]"
+    },
+    {
+      "name": "data_mem__recv_wdata__msg",
+      "memory_port": "recv_wdata__msg",
+      "direction": "output",
+      "type": "CgraData_32_1_1_1__payload_32__predicate_1__bypass_1__delay_1",
+      "dimensions": "[0:6]",
+      "declaration": "output CgraData_32_1_1_1__payload_32__predicate_1__bypass_1__delay_1 data_mem__recv_wdata__msg [0:6]"
+    },
+    {
+      "name": "data_mem__recv_wdata__rdy",
+      "memory_port": "recv_wdata__rdy",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "input logic [0:0] data_mem__recv_wdata__rdy [0:6]"
+    },
+    {
+      "name": "data_mem__recv_wdata__val",
+      "memory_port": "recv_wdata__val",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [0:0] data_mem__recv_wdata__val [0:6]"
+    },
+    {
+      "name": "data_mem__send_rdata__msg",
+      "memory_port": "send_rdata__msg",
+      "direction": "input",
+      "type": "CgraData_32_1_1_1__payload_32__predicate_1__bypass_1__delay_1",
+      "dimensions": "[0:6]",
+      "declaration": "input CgraData_32_1_1_1__payload_32__predicate_1__bypass_1__delay_1 data_mem__send_rdata__msg [0:6]"
+    },
+    {
+      "name": "data_mem__send_rdata__rdy",
+      "memory_port": "send_rdata__rdy",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "output logic [0:0] data_mem__send_rdata__rdy [0:6]"
+    },
+    {
+      "name": "data_mem__send_rdata__val",
+      "memory_port": "send_rdata__val",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "[0:6]",
+      "declaration": "input logic [0:0] data_mem__send_rdata__val [0:6]"
+    },
+    {
+      "name": "data_mem__send_to_controller_spm_rd_resp__msg",
+      "memory_port": "send_to_controller_spm_rd_resp__msg",
+      "direction": "input",
+      "type": "DmaSpmReadResp_32__data_32",
+      "dimensions": "",
+      "declaration": "input DmaSpmReadResp_32__data_32 data_mem__send_to_controller_spm_rd_resp__msg"
+    },
+    {
+      "name": "data_mem__send_to_controller_spm_rd_resp__rdy",
+      "memory_port": "send_to_controller_spm_rd_resp__rdy",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__send_to_controller_spm_rd_resp__rdy"
+    },
+    {
+      "name": "data_mem__send_to_controller_spm_rd_resp__val",
+      "memory_port": "send_to_controller_spm_rd_resp__val",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__send_to_controller_spm_rd_resp__val"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_request_pkt__msg",
+      "memory_port": "send_to_noc_load_request_pkt__msg",
+      "direction": "input",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "input InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__send_to_noc_load_request_pkt__msg"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_request_pkt__rdy",
+      "memory_port": "send_to_noc_load_request_pkt__rdy",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__send_to_noc_load_request_pkt__rdy"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_request_pkt__val",
+      "memory_port": "send_to_noc_load_request_pkt__val",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__send_to_noc_load_request_pkt__val"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_response_pkt__msg",
+      "memory_port": "send_to_noc_load_response_pkt__msg",
+      "direction": "input",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "input InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__send_to_noc_load_response_pkt__msg"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_response_pkt__rdy",
+      "memory_port": "send_to_noc_load_response_pkt__rdy",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__send_to_noc_load_response_pkt__rdy"
+    },
+    {
+      "name": "data_mem__send_to_noc_load_response_pkt__val",
+      "memory_port": "send_to_noc_load_response_pkt__val",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__send_to_noc_load_response_pkt__val"
+    },
+    {
+      "name": "data_mem__send_to_noc_store_pkt__msg",
+      "memory_port": "send_to_noc_store_pkt__msg",
+      "direction": "input",
+      "type": "InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895",
+      "dimensions": "",
+      "declaration": "input InterCgraPacket_1_1x1_16_8_4_CgraPayload__5ac63e1c93aa1895 data_mem__send_to_noc_store_pkt__msg"
+    },
+    {
+      "name": "data_mem__send_to_noc_store_pkt__rdy",
+      "memory_port": "send_to_noc_store_pkt__rdy",
+      "direction": "output",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "output logic [0:0] data_mem__send_to_noc_store_pkt__rdy"
+    },
+    {
+      "name": "data_mem__send_to_noc_store_pkt__val",
+      "memory_port": "send_to_noc_store_pkt__val",
+      "direction": "input",
+      "type": "logic [0:0]",
+      "dimensions": "",
+      "declaration": "input logic [0:0] data_mem__send_to_noc_store_pkt__val"
+    }
+  ],
+  "selected_modules": [
+    "AdderRTL__00ec249fa9189fd7",
+    "BypassQueue1EntryRTL__bf52db5a0197a1a1",
+    "BypassQueueRTL__de7a0309a59fe496",
+    "CgraCompute",
+    "ChannelRTL__14ea05451db65d6a",
+    "ChannelWithClearRTL__28234a25712022e4",
+    "CompRTL__00ec249fa9189fd7",
+    "ConstQueueDynamicRTL__9e94e78d19eca926",
+    "ControllerRTL__d74885762e9d302f",
+    "CrossbarRTL__af5511e92d2ad43c",
+    "CrossbarRTL__f9cc749ddff26d17",
+    "CtrlMemDynamicRTL__df08502b9dfbead5",
+    "Encoder__in_nbits_5__out_nbits_3",
+    "ExclusiveDivRTL__00ec249fa9189fd7",
+    "FlexibleFuRTL__8889a6e6a7910850",
+    "GepRTL__00ec249fa9189fd7",
+    "GrantRTL__00ec249fa9189fd7",
+    "InputUnitRTL__a3b50730ebafae08",
+    "LinkOrRTL__a54ca58e7852ace8",
+    "LogicRTL__00ec249fa9189fd7",
+    "MemUnitRTL__00ec249fa9189fd7",
+    "MulRTL__00ec249fa9189fd7",
+    "Mux__b4a48e54e0753d2b",
+    "Mux__d8b1aea79052d3bb",
+    "NahRTL__00ec249fa9189fd7",
+    "NormalQueueCtrlRTL__num_entries_2",
+    "NormalQueueCtrlWithClearRTL__num_entries_2",
+    "NormalQueueDpathRTL__06dcb483b017b133",
+    "NormalQueueDpathRTL__073e940336a17504",
+    "NormalQueueDpathRTL__3f50370143e38621",
+    "NormalQueueDpathRTL__e10c2d77bcb9538e",
+    "NormalQueueRTL__06dcb483b017b133",
+    "NormalQueueRTL__073e940336a17504",
+    "NormalQueueRTL__3f50370143e38621",
+    "NormalQueueWithClearRTL__e10c2d77bcb9538e",
+    "OutputUnitRTL__2420395e72f34cd9",
+    "PeQueue_NormalQueueRTL__3f50370143e38621",
+    "PeQueue_NormalQueueWithClearRTL__17e45bee21dfb909",
+    "PeQueue_RegisterFile__82f517189341f536",
+    "PhiRTL__00ec249fa9189fd7",
+    "RegEnRst__Type_Bits5__reset_value_1",
+    "RegisterBankRTL__3596ca3621cddc37",
+    "RegisterBankRTL__493e7203765a09b1",
+    "RegisterBankRTL__9a44c4bf7f9388e0",
+    "RegisterBankRTL__c9691accc64d09b9",
+    "RegisterClusterRTL__4cdc70707e060b34",
+    "RegisterFile__14fb828f022f9b03",
+    "RegisterFile__5e8ec2fcb9b12d47",
+    "RegisterFile__701216ea6bbc5838",
+    "RegisterFile__d463a2c62cc05ca9",
+    "RegisterFile__da749a1852bb59a5",
+    "RegisterFile__dbd6e049392bb272",
+    "RetRTL__00ec249fa9189fd7",
+    "RingNetworkRTL__ad9b2c0aa02e2f3a",
+    "RoundRobinArbiterEn__nreqs_5",
+    "SelRTL__00ec249fa9189fd7",
+    "ShifterRTL__00ec249fa9189fd7",
+    "SwitchUnitRTL__8a9c0fce71882b68",
+    "TileWithContextSwitchRTL__70d22822c0293fa6",
+    "XbarRTL__e29f75d9969a53ec",
+    "XbarRouteUnitRTL__319eb850679e11ae"
+  ],
+  "recursive_module_instances": {
+    "AdderRTL__00ec249fa9189fd7": 16,
+    "BypassQueue1EntryRTL__bf52db5a0197a1a1": 1,
+    "BypassQueueRTL__de7a0309a59fe496": 1,
+    "CgraCompute": 1,
+    "ChannelRTL__14ea05451db65d6a": 6,
+    "ChannelWithClearRTL__28234a25712022e4": 64,
+    "CompRTL__00ec249fa9189fd7": 16,
+    "ConstQueueDynamicRTL__9e94e78d19eca926": 16,
+    "ControllerRTL__d74885762e9d302f": 1,
+    "CrossbarRTL__af5511e92d2ad43c": 16,
+    "CrossbarRTL__f9cc749ddff26d17": 16,
+    "CtrlMemDynamicRTL__df08502b9dfbead5": 16,
+    "Encoder__in_nbits_5__out_nbits_3": 1,
+    "ExclusiveDivRTL__00ec249fa9189fd7": 16,
+    "FlexibleFuRTL__8889a6e6a7910850": 16,
+    "GepRTL__00ec249fa9189fd7": 16,
+    "GrantRTL__00ec249fa9189fd7": 16,
+    "InputUnitRTL__a3b50730ebafae08": 5,
+    "LinkOrRTL__a54ca58e7852ace8": 64,
+    "LogicRTL__00ec249fa9189fd7": 16,
+    "MemUnitRTL__00ec249fa9189fd7": 16,
+    "MulRTL__00ec249fa9189fd7": 16,
+    "Mux__b4a48e54e0753d2b": 1,
+    "Mux__d8b1aea79052d3bb": 1,
+    "NahRTL__00ec249fa9189fd7": 16,
+    "NormalQueueCtrlRTL__num_entries_2": 13,
+    "NormalQueueCtrlWithClearRTL__num_entries_2": 64,
+    "NormalQueueDpathRTL__06dcb483b017b133": 6,
+    "NormalQueueDpathRTL__073e940336a17504": 5,
+    "NormalQueueDpathRTL__3f50370143e38621": 2,
+    "NormalQueueDpathRTL__e10c2d77bcb9538e": 64,
+    "NormalQueueRTL__06dcb483b017b133": 6,
+    "NormalQueueRTL__073e940336a17504": 5,
+    "NormalQueueRTL__3f50370143e38621": 2,
+    "NormalQueueWithClearRTL__e10c2d77bcb9538e": 64,
+    "OutputUnitRTL__2420395e72f34cd9": 1,
+    "PeQueue_NormalQueueRTL__3f50370143e38621": 16,
+    "PeQueue_NormalQueueWithClearRTL__17e45bee21dfb909": 16,
+    "PeQueue_RegisterFile__82f517189341f536": 16,
+    "PhiRTL__00ec249fa9189fd7": 16,
+    "RegEnRst__Type_Bits5__reset_value_1": 1,
+    "RegisterBankRTL__3596ca3621cddc37": 16,
+    "RegisterBankRTL__493e7203765a09b1": 16,
+    "RegisterBankRTL__9a44c4bf7f9388e0": 16,
+    "RegisterBankRTL__c9691accc64d09b9": 16,
+    "RegisterClusterRTL__4cdc70707e060b34": 16,
+    "RegisterFile__14fb828f022f9b03": 64,
+    "RegisterFile__5e8ec2fcb9b12d47": 16,
+    "RegisterFile__701216ea6bbc5838": 2,
+    "RegisterFile__d463a2c62cc05ca9": 5,
+    "RegisterFile__da749a1852bb59a5": 64,
+    "RegisterFile__dbd6e049392bb272": 6,
+    "RetRTL__00ec249fa9189fd7": 16,
+    "RingNetworkRTL__ad9b2c0aa02e2f3a": 1,
+    "RoundRobinArbiterEn__nreqs_5": 1,
+    "SelRTL__00ec249fa9189fd7": 16,
+    "ShifterRTL__00ec249fa9189fd7": 16,
+    "SwitchUnitRTL__8a9c0fce71882b68": 1,
+    "TileWithContextSwitchRTL__70d22822c0293fa6": 16,
+    "XbarRTL__e29f75d9969a53ec": 1,
+    "XbarRouteUnitRTL__319eb850679e11ae": 5
+  },
+  "retained_module_hashes": {
+    "AdderRTL__00ec249fa9189fd7": "9ad0279122beabd222a23c99c63bdb333492fe5c9ee157f3b28c1c7e537e07d2",
+    "BypassQueue1EntryRTL__bf52db5a0197a1a1": "53069996d3c8225596499c33bb9fa06c5c5e793a092b35340ae2e50d85e14bb0",
+    "BypassQueueRTL__de7a0309a59fe496": "e2915be289b1d92f99e3fb57bc401d7dbb624739f92cb94f0f4c031f2e00fd85",
+    "ChannelRTL__14ea05451db65d6a": "800342f456b2ce16adb5cae429fe670f6bcb0a674dc6f77ea615da2fa258f736",
+    "ChannelWithClearRTL__28234a25712022e4": "7365adcc4f1263138959263ecc00f3b068764fdc7965a26ea9ace5c198eba182",
+    "CompRTL__00ec249fa9189fd7": "7edf79c91fe2af555695eeef6491d7964b79a46097e2aac02a85e3cb776028a3",
+    "ConstQueueDynamicRTL__9e94e78d19eca926": "348b83339da8eadc88f669dda9312e510786d0f01e52aa18d94eb621fa62a47f",
+    "ControllerRTL__d74885762e9d302f": "8157a3a170f0805051c85dedc2da298d2ddf62386a71290e40c3010ff67110f9",
+    "CrossbarRTL__af5511e92d2ad43c": "2650dc7265241f478117dadbab22eea994997f0b7a21a079247735e7ebfbd1bb",
+    "CrossbarRTL__f9cc749ddff26d17": "2067009c217961157431bfc4f716b7d0f68febc026efd1b431c9723f64d93a6c",
+    "CtrlMemDynamicRTL__df08502b9dfbead5": "082778a3505a60321dfb28948343a1f4996fb05afa4aa96f6f2ab0c1b309d252",
+    "Encoder__in_nbits_5__out_nbits_3": "6d9d5edbcc993915e8349a9465241e90abd4d475918561439c833ba5b65704e3",
+    "ExclusiveDivRTL__00ec249fa9189fd7": "a068b56609a592f3016453d857030da0277a2cf248c887fc7f3d21832ffbb1d3",
+    "FlexibleFuRTL__8889a6e6a7910850": "90d6a34cfee05515a0f0877880e459820a235ccb40b1ce421857dbe1b48ac12c",
+    "GepRTL__00ec249fa9189fd7": "81961006773cd2b627d34f36900047e59076cd56ea71b783f3178e012dcc611a",
+    "GrantRTL__00ec249fa9189fd7": "3f87ba2caf893f9341e405026e2eda8fc078a99c4e3465895342ba344fdfa2b6",
+    "InputUnitRTL__a3b50730ebafae08": "4f36da63673bfd7f08d7117236ff2e3100de2c36544cc6c138fe56f5d8c6254a",
+    "LinkOrRTL__a54ca58e7852ace8": "06f109015e7ca2acb21b613f4b25558d21087a4d0fb14d386520bfe502c9cdb6",
+    "LogicRTL__00ec249fa9189fd7": "31f0799fca4edce67cf2cc682ddcd314a97627454c82c2689977c0a4103f2dac",
+    "MemUnitRTL__00ec249fa9189fd7": "522fec875e9e1f5504912e26b7c1a3f2f7aae4c1c0139a28fa66e23310031e06",
+    "MulRTL__00ec249fa9189fd7": "4c1cea24592430fe091f32de9a931848c8ceedb25b2b7d5ed697d03e9e41b3f0",
+    "Mux__b4a48e54e0753d2b": "222f4dec146ced8cb7b5f6380a4938d96a9d38b7c6bac96b69e580daf5f310e4",
+    "Mux__d8b1aea79052d3bb": "22b538ed23b71c25d7ebc58e1f302c6c106a40bec3db8a00da0929998d327961",
+    "NahRTL__00ec249fa9189fd7": "9ec2e7bbf9976efc212664eaaa91ec503206f303c8ec89137f2f3c22a4b93cea",
+    "NormalQueueCtrlRTL__num_entries_2": "60aa0e76066de6f7bc448ed8292598a6dcd69d162ffec17002a2b475d27ed4cf",
+    "NormalQueueCtrlWithClearRTL__num_entries_2": "7bb98ddd0e7364b20bbddc6eefc548ea8d7d4bd52310f3bc7c5ad6b26899ef34",
+    "NormalQueueDpathRTL__06dcb483b017b133": "17e1b31b16e5bacecc1d27036b9fe0259c5bb73af4786fba560e5615497b67a7",
+    "NormalQueueDpathRTL__073e940336a17504": "50c34092d12a77ed5eb750d123ef4150085962d986eb4de964614c002218556b",
+    "NormalQueueDpathRTL__3f50370143e38621": "d7ce443e7b19d6ba312c15a336d380884da5899c83f04317119c212c7df56867",
+    "NormalQueueDpathRTL__e10c2d77bcb9538e": "d66afe0030ada8f98c53f6e1ffe28e49a98c9c4785c0a21d77b238e5c81d1e6e",
+    "NormalQueueRTL__06dcb483b017b133": "1e42c18fcf8581bda043573fd8d975c9b2a811034f2fba5469dffb3f79e371f7",
+    "NormalQueueRTL__073e940336a17504": "2c2a1f1af2dd237abb80dcc3b8b0062152f7958dc5f0700594d696931758f141",
+    "NormalQueueRTL__3f50370143e38621": "9974c4b1dfcb024cff741d5d8452b45b9128f412a3752576799fad5f034647b0",
+    "NormalQueueWithClearRTL__e10c2d77bcb9538e": "92b70f49590caf0f70d41e7ae3d0475232a6ed083ac8d7692c9995eec2826eb9",
+    "OutputUnitRTL__2420395e72f34cd9": "7e829b0762d47993dbd780e6aa821b607ffe0ab32d8328a5a96e5701aebc0d0e",
+    "PeQueue_NormalQueueRTL__3f50370143e38621": "2167d2b2b3c4a515662458220b7c0131362cadb00123d0d8c422022ea57dbb08",
+    "PeQueue_NormalQueueWithClearRTL__17e45bee21dfb909": "6480aab824348ce1021889e29ea59902e523aa336472613eb34f6af88b2c978e",
+    "PeQueue_RegisterFile__82f517189341f536": "daad62bb7b6b1731704b61bfd2452934d1bdf4ad9279289d47d1597ea053b100",
+    "PhiRTL__00ec249fa9189fd7": "ada828b55a1767ac48a03fbd3ecb55a03b4523a284b115161c308746dbf03eee",
+    "RegEnRst__Type_Bits5__reset_value_1": "97dc67d6d9e07e36e0683e5d23a8c7f3728118f5957a1201fd239af256380735",
+    "RegisterBankRTL__3596ca3621cddc37": "72f42c2ca5b4a0fc41472690fb02e94aab22548b8ae3ccb14efd8f6617eead74",
+    "RegisterBankRTL__493e7203765a09b1": "08b8fa55e63a4aedf19ec6a27bcb5058a905f66c97dca0947d307a79964a5f02",
+    "RegisterBankRTL__9a44c4bf7f9388e0": "2efd91dd26b2fa53052ec44fb282f8ff8bc97cededcb0f342f7fc026cb4e97f1",
+    "RegisterBankRTL__c9691accc64d09b9": "5ea3dcdc8ac8e9f1c0623702fe3d21c562773db095f37899b2f72b9ee91e597b",
+    "RegisterClusterRTL__4cdc70707e060b34": "f1b2f9ada5a7bc39b87f0f3b1659065b6d38efaadd08b37d329746dd2e1eeb02",
+    "RegisterFile__14fb828f022f9b03": "60c773f133e13a199cd1da818723e7338d4b8bc414271cbce6ad5e6282fec866",
+    "RegisterFile__5e8ec2fcb9b12d47": "afa454577df23cc92556d012f890ddc615439361a9b11c2aa684e40725136b7f",
+    "RegisterFile__701216ea6bbc5838": "b87297466ff7aa0a60978cfc0585c64bc5d007be56f0e14039bdcb0c726dceed",
+    "RegisterFile__d463a2c62cc05ca9": "b173201029bc55354f5005e99d2428dd6932088fe902601ad0cf76598920b11c",
+    "RegisterFile__da749a1852bb59a5": "f6f049667fb607cffef91e77eb4edef5ea643264b47d4623280073229fd746b6",
+    "RegisterFile__dbd6e049392bb272": "3df0034135f7cd5acb4397684a606ff1ab293071a8f9c91270cdb39b370958d4",
+    "RetRTL__00ec249fa9189fd7": "fe43885d81eff1b2997cdc7ded39f3dba5702fb62602da0d3e01d5c31a2def67",
+    "RingNetworkRTL__ad9b2c0aa02e2f3a": "e160ad7825fc2b58fb608d026016966206ef40d9663302ee90f8666a25f0888e",
+    "RoundRobinArbiterEn__nreqs_5": "ff4b718f0ba3008f0520a709fc80ccd15bfa3ff2c685eafce0c9a6be0ca72f80",
+    "SelRTL__00ec249fa9189fd7": "fe32036c1d2b8605de9d6f73091aec980b2eda427aa47ccb6d1867af1c099748",
+    "ShifterRTL__00ec249fa9189fd7": "4369b6e7348c3db0ee66f61321574af087458bd79691670897cdc74d82f04611",
+    "SwitchUnitRTL__8a9c0fce71882b68": "d00bd5ebcc544905cf311e7ce0dd3dca55811122128c9f32506201f424417c8f",
+    "TileWithContextSwitchRTL__70d22822c0293fa6": "c715193b60c6ad308cc4e16fb4f1e4a36b76d505c7413d9a20c70490807bfbc0",
+    "XbarRTL__e29f75d9969a53ec": "4315ff287bbe2df268aae6a1946e4ed7ddda4020e2d0e1a03ea0d88da046cd3d",
+    "XbarRouteUnitRTL__319eb850679e11ae": "5096eb3a434c113f6e4fce5587ce7d5c4e794a0c591022cef343fedc6f319877"
+  },
+  "top_instances": [
+    [
+      "BypassQueueRTL__de7a0309a59fe496",
+      "bypass_queue"
+    ],
+    [
+      "ControllerRTL__d74885762e9d302f",
+      "controller"
+    ],
+    [
+      "RingNetworkRTL__ad9b2c0aa02e2f3a",
+      "ctrl_ring"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__0"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__1"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__2"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__3"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__4"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__5"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__6"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__7"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__8"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__9"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__10"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__11"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__12"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__13"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__14"
+    ],
+    [
+      "TileWithContextSwitchRTL__70d22822c0293fa6",
+      "tile__15"
+    ]
+  ],
+  "checks": {
+    "all_memory_connections_promoted": true,
+    "remaining_top_body_identical": true,
+    "remaining_instances_identical": true,
+    "tile_instances": 16,
+    "data_mem_module_excluded": true,
+    "dma_shell_excluded": true
+  }
+}

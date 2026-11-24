@@ -1,0 +1,20 @@
+{
+  "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+  "remote": "/tmp/cgra-revised-gpt-fix-fJfrb7YV",
+  "cores_per_job": 1,
+  "clock_ns": 2,
+  "started": true,
+  "source_directory": "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/revised-area/gpt-fix/source",
+  "original_source_sha": "a44d44854006d788ab4ba82226693d308d1a581f536b8b2b1ed0ee3edc6929aa",
+  "specialized_verilog_hashes": {
+    "gpt_vector": "2fe24df02f22b1d3b61e881e6368d706b626bb07c0d07f43b5705f53ef7dbdd0"
+  },
+  "synth_tcl_hashes": {
+    "gpt_vector": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e"
+  },
+  "fixed_from": "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/revised-area/asic/gpt_vector",
+  "constraint_flow_identical_to_original": true,
+  "completed": true,
+  "timing_closed": true,
+  "finished_utc": "2026-11-15T15:47:42Z"
+}

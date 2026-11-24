@@ -1,0 +1,39 @@
+{
+  "scope": "Modified 16-PE CGRA versus six independent modified ASIC families with 16 primitive lanes each; compute/control/local access, excluding adapters/DMA/external data SPM.",
+  "area_unit": "SAED14 library area units",
+  "clock_target_ns": 2,
+  "cgra_including_local_storage": 544538.068098,
+  "asic_sum_including_local_storage": 563080.753566,
+  "cgra_excluding_static_storage": 413303.567298,
+  "asic_sum_excluding_local_storage": 385796.17116599996,
+  "cgra_over_asic_including_local_storage": 0.9670692252388865,
+  "cgra_over_asic_excluding_storage": 1.071300334704888,
+  "cgra_minus_asic_excluding_storage": 27507.396132000023,
+  "cgra_worst_setup_slack_ns": -0.962234,
+  "cgra_worst_reported_data_path": {
+    "startpoint": "tile__1/ctrl_mem/reg_file__raddr_reg[0]",
+    "endpoint": "tile__1/register_cluster/reg_bank__2/reg_file/regs_reg[7][34]",
+    "slack_ns": -0.759389
+  },
+  "asic_setup_slack_ns": {
+    "add": 0.104329,
+    "relu": 0.104401,
+    "gcn": 0.000325,
+    "norm": 0.104401,
+    "softmax": 0.037377,
+    "gpt_vector": 0.002648
+  },
+  "selected_gpt_result": "gpt-fix/mapped/results.json",
+  "original_gpt_source_sha256": "a44d44854006d788ab4ba82226693d308d1a581f536b8b2b1ed0ee3edc6929aa",
+  "selected_gpt_source_sha256": "2fe24df02f22b1d3b61e881e6368d706b626bb07c0d07f43b5705f53ef7dbdd0",
+  "original_gpt_area_excluding_storage": 125579.051318,
+  "original_gpt_setup_slack_ns": -0.234015,
+  "gpt_timing_repair_area_delta": 119.03638900001533,
+  "all_reported_constraints_met": false,
+  "limits": [
+    "Six independent expanded ASIC endpoints install 96 primitive lanes; this is not equal total arithmetic resources or verified equal throughput.",
+    "Area excluding storage is a breakdown, not full implementation cost; local storage access and runtime state remain charged.",
+    "No simulator or performance rerun; old results remain associated with original hardware.",
+    "Ideal-clock wire-load mapping is not physical signoff; report actual setup failures separately."
+  ]
+}

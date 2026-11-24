@@ -1,0 +1,330 @@
+{
+  "workload": "GPT-2 complete synthetic block",
+  "setting": "cgra1/v002 rows",
+  "status": "completed",
+  "configuration": "MultiAccelRocketConfig",
+  "shape": {
+    "length": 64,
+    "hidden": 128,
+    "heads": 2,
+    "ff": 512
+  },
+  "hardware": "One Gemmini64 with 128 KiB SPM and 32 KiB accumulator; one homogeneous 4x4 CGRA with 32768 INT32 words; two native slots and one CGRA slot",
+  "units": "CPU cycles",
+  "samples_per_mode_phase": 1,
+  "distinct_inputs": 2,
+  "numerical_check": false,
+  "checked_outputs_per_inference": 0,
+  "inference_output_elements": 8192,
+  "completion_status_checks_passed": 6,
+  "inferences": [
+    {
+      "mode": "Manual",
+      "phase": "cold",
+      "repeat": 0,
+      "input": 0,
+      "cycles": 18448100,
+      "staging": 11522,
+      "setup": 138057,
+      "capture": 73,
+      "execute": 18298448,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        0,
+        0,
+        0
+      ],
+      "cached_jobs": [
+        0,
+        0
+      ],
+      "cached_profiles": 0,
+      "reports": 0,
+      "auto_launches": 0,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 2048
+    },
+    {
+      "mode": "Manual",
+      "phase": "warm",
+      "repeat": 1,
+      "input": 1,
+      "cycles": 18270931,
+      "staging": 12175,
+      "setup": 15,
+      "capture": 4,
+      "execute": 18258737,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        0,
+        0,
+        0
+      ],
+      "cached_jobs": [
+        0,
+        0
+      ],
+      "cached_profiles": 0,
+      "reports": 0,
+      "auto_launches": 0,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 0
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "cold",
+      "repeat": 0,
+      "input": 0,
+      "cycles": 16675497,
+      "staging": 11522,
+      "setup": 138057,
+      "capture": 176114,
+      "execute": 16349804,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        59,
+        32,
+        31
+      ],
+      "cached_jobs": [
+        59,
+        32
+      ],
+      "cached_profiles": 31,
+      "reports": 394,
+      "auto_launches": 15,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 2048
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "warm",
+      "repeat": 1,
+      "input": 1,
+      "cycles": 16341700,
+      "staging": 12130,
+      "setup": 18,
+      "capture": 4,
+      "execute": 16329548,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        0,
+        0,
+        0
+      ],
+      "cached_jobs": [
+        59,
+        32
+      ],
+      "cached_profiles": 31,
+      "reports": 394,
+      "auto_launches": 15,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 0
+    },
+    {
+      "mode": "Auto",
+      "phase": "cold",
+      "repeat": 0,
+      "input": 0,
+      "cycles": 16598945,
+      "staging": 11678,
+      "setup": 138888,
+      "capture": 177534,
+      "execute": 16270845,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        59,
+        32,
+        31
+      ],
+      "cached_jobs": [
+        59,
+        32
+      ],
+      "cached_profiles": 31,
+      "reports": 286,
+      "auto_launches": 1,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 2048
+    },
+    {
+      "mode": "Auto",
+      "phase": "warm",
+      "repeat": 1,
+      "input": 1,
+      "cycles": 16262298,
+      "staging": 11851,
+      "setup": 5,
+      "capture": 4,
+      "execute": 16250438,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": [
+        0,
+        0,
+        0
+      ],
+      "cached_jobs": [
+        59,
+        32
+      ],
+      "cached_profiles": 31,
+      "reports": 286,
+      "auto_launches": 1,
+      "input_dma_bytes": 8192,
+      "output_dma_bytes": 8192,
+      "affine_dma_bytes": 0
+    }
+  ],
+  "capture_count_order": [
+    "native_jobs",
+    "cgra_programs_total",
+    "profiles"
+  ],
+  "cached_job_count_order": [
+    "native_jobs",
+    "cgra_programs_total"
+  ],
+  "process_exit_status": {
+    "Manual": 0,
+    "Hybrid": 0,
+    "Auto": 0
+  },
+  "completion": {
+    "sessions": {
+      "Manual": 74726,
+      "Hybrid": 33109,
+      "Auto": 93538
+    },
+    "completed_utc": {
+      "Manual": "2026-11-05 03:55",
+      "Hybrid": "2026-11-05 00:18",
+      "Auto": "2026-11-05 00:08"
+    },
+    "observed_utc": "2026-11-05 03:58:35",
+    "process_scope": "Separate mode processes, each running one cold input0 and one warm input1 inference",
+    "exit_evidence": "All three exit0 statuses and completion times confirmed by the owning root; retained driver/UART logs show PASS and Verilog finish",
+    "uart_pass_each_mode": true,
+    "verilog_finish_each_mode": true
+  },
+  "phases": {
+    "relationship": "Disjoint: cycles = staging + setup + capture + execute; these phases are not nested",
+    "staging": "Input memcpy and memory fence",
+    "setup": "Cold Gemmini flush, plan construction, Auto pairing and affine DMA; warm retains control and timestamp overhead",
+    "capture": "Cold Hybrid/Auto capture all native jobs, CGRA programs and profiles; Manual configures kernels during execution",
+    "execute": "Mode execution, required payload DMA, native command submission, completion/report draining and final memory fence",
+    "excluded": "Result printing; numerical output checking is disabled"
+  },
+  "cold_scope": "Mode-specific preparation and capture included; the cold label does not establish a cold CPU cache",
+  "warm_scope": "Distinct input1 with resident configuration and cached jobs; no recapture; staging, DMA, execution and completion remain timed",
+  "comparison": "Matched frozen hardware and arithmetic across modes; cold input0 and warm input1 are not a single-input cache ablation, and this is not an isolated before/after measurement of Auto pairing",
+  "limits": "One sample per mode/phase does not establish variance or statistical significance. Timing-only records have checked=0; zero mismatches and PASS do not imply numerical output validation. This JSON completes only N64/H128 rows, not the still-running N16/H768 wide case; no trained-model quality, area, technology-SRAM mapping or timing-closure claim",
+  "provenance": {
+    "path_base": "repository root",
+    "simulator": {
+      "path": "chipyard/sims/verilator/simulator-chipyard.harness-MultiAccelRocketConfig",
+      "sha256": "a26e7849c6e2e91d7aef20005e02ed48bd28611d31bd2dda1b2cce2afab27beb"
+    },
+    "rtl": {
+      "path": "build/experiments/p1/gpt2/cgra1/v002/rtl/soc-sim.tar.gz",
+      "sha256": "fd167ca002f8d078835fbcde37281e02761fb7350735d872066f7d780b0e43bc"
+    },
+    "firmware": {
+      "Manual": {
+        "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-manual.riscv",
+        "sha256": "1f484aaf66698fa1ff811691db6fe28a11a9aa6caa318b4fbd872c27fffd0149"
+      },
+      "Hybrid": {
+        "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-hybrid.riscv",
+        "sha256": "1f484aaf66698fa1ff811691db6fe28a11a9aa6caa318b4fbd872c27fffd0149"
+      },
+      "Auto": {
+        "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows/rows-auto.riscv",
+        "sha256": "1f484aaf66698fa1ff811691db6fe28a11a9aa6caa318b4fbd872c27fffd0149"
+      }
+    },
+    "logs": {
+      "Manual": {
+        "driver": {
+          "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows-manual.log",
+          "sha256": "1ecd1e2294d54165c2e913380d889b8002d60bc7068435516f8e9e8f45cdae0f"
+        },
+        "uart": {
+          "path": "chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-manual.log",
+          "sha256": "4974abf0918cf693190a17be15fa886e17c3720d4ad0c90e9f6664dfa6f9db27"
+        }
+      },
+      "Hybrid": {
+        "driver": {
+          "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows-hybrid.log",
+          "sha256": "6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a"
+        },
+        "uart": {
+          "path": "chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-hybrid.log",
+          "sha256": "09b74553cd9c46930a26975bf0cc32bc9c1da8a3ab583410631d27f14c1231f6"
+        }
+      },
+      "Auto": {
+        "driver": {
+          "path": "build/experiments/p1/gpt2/cgra1/v002/large/rows-auto.log",
+          "sha256": "1864c6d05d5f50e6a1b9c4bc5756cd50817ec9faee1cdbcc5647f8a3b2dc8313"
+        },
+        "uart": {
+          "path": "chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-auto.log",
+          "sha256": "b2eb5c247977c625ed4e7990a57c5ada42fa2d0437455e1f6b40b597425ed649"
+        }
+      }
+    },
+    "fixture": {
+      "path": "build/experiments/p1/gpt2/cgra1/v001/rows/generated/gpt2_data.h",
+      "sha256": "4eb7dcecb4ba93cdceac4bd6c1b8a6a0ad72ecf642c97f5f96568cf48abdb789"
+    },
+    "source_snapshot_manifest": {
+      "path": "build/experiments/p1/gpt2/cgra1/v002/hashes.sha256",
+      "sha256": "67c7bec70a4ddb6b1d0fa865980b9c811336d5dc28dbe8504820674bfbda6a8c"
+    },
+    "input_snapshot_manifest": {
+      "path": "build/experiments/p1/gpt2/cgra1/v002/large/inputs.sha256",
+      "sha256": "72d4b9ae976cdc442097cae2bc2b069d9bf33958d34621b3fda3eb1b56baab40"
+    },
+    "snapshot_manifests_verified": true,
+    "program_arguments": {
+      "Manual": [
+        0,
+        1,
+        1
+      ],
+      "Hybrid": [
+        1,
+        1,
+        1
+      ],
+      "Auto": [
+        2,
+        1,
+        1
+      ]
+    },
+    "random_seed": 1,
+    "loadmem": true,
+    "harness_cycle_limit": 200000000,
+    "verilator_threads": 1
+  }
+}

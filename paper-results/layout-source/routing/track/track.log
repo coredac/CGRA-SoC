@@ -1,0 +1,549 @@
+INFO:    Using cached SIF image
+
+
+
+                              Fusion Compiler (TM)
+
+             Version T-2022.03-SP5 for linux64 - Nov 01, 2022 -SLE
+
+                    Copyright (c) 1988 - 2022 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+ 
+Loading user preference file /uac/gds/jjqin25/.synopsys_fc_gui/preferences.tcl
+Warning: Cannot use command line editor for terminal type 'dumb'. (CLE-100)
+proc run {} {
+  set_host_options -max_cores 16
+  open_lib stage.ndm
+  open_block ChipTop
+  set_voltage 0.8 -corners tt
+  set_ignored_layers -min_routing_layer M2 -max_routing_layer M8
+  route_track
+  save_block -compress
+  save_lib
+  close_lib
+}
+if {[catch run message]} {puts stderr $message; puts stderr $::errorInfo; exit 1}
+Information: Loading library file '/dev/shm/cgra-stages-20261118/track/stage.ndm' (FILE-007)
+Information: Loading library file '/opt2/synopsys/14mm/stdcell_rvt/ndm/saed14rvt_frame_timing_ccs.ndm' (FILE-007)
+Information: Loading library file '/dev/shm/cgra-postroute-20261117/ref/pin-repaired-v6.ndm' (FILE-007)
+Information: User units loaded from library 'saed14rvt_frame_timing_ccs' (LNK-040)
+Opening block 'stage.ndm:ChipTop.design' in edit mode
+Using libraries: stage.ndm saed14rvt_frame_timing_ccs pin-repaired-v6
+Visiting block stage.ndm:ChipTop.design
+Design 'ChipTop' was successfully linked.
+
+Start track assignment
+
+Cell Min-Routing-Layer = M2
+Cell Max-Routing-Layer = M8
+Turn off antenna since no rule is specified
+Information: Option route.detail.force_end_on_preferred_grid will be ignored since none of the layers have preferred grid. (ZRT-703)
+Warning: Ignore 2 top cell ports with no pins. (ZRT-027)
+Info: number of net_type_blockage: 0 
+Information: Via ladder engine would be activated for pattern must join connection in certain commands. Please refer to man-page for the command list. (ZRT-619)
+Via on layer (VIA1) needs more than one tracks
+Warning: Layer M1 pitch 0.037 may be too small: wire/via-down 0.037, wire/via-up 0.132. (ZRT-026)
+Wire on layer (M2) needs more than one tracks
+Via on layer (VIA1) needs more than one tracks
+Via on layer (VIA2) needs more than one tracks
+Warning: Layer M2 pitch 0.060 may be too small: wire/via-down 0.132, wire/via-up 0.074. (ZRT-026)
+Via on layer (VIA4) needs more than one tracks
+Warning: Layer M5 pitch 0.120 may be too small: wire/via-down 0.135, wire/via-up 0.107. (ZRT-026)
+Via on layer (VIA8) needs more than one tracks
+Warning: Layer M8 pitch 0.120 may be too small: wire/via-down 0.107, wire/via-up 0.135. (ZRT-026)
+Wire on layer (M9) needs more than one tracks
+Via on layer (VIA8) needs more than one tracks
+Via on layer (VIARDL) needs more than one tracks
+Warning: Layer M9 pitch 0.120 may be too small: wire/via-down 0.135, wire/via-up 1.570. (ZRT-026)
+Via on layer (VIARDL) needs more than one tracks
+Warning: Layer MRDL pitch 0.600 may be too small: wire/via-down 4.500, wire/via-up 0.600. (ZRT-026)
+Information: When applicable Min-max layer allow_pin_connection mode will allow paths of length 1.25 outside the layer range. (ZRT-707)
+Information: When applicable Min-max layer allow_pin_connection mode will allow paths of length 1.25 outside the layer range on clock nets. (ZRT-718)
+Information: When applicable layer based tapering will taper up to 0.00 in distance from the pin. (ZRT-706)
+Warning: Standard cell pin SAEDRVT14_EO4_1/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI33_0P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI33_0P5/A2 has no valid via regions. (ZRT-044)
+Warning: Via regions for port SAEDRVT14_OA33_U_0P5/A2 may block other ports completely. (ZRT-045)
+Warning: Via regions for port SAEDRVT14_OA33_U_0P5/A1 may block other ports completely. (ZRT-045)
+Warning: Via regions for port SAEDRVT14_OA33_U_0P5/A2 may block other ports completely. (ZRT-045)
+Warning: Via regions for port SAEDRVT14_OA33_U_0P5/A1 may block other ports completely. (ZRT-045)
+Warning: Via regions for port SAEDRVT14_OA33_1/B3 may block other ports completely. (ZRT-045)
+Warning: Via regions for port SAEDRVT14_OA33_1/B2 may block other ports completely. (ZRT-045)
+Warning: Standard cell pin SAEDRVT14_OA33_1/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI21_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI21_2/B has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA31_1/B has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA31_1/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI222_1/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI222_1/C1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI222_0P5/B2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI22_0P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI33_0P75/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI33_0P75/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI33_0P75/A3 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI21_1P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI21_1P5/B has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2B_U_0P5/A has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI22_1P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI222_1/B2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_1/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO21_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO21_2/B has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA21_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA221_1/B2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI22_1P5/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR3B_U_0P5/A has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_EO2_MM_0P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO32_1/A3 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2_MM_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI311_0P5/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_2/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_2/B2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_2/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA221_2/C has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA221_2/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_MUXI2_U_0P5/D1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO221_0P5/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI311_0P5/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI22_2/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA221_U_0P5/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA221_U_0P5/B2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AN4_1/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI22_0P75/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AOI311_1/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OR3_4/A3 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_EO2_1/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI21_1P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI21_1P5/B has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OAI311_1/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2_2/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2_2/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_EO2_0P5/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_EO2_V1_0P75/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_EO2_0P5/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_ADDH_0P5/CO has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA32_U_0P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA32_U_0P5/B1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_MUX2_4/D0 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2_1P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_NR2_1P5/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_ND2_0P5/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_BUF_ECO_1/A has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_ND2_1/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_MUX2_MM_4/D0 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_ADDF_V2_1/A has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_OA21_1/A1 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO2BB2_1/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_ND2B_U_0P5/A has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AO2BB2_0P5/A2 has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_CLKSPLT_1/CKOUTB has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_AN3_0P75/X has no valid via regions. (ZRT-044)
+Warning: Standard cell pin SAEDRVT14_BUF_S_4/A has no valid via regions. (ZRT-044)
+Printing options for 'route.common.*'
+common.verbose_level                                    :	 0                   
+
+Printing options for 'route.track.*'
+track.crosstalk_driven                                  :	 false               
+track.timing_driven                                     :	 false               
+
+Loading parastics information to the router ...
+Warning: Technology layer 'M1' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'M2' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'MRDL' setting 'pitch' is not valid (NEX-001)
+parastics information loaded to the router.
+Information: Using 16 threads for routing. (ZRT-444)
+Information: RC layer preference is turned off for this design. (ZRT-613)
+
+[Track Assign: TA init] Elapsed real time: 0:06:22 
+[Track Assign: TA init] Elapsed cpu  time: sys=0:03:02 usr=0:35:01 total=0:38:03
+[Track Assign: TA init] Stage (MB): Used 10882  Alloctr 10949  Proc 14185 
+[Track Assign: TA init] Total (MB): Used 10885  Alloctr 10952  Proc 38271 
+
+Start initial assignment
+
+Assign Horizontal partitions, iteration 0
+Routed partition 1/73       
+Routed partition 2/73       
+Routed partition 3/73       
+Routed partition 4/73       
+Routed partition 5/73       
+Routed partition 6/73       
+Routed partition 7/73       
+Routed partition 8/73       
+Routed partition 9/73       
+Routed partition 10/73      
+Routed partition 11/73      
+Routed partition 12/73      
+Routed partition 13/73      
+Routed partition 14/73      
+Routed partition 15/73      
+Routed partition 16/73      
+Routed partition 17/73      
+Routed partition 18/73      
+Routed partition 19/73      
+Routed partition 20/73      
+Routed partition 21/73      
+Routed partition 22/73      
+Routed partition 23/73      
+Routed partition 24/73      
+Routed partition 25/73      
+Routed partition 26/73      
+Routed partition 27/73      
+Routed partition 28/73      
+Routed partition 29/73      
+Routed partition 30/73      
+Routed partition 31/73      
+Routed partition 32/73      
+Routed partition 33/73      
+Routed partition 34/73      
+Routed partition 35/73      
+Routed partition 36/73      
+Routed partition 37/73      
+Routed partition 38/73      
+Routed partition 39/73      
+Routed partition 40/73      
+Routed partition 41/73      
+Routed partition 42/73      
+Routed partition 43/73      
+Routed partition 44/73      
+Routed partition 45/73      
+Routed partition 46/73      
+Routed partition 47/73      
+Routed partition 48/73      
+Routed partition 49/73      
+Routed partition 50/73      
+Routed partition 51/73      
+Routed partition 52/73      
+Routed partition 53/73      
+Routed partition 54/73      
+Routed partition 55/73      
+Routed partition 56/73      
+Routed partition 57/73      
+Routed partition 58/73      
+Routed partition 59/73      
+Routed partition 60/73      
+Routed partition 61/73      
+Routed partition 62/73      
+Routed partition 63/73      
+Routed partition 64/73      
+Routed partition 65/73      
+Routed partition 66/73      
+Routed partition 67/73      
+Routed partition 68/73      
+Routed partition 69/73      
+Routed partition 70/73      
+Routed partition 71/73      
+Routed partition 72/73      
+Routed partition 73/73      
+
+Assign Vertical partitions, iteration 0
+Routed partition 1/73       
+Routed partition 2/73       
+Routed partition 3/73       
+Routed partition 4/73       
+Routed partition 5/73       
+Routed partition 6/73       
+Routed partition 7/73       
+Routed partition 8/73       
+Routed partition 9/73       
+Routed partition 10/73      
+Routed partition 11/73      
+Routed partition 12/73      
+Routed partition 13/73      
+Routed partition 14/73      
+Routed partition 15/73      
+Routed partition 16/73      
+Routed partition 17/73      
+Routed partition 18/73      
+Routed partition 19/73      
+Routed partition 20/73      
+Routed partition 21/73      
+Routed partition 22/73      
+Routed partition 23/73      
+Routed partition 24/73      
+Routed partition 25/73      
+Routed partition 26/73      
+Routed partition 27/73      
+Routed partition 28/73      
+Routed partition 29/73      
+Routed partition 30/73      
+Routed partition 31/73      
+Routed partition 32/73      
+Routed partition 33/73      
+Routed partition 34/73      
+Routed partition 35/73      
+Routed partition 36/73      
+Routed partition 37/73      
+Routed partition 38/73      
+Routed partition 39/73      
+Routed partition 40/73      
+Routed partition 41/73      
+Routed partition 42/73      
+Routed partition 43/73      
+Routed partition 44/73      
+Routed partition 45/73      
+Routed partition 46/73      
+Routed partition 47/73      
+Routed partition 48/73      
+Routed partition 49/73      
+Routed partition 50/73      
+Routed partition 51/73      
+Routed partition 52/73      
+Routed partition 53/73      
+Routed partition 54/73      
+Routed partition 55/73      
+Routed partition 56/73      
+Routed partition 57/73      
+Routed partition 58/73      
+Routed partition 59/73      
+Routed partition 60/73      
+Routed partition 61/73      
+Routed partition 62/73      
+Routed partition 63/73      
+Routed partition 64/73      
+Routed partition 65/73      
+Routed partition 66/73      
+Routed partition 67/73      
+Routed partition 68/73      
+Routed partition 69/73      
+Routed partition 70/73      
+Routed partition 71/73      
+Routed partition 72/73      
+Routed partition 73/73      
+
+Number of wires with overlap after iteration 0 = 46791584 of 67825443
+
+
+[Track Assign: Iteration 0] Elapsed real time: 0:13:38 
+[Track Assign: Iteration 0] Elapsed cpu  time: sys=0:24:02 usr=1:32:39 total=1:56:42
+[Track Assign: Iteration 0] Stage (MB): Used 11038  Alloctr 11367  Proc 22684 
+[Track Assign: Iteration 0] Total (MB): Used 11041  Alloctr 11370  Proc 46770 
+
+Reroute to fix overlaps (iter = 1)
+
+Assign Horizontal partitions, iteration 1
+Routed partition 1/73       
+Routed partition 2/73       
+Routed partition 3/73       
+Routed partition 4/73       
+Routed partition 5/73       
+Routed partition 6/73       
+Routed partition 7/73       
+Routed partition 8/73       
+Routed partition 9/73       
+Routed partition 10/73      
+Routed partition 11/73      
+Routed partition 12/73      
+Routed partition 13/73      
+Routed partition 14/73      
+Routed partition 15/73      
+Routed partition 16/73      
+Routed partition 17/73      
+Routed partition 18/73      
+Routed partition 19/73      
+Routed partition 20/73      
+Routed partition 21/73      
+Routed partition 22/73      
+Routed partition 23/73      
+Routed partition 24/73      
+Routed partition 25/73      
+Routed partition 26/73      
+Routed partition 27/73      
+Routed partition 28/73      
+Routed partition 29/73      
+Routed partition 30/73      
+Routed partition 31/73      
+Routed partition 32/73      
+Routed partition 33/73      
+Routed partition 34/73      
+Routed partition 35/73      
+Routed partition 36/73      
+Routed partition 37/73      
+Routed partition 38/73      
+Routed partition 39/73      
+Routed partition 40/73      
+Routed partition 41/73      
+Routed partition 42/73      
+Routed partition 43/73      
+Routed partition 44/73      
+Routed partition 45/73      
+Routed partition 46/73      
+Routed partition 47/73      
+Routed partition 48/73      
+Routed partition 49/73      
+Routed partition 50/73      
+Routed partition 51/73      
+Routed partition 52/73      
+Routed partition 53/73      
+Routed partition 54/73      
+Routed partition 55/73      
+Routed partition 56/73      
+Routed partition 57/73      
+Routed partition 58/73      
+Routed partition 59/73      
+Routed partition 60/73      
+Routed partition 61/73      
+Routed partition 62/73      
+Routed partition 63/73      
+Routed partition 64/73      
+Routed partition 65/73      
+Routed partition 66/73      
+Routed partition 67/73      
+Routed partition 68/73      
+Routed partition 69/73      
+Routed partition 70/73      
+Routed partition 71/73      
+Routed partition 72/73      
+Routed partition 73/73      
+
+Assign Vertical partitions, iteration 1
+Routed partition 1/73       
+Routed partition 2/73       
+Routed partition 3/73       
+Routed partition 4/73       
+Routed partition 5/73       
+Routed partition 6/73       
+Routed partition 7/73       
+Routed partition 8/73       
+Routed partition 9/73       
+Routed partition 10/73      
+Routed partition 11/73      
+Routed partition 12/73      
+Routed partition 13/73      
+Routed partition 14/73      
+Routed partition 15/73      
+Routed partition 16/73      
+Routed partition 17/73      
+Routed partition 18/73      
+Routed partition 19/73      
+Routed partition 20/73      
+Routed partition 21/73      
+Routed partition 22/73      
+Routed partition 23/73      
+Routed partition 24/73      
+Routed partition 25/73      
+Routed partition 26/73      
+Routed partition 27/73      
+Routed partition 28/73      
+Routed partition 29/73      
+Routed partition 30/73      
+Routed partition 31/73      
+Routed partition 32/73      
+Routed partition 33/73      
+Routed partition 34/73      
+Routed partition 35/73      
+Routed partition 36/73      
+Routed partition 37/73      
+Routed partition 38/73      
+Routed partition 39/73      
+Routed partition 40/73      
+Routed partition 41/73      
+Routed partition 42/73      
+Routed partition 43/73      
+Routed partition 44/73      
+Routed partition 45/73      
+Routed partition 46/73      
+Routed partition 47/73      
+Routed partition 48/73      
+Routed partition 49/73      
+Routed partition 50/73      
+Routed partition 51/73      
+Routed partition 52/73      
+Routed partition 53/73      
+Routed partition 54/73      
+Routed partition 55/73      
+Routed partition 56/73      
+Routed partition 57/73      
+Routed partition 58/73      
+Routed partition 59/73      
+Routed partition 60/73      
+Routed partition 61/73      
+Routed partition 62/73      
+Routed partition 63/73      
+Routed partition 64/73      
+Routed partition 65/73      
+Routed partition 66/73      
+Routed partition 67/73      
+Routed partition 68/73      
+Routed partition 69/73      
+Routed partition 70/73      
+Routed partition 71/73      
+Routed partition 72/73      
+Routed partition 73/73      
+
+[Track Assign: Iteration 1] Elapsed real time: 3:29:29 
+[Track Assign: Iteration 1] Elapsed cpu  time: sys=37:36:15 usr=14:46:53 total=52:23:09
+[Track Assign: Iteration 1] Stage (MB): Used 11557  Alloctr 11954  Proc 23167 
+[Track Assign: Iteration 1] Total (MB): Used 11560  Alloctr 11957  Proc 47254 
+
+Number of wires with overlap after iteration 1 = 26140605 of 49717810
+
+
+Wire length and via report:
+---------------------------
+Number of M1 wires: 87088 		  : 0
+Number of M2 wires: 14046264 		 VIA12SQ_C: 11370074
+Number of M3 wires: 11140021 		 VIA23SQ_C: 15546189
+Number of M4 wires: 11432218 		 VIA34SQ_C: 11424538
+Number of M5 wires: 7359644 		 VIA45SQ: 10551039
+Number of M6 wires: 3076744 		 VIA56SQ: 4261183
+Number of M7 wires: 1826490 		 VIA67SQ_C: 2391413
+Number of M8 wires: 724997 		 VIA78SQ_C: 1293535
+Number of M9 wires: 24344 		 VIA89_C: 47454
+Number of MRDL wires: 0 		 VIA9RDL: 0
+Total number of wires: 49717810 		 vias: 56885425
+
+Total M1 wire length: 11625.1
+Total M2 wire length: 5061403.0
+Total M3 wire length: 5008706.5
+Total M4 wire length: 13540712.0
+Total M5 wire length: 18134434.0
+Total M6 wire length: 14374797.0
+Total M7 wire length: 20170910.0
+Total M8 wire length: 11884677.0
+Total M9 wire length: 780874.9
+Total MRDL wire length: 0.0
+Total wire length: 88968144.0
+
+Longest M1 wire length: 85.6
+Longest M2 wire length: 621.6
+Longest M3 wire length: 716.2
+Longest M4 wire length: 996.7
+Longest M5 wire length: 1474.0
+Longest M6 wire length: 1059.5
+Longest M7 wire length: 1732.8
+Longest M8 wire length: 1353.6
+Longest M9 wire length: 212.5
+Longest MRDL wire length: 0.0
+
+Info: numNewViaInsted = 0 
+Updating the database ...
+Information: Extraction observers are detached as design net change threshold is reached.
+
+[Track Assign: Done] Elapsed real time: 3:42:11 
+[Track Assign: Done] Elapsed cpu  time: sys=37:38:31 usr=15:07:58 total=52:46:29
+[Track Assign: Done] Stage (MB): Used   -2  Alloctr   -2  Proc 23167 
+[Track Assign: Done] Total (MB): Used    0  Alloctr    0  Proc 47254 
+Information: Saving block 'stage.ndm:ChipTop.design'
+Saving library 'stage.ndm'
+Closing library 'stage.ndm'
+exit 0
+Maximum memory usage for this session: 34507.55 MB
+Maximum memory usage for this session including child processes: 34507.55 MB
+CPU usage for this session:  55170 seconds ( 15.32 hours)
+Elapsed time for this session:  14043 seconds (  3.90 hours)
+Thank you for using Fusion Compiler.

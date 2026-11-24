@@ -1,0 +1,92 @@
+status: completed_small_and_large
+cleanup: Removed two precompiled-header caches after completion to recover approximately418MiB, then removed the remaining852MiB soc-build/chipyard.harness.TestHarness.MultiAccelRocketConfig generated C++/object directory before GPT2cgra4 construction. All are regenerable build intermediates; matching simulator, RTL archive/gen-collateral, source/interfaces, firmware and allresults remain intact.
+sessions: Both small38932 and large40719 drained with exit0.
+build_log: small-build.log
+build_result: Simulator and DIM64 firmware compiled successfully. Small session38932 exited0 with P1 GCN PASS and12 checked inferences, all2048outputs correct per inference and allstatuses0. Large timing completed on2026-11-04 at11:22UTC on the same simulator/ELF hashes; six completion/status checks passed and numerical checking was disabled as requested.
+small_performance: small-performance.json
+small_warm_medians: {Manual: 146849, Hybrid: 92628, Auto: 85472}
+small_cold_cycles: {Manual: 156757, Hybrid: 367740, Auto: 229149}
+small_auto_vs_hybrid_warm_percent: 7.7255257589497806
+large_log: large.log
+large_performance: large-performance.json
+large_warm_cycles: {Manual: 526122, Hybrid: 313568, Auto: 286515}
+large_cold_cycles: {Manual: 538551, Hybrid: 1382468, Auto: 836382}
+large_auto_vs_hybrid_warm_percent: 8.62747474232064
+large_result: Six timing-only inferences completed, all statuses0 and checked0. No full Star64 numerical validation or significance claim from one warm sample.
+archives:
+  rtl: rtl/soc-sim.tar.gz
+  rtl_sha256: da566a61d393d4c91a7518995bcb26b3d868b672796431ed66c7e49f343214ac
+  simulator: simulator
+  simulator_sha256: b6d07fbe3ec3c5a15ec5848ae623ad046c64194e5e8cf3523b567a2c93cb84bc
+  binary: p1.riscv
+  binary_sha256: 690ab2f1dad7dccaffce6c4c891c3fad796f34bde2a308a6b4680fd65d6077c1
+  interfaces: source/interfaces.tar.gz
+  interfaces_sha256: 884ed4dc7006071c9b03b26ae0cc11e90b72aca10aad25e415dac7faadc2b3d0
+  generated_headers: generated/
+  implementation: source/p1.c
+validation: Matching per-CGRA translated compact-memory reference passed36jobs/2305exactreads. Loaders, fixture/API generation and hashes passed. Full SoC builds,12-inference numerical gate and six-inference Star64 timing/status gate passed. Independent read-only audit matched two CGRAs, Gemmini64,195-bit packets,16K words/device,10 controls,64 jobs/device with46 packets and3 result entries against archived RTL/API/config/ELF. Eight2048-word synchronous read-first1R1W banks/device remain behavioral inferred SRAM; no technology macro mapping claim.
+gate: Run the checked ring-chords16 case before star64 timing. Serialize shared generators, headers, RTL and simulator builds with every other experiment.
+build_isolation:
+  build_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/soc-build
+  sim: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/simulator
+  output_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/output
+  tmpdir: /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/tmp
+  make_jobs: 2
+  verilator_threads: 4
+  audit: Existing MAKEFLAGS command-line overrides propagate through both runner make calls and recursive makes. Shared generation remains root-owned; the six frozen GPT2 simulations use preserved compiled RTL, distinct ELFs and output logs. No clean targets or runtime library rebuilds allowed.
+  protected_gpt2_sim_sha256: a26e7849c6e2e91d7aef20005e02ed48bd28611d31bd2dda1b2cce2afab27beb
+  protected_gpt2_rows_elf_sha256: 1f484aaf66698fa1ff811691db6fe28a11a9aa6caa318b4fbd872c27fffd0149
+  protected_gpt2_wide_elf_sha256: b280cd9c26fab73199ad56ca8da8b3aaec3bee5c0d4e7f79bb75092acc68cc0a
+  memory_before_build: Approximately26GiB available; cap build parallelism at two. Swap is already full; monitor actual memory pressure.
+hardware: config/soc.yaml
+arch: config/arch.yaml
+kernel: config/kernel.yaml
+source: p1.c
+shared_source: tests/cgra-gemmini/gcn/p1.c
+fixture: {source: scripts/gcn_data.py, seed: 0, star_nodes: 64, row_align: 64}
+design: One unchanged Gemmini64 with 2 independent homogeneous 4x4 single-CGRA instances; the native architecture remains a 1x1 array.
+partition: Equal contiguous node rows, using floor(nodes*index/2) boundaries from the shared source.
+small: ring-chords16, one cold and three checked warm runs per mode.
+large: star64, one cold and one warm timing-only run per mode after the small gate; completion/status checks retained.
+resources:
+  input_words: 4096
+  indices_words: 192
+  weights_words: 192
+  output_words_per_cgra: 4096
+  live_words_per_cgra: 8576
+  allocated_words_per_cgra: 16384
+  allocation_reason: Native DataMemControllerRTL requires power-of-two global and per-bank capacities; eight banks retain the current memory organization.
+  bank_words: 2048
+  hybrid_jobs_per_cgra: 64
+  auto_jobs_per_cgra: 32
+  packets_per_job: 46
+  packet_count_formula: 51 configuration + 5 launch - 10 fixed setup, preloaded once per cold inference.
+  packet_width_bits: 195
+  gemmini_jobs: 1
+  gemmini_commands: 12
+  gemmini_actual_patches: 1
+  gemmini_patch_capacity: 2
+  profiles: 2
+  stages: 3
+  dependencies: 3
+  result_capacity: 3
+  max_control_steps: 40960
+  total_cached_packet_slots: 5888
+  cache_storage_note: 128 total CGRA job slots across endpoints; 46 native packet slots per job plus the existing 67-bit patch entry and validity bit. Excludes metadata/logic; no area claim.
+star_partition:
+  rows_per_cgra: 32
+  edges_first_cgra: 126
+  edges_other_cgras: 64
+  control_steps_first_cgra_per_band: 80640
+  control_steps_other_cgras_per_band: 40960
+  note: The degree-64 center remains in the first equal-row partition. Its row takes 40960 steps versus 1280 for a leaf; equal row counts therefore retain a work imbalance. These are source-derived step counts, not predicted cycles or a performance ranking.
+memory_note: Synchronous inferred 1R1W memory; technology SRAM mapping and area remain unverified.
+source_sha256: 598b00fa6408c9b9442ffed6f23804621d451c66b7fd1b4c9de0d5df42ecb026
+fixture_sha256: a44a93a395b6b4a03a5c58c24ba0ea3e8e5b07adc3975f76b1a49f6bd27a96b7
+schedule_sha256: a868821308f6ca33be2c2b4b33fac5ee6f8788676eb5af076f92d49cfec202be
+artifact_policy: Stage logs, generated RTL snapshots and result files in this directory. Publishing to /home/jjqin/data remains blocked by the read-only filesystem boundary.
+commands:
+  fixture: chipyard/.conda-env/bin/python scripts/gcn_data.py --seed 0 --star-nodes 64 --row-align 64 --output tests/generated/gcn_data.h --report build/experiments/p1/gcn/cgra2/v001/data.json
+  api: chipyard/.conda-env/bin/python scripts/cgra_fast_api.py --arch-yaml build/experiments/p1/gcn/cgra2/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra2/v001/config/soc.yaml build/experiments/p1/gcn/cgra2/v001/config/kernel.yaml
+  small: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=12000000 BINARY_ARGS='1 -1 3 0' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml build/experiments/p1/gcn/cgra2/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra2/v001/config/soc.yaml build/experiments/p1/gcn/cgra2/v001/p1.c
+  large: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=24000000 BINARY_ARGS='2 -1 1 1' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml build/experiments/p1/gcn/cgra2/v001/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra2/v001/config/soc.yaml build/experiments/p1/gcn/cgra2/v001/p1.c

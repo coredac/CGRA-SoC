@@ -1,0 +1,194 @@
+{
+  "lint": [
+    {
+      "top": "RouteMem0",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem0",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem0.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem1",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem1",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem1.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem2",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem2",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem2.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem3",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem3",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem3.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem4",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem4",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem4.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem5",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem5",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem5.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem6",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem6",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem6.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem7",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem7",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem7.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem8",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem8",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem8.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem9",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem9",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem9.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    },
+    {
+      "top": "RouteMem10",
+      "exit": 0,
+      "command": [
+        "/home/jjqin/miniconda3/envs/cgra-soc/bin/verilator",
+        "--lint-only",
+        "--top-module",
+        "RouteMem10",
+        "-DSYNTHESIS",
+        "-Wno-fatal",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/RouteMem10.sv",
+        "/home/jjqin/CGRA-SoC/build/experiments/physical/backend/route-repair/memory/ports.sv"
+      ]
+    }
+  ],
+  "simulation": "not run",
+  "formal": {
+    "mapped": {
+      "RouteMem0": "passed",
+      "RouteMem1": "passed",
+      "RouteMem2": "passed",
+      "RouteMem3": "passed",
+      "RouteMem4": "passed",
+      "RouteMem5": "passed",
+      "RouteMem6": "passed",
+      "RouteMem7": "passed",
+      "RouteMem8": "passed",
+      "RouteMem9": "passed",
+      "RouteMem10": "passed"
+    },
+    "original_to_replacement_fm": {
+      "RouteMem1": "failed; unmatched address/data state and retimed memory history, no end-to-end equivalence claim",
+      "reports": "formal/results/"
+    },
+    "inductive_transition": {
+      "status": "passed",
+      "solver": "Z3 5.4.1",
+      "obligations": 960,
+      "families": [
+        "RouteMem0",
+        "RouteMem1",
+        "RouteMem6",
+        "RouteMem7",
+        "RouteMem8"
+      ],
+      "report": "formal/transition.json",
+      "negative_controls": "two injected connection errors both detected with SAT counterexamples"
+    },
+    "aggregate": "formal/status.json"
+  },
+  "synthesis": "All 11 family completion markers observed; main RouteMem0-8 and memory-tail RouteMem9-10. Parent owns merged physical netlist checks."
+}

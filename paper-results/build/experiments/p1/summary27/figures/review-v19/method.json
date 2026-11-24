@@ -1,0 +1,250 @@
+{
+  "status": "modeled_sensitivity_figure_not_new_measured_PPA",
+  "speedup": "Original per-task cycles at the same CGRA count divided by current cycles.",
+  "ae": "Per-task1 cycles times per-task1 modeled area divided by current cycles times current modeled component area.",
+  "bars": "Accepted review-v18 bars use speedup_low and ae_low. This audit revision changes deduction metadata only and generates no replacement figure.",
+  "revision": "Correct cumulative removed_sram after segment-buffer and GCN template adjustments. Retained logic, SRAM, total area and all 27 metrics remain unchanged from review-v7.",
+  "gcn_dagger": "Segment AE is a conditional projection using the archived original-design cycle count and shared-template area subtotal. Added band-origin logic and latency are excluded; actual AE can be lower.",
+  "area_scope": "Accelerator components only. CPU, CPU caches, global interconnect and Pool require separately verified source reports; do not infer zeros for missing components.",
+  "sources": {
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/current-review27.csv": "d9a63476664f04251cc44050554961b017fb5b4a41b8134155b061b99bde060a",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/layers.csv": "24a22b2b01b30b9b8986db211388d949c69088d38f29c274007a655aec371089",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/memory.csv": "1272ba28eff1b0f23612ec190615715c197e0fa5587fe3af0ac8c327161f1ca9",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/method.json": "56bf3b636e765645e5874c0252616386c9ab3b2822e52cd770579999dd01940b",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/gcn-reuse/method.json": "713dc0ec817798ed3e94f5a6d183dfc6ed0dbbafae1303e19f87c987c246b4c8"
+  },
+  "checks": [
+    [
+      "27 settings",
+      true
+    ],
+    [
+      "3873 layers",
+      true
+    ],
+    [
+      "nonnegative layers",
+      true
+    ],
+    [
+      "layer deductions reconcile",
+      true
+    ],
+    [
+      "resnet-cgra1 per-task area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra1 per-task ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra1 per-segment area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra1 per-segment ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra1 per-graph area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra1 per-graph ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra2 per-task area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra2 per-task ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra2 per-segment area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra2 per-segment ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra2 per-graph area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra2 per-graph ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra4 per-task area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra4 per-task ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra4 per-segment area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra4 per-segment ordered intervals",
+      true
+    ],
+    [
+      "resnet-cgra4 per-graph area reconciles",
+      true
+    ],
+    [
+      "resnet-cgra4 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-task area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-task ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-segment area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-graph area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra1 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-task area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-task ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-segment area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-graph area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra2 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-task area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-task ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-segment area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-graph area reconciles",
+      true
+    ],
+    [
+      "gpt2-rows-cgra4 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra1 per-task area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra1 per-task ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra1 per-segment area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra1 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra1 per-graph area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra1 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra2 per-task area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra2 per-task ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra2 per-segment area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra2 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra2 per-graph area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra2 per-graph ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra4 per-task area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra4 per-task ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra4 per-segment area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra4 per-segment ordered intervals",
+      true
+    ],
+    [
+      "gcn-cgra4 per-graph area reconciles",
+      true
+    ],
+    [
+      "gcn-cgra4 per-graph ordered intervals",
+      true
+    ]
+  ]
+}

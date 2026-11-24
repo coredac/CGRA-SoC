@@ -1,0 +1,5 @@
+paper-results/build/experiments/asic/cgra-cost-complete/reports/checkpoint/endpoint/recovered/mapped.ddc filter=lfs diff=lfs merge=lfs -text
+paper-results/build/experiments/asic/hybrid/compute-audit/asic.tsv filter=lfs diff=lfs merge=lfs -text
+paper-results/build/experiments/asic/hybrid/compute-audit/cgra.tsv filter=lfs diff=lfs merge=lfs -text
+paper-results/build/experiments/asic/hybrid/revised-area/cgra/leaves.tsv filter=lfs diff=lfs merge=lfs -text
+paper-results/layout-source/global-route-design.tar.gz filter=lfs diff=lfs merge=lfs -text

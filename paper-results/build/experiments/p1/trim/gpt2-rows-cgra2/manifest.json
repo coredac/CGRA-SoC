@@ -1,0 +1,90 @@
+{
+  "id": "gpt2-rows-cgra2",
+  "workload": "gpt2",
+  "shape": "rows",
+  "cgras": 2,
+  "frozen_origin": "build/experiments/p1/gpt2/cgra2/v001",
+  "frozen_manifest": "build/experiments/p1/gpt2/cgra2/v001/run.yaml",
+  "arch": "build/experiments/p1/trim/gpt2-rows-cgra2/config/arch.yaml",
+  "soc": "build/experiments/p1/trim/gpt2-rows-cgra2/config/soc.yaml",
+  "source": "build/experiments/p1/trim/gpt2-rows-cgra2/source",
+  "kernel_directory": "build/experiments/p1/trim/gpt2-rows-cgra2/config/kernels",
+  "arch_sha256": "9fe24dd23de11072365f2b465e5dff08528f9e7c9c05fb9fce1e59e93998ca9b",
+  "soc_sha256": "b36a95d85f2aa81aef8dbbf41877c7cb91d6075076af1a91c4bdcf671dd2a0a5",
+  "capacity": {
+    "native_jobs": 64,
+    "commands_per_job": 32,
+    "native_patches_per_job": 8,
+    "cgra_jobs": {
+      "cgra0": 32,
+      "cgra1": 32
+    },
+    "cgra_packets": {
+      "cgra0": 178,
+      "cgra1": 178
+    },
+    "cgra_patch_support": {
+      "cgra0": false,
+      "cgra1": false
+    },
+    "profiles": 32,
+    "stages": 4,
+    "edges": 7,
+    "results": 4
+  },
+  "spm": {
+    "native_bytes": 131072,
+    "cgra_words": 4096,
+    "bank_words": 512,
+    "banks": 8,
+    "window_bytes": 16384,
+    "peak_words": 2608,
+    "headroom_words": 1488,
+    "minimum_power_of_two_words": 4096
+  },
+  "elaboration_dir": "build/experiments/p1/trim/gpt2-rows-cgra2/rtl-build",
+  "rtl_archive": "build/experiments/p1/trim/gpt2-rows-cgra2/rtl.tar.gz",
+  "manifest": "build/experiments/p1/trim/gpt2-rows-cgra2/manifest.json",
+  "status": "rtl_generated_static_closure_passed",
+  "source_status": "frozen_for_trimmed_hardware",
+  "source_sha256": {
+    "build/experiments/p1/trim/gpt2-rows-cgra2/source/p1.c": "a53becd3708cbcb6683c84520967ad03a9e56dc98201abcb21693e3c51bcb7f1",
+    "build/experiments/p1/trim/gpt2-rows-cgra2/source/p1_native.h": "5ac6e069bb28c9033fc338c44dd60ac30a6a2dcf76948e03757ba3c347ec5a8b",
+    "build/experiments/p1/trim/gpt2-rows-cgra2/source/p1_plan.h": "6f2d1264b929c5447636c480a08604224ad3500ff91635d734a14a81019ac55e"
+  },
+  "compile_define": "P1_CGRAS=2",
+  "validation": {
+    "configuration": "passed_layout_graph_and_available_kernel_parsers",
+    "rtl": "source_and_hierarchy_closure_passed",
+    "synthesis": "pending",
+    "simulation": "deferred_by_user"
+  },
+  "shape_dimensions": {
+    "n": 64,
+    "hidden": 128,
+    "heads": 2,
+    "ff": 512
+  },
+  "supported_gates": [
+    "smoke_N2_H128",
+    "small_N16_H128"
+  ],
+  "expected": {
+    "native_jobs": 59,
+    "cgra_jobs_per_lane": 32,
+    "profiles": 31,
+    "max_commands": 29,
+    "max_native_patches": 5,
+    "result_burst": 4,
+    "operators": 15
+  },
+  "evidence": [
+    "build/experiments/p1/gpt2/cgra2/v001/checks/run.log",
+    "build/experiments/p1/gpt2/cgra2/v001/source/p1_native.h",
+    "build/experiments/p1/gpt2/cgra2/v001/source/p1_plan.h",
+    "build/experiments/p1/gpt2/cgra2/v001/reference/plans.json"
+  ],
+  "rtl_sha256": "638006978c14eb30513c574d577fc0eeceef556e5b3a5f46b6cf151ca3262b5a",
+  "rtl_audit": "build/experiments/p1/trim/gpt2-rows-cgra2/rtl-audit.json",
+  "elaboration_present": false
+}

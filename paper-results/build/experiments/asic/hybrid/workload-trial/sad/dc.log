@@ -1,0 +1,700 @@
+INFO:    Using cached SIF image
+/opt2/synopsys/syn-T-2022.03-SP5-6/bin/dc_shell: /opt2/synopsys/syn-T-2022.03-SP5-6/bin/snps_platform: /bin/csh: bad interpreter: No such file or directory
+
+                           Design Compiler Graphical 
+                                 DC Ultra (TM)
+                                  DFTMAX (TM)
+                              Power Compiler (TM)
+                                 DesignWare (R)
+                                 DC Expert (TM)
+                               Design Vision (TM)
+                               HDL Compiler (TM)
+                               VHDL Compiler (TM)
+                                  DFT Compiler
+                               Design Compiler(R)
+
+              Version T-2022.03-SP5-6 for linux64 - Sep 20, 2023 
+
+                    Copyright (c) 1988 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+Initializing...
+proc run {} {
+  define_design_lib WORK -path work
+  set logic /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db
+  set_app_var target_library [list $logic]
+  set_app_var link_library [list * $logic]
+  set_app_var sh_continue_on_error false
+  set_host_options -max_cores 1
+  if {![analyze -format verilog all.v]} {error "analyze failed"}
+  elaborate ExpandedSad
+  current_design ExpandedSad
+  if {![link]} {error "link failed"}
+  create_clock -name core -period 2 [get_ports clk]
+  set_input_delay 0.1 -clock core [remove_from_collection [all_inputs] [get_ports clk]]
+  set_output_delay 0.1 -clock core [all_outputs]
+  set_input_transition 0.1 [remove_from_collection [all_inputs] [get_ports clk]]
+  set_load 1.0 [all_outputs]
+  set_max_transition 0.2 [current_design]
+  set_max_fanout 16 [current_design]
+  set_wire_load_mode enclosed
+  set_fix_multiple_port_nets -all -buffer_constants [get_designs *]
+  if {![compile -map_effort medium -area_effort high]} {error "compile failed"}
+  redirect -file area.rpt {report_area -hierarchy}
+  redirect -file units.rpt {report_units}
+  redirect -file setup.rpt {report_timing -delay_type max -max_paths 10 -nets -input_pins -significant_digits 6}
+  redirect -file constraints.rpt {report_constraint -all_violators -significant_digits 6}
+  redirect -file qor.rpt {report_qor}
+  write -format ddc -hierarchy -output mapped.ddc
+  redirect -file check.rpt {check_design}
+  redirect -file timing_check.rpt {check_timing -include {unconstrained_endpoints no_input_delay partial_input_delay}}
+  redirect -file design.rpt {report_design}
+  set leaves [get_cells -hierarchical -filter {is_hierarchical == false}]
+  foreach ref [lsort -unique [get_attribute $leaves ref_name]] {
+    if {[string match GTECH* $ref] || [sizeof_collection [get_lib_cells -quiet */$ref]] == 0} {error "unmapped $ref"}
+  }
+  set names [get_attribute $leaves full_name]
+  set refs [get_attribute $leaves ref_name]
+  set areas [get_attribute $leaves area]
+  set seqs [get_attribute $leaves is_sequential]
+  set f [open leaves.tsv w]
+  puts $f "path\tref\tarea\tsequential"
+  foreach name $names ref $refs area $areas seq $seqs {puts $f "$name\t$ref\t$area\t$seq"}
+  close $f
+  set f [open SUCCESS w]
+  puts $f complete
+  close $f
+}
+if {[catch run message]} {puts stderr $message; puts stderr $::errorInfo; exit 1}
+Running PRESTO HDLC
+Compiling source file ./all.v
+Presto compilation completed successfully.
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+Loading db file '/opt2/synopsys/syn-T-2022.03-SP5-6/libraries/syn/gtech.db'
+Loading db file '/opt2/synopsys/syn-T-2022.03-SP5-6/libraries/syn/standard.sldb'
+  Loading link library 'saed14rvt_tt0p8v25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Warning:  ./all.v:233: The statements in initial blocks are ignored. (VER-281)
+
+Statistics for case statements in always block at line 102 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           113            |    auto/auto     |
+|           149            |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 174 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           184            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine ExpandedSad line 174 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|     values_reg      | Flip-flop |  512  |  Y  | N  | N  | N  | N  | N  | N  |
+|     active_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|      round_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|   accumulator_reg   | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|   last_block_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (ExpandedSad)
+Elaborated 1 design.
+Current design is now 'ExpandedSad'.
+Information: Building the design 'PrimitiveBank'. (HDL-193)
+
+Inferred memory devices in process
+	in routine PrimitiveBank line 582 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|     active_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|      busy_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (PrimitiveBank)
+Information: Building the design 'ArithmeticLane'. (HDL-193)
+Warning:  ./all.v:494: The statements in initial blocks are ignored. (VER-281)
+Warning:  ./all.v:431: signed to unsigned assignment occurs. (VER-318)
+
+Statistics for case statements in always block at line 416 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           420            |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 445 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           457            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine ArithmeticLane line 445 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|     partial_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|     stride_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|       op_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        z_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|        y_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|        x_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    out_data_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (ArithmeticLane)
+Information: Building the design 'Restoring'. (HDL-193)
+Warning:  ./all.v:317: The statements in initial blocks are ignored. (VER-281)
+
+Inferred memory devices in process
+	in routine Restoring line 281 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      busy_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     result_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    remainder_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|   square_root_reg   | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     divisor_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    quotient_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+| take_remainder_reg  | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|      count_reg      | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|      done_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    negative_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (Restoring)
+Current design is 'ExpandedSad'.
+
+  Linking design 'ExpandedSad'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (4 designs)               /tmp/cgra-sad-area-i6gRUHww/ExpandedSad.db, etc
+  saed14rvt_tt0p8v25c (library) /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db
+
+Current design is 'ExpandedSad'.
+Current design is 'ExpandedSad'.
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | T-2022.03-DWBB_202203.5.6 |   *     |
+| Licensed DW Building Blocks        |                         |           |
+============================================================================
+
+====================================================================================================
+| Flow Information                                                                                 |
+----------------------------------------------------------------------------------------------------
+| Flow         | Design Compiler                                                                   |
+====================================================================================================
+| Design Information                                      | Value                                  |
+====================================================================================================
+| Number of Scenarios                                     | 0                                      |
+| Leaf Cell Count                                         | 15386                                  |
+| Number of User Hierarchies                              | 33                                     |
+| Sequential Cell Count                                   | 6008                                   |
+| Macro Count                                             | 0                                      |
+| Number of Power Domains                                 | 0                                      |
+| Number of Path Groups                                   | 2                                      |
+| Number of VT Class                                      | 0                                      |
+| Number of Clocks                                        | 1                                      |
+| Number of Dont Touch Cells                              | 2160                                   |
+| Number of Dont Touch Nets                               | 0                                      |
+| Number of Size Only Cells                               | 0                                      |
+| Design with UPF Data                                    | false                                  |
+----------------------------------------------------------------------------------------------------
+| Variables                                               | Value                                  |
+----------------------------------------------------------------------------------------------------
+| set_fix_multiple_port_nets                              | -all -buffer_constants                 |
+====================================================================================================
+
+Information: There are 612 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'Restoring_0'
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_4'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_2'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_1'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_0P5'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_4'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_2'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_1'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_0P5'. (OPT-914)
+  Processing 'ArithmeticLane_0'
+  Processing 'PrimitiveBank'
+  Processing 'ExpandedSad'
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Implementation Selection
+  ----------------------------------
+  Processing 'ArithmeticLane_1_DW01_add_0'
+  Processing 'ArithmeticLane_1_DW01_add_1'
+  Processing 'ArithmeticLane_1_DW01_inc_0_DW01_inc_1'
+  Allocating blocks in 'DW_rash_A_width32_SH_width32'
+  Processing 'ArithmeticLane_1_DW_rash_0'
+  Processing 'ArithmeticLane_1_DW_rash_1'
+  Allocating blocks in 'DW01_ash_A_width32_SH_width32'
+  Processing 'ArithmeticLane_1_DW01_ash_0'
+  Processing 'ArithmeticLane_1_DW01_sub_0'
+  Processing 'ArithmeticLane_1_DW01_add_2'
+  Processing 'ArithmeticLane_1_DW01_cmp6_0'
+  Processing 'ArithmeticLane_1_DW01_cmp6_1'
+  Processing 'Restoring_1_DW01_sub_0_DW01_sub_1'
+  Processing 'Restoring_1_DW01_dec_0'
+  Processing 'Restoring_1_DW01_sub_1_DW01_sub_2'
+  Processing 'Restoring_1_DW01_sub_2_DW01_sub_3'
+  Processing 'Restoring_1_DW01_sub_3_DW01_sub_4'
+  Processing 'Restoring_1_DW01_cmp2_0'
+  Processing 'ArithmeticLane_2_DW01_add_0_DW01_add_3'
+  Processing 'ArithmeticLane_2_DW01_add_1_DW01_add_4'
+  Processing 'ArithmeticLane_2_DW01_inc_0_DW01_inc_2'
+  Processing 'ArithmeticLane_2_DW_rash_0_DW_rash_2'
+  Processing 'ArithmeticLane_2_DW_rash_1_DW_rash_3'
+  Processing 'ArithmeticLane_2_DW01_ash_0_DW01_ash_1'
+  Processing 'ArithmeticLane_2_DW01_sub_0_DW01_sub_5'
+  Processing 'ArithmeticLane_2_DW01_add_2_DW01_add_5'
+  Processing 'ArithmeticLane_2_DW01_cmp6_0_DW01_cmp6_2'
+  Processing 'ArithmeticLane_2_DW01_cmp6_1_DW01_cmp6_3'
+  Processing 'Restoring_2_DW01_sub_0_DW01_sub_6'
+  Processing 'Restoring_2_DW01_dec_0_DW01_dec_1'
+  Processing 'Restoring_2_DW01_sub_1_DW01_sub_7'
+  Processing 'Restoring_2_DW01_sub_2_DW01_sub_8'
+  Processing 'Restoring_2_DW01_sub_3_DW01_sub_9'
+  Processing 'Restoring_2_DW01_cmp2_0_DW01_cmp2_1'
+  Processing 'ArithmeticLane_3_DW01_add_0_DW01_add_6'
+  Processing 'ArithmeticLane_3_DW01_add_1_DW01_add_7'
+  Processing 'ArithmeticLane_3_DW01_inc_0_DW01_inc_3'
+  Processing 'ArithmeticLane_3_DW_rash_0_DW_rash_4'
+  Processing 'ArithmeticLane_3_DW_rash_1_DW_rash_5'
+  Processing 'ArithmeticLane_3_DW01_ash_0_DW01_ash_2'
+  Processing 'ArithmeticLane_3_DW01_sub_0_DW01_sub_10'
+  Processing 'ArithmeticLane_3_DW01_add_2_DW01_add_8'
+  Processing 'ArithmeticLane_3_DW01_cmp6_0_DW01_cmp6_4'
+  Processing 'ArithmeticLane_3_DW01_cmp6_1_DW01_cmp6_5'
+  Processing 'Restoring_3_DW01_sub_0_DW01_sub_11'
+  Processing 'Restoring_3_DW01_dec_0_DW01_dec_2'
+  Processing 'Restoring_3_DW01_sub_1_DW01_sub_12'
+  Processing 'Restoring_3_DW01_sub_2_DW01_sub_13'
+  Processing 'Restoring_3_DW01_sub_3_DW01_sub_14'
+  Processing 'Restoring_3_DW01_cmp2_0_DW01_cmp2_2'
+  Processing 'ArithmeticLane_4_DW01_add_0_DW01_add_9'
+  Processing 'ArithmeticLane_4_DW01_add_1_DW01_add_10'
+  Processing 'ArithmeticLane_4_DW01_inc_0_DW01_inc_4'
+  Processing 'ArithmeticLane_4_DW_rash_0_DW_rash_6'
+  Processing 'ArithmeticLane_4_DW_rash_1_DW_rash_7'
+  Processing 'ArithmeticLane_4_DW01_ash_0_DW01_ash_3'
+  Processing 'ArithmeticLane_4_DW01_sub_0_DW01_sub_15'
+  Processing 'ArithmeticLane_4_DW01_add_2_DW01_add_11'
+  Processing 'ArithmeticLane_4_DW01_cmp6_0_DW01_cmp6_6'
+  Processing 'ArithmeticLane_4_DW01_cmp6_1_DW01_cmp6_7'
+  Processing 'Restoring_4_DW01_sub_0_DW01_sub_16'
+  Processing 'Restoring_4_DW01_dec_0_DW01_dec_3'
+  Processing 'Restoring_4_DW01_sub_1_DW01_sub_17'
+  Processing 'Restoring_4_DW01_sub_2_DW01_sub_18'
+  Processing 'Restoring_4_DW01_sub_3_DW01_sub_19'
+  Processing 'Restoring_4_DW01_cmp2_0_DW01_cmp2_3'
+  Processing 'ArithmeticLane_5_DW01_add_0_DW01_add_12'
+  Processing 'ArithmeticLane_5_DW01_add_1_DW01_add_13'
+  Processing 'ArithmeticLane_5_DW01_inc_0_DW01_inc_5'
+  Processing 'ArithmeticLane_5_DW_rash_0_DW_rash_8'
+  Processing 'ArithmeticLane_5_DW_rash_1_DW_rash_9'
+  Processing 'ArithmeticLane_5_DW01_ash_0_DW01_ash_4'
+  Processing 'ArithmeticLane_5_DW01_sub_0_DW01_sub_20'
+  Processing 'ArithmeticLane_5_DW01_add_2_DW01_add_14'
+  Processing 'ArithmeticLane_5_DW01_cmp6_0_DW01_cmp6_8'
+  Processing 'ArithmeticLane_5_DW01_cmp6_1_DW01_cmp6_9'
+  Processing 'Restoring_5_DW01_sub_0_DW01_sub_21'
+  Processing 'Restoring_5_DW01_dec_0_DW01_dec_4'
+  Processing 'Restoring_5_DW01_sub_1_DW01_sub_22'
+  Processing 'Restoring_5_DW01_sub_2_DW01_sub_23'
+  Processing 'Restoring_5_DW01_sub_3_DW01_sub_24'
+  Processing 'Restoring_5_DW01_cmp2_0_DW01_cmp2_4'
+  Processing 'ArithmeticLane_6_DW01_add_0_DW01_add_15'
+  Processing 'ArithmeticLane_6_DW01_add_1_DW01_add_16'
+  Processing 'ArithmeticLane_6_DW01_inc_0_DW01_inc_6'
+  Processing 'ArithmeticLane_6_DW_rash_0_DW_rash_10'
+  Processing 'ArithmeticLane_6_DW_rash_1_DW_rash_11'
+  Processing 'ArithmeticLane_6_DW01_ash_0_DW01_ash_5'
+  Processing 'ArithmeticLane_6_DW01_sub_0_DW01_sub_25'
+  Processing 'ArithmeticLane_6_DW01_add_2_DW01_add_17'
+  Processing 'ArithmeticLane_6_DW01_cmp6_0_DW01_cmp6_10'
+  Processing 'ArithmeticLane_6_DW01_cmp6_1_DW01_cmp6_11'
+  Processing 'Restoring_6_DW01_sub_0_DW01_sub_26'
+  Processing 'Restoring_6_DW01_dec_0_DW01_dec_5'
+  Processing 'Restoring_6_DW01_sub_1_DW01_sub_27'
+  Processing 'Restoring_6_DW01_sub_2_DW01_sub_28'
+  Processing 'Restoring_6_DW01_sub_3_DW01_sub_29'
+  Processing 'Restoring_6_DW01_cmp2_0_DW01_cmp2_5'
+  Processing 'ArithmeticLane_7_DW01_add_0_DW01_add_18'
+  Processing 'ArithmeticLane_7_DW01_add_1_DW01_add_19'
+  Processing 'ArithmeticLane_7_DW01_inc_0_DW01_inc_7'
+  Processing 'ArithmeticLane_7_DW_rash_0_DW_rash_12'
+  Processing 'ArithmeticLane_7_DW_rash_1_DW_rash_13'
+  Processing 'ArithmeticLane_7_DW01_ash_0_DW01_ash_6'
+  Processing 'ArithmeticLane_7_DW01_sub_0_DW01_sub_30'
+  Processing 'ArithmeticLane_7_DW01_add_2_DW01_add_20'
+  Processing 'ArithmeticLane_7_DW01_cmp6_0_DW01_cmp6_12'
+  Processing 'ArithmeticLane_7_DW01_cmp6_1_DW01_cmp6_13'
+  Processing 'Restoring_7_DW01_sub_0_DW01_sub_31'
+  Processing 'Restoring_7_DW01_dec_0_DW01_dec_6'
+  Processing 'Restoring_7_DW01_sub_1_DW01_sub_32'
+  Processing 'Restoring_7_DW01_sub_2_DW01_sub_33'
+  Processing 'Restoring_7_DW01_sub_3_DW01_sub_34'
+  Processing 'Restoring_7_DW01_cmp2_0_DW01_cmp2_6'
+  Processing 'ArithmeticLane_8_DW01_add_0_DW01_add_21'
+  Processing 'ArithmeticLane_8_DW01_add_1_DW01_add_22'
+  Processing 'ArithmeticLane_8_DW01_inc_0_DW01_inc_8'
+  Processing 'ArithmeticLane_8_DW_rash_0_DW_rash_14'
+  Processing 'ArithmeticLane_8_DW_rash_1_DW_rash_15'
+  Processing 'ArithmeticLane_8_DW01_ash_0_DW01_ash_7'
+  Processing 'ArithmeticLane_8_DW01_sub_0_DW01_sub_35'
+  Processing 'ArithmeticLane_8_DW01_add_2_DW01_add_23'
+  Processing 'ArithmeticLane_8_DW01_cmp6_0_DW01_cmp6_14'
+  Processing 'ArithmeticLane_8_DW01_cmp6_1_DW01_cmp6_15'
+  Processing 'Restoring_8_DW01_sub_0_DW01_sub_36'
+  Processing 'Restoring_8_DW01_dec_0_DW01_dec_7'
+  Processing 'Restoring_8_DW01_sub_1_DW01_sub_37'
+  Processing 'Restoring_8_DW01_sub_2_DW01_sub_38'
+  Processing 'Restoring_8_DW01_sub_3_DW01_sub_39'
+  Processing 'Restoring_8_DW01_cmp2_0_DW01_cmp2_7'
+  Processing 'ArithmeticLane_9_DW01_add_0_DW01_add_24'
+  Processing 'ArithmeticLane_9_DW01_add_1_DW01_add_25'
+  Processing 'ArithmeticLane_9_DW01_inc_0_DW01_inc_9'
+  Processing 'ArithmeticLane_9_DW_rash_0_DW_rash_16'
+  Processing 'ArithmeticLane_9_DW_rash_1_DW_rash_17'
+  Processing 'ArithmeticLane_9_DW01_ash_0_DW01_ash_8'
+  Processing 'ArithmeticLane_9_DW01_sub_0_DW01_sub_40'
+  Processing 'ArithmeticLane_9_DW01_add_2_DW01_add_26'
+  Processing 'ArithmeticLane_9_DW01_cmp6_0_DW01_cmp6_16'
+  Processing 'ArithmeticLane_9_DW01_cmp6_1_DW01_cmp6_17'
+  Processing 'Restoring_9_DW01_sub_0_DW01_sub_41'
+  Processing 'Restoring_9_DW01_dec_0_DW01_dec_8'
+  Processing 'Restoring_9_DW01_sub_1_DW01_sub_42'
+  Processing 'Restoring_9_DW01_sub_2_DW01_sub_43'
+  Processing 'Restoring_9_DW01_sub_3_DW01_sub_44'
+  Processing 'Restoring_9_DW01_cmp2_0_DW01_cmp2_8'
+  Processing 'ArithmeticLane_10_DW01_add_0_DW01_add_27'
+  Processing 'ArithmeticLane_10_DW01_add_1_DW01_add_28'
+  Processing 'ArithmeticLane_10_DW01_inc_0_DW01_inc_10'
+  Processing 'ArithmeticLane_10_DW_rash_0_DW_rash_18'
+  Processing 'ArithmeticLane_10_DW_rash_1_DW_rash_19'
+  Processing 'ArithmeticLane_10_DW01_ash_0_DW01_ash_9'
+  Processing 'ArithmeticLane_10_DW01_sub_0_DW01_sub_45'
+  Processing 'ArithmeticLane_10_DW01_add_2_DW01_add_29'
+  Processing 'ArithmeticLane_10_DW01_cmp6_0_DW01_cmp6_18'
+  Processing 'ArithmeticLane_10_DW01_cmp6_1_DW01_cmp6_19'
+  Processing 'Restoring_10_DW01_sub_0_DW01_sub_46'
+  Processing 'Restoring_10_DW01_dec_0_DW01_dec_9'
+  Processing 'Restoring_10_DW01_sub_1_DW01_sub_47'
+  Processing 'Restoring_10_DW01_sub_2_DW01_sub_48'
+  Processing 'Restoring_10_DW01_sub_3_DW01_sub_49'
+  Processing 'Restoring_10_DW01_cmp2_0_DW01_cmp2_9'
+  Processing 'ArithmeticLane_11_DW01_add_0_DW01_add_30'
+  Processing 'ArithmeticLane_11_DW01_add_1_DW01_add_31'
+  Processing 'ArithmeticLane_11_DW01_inc_0_DW01_inc_11'
+  Processing 'ArithmeticLane_11_DW_rash_0_DW_rash_20'
+  Processing 'ArithmeticLane_11_DW_rash_1_DW_rash_21'
+  Processing 'ArithmeticLane_11_DW01_ash_0_DW01_ash_10'
+  Processing 'ArithmeticLane_11_DW01_sub_0_DW01_sub_50'
+  Processing 'ArithmeticLane_11_DW01_add_2_DW01_add_32'
+  Processing 'ArithmeticLane_11_DW01_cmp6_0_DW01_cmp6_20'
+  Processing 'ArithmeticLane_11_DW01_cmp6_1_DW01_cmp6_21'
+  Processing 'Restoring_11_DW01_sub_0_DW01_sub_51'
+  Processing 'Restoring_11_DW01_dec_0_DW01_dec_10'
+  Processing 'Restoring_11_DW01_sub_1_DW01_sub_52'
+  Processing 'Restoring_11_DW01_sub_2_DW01_sub_53'
+  Processing 'Restoring_11_DW01_sub_3_DW01_sub_54'
+  Processing 'Restoring_11_DW01_cmp2_0_DW01_cmp2_10'
+  Processing 'ArithmeticLane_12_DW01_add_0_DW01_add_33'
+  Processing 'ArithmeticLane_12_DW01_add_1_DW01_add_34'
+  Processing 'ArithmeticLane_12_DW01_inc_0_DW01_inc_12'
+  Processing 'ArithmeticLane_12_DW_rash_0_DW_rash_22'
+  Processing 'ArithmeticLane_12_DW_rash_1_DW_rash_23'
+  Processing 'ArithmeticLane_12_DW01_ash_0_DW01_ash_11'
+  Processing 'ArithmeticLane_12_DW01_sub_0_DW01_sub_55'
+  Processing 'ArithmeticLane_12_DW01_add_2_DW01_add_35'
+  Processing 'ArithmeticLane_12_DW01_cmp6_0_DW01_cmp6_22'
+  Processing 'ArithmeticLane_12_DW01_cmp6_1_DW01_cmp6_23'
+  Processing 'Restoring_12_DW01_sub_0_DW01_sub_56'
+  Processing 'Restoring_12_DW01_dec_0_DW01_dec_11'
+  Processing 'Restoring_12_DW01_sub_1_DW01_sub_57'
+  Processing 'Restoring_12_DW01_sub_2_DW01_sub_58'
+  Processing 'Restoring_12_DW01_sub_3_DW01_sub_59'
+  Processing 'Restoring_12_DW01_cmp2_0_DW01_cmp2_11'
+  Processing 'ArithmeticLane_13_DW01_add_0_DW01_add_36'
+  Processing 'ArithmeticLane_13_DW01_add_1_DW01_add_37'
+  Processing 'ArithmeticLane_13_DW01_inc_0_DW01_inc_13'
+  Processing 'ArithmeticLane_13_DW_rash_0_DW_rash_24'
+  Processing 'ArithmeticLane_13_DW_rash_1_DW_rash_25'
+  Processing 'ArithmeticLane_13_DW01_ash_0_DW01_ash_12'
+  Processing 'ArithmeticLane_13_DW01_sub_0_DW01_sub_60'
+  Processing 'ArithmeticLane_13_DW01_add_2_DW01_add_38'
+  Processing 'ArithmeticLane_13_DW01_cmp6_0_DW01_cmp6_24'
+  Processing 'ArithmeticLane_13_DW01_cmp6_1_DW01_cmp6_25'
+  Processing 'Restoring_13_DW01_sub_0_DW01_sub_61'
+  Processing 'Restoring_13_DW01_dec_0_DW01_dec_12'
+  Processing 'Restoring_13_DW01_sub_1_DW01_sub_62'
+  Processing 'Restoring_13_DW01_sub_2_DW01_sub_63'
+  Processing 'Restoring_13_DW01_sub_3_DW01_sub_64'
+  Processing 'Restoring_13_DW01_cmp2_0_DW01_cmp2_12'
+  Processing 'ArithmeticLane_14_DW01_add_0_DW01_add_39'
+  Processing 'ArithmeticLane_14_DW01_add_1_DW01_add_40'
+  Processing 'ArithmeticLane_14_DW01_inc_0_DW01_inc_14'
+  Processing 'ArithmeticLane_14_DW_rash_0_DW_rash_26'
+  Processing 'ArithmeticLane_14_DW_rash_1_DW_rash_27'
+  Processing 'ArithmeticLane_14_DW01_ash_0_DW01_ash_13'
+  Processing 'ArithmeticLane_14_DW01_sub_0_DW01_sub_65'
+  Processing 'ArithmeticLane_14_DW01_add_2_DW01_add_41'
+  Processing 'ArithmeticLane_14_DW01_cmp6_0_DW01_cmp6_26'
+  Processing 'ArithmeticLane_14_DW01_cmp6_1_DW01_cmp6_27'
+  Processing 'Restoring_14_DW01_sub_0_DW01_sub_66'
+  Processing 'Restoring_14_DW01_dec_0_DW01_dec_13'
+  Processing 'Restoring_14_DW01_sub_1_DW01_sub_67'
+  Processing 'Restoring_14_DW01_sub_2_DW01_sub_68'
+  Processing 'Restoring_14_DW01_sub_3_DW01_sub_69'
+  Processing 'Restoring_14_DW01_cmp2_0_DW01_cmp2_13'
+  Processing 'ArithmeticLane_15_DW01_add_0_DW01_add_42'
+  Processing 'ArithmeticLane_15_DW01_add_1_DW01_add_43'
+  Processing 'ArithmeticLane_15_DW01_inc_0_DW01_inc_15'
+  Processing 'ArithmeticLane_15_DW_rash_0_DW_rash_28'
+  Processing 'ArithmeticLane_15_DW_rash_1_DW_rash_29'
+  Processing 'ArithmeticLane_15_DW01_ash_0_DW01_ash_14'
+  Processing 'ArithmeticLane_15_DW01_sub_0_DW01_sub_70'
+  Processing 'ArithmeticLane_15_DW01_add_2_DW01_add_44'
+  Processing 'ArithmeticLane_15_DW01_cmp6_0_DW01_cmp6_28'
+  Processing 'ArithmeticLane_15_DW01_cmp6_1_DW01_cmp6_29'
+  Processing 'Restoring_15_DW01_sub_0_DW01_sub_71'
+  Processing 'Restoring_15_DW01_dec_0_DW01_dec_14'
+  Processing 'Restoring_15_DW01_sub_1_DW01_sub_72'
+  Processing 'Restoring_15_DW01_sub_2_DW01_sub_73'
+  Processing 'Restoring_15_DW01_sub_3_DW01_sub_74'
+  Processing 'Restoring_15_DW01_cmp2_0_DW01_cmp2_14'
+  Processing 'ArithmeticLane_0_DW01_add_0_DW01_add_45'
+  Processing 'ArithmeticLane_0_DW01_add_1_DW01_add_46'
+  Processing 'ArithmeticLane_0_DW01_inc_0_DW01_inc_16'
+  Processing 'ArithmeticLane_0_DW_rash_0_DW_rash_30'
+  Processing 'ArithmeticLane_0_DW_rash_1_DW_rash_31'
+  Processing 'ArithmeticLane_0_DW01_ash_0_DW01_ash_15'
+  Processing 'ArithmeticLane_0_DW01_sub_0_DW01_sub_75'
+  Processing 'ArithmeticLane_0_DW01_add_2_DW01_add_47'
+  Processing 'ArithmeticLane_0_DW01_cmp6_0_DW01_cmp6_30'
+  Processing 'ArithmeticLane_0_DW01_cmp6_1_DW01_cmp6_31'
+  Processing 'Restoring_0_DW01_sub_0_DW01_sub_76'
+  Processing 'Restoring_0_DW01_dec_0_DW01_dec_15'
+  Processing 'Restoring_0_DW01_sub_1_DW01_sub_77'
+  Processing 'Restoring_0_DW01_sub_2_DW01_sub_78'
+  Processing 'Restoring_0_DW01_sub_3_DW01_sub_79'
+  Processing 'Restoring_0_DW01_cmp2_0_DW01_cmp2_15'
+  Allocating blocks in 'DW02_mult_A_width32_B_width32'
+  Building model 'DW01_MUX'
+  Processing 'DW01_MUX'
+  Building model 'DW01_mmux_width2'
+  Processing 'DW01_mmux_width2'
+  Building model 'DW01_mmux_width3'
+  Processing 'DW01_mmux_width3'
+  Building model 'DW01_mmux_width4'
+  Processing 'DW01_mmux_width4'
+  Building model 'DW01_mmux_width5'
+  Processing 'DW01_mmux_width5'
+  Building model 'DW01_add_width62' (cla)
+  Processing 'DW01_add_width62'
+  Building model 'DW02_mult_A_width32_B_width32' (csa)
+  Processing 'DW02_mult_A_width32_B_width32'
+  Processing 'ArithmeticLane_1_DW02_mult_0'
+  Processing 'ArithmeticLane_1_DW01_add_3_DW01_add_48'
+  Processing 'ArithmeticLane_2_DW02_mult_0_DW02_mult_1'
+  Processing 'ArithmeticLane_2_DW01_add_3_DW01_add_49'
+  Processing 'ArithmeticLane_3_DW02_mult_0_DW02_mult_2'
+  Processing 'ArithmeticLane_3_DW01_add_3_DW01_add_50'
+  Processing 'ArithmeticLane_4_DW02_mult_0_DW02_mult_3'
+  Processing 'ArithmeticLane_4_DW01_add_3_DW01_add_51'
+  Processing 'ArithmeticLane_5_DW02_mult_0_DW02_mult_4'
+  Processing 'ArithmeticLane_5_DW01_add_3_DW01_add_52'
+  Processing 'ArithmeticLane_6_DW02_mult_0_DW02_mult_5'
+  Processing 'ArithmeticLane_6_DW01_add_3_DW01_add_53'
+  Processing 'ArithmeticLane_7_DW02_mult_0_DW02_mult_6'
+  Processing 'ArithmeticLane_7_DW01_add_3_DW01_add_54'
+  Processing 'ArithmeticLane_8_DW02_mult_0_DW02_mult_7'
+  Processing 'ArithmeticLane_8_DW01_add_3_DW01_add_55'
+  Processing 'ArithmeticLane_9_DW02_mult_0_DW02_mult_8'
+  Processing 'ArithmeticLane_9_DW01_add_3_DW01_add_56'
+  Processing 'ArithmeticLane_10_DW02_mult_0_DW02_mult_9'
+  Processing 'ArithmeticLane_10_DW01_add_3_DW01_add_57'
+  Processing 'ArithmeticLane_11_DW02_mult_0_DW02_mult_10'
+  Processing 'ArithmeticLane_11_DW01_add_3_DW01_add_58'
+  Processing 'ArithmeticLane_12_DW02_mult_0_DW02_mult_11'
+  Processing 'ArithmeticLane_12_DW01_add_3_DW01_add_59'
+  Processing 'ArithmeticLane_13_DW02_mult_0_DW02_mult_12'
+  Processing 'ArithmeticLane_13_DW01_add_3_DW01_add_60'
+  Processing 'ArithmeticLane_14_DW02_mult_0_DW02_mult_13'
+  Processing 'ArithmeticLane_14_DW01_add_3_DW01_add_61'
+  Processing 'ArithmeticLane_15_DW02_mult_0_DW02_mult_14'
+  Processing 'ArithmeticLane_15_DW01_add_3_DW01_add_62'
+  Processing 'ArithmeticLane_0_DW02_mult_0_DW02_mult_15'
+  Processing 'ArithmeticLane_0_DW01_add_3_DW01_add_63'
+
+  Beginning Mapping Optimizations  (Medium effort)
+  -------------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:02:29   44925.3     10.13   54329.6   24422.3                          
+    0:02:29   44925.3     10.13   54329.6   24422.3                          
+    0:02:33   46461.3     10.13   54207.0   12501.5                          
+    0:02:36   47849.5     10.23   54237.4    6360.0                          
+    0:02:38   48824.2     10.23   54237.4    3286.0                          
+    0:03:54   48530.2      0.56    2300.2    3587.6                          
+    0:04:06   48093.3      0.56    2344.0    3587.6                          
+    0:04:07   48093.3      0.56    2344.0    3587.6                          
+    0:04:07   48093.3      0.56    2344.0    3587.6                          
+    0:04:15   48091.5      0.56    2343.9    3587.6                          
+    0:04:15   48091.5      0.56    2343.9    3587.6                          
+    0:04:16   48091.5      0.56    2343.6    3587.6                          
+    0:05:19   35916.7      0.36     674.4    3221.6                          
+    0:05:43   35845.6      0.06      14.3    3221.6                          
+    0:05:56   35844.0      0.00       0.0    3221.6                          
+    0:06:00   35842.3      0.00       0.0    3221.6                          
+    0:06:02   35842.3      0.00       0.0    3221.6                          
+    0:06:03   35842.3      0.00       0.0    3221.6                          
+    0:06:05   35842.3      0.00       0.0    3221.6                          
+    0:06:05   35842.3      0.00       0.0    3221.6                          
+    0:06:18   35927.0      0.00       0.0    2887.6                          
+    0:06:34   35996.6      0.00       0.0    2617.6                          
+    0:06:41   36059.1      0.00       0.0    2457.6                          
+    0:06:47   36091.1      0.00       0.0    2289.6                          
+    0:06:50   36099.6      0.00       0.0    2193.6                          
+    0:06:53   36109.0      0.00       0.0    2111.6                          
+    0:06:55   36114.7      0.00       0.0    2061.6                          
+    0:06:57   36120.4      0.00       0.0    2013.6                          
+    0:06:58   36125.3      0.00       0.0    1985.6                          
+    0:06:58   36125.3      0.00       0.0    1985.6                          
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:06:59   36125.3      0.00       0.0    1985.6                          
+    0:06:59   36125.3      0.00       0.0    1985.6                          
+    0:06:59   36125.3      0.00       0.0    1985.6                          
+
+
+  Beginning Design Rule Fixing  (max_fanout)  (max_capacitance)
+  ----------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:06:59   36125.3      0.00       0.0    1985.6                          
+    0:07:00   36138.1      0.00       0.0    1815.0 primitives/lane[7].unit/mult_415/net114596
+    0:07:01   36152.2      0.00       0.0    1340.0 net132514                
+    0:07:02   36164.3      0.00       0.0     617.0 net132524                
+    0:07:03   36182.5      0.00       0.0     405.0 primitives/lane[4].unit/mult_415/net114795
+    0:07:04   36200.7      0.00       0.0     261.0 net197642                
+    0:07:04   36209.4      0.00       0.0     133.0 net197517                
+    0:07:05   36211.5      0.00       0.0      75.0 primitives/lane[10].unit/mult_415/net114399
+    0:07:05   36213.1      0.00       0.0      69.0 primitives/lane[13].unit/mult_415/net114201
+    0:07:06   36215.6      0.00       0.0      63.0 primitives/lane[0].unit/x[14]
+    0:07:06   36224.1      0.00       0.0      55.0 primitives/lane[2].unit/x[14]
+    0:07:07   36232.7      0.00       0.0      47.0 primitives/lane[4].unit/x[11]
+    0:07:07   36241.2      0.00       0.0      39.0 primitives/lane[6].unit/x[14]
+    0:07:08   36249.7      0.00       0.0      31.0 primitives/lane[8].unit/x[14]
+    0:07:09   36256.1      0.00       0.0      25.0 primitives/lane[9].unit/x[12]
+    0:07:09   36264.6      0.00       0.0      17.0 primitives/lane[11].unit/x[12]
+    0:07:10   36273.2      0.00       0.0       9.0 primitives/lane[13].unit/x[12]
+    0:07:10   36281.7      0.00       0.0       1.0 primitives/lane[15].unit/x[12]
+    0:07:10   36282.7      0.00       0.0       0.0                          
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:07:10   36282.7      0.00       0.0       0.0                          
+    0:07:11   36282.7      0.00       0.0       0.0                          
+    0:07:30   36052.5      0.00       0.0       0.0                          
+    0:07:36   35973.1      0.00       0.0       0.0                          
+    0:07:38   35949.0      0.00       0.0       0.0                          
+    0:07:40   35931.3      0.00       0.0       0.0                          
+    0:07:41   35925.6      0.00       0.0       0.0                          
+    0:07:41   35925.7      0.00       0.0       0.0                          
+    0:07:42   35924.7      0.00       0.0       0.0                          
+    0:07:42   35924.7      0.00       0.0       0.0                          
+    0:07:43   35925.1      0.00       0.0       0.0                          
+    0:07:43   35925.1      0.00       0.0       0.0                          
+    0:07:43   35923.8      0.00       0.0       0.0                          
+    0:07:44   35923.9      0.00       0.0       0.0                          
+    0:07:44   35923.9      0.00       0.0       0.0                          
+    0:07:46   35923.9      0.00       0.0       0.0                          
+    0:07:46   35909.4      0.00       0.0       0.0                          
+    0:07:47   35909.4      0.00       0.0       0.0                          
+    0:07:47   35909.4      0.00       0.0       0.0                          
+    0:07:47   35909.4      0.00       0.0       0.0                          
+    0:07:47   35909.4      0.00       0.0       0.0                          
+    0:07:47   35909.4      0.00       0.0       0.0                          
+    0:07:53   35790.2      0.00       0.0       0.0                          
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'ExpandedSad' contains 3 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'primitives/lane[1].unit/native_start': 1980 load(s), 1 driver(s)
+     Net 'primitives/lane[1].unit/native_b[0]': 1172 load(s), 1 driver(s)
+     Net 'primitives/lane[1].unit/divider/clk': 6008 load(s), 1 driver(s)
+Writing ddc file 'mapped.ddc'.
+exit 0
+
+Memory usage for this session 681 Mbytes.
+Memory usage for this session including child processes 681 Mbytes.
+CPU usage for this session 505 seconds ( 0.14 hours ).
+Elapsed time for this session 509 seconds ( 0.14 hours ).
+
+Thank you...

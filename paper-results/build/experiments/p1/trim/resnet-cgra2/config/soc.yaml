@@ -1,0 +1,126 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 8192
+  data_mem_size_per_bank: 1024
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60010000
+    size_bytes: 32768
+execution:
+  ctrl_count_bits: 14
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 32
+      command_capacity: 9
+      patch_capacity: 2
+    cgra0:
+      type: cgra
+      patch_support: false
+      packet_capacity: 84
+      packed_words: 2048
+    cgra1:
+      type: cgra
+      patch_support: false
+      packet_capacity: 84
+      packed_words: 2048
+  run_capacity: 5
+  capacity:
+    stages: 10
+    dependencies: 14
+    results: 10
+    jobs:
+      gemmini0: 24
+      cgra0: 8
+      cgra1: 8
+  buffer_slots:
+    gemmini0: 4
+    cgra0: 2
+    cgra1: 2
+  stages:
+    - name: first0
+      endpoint: gemmini0
+    - name: projection0
+      endpoint: gemmini0
+    - name: activate0
+      endpoint: cgra0
+    - name: second0
+      endpoint: gemmini0
+    - name: add0
+      endpoint: cgra0
+    - name: first1
+      endpoint: gemmini0
+    - name: projection1
+      endpoint: gemmini0
+    - name: activate1
+      endpoint: cgra1
+    - name: second1
+      endpoint: gemmini0
+    - name: add1
+      endpoint: cgra1
+  dependencies:
+    - source: input_ready
+      destination: first0
+    - source: input_ready
+      destination: projection0
+    - source: first0
+      destination: activate0
+      source_offset: 32768
+      size_bytes: 2048
+      source_format: int8
+    - source: activate0
+      destination: second0
+      size_bytes: 2048
+      format: int8
+    - source: projection0
+      destination: add0
+      source_offset: 34816
+      destination_offset: 8192
+      size_bytes: 1024
+      source_format: int8
+    - source: second0
+      destination: add0
+      source_offset: 35840
+      destination_offset: 12288
+      size_bytes: 1024
+      source_format: int8
+    - source: input_ready
+      destination: first1
+    - source: input_ready
+      destination: projection1
+    - source: first1
+      destination: activate1
+      source_offset: 36864
+      size_bytes: 2048
+      source_format: int8
+    - source: activate1
+      destination: second1
+      size_bytes: 2048
+      format: int8
+    - source: projection1
+      destination: add1
+      source_offset: 38912
+      destination_offset: 8192
+      size_bytes: 1024
+      source_format: int8
+    - source: second1
+      destination: add1
+      source_offset: 39936
+      destination_offset: 12288
+      size_bytes: 1024
+      source_format: int8

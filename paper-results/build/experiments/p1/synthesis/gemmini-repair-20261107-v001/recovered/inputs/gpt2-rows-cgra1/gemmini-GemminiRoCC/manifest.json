@@ -1,0 +1,1233 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gpt2-rows-cgra1",
+  "component": "gemmini",
+  "top": "GemminiRoCC",
+  "soc_instances": 1,
+  "archive_sha256": "1c22602d05f9979c4ba459d841d049436d76df57ddfd6d2289ed80c4b01354ab",
+  "source_modules": 160,
+  "sram_required": true,
+  "expected_macro_instances": 628,
+  "macro_counts": {
+    "SRAM2RW64x8": 512,
+    "SRAM2RW64x128": 96,
+    "SRAM2RW128x32": 20
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 64,
+      "width": 2048,
+      "mask_lanes": 256,
+      "macro": "SRAM2RW64x8",
+      "macro_depth": 64,
+      "macro_width": 8,
+      "depth_banks": 1,
+      "width_slices_per_lane": 1,
+      "macro_instances_per_module": 256,
+      "logical_bits": 131072,
+      "physical_bits_per_module": 131072,
+      "macro_area_per_module": 487375.977984,
+      "module": "mem_ext",
+      "original_module_sha256": "48b9ffb95b9c941061fa0c6b524ce60c6e48607baf47f57a0176ecd6f4be6d59",
+      "module_instances": 2
+    },
+    {
+      "depth": 2048,
+      "width": 265,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW64x128",
+      "macro_depth": 64,
+      "macro_width": 128,
+      "depth_banks": 32,
+      "width_slices_per_lane": 3,
+      "macro_instances_per_module": 96,
+      "logical_bits": 542720,
+      "physical_bits_per_module": 786432,
+      "macro_area_per_module": 741762.915264,
+      "module": "commands_ext",
+      "original_module_sha256": "db345008e705942daae3b3f9d938b9fe2cf558c3208f044a1023b1e547866a0d",
+      "module_instances": 1
+    },
+    {
+      "depth": 512,
+      "width": 151,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW128x32",
+      "macro_depth": 128,
+      "macro_width": 32,
+      "depth_banks": 4,
+      "width_slices_per_lane": 5,
+      "macro_instances_per_module": 20,
+      "logical_bits": 77312,
+      "physical_bits_per_module": 81920,
+      "macro_area_per_module": 105391.08276,
+      "module": "GemminiPatch",
+      "original_module_sha256": "b63153ddc06acd07db57a8fc216ce0567a2b5be8c0b5a43b4a1d1e9ce7ffe45d",
+      "semantics": "Each nonzero-patch start preloads the full selected job into an active register cache using one synchronous SRAM read per cycle. Evaluation is held for patch_capacity + 1 cycles after start (9 for rows, 33 for wide), then resumes the original command-ready evaluator and parallel replay. Zero-patch starts bypass prefetch. Capture handshakes and module ports are unchanged. The original frozen simulation cycles do not describe this synthesis variant.",
+      "module_instances": 1
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Explicit RAM modules and adapted native patch backing SRAM; windows, counts and active-job patch cache remain logic.",
+  "submit_allowed": true,
+  "sram_area_per_component": 1821905.9539919998,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": {
+    "status": "synthesis_only_patch_sram_not_simulated",
+    "baseline": "static_generation_only",
+    "patch_cache_adaptation": {
+      "GemminiPatch": {
+        "module": "GemminiPatch",
+        "jobs": 64,
+        "patch_capacity": 8,
+        "entry_bits": 151,
+        "backing_bits": 77312,
+        "active_bits": 1208,
+        "prefetch_cycles": 9,
+        "timing": "Each nonzero-patch start preloads the full selected job into an active register cache using one synchronous SRAM read per cycle. Evaluation is held for patch_capacity + 1 cycles after start (9 for rows, 33 for wide), then resumes the original command-ready evaluator and parallel replay. Zero-patch starts bypass prefetch. Capture handshakes and module ports are unchanged. The original frozen simulation cycles do not describe this synthesis variant.",
+        "original_sha256": "b63153ddc06acd07db57a8fc216ce0567a2b5be8c0b5a43b4a1d1e9ce7ffe45d",
+        "adapted_sha256": "94555e649b92144271b20b6d47ae840303b8b1737cfa135e9d7961a266ced6e3",
+        "validation": "Synthesis staging and static lint only; no dynamic equivalence or cycle validation."
+      }
+    },
+    "performance": "Original simulator is unchanged; its cycles do not validate this SRAM variant."
+  },
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/AccPipe.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AccPipe.sv",
+      "original_sha256": "84ed55e4c33488fdadeb738572812f23e7a07e215659084e24d3070bc221cd89",
+      "staged_sha256": "84ed55e4c33488fdadeb738572812f23e7a07e215659084e24d3070bc221cd89",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccPipeShared.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AccPipeShared.sv",
+      "original_sha256": "f752589a25d59b760175104ff0511285b875f6ff9b5a0a5facac3b32a89f91ac",
+      "staged_sha256": "f752589a25d59b760175104ff0511285b875f6ff9b5a0a5facac3b32a89f91ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccumulatorMem.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AccumulatorMem.sv",
+      "original_sha256": "b06931d5c5dcf91e848306061f47ad4c124a6c106191066189c335ec213187bf",
+      "staged_sha256": "b06931d5c5dcf91e848306061f47ad4c124a6c106191066189c335ec213187bf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccumulatorScale.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AccumulatorScale.sv",
+      "original_sha256": "ceddea1455452b82f62489d294870338753b1a663f061151bcf7460abab6d937",
+      "staged_sha256": "ceddea1455452b82f62489d294870338753b1a663f061151bcf7460abab6d937",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AlwaysOutTransposer.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AlwaysOutTransposer.sv",
+      "original_sha256": "e5597417db8a4e7b95356ec12689451f4448a649f9b969329e390f9348f777dd",
+      "staged_sha256": "e5597417db8a4e7b95356ec12689451f4448a649f9b969329e390f9348f777dd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter2_ScratchpadReadReq.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter2_ScratchpadReadReq.sv",
+      "original_sha256": "9d36ea81b58ba3a55fa5382747bd3d103d95b3613c69d16d69afcc2f2b4e2830",
+      "staged_sha256": "9d36ea81b58ba3a55fa5382747bd3d103d95b3613c69d16d69afcc2f2b4e2830",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter2_TLBundleAWithInfo.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter2_TLBundleAWithInfo.sv",
+      "original_sha256": "d6adaeb1e48b92bc4be76f3e519e7ad8352d8abe1591c6104f480a30dfa099b2",
+      "staged_sha256": "d6adaeb1e48b92bc4be76f3e519e7ad8352d8abe1591c6104f480a30dfa099b2",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_TLBundleAWithInfo.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter3_TLBundleAWithInfo.sv",
+      "original_sha256": "b53b37142c7d264fd82acacc77baed06d9a71b4e4df36eabaec832c636e05281",
+      "staged_sha256": "b53b37142c7d264fd82acacc77baed06d9a71b4e4df36eabaec832c636e05281",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_TLBundleAWithInfo_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter3_TLBundleAWithInfo_1.sv",
+      "original_sha256": "6705d2b191ff818345d8d9c52b59e316a392961303aff34cd3d4afa690f84251",
+      "staged_sha256": "6705d2b191ff818345d8d9c52b59e316a392961303aff34cd3d4afa690f84251",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_UInt6.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter3_UInt6.sv",
+      "original_sha256": "3aa13193552ed9c970230b24709b3dead9beaf2b2db97a3e11d4f939be01fb28",
+      "staged_sha256": "3aa13193552ed9c970230b24709b3dead9beaf2b2db97a3e11d4f939be01fb28",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter5_RoCCCommand.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Arbiter5_RoCCCommand.sv",
+      "original_sha256": "a6a156013ee057c6b31d3d5cd201aea0e96558b9bf874b8c3a86ef3cd423eddb",
+      "staged_sha256": "a6a156013ee057c6b31d3d5cd201aea0e96558b9bf874b8c3a86ef3cd423eddb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoComputeRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoComputeRequest.sv",
+      "original_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "staged_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoCopyRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoCopyRequest.sv",
+      "original_sha256": "e5bd37e58bb4a2b22c0dda3747a776c3c4f988a262eece29e11e91bae1cfbeba",
+      "staged_sha256": "e5bd37e58bb4a2b22c0dda3747a776c3c4f988a262eece29e11e91bae1cfbeba",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoWatch.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoWatch.sv",
+      "original_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "staged_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiLinkConfig.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiLinkConfig.sv",
+      "original_sha256": "c8c60aab4815854f3ed703c197fa2117cd10926496a7698bf259e8830277327a",
+      "staged_sha256": "c8c60aab4815854f3ed703c197fa2117cd10926496a7698bf259e8830277327a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiPatchEntry.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiPatchEntry.sv",
+      "original_sha256": "5943e25fb21c661e6ae1da9733bdba07d55cf40213483fd8b07514acb734c2c0",
+      "staged_sha256": "5943e25fb21c661e6ae1da9733bdba07d55cf40213483fd8b07514acb734c2c0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiPublicationReply.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiPublicationReply.sv",
+      "original_sha256": "0ac51532db6321051287560252ae04e665e1c9c6f7f8d9e1a53962a0ef896b49",
+      "staged_sha256": "0ac51532db6321051287560252ae04e665e1c9c6f7f8d9e1a53962a0ef896b49",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoCopyResult.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSource_AutoCopyResult.sv",
+      "original_sha256": "28a8b2c4e3c3a3663e7fe904628f346ac409318dd3ad5299b1bac2b7b58ad8bf",
+      "staged_sha256": "28a8b2c4e3c3a3663e7fe904628f346ac409318dd3ad5299b1bac2b7b58ad8bf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoEvent.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSource_AutoEvent.sv",
+      "original_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "staged_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiLinkConfigAck.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSource_GemminiLinkConfigAck.sv",
+      "original_sha256": "b85a8cafce0ce0d7fe3b4921badd8db180a8667e4a86718c44c9b1e2987291e5",
+      "staged_sha256": "b85a8cafce0ce0d7fe3b4921badd8db180a8667e4a86718c44c9b1e2987291e5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiPublicationControl.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncQueueSource_GemminiPublicationControl.sv",
+      "original_sha256": "e022b3d40e1e69ac4a41b6c1a7c616f25983489b18e3b444855f96bf2bf14369",
+      "staged_sha256": "e022b3d40e1e69ac4a41b6c1a7c616f25983489b18e3b444855f96bf2bf14369",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/BeatMerger.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/BeatMerger.sv",
+      "original_sha256": "15fa39361c902caec96d1ed8da34255f973854354d7f89c1312c13c062904001",
+      "staged_sha256": "15fa39361c902caec96d1ed8da34255f973854354d7f89c1312c13c062904001",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w151.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w151.sv",
+      "original_sha256": "4ca29b2d5af1aa21edd3b4e6a27d62fe1d804cbe0a358c3ea25041b33171d99c",
+      "staged_sha256": "4ca29b2d5af1aa21edd3b4e6a27d62fe1d804cbe0a358c3ea25041b33171d99c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w234.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w234.sv",
+      "original_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "staged_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w329.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w329.sv",
+      "original_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "staged_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w480.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w480.sv",
+      "original_sha256": "bf945fd71ee134e78d787a44941695dcaee21d7f8e735a8c3fd284e05add7b89",
+      "staged_sha256": "bf945fd71ee134e78d787a44941695dcaee21d7f8e735a8c3fd284e05add7b89",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w652.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w652.sv",
+      "original_sha256": "2965bdc48b74fdb1a46fbce57b6e5b91234ba118e7732352e1c3edbe2ee53961",
+      "staged_sha256": "2965bdc48b74fdb1a46fbce57b6e5b91234ba118e7732352e1c3edbe2ee53961",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w8.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ClockCrossingReg_w8.sv",
+      "original_sha256": "59bfe77ae0540e48a911be51f0f5d5c071c1c54e7137960fb92dfae02e93589d",
+      "staged_sha256": "59bfe77ae0540e48a911be51f0f5d5c071c1c54e7137960fb92dfae02e93589d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CounterController.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/CounterController.sv",
+      "original_sha256": "93e440161d343c8d330d9ad5f4a4ec53683fe8715f4f4f82818abd5bacb5b937",
+      "staged_sha256": "93e440161d343c8d330d9ad5f4a4ec53683fe8715f4f4f82818abd5bacb5b937",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CounterFile.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/CounterFile.sv",
+      "original_sha256": "fe5bf3e145831373ec07427fb69f394977088c8d60c271980836d4436c052e91",
+      "staged_sha256": "fe5bf3e145831373ec07427fb69f394977088c8d60c271980836d4436c052e91",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DMACommandTracker.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/DMACommandTracker.sv",
+      "original_sha256": "9ebc685aed82fa6dea7e4dca719feee566342ad91f99c43eedf1eb5836ba695b",
+      "staged_sha256": "9ebc685aed82fa6dea7e4dca719feee566342ad91f99c43eedf1eb5836ba695b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DMACommandTracker_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/DMACommandTracker_1.sv",
+      "original_sha256": "a5b22d535e7481ffc9c33c54b68d25acfbbf7fceb0d15145df381208be252a0d",
+      "staged_sha256": "a5b22d535e7481ffc9c33c54b68d25acfbbf7fceb0d15145df381208be252a0d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DTLB_2.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/DTLB_2.sv",
+      "original_sha256": "06720401dcaf1d3132115f0a26c8e17dcd4867794994dc01da06fce4593e11b5",
+      "staged_sha256": "06720401dcaf1d3132115f0a26c8e17dcd4867794994dc01da06fce4593e11b5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DecoupledTLB.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/DecoupledTLB.sv",
+      "original_sha256": "518a09f17fa77acc025bc7079554d6de1cdf86235ee0b42435b7dd9c1a6e92e1",
+      "staged_sha256": "518a09f17fa77acc025bc7079554d6de1cdf86235ee0b42435b7dd9c1a6e92e1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ExecuteController.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ExecuteController.sv",
+      "original_sha256": "3b1bf12ab64fc768f9170476cc3ffa1afbf5280d872d877a6307c25c87d0a7e9",
+      "staged_sha256": "3b1bf12ab64fc768f9170476cc3ffa1afbf5280d872d877a6307c25c87d0a7e9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/FrontendTLB.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/FrontendTLB.sv",
+      "original_sha256": "018d686b17dc2289c18f8560d1d63beb84e49c8e04de9803ec7e78781e98ba44",
+      "staged_sha256": "018d686b17dc2289c18f8560d1d63beb84e49c8e04de9803ec7e78781e98ba44",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Gemmini.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Gemmini.sv",
+      "original_sha256": "d0e7b21b5cd2598d09f0d2e1fee68acf3c81c8271b20875d930356258f8d365b",
+      "staged_sha256": "d0e7b21b5cd2598d09f0d2e1fee68acf3c81c8271b20875d930356258f8d365b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/GemminiLinkAdapter.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/GemminiLinkAdapter.sv",
+      "original_sha256": "d7b257682b542d72caa65d67fb5b8fa5923c1f0b2e8ed796aa86077db0accfb3",
+      "staged_sha256": "d7b257682b542d72caa65d67fb5b8fa5923c1f0b2e8ed796aa86077db0accfb3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/GemminiPatch.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/GemminiPatch.sv",
+      "original_sha256": "1ff8f74a01827fb937b1aca2ce5c4d601d2a4b498844a6d6658b245436223ca5",
+      "staged_sha256": "bc4f020cdc5fa0b69caac77a9353d15df072554643369dc6a22ca2a3a30dd370",
+      "changes": [
+        "Adapt GemminiPatch for synchronous cache reads."
+      ]
+    },
+    {
+      "source": "gen-collateral/GemminiRoCC.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/GemminiRoCC.sv",
+      "original_sha256": "f94ac08566c4a8ae90881f601f6c0ec2f35ac0835a957640393a5f98eb69fdb5",
+      "staged_sha256": "f94ac08566c4a8ae90881f601f6c0ec2f35ac0835a957640393a5f98eb69fdb5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Im2Col.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Im2Col.sv",
+      "original_sha256": "de3e87d3e66481c0ee3314f84acfe73b4477db147f5dffae980ba3a309ec490a",
+      "staged_sha256": "de3e87d3e66481c0ee3314f84acfe73b4477db147f5dffae980ba3a309ec490a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoadController.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoadController.sv",
+      "original_sha256": "d55af9b2a64a4780c4024da050c8298b32be45e04fbfe21bfb30e6868af3a262",
+      "staged_sha256": "d55af9b2a64a4780c4024da050c8298b32be45e04fbfe21bfb30e6868af3a262",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConv.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConv.sv",
+      "original_sha256": "4493b671082a7a776003b059f12de4e6437eb43ee0d1f3b904887c5232579f8d",
+      "staged_sha256": "4493b671082a7a776003b059f12de4e6437eb43ee0d1f3b904887c5232579f8d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvExecute.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConvExecute.sv",
+      "original_sha256": "959b5a50875a5a8b9b49a74f2d554e376845081549f4680e8ffac2f174f8eecc",
+      "staged_sha256": "959b5a50875a5a8b9b49a74f2d554e376845081549f4680e8ffac2f174f8eecc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdBias.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConvLdBias.sv",
+      "original_sha256": "b5134e97d0a94453f0e3d065b77784b7169a1ba74cdd5c555bf300019a07c69b",
+      "staged_sha256": "b5134e97d0a94453f0e3d065b77784b7169a1ba74cdd5c555bf300019a07c69b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdInput.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConvLdInput.sv",
+      "original_sha256": "2fa04bdce761c464e53b93749075dadc78cd8019b8977431a0a73e9c0123f949",
+      "staged_sha256": "2fa04bdce761c464e53b93749075dadc78cd8019b8977431a0a73e9c0123f949",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdWeight.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConvLdWeight.sv",
+      "original_sha256": "7909c4a9a27ce21d88a38c7edd506037e31019640a2943560b4df3abaeeafbaf",
+      "staged_sha256": "7909c4a9a27ce21d88a38c7edd506037e31019640a2943560b4df3abaeeafbaf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvSt.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopConvSt.sv",
+      "original_sha256": "af1687ffd67f2b1855ef8a2ad9404306c0433f3a7b58f8f2edb6858abfd6f291",
+      "staged_sha256": "af1687ffd67f2b1855ef8a2ad9404306c0433f3a7b58f8f2edb6858abfd6f291",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmul.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmul.sv",
+      "original_sha256": "e8767369630e3dcdba796932b0e0011130d2de6f22f78e512ac7b99de9bc3302",
+      "staged_sha256": "e8767369630e3dcdba796932b0e0011130d2de6f22f78e512ac7b99de9bc3302",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulExecute.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulExecute.sv",
+      "original_sha256": "48bb8e893ec741c79c1469221eaa0a2ff2ffbb7ed8d56532801084aa7615795b",
+      "staged_sha256": "48bb8e893ec741c79c1469221eaa0a2ff2ffbb7ed8d56532801084aa7615795b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdA.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulLdA.sv",
+      "original_sha256": "85811ea157d3131b43ccaaa3e410c93aceb8caf30e174f21d27398fb3cf6a852",
+      "staged_sha256": "85811ea157d3131b43ccaaa3e410c93aceb8caf30e174f21d27398fb3cf6a852",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdB.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulLdB.sv",
+      "original_sha256": "f1d6a7491e5650b5b621539652e3de12c128530ca134f9982b06c6a60914a5c2",
+      "staged_sha256": "f1d6a7491e5650b5b621539652e3de12c128530ca134f9982b06c6a60914a5c2",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdD.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulLdD.sv",
+      "original_sha256": "b317aa31cbdf444c209c0be3cbdea58d9e6abc48335d75c4b27a2c39d72fb087",
+      "staged_sha256": "b317aa31cbdf444c209c0be3cbdea58d9e6abc48335d75c4b27a2c39d72fb087",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulStC.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulStC.sv",
+      "original_sha256": "230c19ed127e2d902342e82b3d0d389a05673cfa6d41f7302c01088c53df8784",
+      "staged_sha256": "230c19ed127e2d902342e82b3d0d389a05673cfa6d41f7302c01088c53df8784",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulStCSpad.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/LoopMatmulStCSpad.sv",
+      "original_sha256": "06cf725fdbea3bcd35743004bbfcf2e4a488f8314840b77a0f3b584dc5d11d07",
+      "staged_sha256": "06cf725fdbea3bcd35743004bbfcf2e4a488f8314840b77a0f3b584dc5d11d07",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MacUnit.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/MacUnit.sv",
+      "original_sha256": "4ef11661419e5444fe98104a2b22d10d1e3cf83c89babd747962a8a90c557a85",
+      "staged_sha256": "4ef11661419e5444fe98104a2b22d10d1e3cf83c89babd747962a8a90c557a85",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Mesh.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Mesh.sv",
+      "original_sha256": "d268eb56f7f76ae5ab37ed827fa163884c4419baf197bf0244d31957c9193ea8",
+      "staged_sha256": "d268eb56f7f76ae5ab37ed827fa163884c4419baf197bf0244d31957c9193ea8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MeshWithDelays.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/MeshWithDelays.sv",
+      "original_sha256": "dfca78636296e4d08ee591e1fc8ca7dd377e0d75a06e67a1b387a1432772f6a3",
+      "staged_sha256": "dfca78636296e4d08ee591e1fc8ca7dd377e0d75a06e67a1b387a1432772f6a3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MultiHeadedQueue.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/MultiHeadedQueue.sv",
+      "original_sha256": "1d60d57e47eff6d7bbcd21c6c4b29db05b034759456488cf8cfdf8c1cdb05890",
+      "staged_sha256": "1d60d57e47eff6d7bbcd21c6c4b29db05b034759456488cf8cfdf8c1cdb05890",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MultiHeadedQueue_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/MultiHeadedQueue_1.sv",
+      "original_sha256": "d4f5940a4c45073e658d339bd6c054420e31f0263faa6ab9cce8bc1e61d83287",
+      "staged_sha256": "d4f5940a4c45073e658d339bd6c054420e31f0263faa6ab9cce8bc1e61d83287",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/OptimizationBarrier_TLBEntryData.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/OptimizationBarrier_TLBEntryData.sv",
+      "original_sha256": "11ca5308269f25df090365fdde5d3672bd0ffefa2fccb8c2aaad4ebc9e7ef9f0",
+      "staged_sha256": "11ca5308269f25df090365fdde5d3672bd0ffefa2fccb8c2aaad4ebc9e7ef9f0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PE.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PE.sv",
+      "original_sha256": "e20b1a7b233ea63095612bfb1ed44f8c0e581a07689749b42b4d7a6914e6ed2c",
+      "staged_sha256": "e20b1a7b233ea63095612bfb1ed44f8c0e581a07689749b42b4d7a6914e6ed2c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PE_4096.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PE_4096.sv",
+      "original_sha256": "d03ac6e192f6e8957af245e551f7eda5259fd85b99901d298a2f3d8c9445f6ea",
+      "staged_sha256": "d03ac6e192f6e8957af245e551f7eda5259fd85b99901d298a2f3d8c9445f6ea",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PMAChecker.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PMAChecker.sv",
+      "original_sha256": "e45e7b4b281e337e6b4313be98990769c31c7838676934c53e0ed87dd1d70c52",
+      "staged_sha256": "e45e7b4b281e337e6b4313be98990769c31c7838676934c53e0ed87dd1d70c52",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PMPChecker_s6.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PMPChecker_s6.sv",
+      "original_sha256": "90c1fa82fe60a2d54f3ceb24a58dbb2aa6925ae4b2d8e14960595c38a8c18eac",
+      "staged_sha256": "90c1fa82fe60a2d54f3ceb24a58dbb2aa6925ae4b2d8e14960595c38a8c18eac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline.sv",
+      "original_sha256": "d7a128ac207f39c1235a57468055182109d207f0c79a7e7b19931e15bcd64146",
+      "staged_sha256": "d7a128ac207f39c1235a57468055182109d207f0c79a7e7b19931e15bcd64146",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_1.sv",
+      "original_sha256": "d8b67f12fb1cae2f0bd9948ac7fbf7da2b0044734108a5bab922b67f2e1c5778",
+      "staged_sha256": "d8b67f12fb1cae2f0bd9948ac7fbf7da2b0044734108a5bab922b67f2e1c5778",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_2.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_2.sv",
+      "original_sha256": "27f27f5b8d1085326d65a65924b511d36ffbe9d9236b779831c92881bd732645",
+      "staged_sha256": "27f27f5b8d1085326d65a65924b511d36ffbe9d9236b779831c92881bd732645",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_3.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_3.sv",
+      "original_sha256": "9d91c21a94576d73dc698bb566a9010716cdb34c3d1ff1dbfe6e3124505e68f0",
+      "staged_sha256": "9d91c21a94576d73dc698bb566a9010716cdb34c3d1ff1dbfe6e3124505e68f0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_4.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_4.sv",
+      "original_sha256": "99f257e7196aa3504b2d0dfeb0b47c241e7f08ec4e5b95ca680575cbeb0a8e81",
+      "staged_sha256": "99f257e7196aa3504b2d0dfeb0b47c241e7f08ec4e5b95ca680575cbeb0a8e81",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_5.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_5.sv",
+      "original_sha256": "cd67e4c2676ad88470fef48cba5159b4525786a7f8b7896b28e35526bcde0828",
+      "staged_sha256": "cd67e4c2676ad88470fef48cba5159b4525786a7f8b7896b28e35526bcde0828",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_6.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_6.sv",
+      "original_sha256": "a5ec4d2d51b468b559777b89e9b242cfed1bf7fe06f0bf1c059e2ffec8186b27",
+      "staged_sha256": "a5ec4d2d51b468b559777b89e9b242cfed1bf7fe06f0bf1c059e2ffec8186b27",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_7.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Pipeline_7.sv",
+      "original_sha256": "06e23bed67fa395e7cfa9d40e5c2e43e138fc6cd0912715952a0a34c032804fa",
+      "staged_sha256": "06e23bed67fa395e7cfa9d40e5c2e43e138fc6cd0912715952a0a34c032804fa",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PixelRepeater.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PixelRepeater.sv",
+      "original_sha256": "00a71d049369e96ce3919d33779e0a5607bca289f3237dcadab182f762442155",
+      "staged_sha256": "00a71d049369e96ce3919d33779e0a5607bca289f3237dcadab182f762442155",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PixelRepeater_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/PixelRepeater_1.sv",
+      "original_sha256": "bcc58ae4b5005975e26ebf57d0bdc5b7b11caa75fb25ed28151fad822651402f",
+      "staged_sha256": "bcc58ae4b5005975e26ebf57d0bdc5b7b11caa75fb25ed28151fad822651402f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_AccumulatorReadResp.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_AccumulatorReadResp.sv",
+      "original_sha256": "f0ce434040d9a1ab2026bb76ac097529dd6f6f5cbdfa755edf5b9b7cf90270e7",
+      "staged_sha256": "f0ce434040d9a1ab2026bb76ac097529dd6f6f5cbdfa755edf5b9b7cf90270e7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_ScratchpadReadResp.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_ScratchpadReadResp.sv",
+      "original_sha256": "3e21bb5fc09ff5d43b4a17493a7c48ed4dbe7dcc88a491e2e5206f5dde5771ed",
+      "staged_sha256": "3e21bb5fc09ff5d43b4a17493a7c48ed4dbe7dcc88a491e2e5206f5dde5771ed",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo.sv",
+      "original_sha256": "bff0cfb3ca76f29ef2c499867a3e30011b7422a99d70ed36fcf4e20bdc2cc274",
+      "staged_sha256": "bff0cfb3ca76f29ef2c499867a3e30011b7422a99d70ed36fcf4e20bdc2cc274",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_2.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_2.sv",
+      "original_sha256": "f171d3e6b49fa2a83b1b02a1435eb4c3078f80365de983454b9efc13681fcd10",
+      "staged_sha256": "f171d3e6b49fa2a83b1b02a1435eb4c3078f80365de983454b9efc13681fcd10",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_3.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_3.sv",
+      "original_sha256": "406f9504d188ecfabd60a86d372a34bfd6df9fb304fd5ad7d8d90c541499f7f9",
+      "staged_sha256": "406f9504d188ecfabd60a86d372a34bfd6df9fb304fd5ad7d8d90c541499f7f9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_5.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_5.sv",
+      "original_sha256": "bf2fed9cdbf0937366224fd8785b5269f435d6047b5f1ceb18507b7af83467a8",
+      "staged_sha256": "bf2fed9cdbf0937366224fd8785b5269f435d6047b5f1ceb18507b7af83467a8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_6.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_6.sv",
+      "original_sha256": "119266d259d533716fbdd65f5106c59a8de695ad975947a41ab8130bbdbb6669",
+      "staged_sha256": "119266d259d533716fbdd65f5106c59a8de695ad975947a41ab8130bbdbb6669",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_GemminiCmd.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_GemminiCmd.sv",
+      "original_sha256": "a0808aa052546e9c179d16e90c17490a0bdedd75e44a22ff78b54c44ecf0f410",
+      "staged_sha256": "a0808aa052546e9c179d16e90c17490a0bdedd75e44a22ff78b54c44ecf0f410",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_NormalizedInput.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_NormalizedInput.sv",
+      "original_sha256": "e54d283288b36cb595b8d5532734930aa5807cc162f40130279189046e894676",
+      "staged_sha256": "e54d283288b36cb595b8d5532734930aa5807cc162f40130279189046e894676",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_ScratchpadMemWriteRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "cd29627fd821f5346f27c0c2171d459f4dd6658628ea775fe684401c345f03a9",
+      "staged_sha256": "cd29627fd821f5346f27c0c2171d459f4dd6658628ea775fe684401c345f03a9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a32d256s4k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_TLBundleA_a32d256s4k5z4u.sv",
+      "original_sha256": "8ab3fe866734c9c32d3ea6775a85160b6d6c9d73eafab11f7242daad9825008c",
+      "staged_sha256": "8ab3fe866734c9c32d3ea6775a85160b6d6c9d73eafab11f7242daad9825008c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a32d256s5k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_TLBundleA_a32d256s5k5z4u.sv",
+      "original_sha256": "612d7d4ab89d035fad1c7a9252570fd68b312cd0b0a3ced5f359e88651401276",
+      "staged_sha256": "612d7d4ab89d035fad1c7a9252570fd68b312cd0b0a3ced5f359e88651401276",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a32d256s4k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_TLBundleD_a32d256s4k5z4u.sv",
+      "original_sha256": "211b7b48096db1a98c4ab625115a93d2430d5498b5ea5aa1455fa061b8b74e0b",
+      "staged_sha256": "211b7b48096db1a98c4ab625115a93d2430d5498b5ea5aa1455fa061b8b74e0b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a32d256s5k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_TLBundleD_a32d256s5k5z4u.sv",
+      "original_sha256": "62d3c92db37d303d897205636e6f6f97389e2be28b0eaa67f93ae352f831ddca",
+      "staged_sha256": "62d3c92db37d303d897205636e6f6f97389e2be28b0eaa67f93ae352f831ddca",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_VectorScalarMultiplierReq.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_VectorScalarMultiplierReq.sv",
+      "original_sha256": "f8c23e67c846f9ff043feaea778d022f23d9f1fa6296b347144d5f7e65af0d77",
+      "staged_sha256": "f8c23e67c846f9ff043feaea778d022f23d9f1fa6296b347144d5f7e65af0d77",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_VectorScalarMultiplierReq_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue2_VectorScalarMultiplierReq_1.sv",
+      "original_sha256": "186c23bf89a6a8c1c6e4c18811278c54f94ac0f7a3933e47ac3c137c5f9dc04a",
+      "staged_sha256": "186c23bf89a6a8c1c6e4c18811278c54f94ac0f7a3933e47ac3c137c5f9dc04a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_Bool.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue4_Bool.sv",
+      "original_sha256": "2fcaa21589dcf9da32ce223d3456753cf14c6ddae65a9e7068c752cac7ee9d91",
+      "staged_sha256": "2fcaa21589dcf9da32ce223d3456753cf14c6ddae65a9e7068c752cac7ee9d91",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_ExtMemIO_Anon.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue4_ExtMemIO_Anon.sv",
+      "original_sha256": "747e8160dc71daf5bf2219b485f4f1d8e00d5f54b20cbb7850b158cffbaf9c67",
+      "staged_sha256": "747e8160dc71daf5bf2219b485f4f1d8e00d5f54b20cbb7850b158cffbaf9c67",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_ScratchpadReadResp.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue4_ScratchpadReadResp.sv",
+      "original_sha256": "719c91101d271d318cceebb6e841bc0c71d831161ffb8778ad2f8b801c504606",
+      "staged_sha256": "719c91101d271d318cceebb6e841bc0c71d831161ffb8778ad2f8b801c504606",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ComputeCntlSignals.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue5_ComputeCntlSignals.sv",
+      "original_sha256": "3a39e895c64f6e658b0973bfdd9481eef67a5342d852ac61699cd1fbddfb4b3d",
+      "staged_sha256": "3a39e895c64f6e658b0973bfdd9481eef67a5342d852ac61699cd1fbddfb4b3d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ScratchpadMemReadRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue5_ScratchpadMemReadRequest.sv",
+      "original_sha256": "52bf3e7ce4707fd323d7b526b8748d97da511cdf8e64608eef2308e7643fe8ef",
+      "staged_sha256": "52bf3e7ce4707fd323d7b526b8748d97da511cdf8e64608eef2308e7643fe8ef",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ScratchpadMemWriteRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue5_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "b8aa07ba3af9ed553fdfdc5dcd77fdc34d099ded6be9299cf6fd53b22afb52ab",
+      "staged_sha256": "b8aa07ba3af9ed553fdfdc5dcd77fdc34d099ded6be9299cf6fd53b22afb52ab",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_im2colRowSignals.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue5_im2colRowSignals.sv",
+      "original_sha256": "df6ac353e461d8695ba7caaef239642683f8a01a45260f1cd6b98ac28de502e6",
+      "staged_sha256": "df6ac353e461d8695ba7caaef239642683f8a01a45260f1cd6b98ac28de502e6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue6_ScratchpadMemWriteRequest.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue6_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "ba3eb27d7d7837fc9edf4583d82d47d4a26c8eee72038da5027f079caa2139d3",
+      "staged_sha256": "ba3eb27d7d7837fc9edf4583d82d47d4a26c8eee72038da5027f079caa2139d3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue6_TagWithIdAndTotalRows.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue6_TagWithIdAndTotalRows.sv",
+      "original_sha256": "6f6582cd55923f9d06ca03aa3d826dc72163648e1cedbf7c349c678007177973",
+      "staged_sha256": "6f6582cd55923f9d06ca03aa3d826dc72163648e1cedbf7c349c678007177973",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue8_GemminiCmd.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Queue8_GemminiCmd.sv",
+      "original_sha256": "a42acf77401ebbb4917f7c0bdb55a6f5a0c0f12be290b74b660e63fb5535e390",
+      "staged_sha256": "a42acf77401ebbb4917f7c0bdb55a6f5a0c0f12be290b74b660e63fb5535e390",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/RRArbiter.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/RRArbiter.sv",
+      "original_sha256": "7825846f6bba8cb05abe99046bdffe4e91abff3e0923796fd1f9219fef7ddac1",
+      "staged_sha256": "7825846f6bba8cb05abe99046bdffe4e91abff3e0923796fd1f9219fef7ddac1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleA_a31d256s5k1z3u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Repeater_TLBundleA_a31d256s5k1z3u.sv",
+      "original_sha256": "452dfea5e0ce5185ddc8d4c932fb467818dc18db66fe143807342711f6549927",
+      "staged_sha256": "452dfea5e0ce5185ddc8d4c932fb467818dc18db66fe143807342711f6549927",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ReservationStation.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ReservationStation.sv",
+      "original_sha256": "2aed28a934cebdd9483f4567d794642ef16ff79d95187bfe398f16734511603f",
+      "staged_sha256": "2aed28a934cebdd9483f4567d794642ef16ff79d95187bfe398f16734511603f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Scratchpad.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Scratchpad.sv",
+      "original_sha256": "232e0c98209e1dd56751b235738f26735dbd6b1318895e2a9b493c5722cb8f81",
+      "staged_sha256": "232e0c98209e1dd56751b235738f26735dbd6b1318895e2a9b493c5722cb8f81",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ScratchpadBank.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ScratchpadBank.sv",
+      "original_sha256": "5add93edeeb829a3aec9c8e9df3bf31ab1ae2f19214120ff88ee58f1167d0bd6",
+      "staged_sha256": "5add93edeeb829a3aec9c8e9df3bf31ab1ae2f19214120ff88ee58f1167d0bd6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StoreController.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/StoreController.sv",
+      "original_sha256": "6d117938d341beddda31b65a74d59022ec8c345a956535537a0da092b521c84b",
+      "staged_sha256": "6d117938d341beddda31b65a74d59022ec8c345a956535537a0da092b521c84b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamReader.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/StreamReader.sv",
+      "original_sha256": "805e2f33bb2766278255ae53933706af087f4b57c7c28f7677c01a9249cc0f4c",
+      "staged_sha256": "805e2f33bb2766278255ae53933706af087f4b57c7c28f7677c01a9249cc0f4c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamReaderCore.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/StreamReaderCore.sv",
+      "original_sha256": "ea2828ee93fb9cdde32ebdff0af27888fee16249270fc7c563be00ad9b3db035",
+      "staged_sha256": "ea2828ee93fb9cdde32ebdff0af27888fee16249270fc7c563be00ad9b3db035",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamWriter.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/StreamWriter.sv",
+      "original_sha256": "9bacf39a53a3bd844cb0be7c561bcb35577d10e20024da38c59f95fe2f1869c1",
+      "staged_sha256": "9bacf39a53a3bd844cb0be7c561bcb35577d10e20024da38c59f95fe2f1869c1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamWriter_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/StreamWriter_1.sv",
+      "original_sha256": "72f4c2d475f342d19c534e6f454c1f6fa11c444a23882202ca2e5a306f2ea5fb",
+      "staged_sha256": "72f4c2d475f342d19c534e6f454c1f6fa11c444a23882202ca2e5a306f2ea5fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s4k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLBuffer_a32d256s4k5z4u.sv",
+      "original_sha256": "1b8df7d4744c1229143d0da2c881955208ae3c003a727012d4384207b1000c26",
+      "staged_sha256": "1b8df7d4744c1229143d0da2c881955208ae3c003a727012d4384207b1000c26",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s4k5z4u_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLBuffer_a32d256s4k5z4u_1.sv",
+      "original_sha256": "23026168c03e12c8ba723965a2254348a56834195aba68be9a18d89ad1f2ab76",
+      "staged_sha256": "23026168c03e12c8ba723965a2254348a56834195aba68be9a18d89ad1f2ab76",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s5k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLBuffer_a32d256s5k5z4u.sv",
+      "original_sha256": "35c335cf1f76ca5ec9fb12790e65f886e91e2c0b8aa3794d25cc13f869204671",
+      "staged_sha256": "35c335cf1f76ca5ec9fb12790e65f886e91e2c0b8aa3794d25cc13f869204671",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLFragmenter_4.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLFragmenter_4.sv",
+      "original_sha256": "e008568cd9a5069e7006e98cda9626d03fd941e4332a00b59e776d99553651a7",
+      "staged_sha256": "e008568cd9a5069e7006e98cda9626d03fd941e4332a00b59e776d99553651a7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_53.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_53.sv",
+      "original_sha256": "5fa4b85b70a9b1ed6d696d7c5a4f52bb000c4882627c7a39b94dd445aea4a3e7",
+      "staged_sha256": "5fa4b85b70a9b1ed6d696d7c5a4f52bb000c4882627c7a39b94dd445aea4a3e7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_54.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_54.sv",
+      "original_sha256": "bf216be66fc20d8b0ff9d41b501e5a2b465b6db8e653df393bc3e558b37a8082",
+      "staged_sha256": "bf216be66fc20d8b0ff9d41b501e5a2b465b6db8e653df393bc3e558b37a8082",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_55.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_55.sv",
+      "original_sha256": "ef677242045e97ae58e4ad1207f1004f846994d5f494c21c207dd3bd2e676784",
+      "staged_sha256": "ef677242045e97ae58e4ad1207f1004f846994d5f494c21c207dd3bd2e676784",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_56.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_56.sv",
+      "original_sha256": "a21f158ae89b8037745144a7fc0c04982f0780341a64f4255253d6e6b230cf9c",
+      "staged_sha256": "a21f158ae89b8037745144a7fc0c04982f0780341a64f4255253d6e6b230cf9c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_57.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_57.sv",
+      "original_sha256": "ab578e24f8f4956913f5a752676f248344761fa2603c91bc57190d690d874d75",
+      "staged_sha256": "ab578e24f8f4956913f5a752676f248344761fa2603c91bc57190d690d874d75",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_58.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_58.sv",
+      "original_sha256": "7be30550ccd39720289fb4af406ff4456aba57cf3a03ab17c0a6c04652296099",
+      "staged_sha256": "7be30550ccd39720289fb4af406ff4456aba57cf3a03ab17c0a6c04652296099",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_59.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLMonitor_59.sv",
+      "original_sha256": "4f71d219fffad6c01b0b4b93eee4726ef352cebba6b59c5b123beecd4352cd9c",
+      "staged_sha256": "4f71d219fffad6c01b0b4b93eee4726ef352cebba6b59c5b123beecd4352cd9c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i1_o2_a32d256s5k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLXbar_i1_o2_a32d256s5k5z4u.sv",
+      "original_sha256": "6d0d6f90b2dcc2d249c3ebda3c4e8671a8af3a206e50ab77defb106b7f098042",
+      "staged_sha256": "6d0d6f90b2dcc2d249c3ebda3c4e8671a8af3a206e50ab77defb106b7f098042",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i2_o1_a32d256s5k5z4u.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TLXbar_i2_o1_a32d256s5k5z4u.sv",
+      "original_sha256": "4edd682410baf6df931de84e0f2bc3a4f733dffd6d659d70735649986fe56943",
+      "staged_sha256": "4edd682410baf6df931de84e0f2bc3a4f733dffd6d659d70735649986fe56943",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TagQueue.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TagQueue.sv",
+      "original_sha256": "02a9cd0040c302179028aa3eebd771d86f977087a340618d26c42935e7a80b2b",
+      "staged_sha256": "02a9cd0040c302179028aa3eebd771d86f977087a340618d26c42935e7a80b2b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Tile.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/Tile.sv",
+      "original_sha256": "ef94d67055977300e07970ec4e358f6fa049e5857b3e8860e86ac308017fb1a5",
+      "staged_sha256": "ef94d67055977300e07970ec4e358f6fa049e5857b3e8860e86ac308017fb1a5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TransposePreloadUnroller.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TransposePreloadUnroller.sv",
+      "original_sha256": "9d6c845d902345ace24b1f260cf8d5b912006229c3252ae367bbeb9d7ee11230",
+      "staged_sha256": "9d6c845d902345ace24b1f260cf8d5b912006229c3252ae367bbeb9d7ee11230",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TwoPortSyncMem.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/TwoPortSyncMem.sv",
+      "original_sha256": "5fd3a0b4cf6da6b61159f5a3f5ddd59a9ca521fc97e8147e84263d046d2329ca",
+      "staged_sha256": "5fd3a0b4cf6da6b61159f5a3f5ddd59a9ca521fc97e8147e84263d046d2329ca",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/VectorScalarMultiplier.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/VectorScalarMultiplier.sv",
+      "original_sha256": "90314fa3500e28167db6efc2968ad2f34ac6f1949a3f8feca5ee8f6a272eac33",
+      "staged_sha256": "90314fa3500e28167db6efc2968ad2f34ac6f1949a3f8feca5ee8f6a272eac33",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/VectorScalarMultiplier_1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/VectorScalarMultiplier_1.sv",
+      "original_sha256": "b565bf180ac55f8e95d59fcd3500e41aaa66e979fab77c3c4fad16c21634457a",
+      "staged_sha256": "b565bf180ac55f8e95d59fcd3500e41aaa66e979fab77c3c4fad16c21634457a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/WeightedArbiter.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/WeightedArbiter.sv",
+      "original_sha256": "aa7ac5794d64462a6f3d641c67731444feed1f067c169e29edd3e6134ce911e8",
+      "staged_sha256": "aa7ac5794d64462a6f3d641c67731444feed1f067c169e29edd3e6134ce911e8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/XactTracker.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/XactTracker.sv",
+      "original_sha256": "f5564648b7c8680fe1c6cc2b0281e47995b6337f593730f33d57a32c98ee6dd6",
+      "staged_sha256": "f5564648b7c8680fe1c6cc2b0281e47995b6337f593730f33d57a32c98ee6dd6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ZeroWriter.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ZeroWriter.sv",
+      "original_sha256": "bac806eb6f0ea3e2a2355fd6e37119950b3099f44947de607c576fd1fe31ea96",
+      "staged_sha256": "bac806eb6f0ea3e2a2355fd6e37119950b3099f44947de607c576fd1fe31ea96",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "a4e6fb097808d39bc699b8c470e95e764d7c9a11ef72071783feb4e9f1d29aaf",
+      "staged_sha256": "59b705abd6099857b925b187d41be62ea833bd62b183308fffa2fecd47d0936b",
+      "changes": [
+        "Map mem_ext to physical SRAM2RW64x8 instances.",
+        "Map commands_ext to physical SRAM2RW64x128 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/commands.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/commands.sv",
+      "original_sha256": "0fb0dd12ee7f78169058f11f645e7d5b1ef9a9b6d9a275424110aac669ee0aed",
+      "staged_sha256": "0fb0dd12ee7f78169058f11f645e7d5b1ef9a9b6d9a275424110aac669ee0aed",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/mem.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/mem.sv",
+      "original_sha256": "46c4e1daa1a93bfd971f307a86489d1d71b8a4f84fabeb5c760c74a2da82619b",
+      "staged_sha256": "46c4e1daa1a93bfd971f307a86489d1d71b8a4f84fabeb5c760c74a2da82619b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x2051.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x2051.sv",
+      "original_sha256": "e4a17b2fb36d6bc73d0e136c92fed097f8dcae92031f535d05be459784a86274",
+      "staged_sha256": "e4a17b2fb36d6bc73d0e136c92fed097f8dcae92031f535d05be459784a86274",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x2342.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x2342.sv",
+      "original_sha256": "b859253a08eef44fa4a2e79cfb49e37bd07ba7b5b171b88daa63abb8cc6ba83c",
+      "staged_sha256": "b859253a08eef44fa4a2e79cfb49e37bd07ba7b5b171b88daa63abb8cc6ba83c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x274.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x274.sv",
+      "original_sha256": "ccffe254e249ecd382922768ee054a37d1fca343c3acedc3eb0165301867033b",
+      "staged_sha256": "ccffe254e249ecd382922768ee054a37d1fca343c3acedc3eb0165301867033b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x276.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x276.sv",
+      "original_sha256": "fb717385bce1a4be18b640fb6cba9e25060ce7afe0acfdd6e203e074489ba9ac",
+      "staged_sha256": "fb717385bce1a4be18b640fb6cba9e25060ce7afe0acfdd6e203e074489ba9ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x277.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x277.sv",
+      "original_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "staged_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x335.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x335.sv",
+      "original_sha256": "a405bb40a351c9ad2b1600e722ecdf6395a8ae7b5f7fae04d738ef6c0c64865d",
+      "staged_sha256": "a405bb40a351c9ad2b1600e722ecdf6395a8ae7b5f7fae04d738ef6c0c64865d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x336.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x336.sv",
+      "original_sha256": "e2e73e4f011525c5bf5bc61552261ca68c76e4d16acd361015a9d78e9755fa5a",
+      "staged_sha256": "e2e73e4f011525c5bf5bc61552261ca68c76e4d16acd361015a9d78e9755fa5a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x383.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x383.sv",
+      "original_sha256": "d0b2a9281f0785c9a9dd5ef3f8d33af23018674331d5e42ffa12ad5ea2541dc5",
+      "staged_sha256": "d0b2a9281f0785c9a9dd5ef3f8d33af23018674331d5e42ffa12ad5ea2541dc5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x614.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_2x614.sv",
+      "original_sha256": "ce0f4cb2a6c86a4a0f0b319ee8a61140919abfede6a4ef63295be945abbe1c9f",
+      "staged_sha256": "ce0f4cb2a6c86a4a0f0b319ee8a61140919abfede6a4ef63295be945abbe1c9f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x1.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_4x1.sv",
+      "original_sha256": "54fcf4f94067ed86c8ae1d89862485c1b774c0f2d1e0886905fd711c8ad240a7",
+      "staged_sha256": "54fcf4f94067ed86c8ae1d89862485c1b774c0f2d1e0886905fd711c8ad240a7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x513.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_4x513.sv",
+      "original_sha256": "006c62839131475369de94324685f110b26090afebbdde787890e1f73c3f166b",
+      "staged_sha256": "006c62839131475369de94324685f110b26090afebbdde787890e1f73c3f166b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x585.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_4x585.sv",
+      "original_sha256": "bd63b8fc7bdf3ec329bf82f86025ac3ddb854513030653733a1322e56c1def84",
+      "staged_sha256": "bd63b8fc7bdf3ec329bf82f86025ac3ddb854513030653733a1322e56c1def84",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x187.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_5x187.sv",
+      "original_sha256": "20882e5d90df4f7b3c7ce3b7acb1a958b2fb4da7fed5182c511f4108fa7b77fd",
+      "staged_sha256": "20882e5d90df4f7b3c7ce3b7acb1a958b2fb4da7fed5182c511f4108fa7b77fd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x224.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_5x224.sv",
+      "original_sha256": "36e3ed12fc85dddf731577ebd7bb22a295a386fd49bb066e509aa509838ca601",
+      "staged_sha256": "36e3ed12fc85dddf731577ebd7bb22a295a386fd49bb066e509aa509838ca601",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x92.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_5x92.sv",
+      "original_sha256": "9b323df98e6b8a0f812d5c67a7bd7689cfcb571ff2c4b96c0e20b957ea58afed",
+      "staged_sha256": "9b323df98e6b8a0f812d5c67a7bd7689cfcb571ff2c4b96c0e20b957ea58afed",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_6x10.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_6x10.sv",
+      "original_sha256": "c493f7284b1e5e69aad59dc62ceeaffbb29ea7afd1da13ed2dead1d3eceeab1e",
+      "staged_sha256": "c493f7284b1e5e69aad59dc62ceeaffbb29ea7afd1da13ed2dead1d3eceeab1e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_6x383.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_6x383.sv",
+      "original_sha256": "856725cdc525d177da7f84b32f95bef602b595a667bab35500e4fa6e17d4a45e",
+      "staged_sha256": "856725cdc525d177da7f84b32f95bef602b595a667bab35500e4fa6e17d4a45e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_8x246.sv",
+      "staged": "gpt2-rows-cgra1/gemmini-GemminiRoCC/src/ram_8x246.sv",
+      "original_sha256": "dbd315306b2f23f7b453a3e9a9c035018958ef27b352bfebdb1f2a74f743140a",
+      "staged_sha256": "dbd315306b2f23f7b453a3e9a9c035018958ef27b352bfebdb1f2a74f743140a",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only",
+  "patch_cache_adaptation": {
+    "GemminiPatch": {
+      "module": "GemminiPatch",
+      "jobs": 64,
+      "patch_capacity": 8,
+      "entry_bits": 151,
+      "backing_bits": 77312,
+      "active_bits": 1208,
+      "prefetch_cycles": 9,
+      "timing": "Each nonzero-patch start preloads the full selected job into an active register cache using one synchronous SRAM read per cycle. Evaluation is held for patch_capacity + 1 cycles after start (9 for rows, 33 for wide), then resumes the original command-ready evaluator and parallel replay. Zero-patch starts bypass prefetch. Capture handshakes and module ports are unchanged. The original frozen simulation cycles do not describe this synthesis variant.",
+      "original_sha256": "b63153ddc06acd07db57a8fc216ce0567a2b5be8c0b5a43b4a1d1e9ce7ffe45d",
+      "adapted_sha256": "94555e649b92144271b20b6d47ae840303b8b1737cfa135e9d7961a266ced6e3",
+      "validation": "Synthesis staging and static lint only; no dynamic equivalence or cycle validation."
+    }
+  }
+}

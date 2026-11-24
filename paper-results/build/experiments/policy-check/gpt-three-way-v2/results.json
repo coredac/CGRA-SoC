@@ -1,0 +1,184 @@
+{
+  "status": "Compact-layout CGRA area projection and unchanged ASIC proxy; not newly measured or timing-closed PPA",
+  "reference": "P1 GPT N64/H128/heads2/FF512, 1 GEMM + 1 CGRA, per-task; projected 32 KiB CGRA data SPM",
+  "sources": {
+    "p1_metrics": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v20/metrics.csv",
+      "sha256": "e2d9cf4a4a53c74fe36d699e71c55d9c345af8fb5ac9a2ea2a5e6755ce81d78e"
+    },
+    "p1_layers": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v20/layers.csv",
+      "sha256": "d78aed2454864f8a75cf6a120000699fb412ddb0eaa1c6b4d7b6d4468ca70dd0"
+    },
+    "old_gpt": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/asic/full/gpt/results.json",
+      "sha256": "21418be8350318a29971b409e233347753b84a9960fcb956b61ffd470d3cf6bf"
+    },
+    "old_endpoint": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/asic/cost-complete/results.json",
+      "sha256": "b089567a85e8f7b05528d692692f4f1aa22b13b3e053e60174db111c0ce42d32"
+    },
+    "old_components": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/compute-audit/results.json",
+      "sha256": "c2b2ce94dadfdee6758efe6c90c3425f21221fc7f68932ae0ba4e7527919e1b9"
+    },
+    "seven_cores": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/workload-trial/results.json",
+      "sha256": "6deba3f8a7d0abc5c6bbb68f6f0ef9e7d16c5e8efea6ab91ec2756bed106e5c2"
+    },
+    "p1_area_method": {
+      "path": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v20/method.json",
+      "sha256": "f8dff6c26a432b2332ace101eba87d5bd1a7341cc771424a395edeb25b7d95bb"
+    }
+  },
+  "ASIC_inventory": [
+    "Norm",
+    "Softmax",
+    "GPT-vector"
+  ],
+  "additional_ASIC_cores": 3,
+  "GEMM_count": 1,
+  "total_fixed_function_compute_IPs": 4,
+  "inventory_note": "GPT uses these three auxiliary services plus one GEMM. Add, ReLU, GCN and SAD are excluded from this workload-specific projection. The installed-seven-core scenario is archived separately.",
+  "topology": "Three local ASIC cores share a 128 KiB SPM and one upstream command endpoint; GEMM is the other endpoint. Four compute IPs do not mean four independent AutoLink endpoints.",
+  "area_model": {
+    "old_endpoint": 1955667.273626,
+    "old_five_unit_subtotal": 529702.790383,
+    "old_shared_control_and_peripheral": 76958.6087530173,
+    "additional_shared_control": -30783.44350120692,
+    "new_cluster_endpoint": 1712481.376330793,
+    "equation": "new cluster = old endpoint - five old units + three selected cores + (3/5 - 1)*(old shared memory peripheral + local controller + endpoint shell)",
+    "shared_GEMM_SPM_fabric_by_policy": {
+      "per-task": 6725954.139254999,
+      "per-segment": 7706566.301071,
+      "per-graph": 8130143.311829
+    },
+    "new_core_subtotal": 317300.336589
+  },
+  "latency_model": {
+    "scale": 70.53849429937901,
+    "equation": "All old ASIC mode cycles multiply by P1 1-CGRA resident segment cycles / old small-case CGRA chain cycles; graph applies P1 1-CGRA graph/resident-segment ratio.",
+    "small_shape": "N2/H128/heads2/FF512",
+    "target_shape": "N64/H128/heads2/FF512",
+    "old_task_proxy_cycles": 264525.3333333333,
+    "old_segment_proxy_cycles": 236360.33333333334
+  },
+  "assumptions": [
+    "Old operator and local-chain modes are proxies, not measurements of specialized task/segment hardware.",
+    "A single proportional workload scaling factor preserves old relative ASIC mode costs; attention, memory and control scaling can differ in reality.",
+    "Removing unused cores adds no latency relative to the old proxy; cluster scheduling, shared-SPM arbitration and buffering are not revalidated.",
+    "The existing linear peripheral/control model is extrapolated from five to three cores; SRAM payload remains 128 KiB. No redesigned cluster synthesis exists.",
+    "The three selected core areas include their synthesized native/local/configuration logic and local storage; old unit areas are removed to avoid double counting.",
+    "Existing P1 GEMM and shared-control costs are reused; new ownership/refill logic and achieved common clock are unverified.",
+    "CGRA values use the conservative minimum AE endpoint already selected for the main figure. The prior 75% refill-overlap scenario is archived separately and is not used in this table.",
+    "GPT single-CGRA data SRAM is projected at 32 KiB using the multicore compact-layout equations; address relocation and cycle invariance are not validated. Its peripheral logic is not re-synthesized. The ASIC cluster retains its original shared 128 KiB SPM."
+  ],
+  "cases": [
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-task",
+      "cycles": 18270931.0,
+      "area_library_units": 8732372.535943998,
+      "relative_area": 1.0,
+      "speedup": 1.0,
+      "AE": 1.0,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-segment",
+      "cycles": 16539829.0,
+      "area_library_units": 10786725.552227,
+      "relative_area": 1.2352571432135906,
+      "speedup": 1.104662629825254,
+      "AE": 0.8942774675655081,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-graph",
+      "cycles": 16262298.0,
+      "area_library_units": 11550277.242689,
+      "relative_area": 1.3226963457120051,
+      "speedup": 1.1235147086838526,
+      "AE": 0.8494124235892302,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-task",
+      "cycles": 12689077.0,
+      "area_library_units": 12489726.336847,
+      "relative_area": 1.4302786883446699,
+      "speedup": 1.4398944068193456,
+      "AE": 1.0067229684347772,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-segment",
+      "cycles": 5117312.0,
+      "area_library_units": 19818656.336694002,
+      "relative_area": 2.269561480012092,
+      "speedup": 3.5704156791690638,
+      "AE": 1.57317425000976,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-graph",
+      "cycles": 4434498.0,
+      "area_library_units": 21602132.066268,
+      "relative_area": 2.4737987273618693,
+      "speedup": 4.1201802323509895,
+      "AE": 1.665527670775734,
+      "status": "review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles"
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-task",
+      "cycles": 18659218.717374664,
+      "area_library_units": 8438435.515585791,
+      "relative_area": 0.9663393861005918,
+      "speedup": 0.9791905693772105,
+      "AE": 1.0132988300606025,
+      "status": "cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint"
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-segment",
+      "cycles": 16672502.025432657,
+      "area_library_units": 9419047.677401792,
+      "relative_area": 1.0786355756847659,
+      "speedup": 1.095872171563036,
+      "AE": 1.0159799994241128,
+      "status": "cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint"
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-graph",
+      "cycles": 16591492.705360487,
+      "area_library_units": 9842624.688159794,
+      "relative_area": 1.1271420965660592,
+      "speedup": 1.1012228570667972,
+      "AE": 0.9770044614798549,
+      "status": "cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint"
+    }
+  ],
+  "original_experiments_modified": false,
+  "ASIC_sensitivity": {
+    "segment_AE_gain_over_task": 0.0026459809130046086,
+    "segment_AE_gain_over_graph": 0.03989289658434325,
+    "extra_segment_cycles_before_tying_task": 44115.12213132549
+  },
+  "main_result_alignment": {
+    "path": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v20/method.json",
+    "sha256": "f8dff6c26a432b2332ace101eba87d5bd1a7341cc771424a395edeb25b7d95bb",
+    "selection": "ae_low; cycles_high; same shared GPT per-task1 AE reference",
+    "correction": "CGRA values match review-v20. ASIC area and cycles are unchanged; only its relative area and AE use the new reference area."
+  },
+  "projection_source": {
+    "path": "/home/jjqin/CGRA-SoC/build/experiments/policy-check/gpt-three-way/results.json",
+    "sha256": "cf21302c235b2f6f9158e94e68e3b891896b03bfee24c290cc04b0cc2c67b0cb"
+  }
+}

@@ -1,0 +1,110 @@
+% Speedup/AE data and annotations from speedup-ae-v9.tex.
+% Policy codes: 1 = per-task, 2 = per-segment, 3 = per-graph.
+% Parentheses contain the number of CGRAs.
+\begingroup
+\definecolor{c1}{HTML}{376795}
+\definecolor{c2}{HTML}{72BCD5}
+\definecolor{c4}{HTML}{F08A48}
+\pgfplotsset{joint/.style={
+width=14cm,height=3.2cm,scale only axis,
+xmin=.5,xmax=3.5,ymin=0,ymax=4.9,
+ytick={0,1,2,3,4},
+font=\fontsize{8}{9}\selectfont,
+axis line style={black!70},tick style={black!70},tick align=outside,
+bar width=3.2pt,clip=false}}
+\begin{tikzpicture}[baseline=(speedup.south)]
+\begin{axis}[
+joint,name=speedup,
+xtick={1,2,3},xticklabels={ResNet,GPT-2,GCN},
+ylabel={Normalized Speedup},
+ylabel style={at={(axis description cs:-.05,.5)},anchor=south,inner sep=0pt},
+ymajorgrids=true,major grid style={draw=gray!25,line width=.2pt},
+extra y ticks={1},extra y tick labels={},extra y tick style={grid=major,major grid style={draw=black,dashed,line width=.5pt}},
+xtick pos=left,ytick pos=left,
+legend columns=6,legend cell align=left,
+legend style={at={(.5,1.06)},anchor=south,draw=black,line width=.4pt,fill=white,font=\fontsize{8}{9}\selectfont,inner xsep=3pt,inner ysep=2pt,nodes={inner sep=1pt},/tikz/every even column/.append style={column sep=3pt}},
+legend image code/.code={\draw[#1] (0cm,-.06cm) rectangle (.16cm,.06cm);}]
+
+\addplot[ybar,bar shift=-48.9pt,fill=c1!35,draw=black,line width=.35pt] coordinates {(1,1.000000000) (2,1.000000000) (3,1.000000000)};
+\addlegendentry{1(1)}
+\addplot[ybar,bar shift=-39.3pt,fill=c1!65,draw=black,line width=.35pt] coordinates {(1,1.015221033) (2,1.104662630) (3,1.511910586)};
+\addlegendentry{2(1)}
+\addplot[ybar,bar shift=-29.7pt,fill=c1!100,draw=black,line width=.35pt] coordinates {(1,2.343110867) (2,1.123514709) (3,1.513248317)};
+\addlegendentry{3(1)}
+\addplot[ybar,bar shift=-11.899999999999999pt,fill=c2!35,draw=black,line width=.35pt] coordinates {(1,1.000000000) (2,1.000000000) (3,1.000000000)};
+\addlegendentry{1(2)}
+\addplot[ybar,bar shift=-2.3pt,fill=c2!65,draw=black,line width=.35pt] coordinates {(1,1.104048698) (2,1.431219540) (3,1.677856159)};
+\addlegendentry{2(2)}
+\addplot[ybar,bar shift=7.3pt,fill=c2!100,draw=black,line width=.35pt] coordinates {(1,2.898380583) (2,1.502362626) (3,1.836280823)};
+\addlegendentry{3(2)}
+\addplot[ybar,bar shift=25.099999999999998pt,fill=c4!35,draw=black,line width=.35pt] coordinates {(1,1.000000000) (2,1.000000000) (3,1.000000000)};
+\addlegendentry{1(4)}
+\addplot[ybar,bar shift=34.7pt,fill=c4!65,draw=black,line width=.35pt] coordinates {(1,3.622980905) (2,2.479637161) (3,1.670514179)};
+\addlegendentry{2(4)}
+\addplot[ybar,bar shift=44.300000000000004pt,fill=c4!100,draw=black,line width=.35pt] coordinates {(1,3.878965539) (2,2.861446098) (3,2.255609231)};
+\addlegendentry{3(4)}
+\addlegendimage{fill=gray!30,draw=black,line width=.35pt}
+\addlegendentry{Speedup}
+\addlegendimage{fill=gray!30,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75}}
+\addlegendentry{AE}
+\end{axis}
+\begin{axis}[
+joint,at={(speedup.south west)},anchor=south west,
+axis y line*=right,axis x line=none,
+xtick=\empty,ylabel={Normalized AE},ytick pos=right,
+ylabel style={at={(axis description cs:1.05,.5)},anchor=north,inner sep=0pt}]
+
+\addplot[ybar,bar shift=-44.300000000000004pt,fill=c1!35,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,1.000000000) (2,1.000000000) (3,1.000000000)};
+\addplot[ybar,bar shift=-34.7pt,fill=c1!65,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,0.864058211) (2,0.894277468) (3,1.296285084)};
+\addplot[ybar,bar shift=-25.099999999999998pt,fill=c1!100,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,1.924581425) (2,0.849412424) (3,1.283307995)};
+\addplot[ybar,bar shift=-7.3pt,fill=c2!35,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,1.127202877) (2,1.274694567) (3,0.897893997)};
+\addplot[ybar,bar shift=2.3pt,fill=c2!65,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,0.794814608) (2,1.328963190) (3,1.319639841)};
+\addplot[ybar,bar shift=11.899999999999999pt,fill=c2!100,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,2.049041386) (2,1.290753901) (3,1.429051292)};
+\addplot[ybar,bar shift=29.7pt,fill=c4!35,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,0.855910964) (2,1.006722968) (3,0.783383781)};
+\addplot[ybar,bar shift=39.3pt,fill=c4!65,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,1.154310919) (2,1.573174250) (3,1.116989804)};
+\addplot[ybar,bar shift=48.9pt,fill=c4!100,draw=black,line width=.35pt,postaction={pattern=north east lines,pattern color=black!75},forget plot] coordinates {(1,1.232956445) (2,1.665527671) (3,1.485333581)};
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-1-0) at ([xshift=-31.7pt]axis cs:1,2.343110867){2.34};
+\draw[black!70,line width=.3pt] ([xshift=-29.7pt,yshift=.5pt]axis cs:1,2.343110867) -- (value-1-1-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-1-1) at ([xshift=-23.099999999999998pt]axis cs:1,1.924581425){1.92};
+\draw[black!70,line width=.3pt] ([xshift=-25.099999999999998pt,yshift=.5pt]axis cs:1,1.924581425) -- (value-1-1-1.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-2-0) at ([xshift=5.3pt]axis cs:1,2.898380583){2.90};
+\draw[black!70,line width=.3pt] ([xshift=7.3pt,yshift=.5pt]axis cs:1,2.898380583) -- (value-1-2-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-2-1) at ([xshift=13.899999999999999pt]axis cs:1,2.049041386){2.05};
+\draw[black!70,line width=.3pt] ([xshift=11.899999999999999pt,yshift=.5pt]axis cs:1,2.049041386) -- (value-1-2-1.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-4-0) at ([xshift=42.300000000000004pt]axis cs:1,3.878965539){3.88};
+\draw[black!70,line width=.3pt] ([xshift=44.300000000000004pt,yshift=.5pt]axis cs:1,3.878965539) -- (value-1-4-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-1-4-1) at ([xshift=50.9pt]axis cs:1,1.232956445){1.23};
+\draw[black!70,line width=.3pt] ([xshift=48.9pt,yshift=.5pt]axis cs:1,1.232956445) -- (value-1-4-1.south west);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-2-1-0) at ([xshift=-27.7pt]axis cs:2,1.123514709){1.12};
+\draw[black!70,line width=.3pt] ([xshift=-29.7pt,yshift=.5pt]axis cs:2,1.123514709) -- (value-2-1-0.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-2-1-1) at ([xshift=-46.300000000000004pt]axis cs:2,1.000000000){1.00};
+\draw[black!70,line width=.3pt] ([xshift=-44.300000000000004pt,yshift=.5pt]axis cs:2,1.000000000) -- (value-2-1-1.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-2-2-0) at ([xshift=9.3pt]axis cs:2,1.502362626){1.50};
+\draw[black!70,line width=.3pt] ([xshift=7.3pt,yshift=.5pt]axis cs:2,1.502362626) -- (value-2-2-0.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=12pt] (value-2-2-1) at ([xshift=0.2999999999999998pt]axis cs:2,1.328963190){1.33};
+\draw[black!70,line width=.3pt] ([xshift=2.3pt,yshift=.5pt]axis cs:2,1.328963190) -- (value-2-2-1.south east);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-2-4-0) at ([xshift=42.300000000000004pt]axis cs:2,2.861446098){2.86};
+\draw[black!70,line width=.3pt] ([xshift=44.300000000000004pt,yshift=.5pt]axis cs:2,2.861446098) -- (value-2-4-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-2-4-1) at ([xshift=50.9pt]axis cs:2,1.665527671){1.67};
+\draw[black!70,line width=.3pt] ([xshift=48.9pt,yshift=.5pt]axis cs:2,1.665527671) -- (value-2-4-1.south west);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-3-1-0) at ([xshift=-27.7pt]axis cs:3,1.513248317){1.51};
+\draw[black!70,line width=.3pt] ([xshift=-29.7pt,yshift=.5pt]axis cs:3,1.513248317) -- (value-3-1-0.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-3-1-1) at ([xshift=-36.7pt]axis cs:3,1.296285084){1.30};
+\draw[black!70,line width=.3pt] ([xshift=-34.7pt,yshift=.5pt]axis cs:3,1.296285084) -- (value-3-1-1.south east);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=8pt] (value-3-2-0) at ([xshift=5.3pt]axis cs:3,1.836280823){1.84};
+\draw[black!70,line width=.3pt] ([xshift=7.3pt,yshift=.5pt]axis cs:3,1.836280823) -- (value-3-2-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-3-2-1) at ([xshift=13.899999999999999pt]axis cs:3,1.429051292){1.43};
+\draw[black!70,line width=.3pt] ([xshift=11.899999999999999pt,yshift=.5pt]axis cs:3,1.429051292) -- (value-3-2-1.south west);
+\node[anchor=south east,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-3-4-0) at ([xshift=42.300000000000004pt]axis cs:3,2.255609231){2.26};
+\draw[black!70,line width=.3pt] ([xshift=44.300000000000004pt,yshift=.5pt]axis cs:3,2.255609231) -- (value-3-4-0.south east);
+\node[anchor=south west,font=\fontsize{8}{9}\selectfont,fill=white,inner sep=.6pt,yshift=4pt] (value-3-4-1) at ([xshift=50.9pt]axis cs:3,1.485333581){1.49};
+\draw[black!70,line width=.3pt] ([xshift=48.9pt,yshift=.5pt]axis cs:3,1.485333581) -- (value-3-4-1.south west);
+\end{axis}
+% Trim the extra right margin reserved by the overlaid axes.
+\coordinate (plot-bottom-left) at (current bounding box.south west);
+\coordinate (plot-top) at (current bounding box.north);
+\coordinate (plot-right) at ([xshift=1cm]speedup.south east);
+\pgfresetboundingbox
+\path[use as bounding box] (plot-bottom-left) rectangle (plot-right |- plot-top);
+\end{tikzpicture}
+\endgroup

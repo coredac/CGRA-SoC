@@ -1,0 +1,79 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gcn-cgra1",
+  "component": "autolink",
+  "top": "ClockSinkDomain_5",
+  "soc_instances": 1,
+  "archive_sha256": "62f907284df255ac775676a1b1c08f625dfd0c8259f3c36a6eb5e696d7dcf164",
+  "source_modules": 8,
+  "sram_required": false,
+  "expected_macro_instances": 0,
+  "macro_counts": {},
+  "macro_lib": null,
+  "mapped_memories": [],
+  "logic_memories": [
+    {
+      "module": "descriptions_ext",
+      "logical_bits": 3786,
+      "reason": "Optional description cache below the 1 KiB SRAM cutoff remains logic."
+    }
+  ],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 0,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/ClockSinkDomain_5.sv",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/ClockSinkDomain_5.sv",
+      "original_sha256": "53937e1367e905dd1f18dff7003da8d1557c00f955a2fc19e81a6a8e899dbdc3",
+      "staged_sha256": "53937e1367e905dd1f18dff7003da8d1557c00f955a2fc19e81a6a8e899dbdc3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_AutoRun.sv",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/Queue1_AutoRun.sv",
+      "original_sha256": "ddfe3848ecbb7fe3eaabdf1072d4b0b1e88cfe737fb7b3dab0701f84e1211e29",
+      "staged_sha256": "ddfe3848ecbb7fe3eaabdf1072d4b0b1e88cfe737fb7b3dab0701f84e1211e29",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_RegMapperInput_i9_m8.sv",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/Queue1_RegMapperInput_i9_m8.sv",
+      "original_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "staged_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_117.sv",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/TLMonitor_117.sv",
+      "original_sha256": "8ad3bc6f416ab1c5c990666658da265e967f3e5b0ea70dbe93e9c442bc3d6d0a",
+      "staged_sha256": "8ad3bc6f416ab1c5c990666658da265e967f3e5b0ea70dbe93e9c442bc3d6d0a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "e747d5f6f36d17a2178586dc647facd09bafaf3ddca78111780e4b10f0900444",
+      "staged_sha256": "e747d5f6f36d17a2178586dc647facd09bafaf3ddca78111780e4b10f0900444",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/descriptions.sv",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/descriptions.sv",
+      "original_sha256": "4bcd1858b5355e75439e06c6a6d28e4c87029df2788ca4310e5eccf843c46c79",
+      "staged_sha256": "4bcd1858b5355e75439e06c6a6d28e4c87029df2788ca4310e5eccf843c46c79",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gcn-cgra1/autolink-ClockSinkDomain_5/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "hypothetical_area_model_separate_from_archived_performance",
+  "change": "Propose that per-segment and per-graph share one patched CGRA job-template set across the two GCN feature bands. Per-segment still uses CPU-controlled Gemmini and two segment launches.",
+  "source_mechanism": "Original GCN capture(mode=1) creates two resolved job sets without patches; mode=2 creates one set with output-offset updates from TileId. New segment behavior needs correct per-band binding and cannot be assumed identical to the archived execution.",
+  "interface_audit": "Frozen AutoTileCursor resets tile.id to zero on every start. Hybrid launches one tile per profile, so its second band cannot reuse Auto's patched template without a per-segment tile-origin binding. No tile-origin register is exposed in the audited interface. Existing patch arithmetic shares the packet-load stage; do not arbitrarily add one replay cycle per packet.",
+  "accounting": "Start from the prior Hybrid component model. Undo its complete removal of CGRA patch SRAM, then apply the Auto half-depth packet AND patch SRAM deductions, including macro rounding. Keep Hybrid native paths, stage count, descriptors, all retained CGRA adapter logic and all compute/data SRAM.",
+  "capacity": "Per-IP job slots:128->64,64->32,32->16 for1/2/4C. Packet/patch slots per job unchanged. This shares immutable templates; it does not delete the state needed by the next segment.",
+  "unpriced": "Additional per-segment band binding, job-address selection or control changes, if required, have not been synthesized. Area values are accounted subtotals; margins.csv gives the remaining gap to graph area. Do not claim the ordering is validated for complete hardware.",
+  "timing": "original-cycles.csv preserves all nine measured cycles exactly. No new shared-template segment latency is claimed. Patch replay and per-band binding may change cycles. Do not multiply this proposed segment area by old segment cycles and label the result measured AE.",
+  "scope": "Inherited accelerator-component area scope and library units. No whole-SoC area or timing-closed PPA claim. Old synthesis SRAM/capacity variants differ from timing simulation.",
+  "original_files_modified": false,
+  "source_hashes": {
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/area.csv": "efce0bb604b35a76f6e700f26051610a0a9c3f38991c78354bcf46aa629611e5",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/method.json": "56bf3b636e765645e5874c0252616386c9ab3b2822e52cd770579999dd01940b",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/layers.json": "4c9fd471f91666b56596884d1f63801dfb472d7a29d52ed17a52088a84099bfc",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/pairs.csv": "a5154cb01158e5ecdfddc271de61bc78556afbaf35a99a2bedc02ec8e6e58b03",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/gcn-reuse/estimate.py": "661928b54e7f04ce8dcfc9aa58f423ab5574e0eda2366d0ccb7217c302cd4c7f",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra1/v002/p1.c": "598b00fa6408c9b9442ffed6f23804621d451c66b7fd1b4c9de0d5df42ecb026",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/trim/saed-patch-v001/gcn-cgra1/autolink-ClockSinkDomain_4/src/AutoTileCursor.sv": "9d6161ab390bdd4e706871b96198cbda0c2cf6c5d05e3026cc080746c4167124",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/trim/saed-patch-v001/gcn-cgra1/cgra-CGRAAccelerator/src/CgraLinkAdapter.sv": "511867ed83d6d0854f20f3062cd5325f1d3260bc666165b474f4f1b6019603fc"
+  }
+}

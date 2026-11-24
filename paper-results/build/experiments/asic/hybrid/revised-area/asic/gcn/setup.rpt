@@ -1,0 +1,1739 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -input_pins
+        -nets
+        -max_paths 10
+Design : ExpandedAsic
+Version: T-2022.03-SP5-6
+Date   : Sun Nov 15 22:58:27 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: tt0p8v25c   Library: saed14rvt_tt0p8v25c
+Wire Load Model Mode: enclosed
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[11]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U86/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U86/X (SAEDRVT14_BUF_U_0P5)                     0.011557   1.732933 r
+  gcn.kernel/n76 (net)                                 5     0.000000   1.732933 r
+  gcn.kernel/U1149/A1 (SAEDRVT14_NR2_MM_0P5)                 0.088632   1.821566 r
+  gcn.kernel/U1149/X (SAEDRVT14_NR2_MM_0P5)                  0.005946   1.827512 f
+  gcn.kernel/n4089 (net)                               1     0.000000   1.827512 f
+  gcn.kernel/U7260/C (SAEDRVT14_AO221_0P5)                   0.071161   1.898673 f
+  gcn.kernel/U7260/X (SAEDRVT14_AO221_0P5)                   0.015296   1.913970 f
+  gcn.kernel/n7951 (net)                               1     0.000000   1.913970 f
+  gcn.kernel/edge_index_reg[11]/D (SAEDRVT14_FDP_V2_1)       0.080132   1.994102 f
+  data arrival time                                                     1.994102
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[11]/CK (SAEDRVT14_FDP_V2_1)      0.000000   2.000000 r
+  library setup time                                         -0.005574  1.994426
+  data required time                                                    1.994426
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994426
+  data arrival time                                                     -1.994102
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.000325
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[10]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U86/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U86/X (SAEDRVT14_BUF_U_0P5)                     0.011557   1.732933 r
+  gcn.kernel/n76 (net)                                 5     0.000000   1.732933 r
+  gcn.kernel/U1150/A1 (SAEDRVT14_NR2_MM_0P5)                 0.088632   1.821566 r
+  gcn.kernel/U1150/X (SAEDRVT14_NR2_MM_0P5)                  0.005946   1.827512 f
+  gcn.kernel/n4090 (net)                               1     0.000000   1.827512 f
+  gcn.kernel/U7261/C (SAEDRVT14_AO221_0P5)                   0.071161   1.898673 f
+  gcn.kernel/U7261/X (SAEDRVT14_AO221_0P5)                   0.015296   1.913970 f
+  gcn.kernel/n7952 (net)                               1     0.000000   1.913970 f
+  gcn.kernel/edge_index_reg[10]/D (SAEDRVT14_FDP_V2_1)       0.080132   1.994102 f
+  data arrival time                                                     1.994102
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[10]/CK (SAEDRVT14_FDP_V2_1)      0.000000   2.000000 r
+  library setup time                                         -0.005574  1.994426
+  data required time                                                    1.994426
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994426
+  data arrival time                                                     -1.994102
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.000325
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[9]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U86/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U86/X (SAEDRVT14_BUF_U_0P5)                     0.011557   1.732933 r
+  gcn.kernel/n76 (net)                                 5     0.000000   1.732933 r
+  gcn.kernel/U1151/A1 (SAEDRVT14_NR2_MM_0P5)                 0.088632   1.821566 r
+  gcn.kernel/U1151/X (SAEDRVT14_NR2_MM_0P5)                  0.005946   1.827512 f
+  gcn.kernel/n4091 (net)                               1     0.000000   1.827512 f
+  gcn.kernel/U7262/C (SAEDRVT14_AO221_0P5)                   0.071161   1.898673 f
+  gcn.kernel/U7262/X (SAEDRVT14_AO221_0P5)                   0.015296   1.913970 f
+  gcn.kernel/n7953 (net)                               1     0.000000   1.913970 f
+  gcn.kernel/edge_index_reg[9]/D (SAEDRVT14_FDP_V2_1)        0.080132   1.994102 f
+  data arrival time                                                     1.994102
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[9]/CK (SAEDRVT14_FDP_V2_1)       0.000000   2.000000 r
+  library setup time                                         -0.005574  1.994426
+  data required time                                                    1.994426
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994426
+  data arrival time                                                     -1.994102
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.000325
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[8]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U86/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U86/X (SAEDRVT14_BUF_U_0P5)                     0.011557   1.732933 r
+  gcn.kernel/n76 (net)                                 5     0.000000   1.732933 r
+  gcn.kernel/U1152/A1 (SAEDRVT14_NR2_MM_0P5)                 0.088632   1.821566 r
+  gcn.kernel/U1152/X (SAEDRVT14_NR2_MM_0P5)                  0.005946   1.827512 f
+  gcn.kernel/n4092 (net)                               1     0.000000   1.827512 f
+  gcn.kernel/U7263/C (SAEDRVT14_AO221_0P5)                   0.071161   1.898673 f
+  gcn.kernel/U7263/X (SAEDRVT14_AO221_0P5)                   0.015296   1.913970 f
+  gcn.kernel/n7954 (net)                               1     0.000000   1.913970 f
+  gcn.kernel/edge_index_reg[8]/D (SAEDRVT14_FDP_V2_1)        0.080132   1.994102 f
+  data arrival time                                                     1.994102
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[8]/CK (SAEDRVT14_FDP_V2_1)       0.000000   2.000000 r
+  library setup time                                         -0.005574  1.994426
+  data required time                                                    1.994426
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994426
+  data arrival time                                                     -1.994102
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.000325
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[18]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1166/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1166/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4082 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7253/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7253/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7944 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[18]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[18]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[17]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1167/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1167/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4083 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7254/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7254/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7945 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[17]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[17]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[16]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1168/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1168/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4084 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7255/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7255/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7946 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[16]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[16]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[15]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1169/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1169/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4085 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7256/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7256/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7947 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[15]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[15]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[14]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1170/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1170/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4086 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7257/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7257/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7948 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[14]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[14]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+  Startpoint: gcn.kernel/edge_index_reg[2]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gcn.kernel/edge_index_reg[13]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GcnNative          280000                saed14rvt_tt0p8v25c
+  GcnNative_DW01_inc_4_DW01_inc_5
+                     ForQA                 saed14rvt_tt0p8v25c
+  GcnNative_DW01_cmp6_2
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                              Fanout      Incr       Path
+  ---------------------------------------------------------------------------------
+  clock core (rise edge)                                     0.000000   0.000000
+  clock network delay (ideal)                                0.000000   0.000000
+  gcn.kernel/edge_index_reg[2]/CK (SAEDRVT14_FDP_V2_1)       0.000000 # 0.000000 r
+  gcn.kernel/edge_index_reg[2]/Q (SAEDRVT14_FDP_V2_1)        0.021284   0.021284 r
+  gcn.kernel/N269 (net)                                2     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (GcnNative_DW01_inc_4_DW01_inc_5)     0.000000   0.021284 r
+  gcn.kernel/r582/A[2] (net)                                 0.000000   0.021284 r
+  gcn.kernel/r582/U1_1_2/A (SAEDRVT14_ADDH_0P5)              0.180431   0.201715 r
+  gcn.kernel/r582/U1_1_2/CO (SAEDRVT14_ADDH_0P5)             0.011289   0.213004 r
+  gcn.kernel/r582/carry[3] (net)                       1     0.000000   0.213004 r
+  gcn.kernel/r582/U1_1_3/B (SAEDRVT14_ADDH_0P5)              0.015301   0.228305 r
+  gcn.kernel/r582/U1_1_3/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.240559 r
+  gcn.kernel/r582/carry[4] (net)                       1     0.000000   0.240559 r
+  gcn.kernel/r582/U1_1_4/B (SAEDRVT14_ADDH_0P5)              0.015301   0.255860 r
+  gcn.kernel/r582/U1_1_4/CO (SAEDRVT14_ADDH_0P5)             0.012254   0.268114 r
+  gcn.kernel/r582/carry[5] (net)                       1     0.000000   0.268114 r
+  gcn.kernel/r582/U1_1_5/B (SAEDRVT14_ADDH_0P5)              0.015301   0.283415 r
+  gcn.kernel/r582/U1_1_5/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.295664 r
+  gcn.kernel/r582/carry[6] (net)                       1     0.000000   0.295664 r
+  gcn.kernel/r582/U1_1_6/B (SAEDRVT14_ADDH_0P5)              0.015301   0.310965 r
+  gcn.kernel/r582/U1_1_6/CO (SAEDRVT14_ADDH_0P5)             0.012249   0.323214 r
+  gcn.kernel/r582/carry[7] (net)                       1     0.000000   0.323214 r
+  gcn.kernel/r582/U1_1_7/B (SAEDRVT14_ADDH_0P5)              0.015301   0.338515 r
+  gcn.kernel/r582/U1_1_7/CO (SAEDRVT14_ADDH_0P5)             0.012318   0.350833 r
+  gcn.kernel/r582/carry[8] (net)                       1     0.000000   0.350833 r
+  gcn.kernel/r582/U1_1_8/A (SAEDRVT14_ADDH_0P5)              0.015479   0.366312 r
+  gcn.kernel/r582/U1_1_8/CO (SAEDRVT14_ADDH_0P5)             0.011572   0.377884 r
+  gcn.kernel/r582/carry[9] (net)                       1     0.000000   0.377884 r
+  gcn.kernel/r582/U1_1_9/B (SAEDRVT14_ADDH_0P5)              0.015301   0.393184 r
+  gcn.kernel/r582/U1_1_9/CO (SAEDRVT14_ADDH_0P5)             0.012260   0.405444 r
+  gcn.kernel/r582/carry[10] (net)                      1     0.000000   0.405444 r
+  gcn.kernel/r582/U1_1_10/B (SAEDRVT14_ADDH_0P5)             0.015301   0.420745 r
+  gcn.kernel/r582/U1_1_10/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.433006 r
+  gcn.kernel/r582/carry[11] (net)                      1     0.000000   0.433006 r
+  gcn.kernel/r582/U1_1_11/B (SAEDRVT14_ADDH_0P5)             0.015301   0.448307 r
+  gcn.kernel/r582/U1_1_11/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.460568 r
+  gcn.kernel/r582/carry[12] (net)                      1     0.000000   0.460568 r
+  gcn.kernel/r582/U1_1_12/B (SAEDRVT14_ADDH_0P5)             0.015301   0.475868 r
+  gcn.kernel/r582/U1_1_12/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.488129 r
+  gcn.kernel/r582/carry[13] (net)                      1     0.000000   0.488129 r
+  gcn.kernel/r582/U1_1_13/B (SAEDRVT14_ADDH_0P5)             0.015301   0.503430 r
+  gcn.kernel/r582/U1_1_13/CO (SAEDRVT14_ADDH_0P5)            0.012261   0.515691 r
+  gcn.kernel/r582/carry[14] (net)                      1     0.000000   0.515691 r
+  gcn.kernel/r582/U1_1_14/B (SAEDRVT14_ADDH_0P5)             0.015301   0.530992 r
+  gcn.kernel/r582/U1_1_14/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.543286 r
+  gcn.kernel/r582/carry[15] (net)                      1     0.000000   0.543286 r
+  gcn.kernel/r582/U1_1_15/B (SAEDRVT14_ADDH_0P5)             0.015301   0.558587 r
+  gcn.kernel/r582/U1_1_15/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.570882 r
+  gcn.kernel/r582/carry[16] (net)                      1     0.000000   0.570882 r
+  gcn.kernel/r582/U1_1_16/B (SAEDRVT14_ADDH_0P5)             0.015301   0.586183 r
+  gcn.kernel/r582/U1_1_16/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.598524 r
+  gcn.kernel/r582/carry[17] (net)                      1     0.000000   0.598524 r
+  gcn.kernel/r582/U1_1_17/A (SAEDRVT14_ADDH_0P5)             0.015479   0.614003 r
+  gcn.kernel/r582/U1_1_17/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.625584 r
+  gcn.kernel/r582/carry[18] (net)                      1     0.000000   0.625584 r
+  gcn.kernel/r582/U1_1_18/B (SAEDRVT14_ADDH_0P5)             0.015301   0.640885 r
+  gcn.kernel/r582/U1_1_18/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.653161 r
+  gcn.kernel/r582/carry[19] (net)                      1     0.000000   0.653161 r
+  gcn.kernel/r582/U1_1_19/B (SAEDRVT14_ADDH_0P5)             0.015301   0.668461 r
+  gcn.kernel/r582/U1_1_19/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.680756 r
+  gcn.kernel/r582/carry[20] (net)                      1     0.000000   0.680756 r
+  gcn.kernel/r582/U1_1_20/B (SAEDRVT14_ADDH_0P5)             0.015301   0.696057 r
+  gcn.kernel/r582/U1_1_20/CO (SAEDRVT14_ADDH_0P5)            0.012295   0.708352 r
+  gcn.kernel/r582/carry[21] (net)                      1     0.000000   0.708352 r
+  gcn.kernel/r582/U1_1_21/B (SAEDRVT14_ADDH_0P5)             0.015301   0.723652 r
+  gcn.kernel/r582/U1_1_21/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.735994 r
+  gcn.kernel/r582/carry[22] (net)                      1     0.000000   0.735994 r
+  gcn.kernel/r582/U1_1_22/A (SAEDRVT14_ADDH_0P5)             0.015479   0.751472 r
+  gcn.kernel/r582/U1_1_22/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.763054 r
+  gcn.kernel/r582/carry[23] (net)                      1     0.000000   0.763054 r
+  gcn.kernel/r582/U1_1_23/B (SAEDRVT14_ADDH_0P5)             0.015301   0.778354 r
+  gcn.kernel/r582/U1_1_23/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.790630 r
+  gcn.kernel/r582/carry[24] (net)                      1     0.000000   0.790630 r
+  gcn.kernel/r582/U1_1_24/B (SAEDRVT14_ADDH_0P5)             0.015301   0.805931 r
+  gcn.kernel/r582/U1_1_24/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.818273 r
+  gcn.kernel/r582/carry[25] (net)                      1     0.000000   0.818273 r
+  gcn.kernel/r582/U1_1_25/A (SAEDRVT14_ADDH_0P5)             0.015479   0.833751 r
+  gcn.kernel/r582/U1_1_25/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.845333 r
+  gcn.kernel/r582/carry[26] (net)                      1     0.000000   0.845333 r
+  gcn.kernel/r582/U1_1_26/B (SAEDRVT14_ADDH_0P5)             0.015301   0.860633 r
+  gcn.kernel/r582/U1_1_26/CO (SAEDRVT14_ADDH_0P5)            0.012276   0.872909 r
+  gcn.kernel/r582/carry[27] (net)                      1     0.000000   0.872909 r
+  gcn.kernel/r582/U1_1_27/B (SAEDRVT14_ADDH_0P5)             0.015301   0.888210 r
+  gcn.kernel/r582/U1_1_27/CO (SAEDRVT14_ADDH_0P5)            0.012341   0.900551 r
+  gcn.kernel/r582/carry[28] (net)                      1     0.000000   0.900551 r
+  gcn.kernel/r582/U1_1_28/A (SAEDRVT14_ADDH_0P5)             0.015479   0.916030 r
+  gcn.kernel/r582/U1_1_28/CO (SAEDRVT14_ADDH_0P5)            0.011581   0.927611 r
+  gcn.kernel/r582/carry[29] (net)                      1     0.000000   0.927611 r
+  gcn.kernel/r582/U1_1_29/B (SAEDRVT14_ADDH_0P5)             0.015301   0.942912 r
+  gcn.kernel/r582/U1_1_29/CO (SAEDRVT14_ADDH_0P5)            0.012292   0.955204 r
+  gcn.kernel/r582/carry[30] (net)                      1     0.000000   0.955204 r
+  gcn.kernel/r582/U1_1_30/A (SAEDRVT14_ADDH_1)               0.015361   0.970564 r
+  gcn.kernel/r582/U1_1_30/S (SAEDRVT14_ADDH_1)               0.011452   0.982016 r
+  gcn.kernel/r582/SUM[30] (net)                        1     0.000000   0.982016 r
+  gcn.kernel/r582/SUM[30] (GcnNative_DW01_inc_4_DW01_inc_5)  0.000000   0.982016 r
+  gcn.kernel/N1791 (net)                                     0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (GcnNative_DW01_cmp6_2)              0.000000   0.982016 r
+  gcn.kernel/r583/A[30] (net)                                0.000000   0.982016 r
+  gcn.kernel/r583/U2/A2 (SAEDRVT14_EO2_1)                    0.056679   1.038695 r
+  gcn.kernel/r583/U2/X (SAEDRVT14_EO2_1)                     0.018339   1.057034 f
+  gcn.kernel/r583/n41 (net)                            1     0.000000   1.057034 f
+  gcn.kernel/r583/U3/A2 (SAEDRVT14_OR4_2)                    0.011399   1.068433 f
+  gcn.kernel/r583/U3/X (SAEDRVT14_OR4_2)                     0.015896   1.084329 f
+  gcn.kernel/r583/n29 (net)                            1     0.000000   1.084329 f
+  gcn.kernel/r583/U10/A2 (SAEDRVT14_NR4_0P75)                0.009266   1.093596 f
+  gcn.kernel/r583/U10/X (SAEDRVT14_NR4_0P75)                 0.017958   1.111554 r
+  gcn.kernel/r583/n1 (net)                             1     0.000000   1.111554 r
+  gcn.kernel/r583/U1/A1 (SAEDRVT14_AN4_2)                    0.009011   1.120565 r
+  gcn.kernel/r583/U1/X (SAEDRVT14_AN4_2)                     0.011050   1.131615 r
+  gcn.kernel/r583/EQ (net)                             3     0.000000   1.131615 r
+  gcn.kernel/r583/EQ (GcnNative_DW01_cmp6_2)                 0.000000   1.131615 r
+  gcn.kernel/n54 (net)                                       0.000000   1.131615 r
+  gcn.kernel/U11438/A (SAEDRVT14_INV_S_0P5)                  0.061847   1.193462 r
+  gcn.kernel/U11438/X (SAEDRVT14_INV_S_0P5)                  0.005700   1.199162 f
+  gcn.kernel/n12609 (net)                              3     0.000000   1.199162 f
+  gcn.kernel/U8890/A1 (SAEDRVT14_AO21B_0P5)                  0.075689   1.274851 f
+  gcn.kernel/U8890/X (SAEDRVT14_AO21B_0P5)                   0.011932   1.286783 f
+  gcn.kernel/n4129 (net)                               3     0.000000   1.286783 f
+  gcn.kernel/U82/A1 (SAEDRVT14_ND2_ECO_1)                    0.097009   1.383793 f
+  gcn.kernel/U82/X (SAEDRVT14_ND2_ECO_1)                     0.007850   1.391643 r
+  gcn.kernel/n4142 (net)                               2     0.000000   1.391643 r
+  gcn.kernel/U8889/A (SAEDRVT14_ND2B_U_0P5)                  0.077167   1.468809 r
+  gcn.kernel/U8889/X (SAEDRVT14_ND2B_U_0P5)                  0.009206   1.478015 r
+  gcn.kernel/n4070 (net)                               1     0.000000   1.478015 r
+  gcn.kernel/U778/A (SAEDRVT14_BUF_U_0P5)                    0.064244   1.542259 r
+  gcn.kernel/U778/X (SAEDRVT14_BUF_U_0P5)                    0.009410   1.551669 r
+  gcn.kernel/n11158 (net)                              3     0.000000   1.551669 r
+  gcn.kernel/U575/A (SAEDRVT14_BUF_U_0P5)                    0.084722   1.636391 r
+  gcn.kernel/U575/X (SAEDRVT14_BUF_U_0P5)                    0.009288   1.645679 r
+  gcn.kernel/n11160 (net)                              2     0.000000   1.645679 r
+  gcn.kernel/U87/A (SAEDRVT14_BUF_U_0P5)                     0.075697   1.721376 r
+  gcn.kernel/U87/X (SAEDRVT14_BUF_U_0P5)                     0.013813   1.735189 r
+  gcn.kernel/n77 (net)                                 7     0.000000   1.735189 r
+  gcn.kernel/U1171/A1 (SAEDRVT14_NR2_MM_0P5)                 0.107347   1.842537 r
+  gcn.kernel/U1171/X (SAEDRVT14_NR2_MM_0P5)                  0.006937   1.849474 f
+  gcn.kernel/n4087 (net)                               1     0.000000   1.849474 f
+  gcn.kernel/U7258/C (SAEDRVT14_AO221_0P5)                   0.071161   1.920635 f
+  gcn.kernel/U7258/X (SAEDRVT14_AO221_0P5)                   0.014950   1.935585 f
+  gcn.kernel/n7949 (net)                               1     0.000000   1.935585 f
+  gcn.kernel/edge_index_reg[13]/D (SAEDRVT14_FDP_V2LP_0P5)   0.057616   1.993201 f
+  data arrival time                                                     1.993201
+
+  clock core (rise edge)                                     2.000000   2.000000
+  clock network delay (ideal)                                0.000000   2.000000
+  gcn.kernel/edge_index_reg[13]/CK (SAEDRVT14_FDP_V2LP_0P5)  0.000000   2.000000 r
+  library setup time                                         -0.005506  1.994494
+  data required time                                                    1.994494
+  ---------------------------------------------------------------------------------
+  data required time                                                    1.994494
+  data arrival time                                                     -1.993201
+  ---------------------------------------------------------------------------------
+  slack (MET)                                                           0.001294
+
+
+1

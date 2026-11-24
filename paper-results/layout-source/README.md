@@ -1,0 +1,13 @@
+# Figure 5(b) layout provenance
+
+The published panel is [global-route-paper.pdf](../build/experiments/physical/figure/global-route-paper.pdf). Its decoded PDF form (including labels) and indexed image stream match objects 35 and 36 on page 6 of `1466_file_Paper-2.pdf` by SHA-256. Their respective digests are `8717ae521b4da6cb2e63ed1304dd057c7c9112721c7fb7e9fd17b8f951874fa8` and `35ec3d2a91c22adec18fae1ef55d617b40d50ea45bd7c6f8577a16842cb8be1a`.
+
+[view.rpt](geometry/view.rpt) records the die bounds of 2493.376 × 2493.200 µm, giving 6.2164850432 mm², which the paper rounds to 6.2165 mm². [paths.tsv](geometry/paths.tsv) records the 339 centerline segments used in the interface overlay. The geometry directory includes the native capture, calibration, physical region bounds and color palette. The [figure metadata](../build/experiments/physical/figure/global-route-chip.json) maps them to die coordinates.
+
+The Figure 5(b) caption and Section VI-E use “post-route”. The image comes from the whole-chip [global-routing run](routing/global/global.log). The [congestion report](geometry/summary.rpt) records overflow in 38.58% of GRCs. A later [track assignment](routing/track/track.log) completed. The separate [routing probe](routing/quick/route.tcl) used eight selected nets and one detail-routing iteration. The archived evidence establishes global routing and track assignment; completed chip-wide detailed routing and signoff are unverified.
+
+The [public design archive](global-route-design.tar.gz) contains the 39 ChipTop design files from the global-route checkpoint. Each file matches the [source member checksum](global-route-files.sha256). The four run records are in [routing/global](routing/global). The public archive requires separate technology and reference libraries for reconstruction. The corresponding [area report](../build/experiments/physical/backend/reports/global-route/area.rpt) reports cell area and the [SoC configuration](../build/experiments/physical/soc/soc.yaml) records the component and memory parameters.
+
+The final [label placement script](labels/figure.py) reads the archived base stream next to the script. Given a working directory containing the original Arial.TTF (SHA-256 `35c0f3559d8db569e36c31095b8a60d441643d95f59139de40e23fada819b833`), it writes the label and dimension drawing instructions to `contents` there. The published PDF already embeds the font and outlines.
+
+Section VI-A names Cadence Innovus. The [run log](routing/global/global.log) for this layout identifies Synopsys Fusion Compiler. The [clock report](../build/experiments/physical/backend/reports/global-route/clocks.rpt) specifies a 2 ns core clock target.

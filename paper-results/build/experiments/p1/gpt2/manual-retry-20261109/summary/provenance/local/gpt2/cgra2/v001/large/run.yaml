@@ -1,0 +1,252 @@
+status: rows_completed_wide_interrupted_by_user
+stop_observed_utc: '2026-11-05 12:47'
+stop_evidence: Previous execution handles unavailable after interruption; wide final exits unconfirmed. Preserve partial logs; do not restart.
+started_utc: '2026-11-04 20:01'
+active_sessions: {}
+interrupted_sessions: {wide_manual: 19699, wide_hybrid: 36003, wide_auto: 25625}
+wide_auto_started_utc: '2026-11-05 04:40'
+wide_auto_command: bash build/experiments/p1/gpt2/cgra2/v001/large/run.sh wide auto
+wide_auto_log: wide-auto.log
+completed_sessions: {rows_auto: 45837, rows_hybrid: 94549, rows_manual: 2594}
+rows_manual_completed_utc: '2026-11-05 06:20'
+rows_manual_exit_code: 0
+partial_wide:
+  observed_utc: '2026-11-05 10:59'
+  status: running_cold_records_only
+  records:
+    - mode: Manual
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 19038177
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 17829, setup: 235463, capture: 25, execute: 18784860, total: 19038177}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [0, 0]
+      cached_profiles: 0
+      reports: 0
+      auto_launches: 0
+      dma_bytes: {input: 12288, output: 12288, affine: 24576}
+      driver_log: wide-manual.log
+      uart_log: wide/output-manual/wide-manual.log
+    - mode: Hybrid
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 13602118
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [29, 46, 16]
+      breakdown_cycles: {staging: 17829, setup: 235463, capture: 190658, execute: 13158168, total: 13602118}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [29, 46]
+      cached_profiles: 16
+      reports: 776
+      auto_launches: 15
+      dma_bytes: {input: 12288, output: 12288, affine: 24576}
+      driver_log: wide-hybrid.log
+      uart_log: wide/output-hybrid/wide-hybrid.log
+    - mode: Auto
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 12872011
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [29, 46, 16]
+      breakdown_cycles: {staging: 17755, setup: 236336, capture: 191311, execute: 12426609, total: 12872011}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [29, 46]
+      cached_profiles: 16
+      reports: 560
+      auto_launches: 1
+      dma_bytes: {input: 12288, output: 12288, affine: 24576}
+      driver_log: wide-auto.log
+      uart_log: wide/output-auto/wide-auto.log
+  interpretation: Partial timing-only records; all three cold records are present, but warm records and process exits remain pending. No completed wide result is claimed.
+wide_hybrid_started_utc: '2026-11-05 03:15'
+wide_hybrid_command: bash build/experiments/p1/gpt2/cgra2/v001/large/run.sh wide hybrid
+wide_hybrid_log: wide-hybrid.log
+wide_manual_started_utc: '2026-11-05 03:11'
+wide_command: bash build/experiments/p1/gpt2/cgra2/v001/large/run.sh wide manual
+wide_log: wide-manual.log
+wide_scheduling: Manual and Hybrid started after their respective rows runs exited0. Auto started after the four-CGRA rows Auto run exited0, without changing the original two-CGRA design or ELF. All modes reuse the frozen simulator and verified wide ELF with separate output/TMPDIR/binary paths. Total active workers27 at Auto launch; about30GiB memory was available before the first wide launch.
+small_gate: ../run.yaml
+small_gate_exit_code: 0
+small_gate_scope: Allsix N16/H128/heads2/FF512 inferences checked2048outputs each,zero mismatches/status errors,final PASS and exit0. Both input arrays checked in every mode.
+runner: run.sh
+command: bash build/experiments/p1/gpt2/cgra2/v001/large/run.sh rows MODE
+driver_logs: [rows-manual.log, rows-hybrid.log, rows-auto.log]
+output_directories: [rows/output-manual, rows/output-hybrid, rows/output-auto]
+simulator: ../simulator
+simulator_sha256: 413dd7d966eb32e46b2da8ddd44cdee48e00601310b67606d5f642e7eabebe2e
+rows_elf: ../checks/rows.riscv
+rows_elf_sha256: bb56c5be8ba06b33b5b095c8a726b688ee6793e74bb09c02ca5059c07fc8fdfe
+wide_elf: ../checks/wide.riscv
+wide_elf_sha256: 09747f0f47d3f474e23665c2973742949d7839ea47517c92d95fb237b2443df2
+rtl: ../rtl/soc-sim.tar.gz
+rtl_sha256: bbb661597c6cb607a852d82ba0b1f51ee4ae04b7683700ff50472451d561a549
+shape: {length: 64, hidden: 128, heads: 2, ff: 512}
+pending_shape: {length: 16, hidden: 768, heads: 12, ff: 3072}
+arguments: MODE_NUMBER 1 1
+samples: One configuration-cold and one warm inference per mode,on different inputs.
+numerical_check: Disabled for these larger cases as requested; completion/status and process exits remain required.
+harness_cycle_limit: 200000000
+random_seed: 1
+loadmem: 1
+simulator_threads: 4
+stack_kib: 32768
+isolation: Reuse frozen simulator and precompiled matching ELF; no generator or simulator build. Separate binaries/output/TMPDIR per mode,pipefail retained through tee. Shared current ResNet headers are not used to recompile this firmware.
+concurrency: Three rows modes use12 Verilator worker threads beside the six original one-thread GPT2 runs and the four-thread four-CGRA numerical gate,total22 workers on32 reported host CPUs. Available memory was about35GiB before launch. This is scheduling information,not a controlled wall-time comparison.
+results: pending
+partial_results:
+  observed_utc: '2026-11-05 06:23:20'
+  status: completed
+  performance: rows-performance.json
+  performance_sha256: 2271966c9c5473b61c343ce128baae6729ec53163afc7e47864766fd9f660090
+  shape: rows
+  records:
+    - mode: Manual
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 12887567
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 12089, setup: 268118, capture: 12, execute: 12607348, total: 12887567}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [0, 0]
+      cached_profiles: 0
+      reports: 0
+      auto_launches: 0
+      dma_bytes: {input: 8192, output: 8192, affine: 4096}
+      driver_log: rows-manual.log
+      uart_log: rows/output-manual/rows-manual.log
+    - mode: Manual
+      phase: warm
+      repeat: 1
+      input: 1
+      cycles: 12578157
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 12011, setup: 5, capture: 4, execute: 12566137, total: 12578157}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [0, 0]
+      cached_profiles: 0
+      reports: 0
+      auto_launches: 0
+      dma_bytes: {input: 8192, output: 8192, affine: 0}
+      driver_log: rows-manual.log
+      uart_log: rows/output-manual/rows-manual.log
+    - mode: Hybrid
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 9042143
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [59, 64, 31]
+      breakdown_cycles: {staging: 12089, setup: 268118, capture: 286562, execute: 8475374, total: 9042143}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 64]
+      cached_profiles: 31
+      reports: 522
+      auto_launches: 15
+      dma_bytes: {input: 8192, output: 8192, affine: 4096}
+      driver_log: rows-hybrid.log
+      uart_log: rows/output-hybrid/rows-hybrid.log
+    - mode: Hybrid
+      phase: warm
+      repeat: 1
+      input: 1
+      cycles: 8466036
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 11595, setup: 30, capture: 4, execute: 8454407, total: 8466036}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 64]
+      cached_profiles: 31
+      reports: 522
+      auto_launches: 15
+      dma_bytes: {input: 8192, output: 8192, affine: 0}
+      driver_log: rows-hybrid.log
+      uart_log: rows/output-hybrid/rows-hybrid.log
+    - mode: Auto
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 8951640
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [59, 64, 31]
+      breakdown_cycles: {staging: 11954, setup: 271761, capture: 287369, execute: 8380556, total: 8951640}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 64]
+      cached_profiles: 31
+      reports: 378
+      auto_launches: 1
+      dma_bytes: {input: 8192, output: 8192, affine: 4096}
+      driver_log: rows-auto.log
+      uart_log: rows/output-auto/rows-auto.log
+    - mode: Auto
+      phase: warm
+      repeat: 1
+      input: 1
+      cycles: 8372251
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 11983, setup: 8, capture: 4, execute: 8360256, total: 8372251}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 64]
+      cached_profiles: 31
+      reports: 378
+      auto_launches: 1
+      dma_bytes: {input: 8192, output: 8192, affine: 0}
+      driver_log: rows-auto.log
+      uart_log: rows/output-auto/rows-auto.log
+  manual_result:
+    status: completed
+    completed_utc: '2026-11-05 06:20'
+    session: 2594
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-manual.log
+    driver_log_sha256: 620227bd9b308783aa572f31680ce5e02e6a09766e903423b5208e5f0b09cfa5
+    uart_log: rows/output-manual/rows-manual.log
+    uart_log_sha256: 7d49b361ac020262d33a4fc8cb7845944d037d201f5838cb851739d06fd4c176
+  auto_result:
+    status: completed
+    completed_utc: '2026-11-05 03:10'
+    session: 45837
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-auto.log
+    driver_log_sha256: 4973c22c0da6689c0d5f0ec5d96c3534b4ed64d2bad1558545faa1a962fe85ec
+    uart_log: rows/output-auto/rows-auto.log
+    uart_log_sha256: f56ecc43366837b8d9fcf041dc14fe97d5969dc05a2fb79703625ebd8dde6bb5
+  hybrid_result:
+    status: completed
+    completed_utc: '2026-11-05 03:15'
+    session: 94549
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-hybrid.log
+    driver_log_sha256: 577f00cf86f9abe0c8a4434cae944ef5c309f8b42b2f6aa94b82bb8ea43dbc0b
+    uart_log: rows/output-hybrid/rows-hybrid.log
+    uart_log_sha256: 77e20148a54391398cad9af1387bb09c2259383ec1ffa6b31d5a590243eecc2e
+  interpretation: All three rows modes completed both cold and warm timing/status checks with PASS and exit0. All six records have checked0, so this is timing-only completion, not numerical output validation. The rows JSON preserves one sample per mode and phase on distinct inputs. Wide remains incomplete; no wide completion is claimed.

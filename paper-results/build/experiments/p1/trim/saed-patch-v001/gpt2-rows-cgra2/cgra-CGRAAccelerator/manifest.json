@@ -1,0 +1,349 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gpt2-rows-cgra2",
+  "component": "cgra",
+  "top": "CGRAAccelerator",
+  "soc_instances": 1,
+  "archive_sha256": "638006978c14eb30513c574d577fc0eeceef556e5b3a5f46b6cf151ca3262b5a",
+  "source_modules": 138,
+  "sram_required": true,
+  "expected_macro_instances": 242,
+  "macro_counts": {
+    "SRAM2RW64x128": 178,
+    "SRAM2RW128x32": 64
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 5696,
+      "width": 195,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW64x128",
+      "macro_depth": 64,
+      "macro_width": 128,
+      "depth_banks": 89,
+      "width_slices_per_lane": 2,
+      "macro_instances_per_module": 178,
+      "logical_bits": 1110720,
+      "physical_bits_per_module": 1458176,
+      "macro_area_per_module": 1375352.0720519999,
+      "module": "packets_ext",
+      "original_module_sha256": "99c92bb31e59f32b2268ea470f3f9a3bb1a1eedbf2a9ba72b5fe6d8b43c487c5",
+      "module_instances": 1
+    },
+    {
+      "depth": 512,
+      "width": 35,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW128x32",
+      "macro_depth": 128,
+      "macro_width": 32,
+      "depth_banks": 4,
+      "width_slices_per_lane": 2,
+      "macro_instances_per_module": 8,
+      "logical_bits": 17920,
+      "physical_bits_per_module": 32768,
+      "macro_area_per_module": 42156.433104,
+      "module": "SyncRamRTL__81bc7ef60c3a5cf9",
+      "original_module_sha256": "4316e2a7ea426e6202f6933624629cf74116a1fe28b6fa26ef684e38c0445e3d",
+      "semantics": "Fullword writes commit one edge later. An enabled read matching the previous pending write forwards its data; the current write is excluded. Forward state and SRAM read state hold when ren=0. Reset does not discard a pending write or reset data.",
+      "module_instances": 8
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 1712603.5368839998,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/IntegratedCgraWithDmaRTL_single__pickled.v",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/IntegratedCgraWithDmaRTL_single__pickled.v",
+      "original_sha256": "0af00d69bc1be2f0537ed5357a63f5cb5e67e3da72501ec11d085ff9dda0ae8a",
+      "staged_sha256": "81b0cc6e2a9e5132789c5c94b7d439da7f7f84ed12182d2ca56f50468957f3cd",
+      "changes": [
+        "Map SyncRamRTL__81bc7ef60c3a5cf9 to physical SRAM2RW128x32 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoComputeRequest.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSink_AutoComputeRequest.sv",
+      "original_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "staged_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoCopyRequest.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSink_AutoCopyRequest.sv",
+      "original_sha256": "c6719082185548a9c5d7594b84f0212b444712a3ec1dff65e0d6ae099df93a12",
+      "staged_sha256": "c6719082185548a9c5d7594b84f0212b444712a3ec1dff65e0d6ae099df93a12",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoWatch.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSink_AutoWatch.sv",
+      "original_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "staged_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_CgraLinkConfig.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSink_CgraLinkConfig.sv",
+      "original_sha256": "b55005c65b39c51e173cc1388ba600b561b7096a4959e782506eb44ea1c43f7d",
+      "staged_sha256": "b55005c65b39c51e173cc1388ba600b561b7096a4959e782506eb44ea1c43f7d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_CgraPatchConfig.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSink_CgraPatchConfig.sv",
+      "original_sha256": "bdacaac28111c7e8841ef77f71f48f6de175ec248dfbeb9c2f794f44732e2f9c",
+      "staged_sha256": "bdacaac28111c7e8841ef77f71f48f6de175ec248dfbeb9c2f794f44732e2f9c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoCopyResult.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSource_AutoCopyResult.sv",
+      "original_sha256": "68e35c6d6c3e4e6d73a3693addfb8f14990d7093b69ad9bd538de15c6915e115",
+      "staged_sha256": "68e35c6d6c3e4e6d73a3693addfb8f14990d7093b69ad9bd538de15c6915e115",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoEvent.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSource_AutoEvent.sv",
+      "original_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "staged_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_CgraLinkConfigAck.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncQueueSource_CgraLinkConfigAck.sv",
+      "original_sha256": "fd1bf0aad9bdd24fbe75f95952a110111de008887713ea9254f15ab5dd060a68",
+      "staged_sha256": "fd1bf0aad9bdd24fbe75f95952a110111de008887713ea9254f15ab5dd060a68",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CGRAAccelerator.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CGRAAccelerator.sv",
+      "original_sha256": "7814b816f9bc86709a371c27c07c1cf3b67f4ccdbde7b007c3166f4ef736523c",
+      "staged_sha256": "7814b816f9bc86709a371c27c07c1cf3b67f4ccdbde7b007c3166f4ef736523c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CGRATileLinkDmaAdapter.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CGRATileLinkDmaAdapter.sv",
+      "original_sha256": "38593953d89e6ea3850946143cd75d5a9af3608798036c88d9389f0fc4de980d",
+      "staged_sha256": "38593953d89e6ea3850946143cd75d5a9af3608798036c88d9389f0fc4de980d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraLinkAdapter.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CgraLinkAdapter.sv",
+      "original_sha256": "5ccd679cedec4cab21a8eef3283ffe5a91bad91fba1fe92c0bdecaec885fe316",
+      "staged_sha256": "5ccd679cedec4cab21a8eef3283ffe5a91bad91fba1fe92c0bdecaec885fe316",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPackedReader.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CgraPackedReader.sv",
+      "original_sha256": "e9d4e249f9b8b964ab4ff5833fbc9bfc844caa949e68e3275c3928cf4e95bd9b",
+      "staged_sha256": "e9d4e249f9b8b964ab4ff5833fbc9bfc844caa949e68e3275c3928cf4e95bd9b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPackedWriter.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CgraPackedWriter.sv",
+      "original_sha256": "a70cb8681ddb82a75da28bc104501fa38aa1f1ff5ae2118706675e83fcf2dd6b",
+      "staged_sha256": "a70cb8681ddb82a75da28bc104501fa38aa1f1ff5ae2118706675e83fcf2dd6b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPacketArbiter.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CgraPacketArbiter.sv",
+      "original_sha256": "b82ccf884a21fcd594b090c88e8d1db433cf3ad005e300b52ad542082196b31a",
+      "staged_sha256": "b82ccf884a21fcd594b090c88e8d1db433cf3ad005e300b52ad542082196b31a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraSpmManager.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/CgraSpmManager.sv",
+      "original_sha256": "4e577b6e4f8803760698401fd0f833734d040ab88ad1a57f601dc3a783b31806",
+      "staged_sha256": "4e577b6e4f8803760698401fd0f833734d040ab88ad1a57f601dc3a783b31806",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w234.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ClockCrossingReg_w234.sv",
+      "original_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "staged_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w329.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ClockCrossingReg_w329.sv",
+      "original_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "staged_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w51.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ClockCrossingReg_w51.sv",
+      "original_sha256": "a494d90a5af10cf32b8c458b135edaf5a29d60ea6a71f1f4b89d3a9e1d479324",
+      "staged_sha256": "a494d90a5af10cf32b8c458b135edaf5a29d60ea6a71f1f4b89d3a9e1d479324",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w653.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ClockCrossingReg_w653.sv",
+      "original_sha256": "1011938bb0a7773bf61c9428950eb85dda91694ff52b32ff0c4b1a2f6b81f147",
+      "staged_sha256": "1011938bb0a7773bf61c9428950eb85dda91694ff52b32ff0c4b1a2f6b81f147",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/IntegratedCgraWithDmaRTL_single_wrapper.v",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/IntegratedCgraWithDmaRTL_single_wrapper.v",
+      "original_sha256": "75178dd40a9eb7fc4e4863452f17222d51b6913864b083871662d8be4cc6c8c5",
+      "staged_sha256": "18e38cac8e432057e08f310a2714a3dd48b62fd6f75e5c9003e01bbcae288b08",
+      "changes": [
+        "Make native wrapper address truncation explicit for DC."
+      ]
+    },
+    {
+      "source": "gen-collateral/Queue1_UInt195.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/Queue1_UInt195.sv",
+      "original_sha256": "0a01b63b0e33d0ad17ea3fdfb8763d71582483b696ee263c9c14a8aaea8f2ff3",
+      "staged_sha256": "0a01b63b0e33d0ad17ea3fdfb8763d71582483b696ee263c9c14a8aaea8f2ff3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_RoCCCommand.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/Queue2_RoCCCommand.sv",
+      "original_sha256": "bb098a6eaeb22473431d9be2648d30098d85beea218b77d97ec6a42c99b1a7cc",
+      "staged_sha256": "bb098a6eaeb22473431d9be2648d30098d85beea218b77d97ec6a42c99b1a7cc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue8_UInt195.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/Queue8_UInt195.sv",
+      "original_sha256": "b649c338b5482f87d3ff4b869a36f5403696f7e82a4cee970ce47b7e4a017eec",
+      "staged_sha256": "b649c338b5482f87d3ff4b869a36f5403696f7e82a4cee970ce47b7e4a017eec",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleA_a31d256s8k1z3u.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/Repeater_TLBundleA_a31d256s8k1z3u.sv",
+      "original_sha256": "ccc5e3bcc59678b9d97e8b1a18cd58eedde36075b39f45f0bf79ff31056c97d7",
+      "staged_sha256": "ccc5e3bcc59678b9d97e8b1a18cd58eedde36075b39f45f0bf79ff31056c97d7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleD_a32d256s1k5z4u.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/Repeater_TLBundleD_a32d256s1k5z4u.sv",
+      "original_sha256": "67909a7f448df86e724674facd9dcb0be0165275cd525bd103c1b4dfd45e00cf",
+      "staged_sha256": "67909a7f448df86e724674facd9dcb0be0165275cd525bd103c1b4dfd45e00cf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLFragmenter_6.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/TLFragmenter_6.sv",
+      "original_sha256": "11d3d2373fac482227185689d980c36b59e2c9be19cc094c38cff248cd09d9d3",
+      "staged_sha256": "11d3d2373fac482227185689d980c36b59e2c9be19cc094c38cff248cd09d9d3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_63.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/TLMonitor_63.sv",
+      "original_sha256": "a21736d8bc137d0afc7d9dc98fe695e866740b55454789fea911dd861a39ee25",
+      "staged_sha256": "a21736d8bc137d0afc7d9dc98fe695e866740b55454789fea911dd861a39ee25",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_64.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/TLMonitor_64.sv",
+      "original_sha256": "af07fdbd60a957b21c4bbd9814cf262f6433e22c648f51209ddf0c535f9d643e",
+      "staged_sha256": "af07fdbd60a957b21c4bbd9814cf262f6433e22c648f51209ddf0c535f9d643e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_65.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/TLMonitor_65.sv",
+      "original_sha256": "8ce242bcf124e7b5bf6f29c847dd9ce4f46c2268acbc0c8dc1fdf30d8fc047ec",
+      "staged_sha256": "8ce242bcf124e7b5bf6f29c847dd9ce4f46c2268acbc0c8dc1fdf30d8fc047ec",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLWidthWidget16.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/TLWidthWidget16.sv",
+      "original_sha256": "9d642180712d1aa6e4ee3e2bd9237bfbd461f90e8d2787ce3090f13786404da1",
+      "staged_sha256": "9d642180712d1aa6e4ee3e2bd9237bfbd461f90e8d2787ce3090f13786404da1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "3af7e865e6180bc4288f7556794bccccdf1c9472bbe5f5aa0236993662a3a9d4",
+      "staged_sha256": "3f3f2345a17c44c1cfcf99ddeaaa14d62aa1f018645442f8e929c6dff5a0fd07",
+      "changes": [
+        "Map packets_ext to physical SRAM2RW64x128 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/packets.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/packets.sv",
+      "original_sha256": "befe131d4f6fc31c22dbddb550840cb72a40cf109c90a74904b5d85a0233997f",
+      "staged_sha256": "befe131d4f6fc31c22dbddb550840cb72a40cf109c90a74904b5d85a0233997f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x265.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ram_2x265.sv",
+      "original_sha256": "384faddeb3d4551904056f5a778c3c59f72e82bfccfb8caba8ec5108cf4f21ba",
+      "staged_sha256": "384faddeb3d4551904056f5a778c3c59f72e82bfccfb8caba8ec5108cf4f21ba",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_8x195.sv",
+      "staged": "gpt2-rows-cgra2/cgra-CGRAAccelerator/src/ram_8x195.sv",
+      "original_sha256": "cf89110988eba283a027816d784be4896c4e53ba115e9ec764b2359c5bc70f45",
+      "staged_sha256": "cf89110988eba283a027816d784be4896c4e53ba115e9ec764b2359c5bc70f45",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

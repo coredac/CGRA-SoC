@@ -1,0 +1,95 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gpt2-rows-cgra1",
+  "component": "autolink",
+  "top": "ClockSinkDomain_5",
+  "soc_instances": 1,
+  "archive_sha256": "1c22602d05f9979c4ba459d841d049436d76df57ddfd6d2289ed80c4b01354ab",
+  "source_modules": 7,
+  "sram_required": true,
+  "expected_macro_instances": 86,
+  "macro_counts": {
+    "SRAM2RW32x32": 86
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 32,
+      "width": 2750,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW32x32",
+      "macro_depth": 32,
+      "macro_width": 32,
+      "depth_banks": 1,
+      "width_slices_per_lane": 86,
+      "macro_instances_per_module": 86,
+      "logical_bits": 88000,
+      "physical_bits_per_module": 88064,
+      "macro_area_per_module": 169231.396668,
+      "module": "descriptions_ext",
+      "original_module_sha256": "df2667c12d944c8ddd6afa87e89b6ba2241bba1c21862248e71beb17facbc7a8",
+      "module_instances": 1
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 169231.396668,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/ClockSinkDomain_5.sv",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/ClockSinkDomain_5.sv",
+      "original_sha256": "f7ef0ea701bc858dc12fc4c4fd4d407a60e3249cc49c4d14de0f8f0fac63def2",
+      "staged_sha256": "f7ef0ea701bc858dc12fc4c4fd4d407a60e3249cc49c4d14de0f8f0fac63def2",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_AutoRun.sv",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/Queue1_AutoRun.sv",
+      "original_sha256": "1f4fa3d2911def07b427080d6c49cd7fc6e02c7e966fd1ab0d1043e728ea1e1f",
+      "staged_sha256": "1f4fa3d2911def07b427080d6c49cd7fc6e02c7e966fd1ab0d1043e728ea1e1f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_RegMapperInput_i9_m8.sv",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/Queue1_RegMapperInput_i9_m8.sv",
+      "original_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "staged_sha256": "a9e9652dacefdbb206adf039f36dc63b2801e1afc5bb7d245022fdc8f00ff9eb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_117.sv",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/TLMonitor_117.sv",
+      "original_sha256": "e63e97303ab84d8b9f558e50517ef5a55b9bc9d22e7d98e0198038cc39a1c77c",
+      "staged_sha256": "e63e97303ab84d8b9f558e50517ef5a55b9bc9d22e7d98e0198038cc39a1c77c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "a4e6fb097808d39bc699b8c470e95e764d7c9a11ef72071783feb4e9f1d29aaf",
+      "staged_sha256": "184a29b9bc0db22a8353b7e41fcb4242e3d17c494d74be56c2f431b2adb86665",
+      "changes": [
+        "Map descriptions_ext to physical SRAM2RW32x32 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/descriptions.sv",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/descriptions.sv",
+      "original_sha256": "0e18fdef59255ceedee906f17db6c9a96018d9d9fa40f6f7dd2708fcdb2c86e9",
+      "staged_sha256": "0e18fdef59255ceedee906f17db6c9a96018d9d9fa40f6f7dd2708fcdb2c86e9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gpt2-rows-cgra1/autolink-ClockSinkDomain_5/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

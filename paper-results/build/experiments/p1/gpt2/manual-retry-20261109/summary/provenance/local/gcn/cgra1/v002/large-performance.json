@@ -1,0 +1,173 @@
+{
+  "status": "completed_timing_only",
+  "exit_code": 0,
+  "case": "star64",
+  "hardware": "config/soc.yaml",
+  "rtl": "rtl/soc-sim.tar.gz",
+  "binary": "p1.riscv",
+  "arguments": "2 -1 1 1",
+  "raw_log": "large-results.log",
+  "clock": {
+    "cpu_mhz": 500,
+    "harness_mhz": 1000,
+    "note": "Simulation clocks; not a physical timing-closure claim."
+  },
+  "validation": {
+    "small_numerical_gate": "small-performance.json",
+    "large_numerical_check": false,
+    "completed_inferences": 6,
+    "completion_statuses": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "timing": {
+    "cold": "Includes resident configuration, job/profile capture, payload transfers, compute and output DMA; not reset/cache-cold.",
+    "warm": "Reuses configuration/jobs; per-inference transfers, compute, completion handling and output DMA remain measured.",
+    "phase_accounting": "setup_cycles includes capture_cycles and input_cycles; total is setup + execute + writeback."
+  },
+  "sampling": "One configuration-cold and one warm run per mode, sequential in one process; no variance or statistical significance claim.",
+  "modes": {
+    "Manual": {
+      "cold_cycles": 619742,
+      "warm_cycles": 608860
+    },
+    "Hybrid": {
+      "cold_cycles": 1467526,
+      "warm_cycles": 402709
+    },
+    "Auto": {
+      "cold_cycles": 949319,
+      "warm_cycles": 402353
+    }
+  },
+  "auto_vs_hybrid_warm_percent": 0.08840130218097932,
+  "auto_vs_manual_warm_percent": 33.91699241204875,
+  "interpretation": "Warm latency Manual > Hybrid > Auto, with only a 0.0884 percent Auto lead over Hybrid. Cold latency Manual < Auto < Hybrid. No artificial baseline slowdown.",
+  "runs": [
+    {
+      "mode": "Manual",
+      "phase": "cold",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 0,
+      "cycles": 619742,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 6673,
+      "capture_cycles": 0,
+      "input_cycles": 2104,
+      "execute_cycles": 577268,
+      "writeback_cycles": 35801,
+      "total_cycles": 619742
+    },
+    {
+      "mode": "Manual",
+      "phase": "warm",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 1,
+      "cycles": 608860,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 1496,
+      "capture_cycles": 0,
+      "input_cycles": 1490,
+      "execute_cycles": 572466,
+      "writeback_cycles": 34898,
+      "total_cycles": 608860
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "cold",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 0,
+      "cycles": 1467526,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 1,
+      "setup_cycles": 1065861,
+      "capture_cycles": 1062574,
+      "input_cycles": 1376,
+      "execute_cycles": 366688,
+      "writeback_cycles": 34977,
+      "total_cycles": 1467526
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "warm",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 1,
+      "cycles": 402709,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 1357,
+      "capture_cycles": 0,
+      "input_cycles": 1351,
+      "execute_cycles": 366481,
+      "writeback_cycles": 34871,
+      "total_cycles": 402709
+    },
+    {
+      "mode": "Auto",
+      "phase": "cold",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 0,
+      "cycles": 949319,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 1,
+      "setup_cycles": 548220,
+      "capture_cycles": 545262,
+      "input_cycles": 1344,
+      "execute_cycles": 366174,
+      "writeback_cycles": 34925,
+      "total_cycles": 949319,
+      "fabric_cycles": 365898,
+      "overlap_cycles": 1411,
+      "peak_tiles": 2
+    },
+    {
+      "mode": "Auto",
+      "phase": "warm",
+      "graph": 2,
+      "nodes": 64,
+      "cgras": 1,
+      "repeat": 1,
+      "cycles": 402353,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 1332,
+      "capture_cycles": 0,
+      "input_cycles": 1326,
+      "execute_cycles": 366147,
+      "writeback_cycles": 34874,
+      "total_cycles": 402353,
+      "fabric_cycles": 365895,
+      "overlap_cycles": 1411,
+      "peak_tiles": 2
+    }
+  ]
+}

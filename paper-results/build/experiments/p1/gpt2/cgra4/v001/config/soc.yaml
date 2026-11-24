@@ -1,0 +1,127 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 8192
+  data_mem_size_per_bank: 1024
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 131072
+  cgra_spm_window:
+    base_address: 0x60020000
+    size_bytes: 32768
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 32
+      command_capacity: 144
+      patch_capacity: 32
+    cgra0:
+      type: cgra
+      packed_words: 8192
+      packet_capacity: 192
+    cgra1:
+      type: cgra
+      packed_words: 8192
+      packet_capacity: 192
+    cgra2:
+      type: cgra
+      packed_words: 8192
+      packet_capacity: 192
+    cgra3:
+      type: cgra
+      packed_words: 8192
+      packet_capacity: 192
+  run_capacity: 32
+  capacity:
+    stages: 6
+    dependencies: 13
+    results: 6
+    jobs:
+      gemmini0: 64
+      cgra0: 32
+      cgra1: 32
+      cgra2: 32
+      cgra3: 32
+  buffer_slots:
+    gemmini0: 2
+    cgra0: 1
+    cgra1: 1
+    cgra2: 1
+    cgra3: 1
+  stages:
+    - name: scores
+      endpoint: gemmini0
+      output: {buffer: publication}
+    - name: softmax0
+      endpoint: cgra0
+      jobs: 3
+    - name: softmax1
+      endpoint: cgra1
+      jobs: 3
+    - name: softmax2
+      endpoint: cgra2
+      jobs: 3
+    - name: softmax3
+      endpoint: cgra3
+      jobs: 3
+    - name: values
+      endpoint: gemmini0
+  buffers:
+    publication: {address: 0x60006000, size_bytes: 4096}
+  dependencies:
+    - source: input_ready
+      destination: scores
+    - source: scores
+      destination: softmax0
+      buffer: publication
+      source_offset: 0
+      size_bytes: 1024
+    - source: scores
+      destination: softmax1
+      buffer: publication
+      source_offset: 1024
+      size_bytes: 1024
+    - source: scores
+      destination: softmax2
+      buffer: publication
+      source_offset: 2048
+      size_bytes: 1024
+    - source: scores
+      destination: softmax3
+      buffer: publication
+      source_offset: 3072
+      size_bytes: 1024
+    - source: softmax0
+      destination: values
+      destination_offset: 0
+      size_bytes: 256
+      format: int8
+    - source: softmax1
+      destination: values
+      destination_offset: 256
+      size_bytes: 256
+      format: int8
+    - source: softmax2
+      destination: values
+      destination_offset: 512
+      size_bytes: 256
+      format: int8
+    - source: softmax3
+      destination: values
+      destination_offset: 768
+      size_bytes: 256
+      format: int8

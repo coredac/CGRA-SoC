@@ -1,0 +1,17 @@
+[UART] UART0 is here (stdin/stdout).
+P1 ResNet shape=32x32x16->16x16x32 strips=8 cgras=1 groups=8 gemmini_jobs=24 cgra_jobs_per_device=16 stages=5 edges=6 live_words_per_device=12288 publication_bytes=4096 warm_repeats=1
+P1 ResNet Auto schedule=rotated_add profiles=9 stage_bound=5 edge_bound=7
+P1 ResNet mode=Manual phase=cold cgras=1 repeat=0 cycles=642243 checked=0 mismatches=0 status=0 captures=0
+P1 ResNet setup_cycles=7854 capture_cycles=0 execute_cycles=598234 writeback_cycles=36155 total_cycles=642243
+P1 ResNet mode=Manual phase=warm cgras=1 repeat=1 cycles=622431 checked=0 mismatches=0 status=0 captures=0
+P1 ResNet setup_cycles=9 capture_cycles=0 execute_cycles=587313 writeback_cycles=35109 total_cycles=622431
+P1 ResNet mode=Hybrid phase=cold cgras=1 repeat=0 cycles=660798 checked=0 mismatches=0 status=0 captures=1
+P1 ResNet setup_cycles=350318 capture_cycles=346555 execute_cycles=275374 writeback_cycles=35106 total_cycles=660798
+P1 ResNet mode=Hybrid phase=warm cgras=1 repeat=1 cycles=309863 checked=0 mismatches=0 status=0 captures=0
+P1 ResNet setup_cycles=6 capture_cycles=0 execute_cycles=274753 writeback_cycles=35104 total_cycles=309863
+P1 ResNet mode=Auto phase=cold cgras=1 repeat=0 cycles=620618 checked=0 mismatches=0 status=0 captures=1
+P1 ResNet setup_cycles=354935 capture_cycles=351584 execute_cycles=230573 writeback_cycles=35110 total_cycles=620618
+P1 ResNet mode=Auto phase=warm cgras=1 repeat=1 cycles=265643 checked=0 mismatches=0 status=0 captures=0
+P1 ResNet setup_cycles=6 capture_cycles=0 execute_cycles=230520 writeback_cycles=35117 total_cycles=265643
+P1 ResNet: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra1/v002/soc-build/gen-collateral/TestDriver.v:158: Verilog $finish

@@ -1,0 +1,62 @@
+status: small_passed_large_timing_completed
+preflight: Corrected interface mapping placement from arch.yaml to soc.yaml. Fast API, RTL generation, simulator rebuild, RISC-V compilation and the small simulation passed.
+gate: User approved advancing other cases while retaining the generic index optimization and recording the small Auto/Hybrid gap honestly. Validate this resized hardware on small inputs before full-size timing.
+hardware: config/soc.yaml
+arch: config/arch.yaml
+kernel: config/kernel.yaml
+small: ring-chords16, one cold and three checked warm runs per mode.
+large: star64, timing-only after the small gate; completion/status checks retained.
+changes:
+  data_spm: Reduce 32768 to 16384 words, using eight synchronous 1R1W banks.
+  cached_jobs: Increase CGRA jobs from 65 to 128 for both full-width channel bands in Hybrid.
+  cached_packets: Reduce 58 to the actual 46 native packets per captured job.
+  other_tables: One Gemmini job, two profiles, two stages/dependencies/results.
+  unchanged: Gemmini64, homogeneous4x4 CGRA, ten control slots, same functions/control network, two64-channel pipeline.
+resources:
+  live_words: 12672
+  allocated_words: 16384
+  max_control_steps: 40960
+  hybrid_jobs: 128
+  auto_jobs: 64
+  command_capacity: 12
+  gemmini_patch_capacity: 2
+  cached_packet_width: 195
+memory_note: Synchronous inferred RAM; technology SRAM mapping and area remain unverified.
+rtl: rtl/soc-sim.tar.gz
+rtl_sha256: 12a340379fe69e4c63ce31ac5572e2cf9f39913a33c310249339f0656358c1fe
+api_sha256: 28fef89731be979746b7cbaf9665dbd49819811dabefe309a8afe42072036973
+source_sha256: 598b00fa6408c9b9442ffed6f23804621d451c66b7fd1b4c9de0d5df42ecb026
+binary: p1.riscv
+binary_sha256: 98abcbaea4ada256958aac47da0bb8c3c10e8812a5af3faf98a61d1aa4ea4f59
+memory_evidence:
+  packet_ram: {depth: 5888, width: 195}
+  patch_ram: {depth: 5888, width: 67}
+  packet_patch_valid_kib: 189.03125
+  note: Packet/patch memories appear in generated mems.conf; validity bits are registers. This excludes metadata and logic, and is not an area estimate. CGRA data RAM is inside the native blackbox, separate from this memory list.
+small_command: MAKEFLAGS=-j4 CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=12000000 BINARY_ARGS='1 -1 3 0' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml build/experiments/p1/gcn/cgra1/v002/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra1/v002/config/soc.yaml tests/cgra-gemmini/gcn/p1.c
+small_results:
+  exit_code: 0
+  checked_inferences: 12
+  performance: small-performance.json
+  log: small-results.log
+  manual: {cold: 211253, warm: [203228, 203113, 203085], warm_median: 203113, checked_inferences: 4, mismatches: 0, status_errors: 0}
+  hybrid: {cold: 422634, warm: [150837, 150940, 150902], warm_median: 150902, checked_inferences: 4, mismatches: 0, status_errors: 0}
+  auto: {cold: 291975, warm: [150617, 150576, 150588], warm_median: 150588, checked_inferences: 4, mismatches: 0, status_errors: 0}
+  interpretation: Auto warm median is 0.208percent below Hybrid; this is still a small margin, not a significance claim. Cold latency remains Manual < Auto < Hybrid.
+next:
+  large: Star64 timing-only completed with exit0 and all six completion/status checks passed; numerical validation deliberately disabled for this case.
+  sampling: User confirmed retaining both cold and warm measurements. First large sweep uses one cold and one warm inference per mode; no variance or significance claim.
+  budget: 24000000 harness cycles.
+  subsequent: GCN large run and archive are complete; shared generation may now switch to the prepared ResNet one-CGRA configuration.
+large_command: MAKEFLAGS=-j4 CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=24000000 BINARY_ARGS='2 -1 1 1' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml build/experiments/p1/gcn/cgra1/v002/config/arch.yaml --soc-yaml build/experiments/p1/gcn/cgra1/v002/config/soc.yaml tests/cgra-gemmini/gcn/p1.c
+large_log: large.log
+large_results:
+  exit_code: 0
+  performance: large-performance.json
+  raw_log: large-results.log
+  checked: false
+  completed_inferences: 6
+  manual: {cold: 619742, warm: 608860, status: 0}
+  hybrid: {cold: 1467526, warm: 402709, status: 0}
+  auto: {cold: 949319, warm: 402353, status: 0}
+  interpretation: Auto warm latency is 0.0884percent below Hybrid and 33.9169percent below Manual. Cold latency remains Manual < Auto < Hybrid. One sample per mode and phase; no significance claim.

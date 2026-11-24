@@ -1,0 +1,10 @@
+configuration,cgras,mode,policy,prior_area,accounted_area,additional_binding_area,basis,actual_new_synthesis
+gcn-cgra1,1,Manual,per-task,7482332.931068001,7482332.931068001,not_applicable,prior_component_area_model,False
+gcn-cgra1,1,Hybrid,per-segment,9082380.580481,8726952.506245,unmeasured,proposed_shared_template_component_model,False
+gcn-cgra1,1,Auto,per-graph,8823000.994406998,8823000.994406998,not_applicable,prior_component_area_model,False
+gcn-cgra2,2,Manual,per-task,9643683.337660998,9643683.337660998,not_applicable,prior_component_area_model,False
+gcn-cgra2,2,Hybrid,per-segment,11364921.007384,11009492.933148,unmeasured,proposed_shared_template_component_model,False
+gcn-cgra2,2,Auto,per-graph,11126518.423012,11126518.423012,not_applicable,prior_component_area_model,False
+gcn-cgra4,4,Manual,per-task,11180287.280379003,11180287.280379003,not_applicable,prior_component_area_model,False
+gcn-cgra4,4,Hybrid,per-segment,13407776.959332006,13098709.068692006,unmeasured,proposed_shared_template_component_model,False
+gcn-cgra4,4,Auto,per-graph,13300482.694620004,13300482.694620004,not_applicable,prior_component_area_model,False

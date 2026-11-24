@@ -1,0 +1,804 @@
+{
+  "scope": "Measured whole expanded ASIC cores, one standalone core per family. Native arrays remain in synthesis; only named sequential storage cells are subtracted afterward.",
+  "area_unit": "SAED14 library area units",
+  "clock_ns": 2,
+  "complete_family_count": 6,
+  "families": {
+    "add": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0034553855376,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 0,
+        "matched_storage_arrays": 0,
+        "passed": true
+      },
+      "storage_array_cell_counts": {},
+      "total_cell_area": 34553.855376,
+      "local_array_storage_area": 0.0,
+      "area_excluding_local_array_storage": 34553.855376,
+      "leaf_area_sum": 34553.856,
+      "report_minus_leaf_area": -0.000624,
+      "group_area": {
+        "primitive_bank": 33544.3776,
+        "top_arbitration_and_control": 1009.4784,
+        "local_array_storage": 0.0
+      },
+      "group_cell_counts": {
+        "primitive_bank": 77560,
+        "top_arbitration_and_control": 2907
+      },
+      "storage_cell_references": {},
+      "bank_module_access_area_included": 0.0,
+      "bank_module_access_hierarchy_available": false,
+      "sequential_cell_count": 5539,
+      "sequential_cell_area": 5157.1932,
+      "design_warning_codes": {
+        "LINT-28": 2683,
+        "LINT-33": 81
+      },
+      "storage_rule": {
+        "prefix": null,
+        "relative_path_pattern": null,
+        "sequential": true
+      },
+      "worst_setup_slack_ns": 0.104329,
+      "total_negative_setup_slack_ns_report_precision": 0.0,
+      "violating_setup_paths": 0,
+      "no_violated_constraints": true,
+      "reported_setup_paths": [
+        {
+          "startpoint": "primitives/lane[9].unit/op_reg[4]",
+          "endpoint": "primitives/lane[9].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104329
+        },
+        {
+          "startpoint": "primitives/lane[6].unit/op_reg[4]",
+          "endpoint": "primitives/lane[6].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104402
+        },
+        {
+          "startpoint": "primitives/lane[10].unit/op_reg[4]",
+          "endpoint": "primitives/lane[10].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104402
+        },
+        {
+          "startpoint": "primitives/lane[1].unit/op_reg[4]",
+          "endpoint": "primitives/lane[1].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104571
+        },
+        {
+          "startpoint": "primitives/lane[2].unit/op_reg[4]",
+          "endpoint": "primitives/lane[2].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104571
+        },
+        {
+          "startpoint": "primitives/lane[3].unit/op_reg[4]",
+          "endpoint": "primitives/lane[3].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104571
+        },
+        {
+          "startpoint": "primitives/lane[12].unit/op_reg[4]",
+          "endpoint": "primitives/lane[12].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104571
+        },
+        {
+          "startpoint": "primitives/lane[7].unit/op_reg[4]",
+          "endpoint": "primitives/lane[7].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.110876
+        },
+        {
+          "startpoint": "primitives/lane[13].unit/op_reg[4]",
+          "endpoint": "primitives/lane[13].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.111306
+        },
+        {
+          "startpoint": "primitives/lane[14].unit/op_reg[4]",
+          "endpoint": "primitives/lane[14].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.111306
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": 0,
+      "worst_startpoint": "primitives/lane[9].unit/op_reg[4]",
+      "worst_endpoint": "primitives/lane[9].unit/out_data_reg[31]",
+      "started_utc": "2026-11-15T14:17:56Z",
+      "finished_utc": "2026-11-15T14:25:32Z",
+      "source_sha256": "dc0c0fc9e388c0ed544c3bac03522486f39551ca685829b8f9fe0d0c08ec2f44"
+    },
+    "relu": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0034550525372,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 0,
+        "matched_storage_arrays": 0,
+        "passed": true
+      },
+      "storage_array_cell_counts": {},
+      "total_cell_area": 34550.525372,
+      "local_array_storage_area": 0.0,
+      "area_excluding_local_array_storage": 34550.525372,
+      "leaf_area_sum": 34550.526,
+      "report_minus_leaf_area": -0.000628,
+      "group_area": {
+        "primitive_bank": 33546.198,
+        "top_arbitration_and_control": 1004.328,
+        "local_array_storage": 0.0
+      },
+      "group_cell_counts": {
+        "primitive_bank": 77502,
+        "top_arbitration_and_control": 2887
+      },
+      "storage_cell_references": {},
+      "bank_module_access_area_included": 0.0,
+      "bank_module_access_hierarchy_available": false,
+      "sequential_cell_count": 5539,
+      "sequential_cell_area": 5149.512,
+      "design_warning_codes": {
+        "LINT-28": 2683,
+        "LINT-33": 81
+      },
+      "storage_rule": {
+        "prefix": null,
+        "relative_path_pattern": null,
+        "sequential": true
+      },
+      "worst_setup_slack_ns": 0.104401,
+      "total_negative_setup_slack_ns_report_precision": 0.0,
+      "violating_setup_paths": 0,
+      "no_violated_constraints": true,
+      "reported_setup_paths": [
+        {
+          "startpoint": "primitives/lane[8].unit/op_reg[4]",
+          "endpoint": "primitives/lane[8].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[9].unit/op_reg[4]",
+          "endpoint": "primitives/lane[9].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[11].unit/op_reg[4]",
+          "endpoint": "primitives/lane[11].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[2].unit/op_reg[4]",
+          "endpoint": "primitives/lane[2].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104402
+        },
+        {
+          "startpoint": "primitives/lane[5].unit/op_reg[4]",
+          "endpoint": "primitives/lane[5].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.110876
+        },
+        {
+          "startpoint": "primitives/lane[3].unit/op_reg[4]",
+          "endpoint": "primitives/lane[3].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.110878
+        },
+        {
+          "startpoint": "primitives/lane[13].unit/op_reg[4]",
+          "endpoint": "primitives/lane[13].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.111306
+        },
+        {
+          "startpoint": "primitives/lane[14].unit/op_reg[4]",
+          "endpoint": "primitives/lane[14].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.111306
+        },
+        {
+          "startpoint": "primitives/lane[7].unit/op_reg[4]",
+          "endpoint": "primitives/lane[7].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.111475
+        },
+        {
+          "startpoint": "primitives/lane[6].unit/op_reg[4]",
+          "endpoint": "primitives/lane[6].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.113065
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": 0,
+      "worst_startpoint": "primitives/lane[8].unit/op_reg[4]",
+      "worst_endpoint": "primitives/lane[8].unit/out_data_reg[31]",
+      "started_utc": "2026-11-15T14:17:56Z",
+      "finished_utc": "2026-11-15T14:25:58Z",
+      "source_sha256": "1dfb92933d0cd75db0a14801d8a2542cbf2ee6abd2d54c4c9e075bcde7335f1e"
+    },
+    "gcn": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0176676036229,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 20,
+        "matched_storage_arrays": 20,
+        "passed": true
+      },
+      "storage_array_cell_counts": {
+        "gcn.kernel/lanes[0].memory/words": 4096,
+        "gcn.kernel/lanes[1].memory/words": 4096,
+        "gcn.kernel/lanes[2].memory/words": 4096,
+        "gcn.kernel/lanes[3].memory/words": 4096,
+        "gcn.kernel/lanes[4].memory/words": 4096,
+        "gcn.kernel/lanes[5].memory/words": 4096,
+        "gcn.kernel/lanes[6].memory/words": 4096,
+        "gcn.kernel/lanes[7].memory/words": 4096,
+        "gcn.kernel/lanes[8].memory/words": 4096,
+        "gcn.kernel/lanes[9].memory/words": 4096,
+        "gcn.kernel/lanes[10].memory/words": 4096,
+        "gcn.kernel/lanes[11].memory/words": 4096,
+        "gcn.kernel/lanes[12].memory/words": 4096,
+        "gcn.kernel/lanes[13].memory/words": 4096,
+        "gcn.kernel/lanes[14].memory/words": 4096,
+        "gcn.kernel/lanes[15].memory/words": 4096,
+        "gcn.kernel/weight_banks[0].memory/words": 4096,
+        "gcn.kernel/weight_banks[1].memory/words": 4096,
+        "gcn.kernel/columns": 1024,
+        "gcn.kernel/rowptr": 544
+      },
+      "total_cell_area": 176676.036229,
+      "local_array_storage_area": 70200.3072,
+      "area_excluding_local_array_storage": 106475.729029,
+      "leaf_area_sum": 176676.036,
+      "report_minus_leaf_area": 0.000229,
+      "group_area": {
+        "primitive_bank": 33521.3784,
+        "local_array_storage": 70200.3072,
+        "native_datapath_control_and_access": 71976.9288,
+        "top_arbitration_and_control": 977.4216
+      },
+      "group_cell_counts": {
+        "primitive_bank": 77582,
+        "local_array_storage": 75296,
+        "native_datapath_control_and_access": 238020,
+        "top_arbitration_and_control": 2509
+      },
+      "storage_cell_references": {
+        "SAEDRVT14_FDP_V2LP_0P5": 30586,
+        "SAEDRVT14_FDP_V2LP_1": 44244,
+        "SAEDRVT14_FDPQB_V2LP_1": 64,
+        "SAEDRVT14_FDP_V2_1": 402
+      },
+      "bank_module_access_area_included": 66366.7224,
+      "bank_module_access_hierarchy_available": true,
+      "sequential_cell_count": 83012,
+      "sequential_cell_area": 77344.1784,
+      "design_warning_codes": {
+        "LINT-28": 2785,
+        "LINT-33": 83
+      },
+      "storage_rule": {
+        "prefix": "gcn.kernel/",
+        "relative_path_pattern": "(?:rowptr|columns)_reg\\[|(?:lanes|weight_banks)\\[\\d+\\]\\.memory/words_reg\\[",
+        "sequential": true
+      },
+      "worst_setup_slack_ns": 0.000325,
+      "total_negative_setup_slack_ns_report_precision": 0.0,
+      "violating_setup_paths": 0,
+      "no_violated_constraints": true,
+      "reported_setup_paths": [
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[11]",
+          "status": "MET",
+          "slack_ns": 0.000325
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[10]",
+          "status": "MET",
+          "slack_ns": 0.000325
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[9]",
+          "status": "MET",
+          "slack_ns": 0.000325
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[8]",
+          "status": "MET",
+          "slack_ns": 0.000325
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[18]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[17]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[16]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[15]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[14]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        },
+        {
+          "startpoint": "gcn.kernel/edge_index_reg[2]",
+          "endpoint": "gcn.kernel/edge_index_reg[13]",
+          "status": "MET",
+          "slack_ns": 0.001294
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": 0,
+      "worst_startpoint": "gcn.kernel/edge_index_reg[2]",
+      "worst_endpoint": "gcn.kernel/edge_index_reg[11]",
+      "started_utc": "2026-11-15T14:25:32Z",
+      "finished_utc": "2026-11-15T14:58:52Z",
+      "source_sha256": "dc83f31f5a4c0c248f045cb67dac46465765a104f8d5238bf7ed67d93e4e230b"
+    },
+    "norm": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0065169297921,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 4,
+        "matched_storage_arrays": 4,
+        "passed": true
+      },
+      "storage_array_cell_counts": {
+        "gpt.norm.kernel/result": 4096,
+        "gpt.norm.kernel/source": 4096,
+        "gpt.norm.kernel/gain": 4096,
+        "gpt.norm.kernel/offset": 4096
+      },
+      "total_cell_area": 65169.297921,
+      "local_array_storage_area": 15276.4416,
+      "area_excluding_local_array_storage": 49892.856321,
+      "leaf_area_sum": 65169.2988,
+      "report_minus_leaf_area": -0.000879,
+      "group_area": {
+        "primitive_bank": 33554.9892,
+        "native_datapath_control_and_access": 16328.7216,
+        "local_array_storage": 15276.4416,
+        "top_arbitration_and_control": 9.1464
+      },
+      "group_cell_counts": {
+        "primitive_bank": 77678,
+        "native_datapath_control_and_access": 42547,
+        "local_array_storage": 16384,
+        "top_arbitration_and_control": 45
+      },
+      "storage_cell_references": {
+        "SAEDRVT14_FDP_V2LP_0P5": 11840,
+        "SAEDRVT14_FDP_V2LP_1": 4544
+      },
+      "bank_module_access_area_included": 0.0,
+      "bank_module_access_hierarchy_available": false,
+      "sequential_cell_count": 22338,
+      "sequential_cell_area": 20827.9512,
+      "design_warning_codes": {
+        "LINT-2": 28,
+        "LINT-8": 28,
+        "LINT-28": 2933,
+        "LINT-33": 118
+      },
+      "storage_rule": {
+        "prefix": "gpt.norm.kernel/",
+        "relative_path_pattern": "(?:source|gain|offset|result)_reg\\[",
+        "sequential": true
+      },
+      "worst_setup_slack_ns": 0.104401,
+      "total_negative_setup_slack_ns_report_precision": 0.0,
+      "violating_setup_paths": 0,
+      "no_violated_constraints": true,
+      "reported_setup_paths": [
+        {
+          "startpoint": "primitives/lane[1].unit/op_reg[4]",
+          "endpoint": "primitives/lane[1].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[2].unit/op_reg[4]",
+          "endpoint": "primitives/lane[2].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[3].unit/op_reg[4]",
+          "endpoint": "primitives/lane[3].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[4].unit/op_reg[4]",
+          "endpoint": "primitives/lane[4].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[5].unit/op_reg[4]",
+          "endpoint": "primitives/lane[5].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[6].unit/op_reg[4]",
+          "endpoint": "primitives/lane[6].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[7].unit/op_reg[4]",
+          "endpoint": "primitives/lane[7].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[8].unit/op_reg[4]",
+          "endpoint": "primitives/lane[8].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[9].unit/op_reg[4]",
+          "endpoint": "primitives/lane[9].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        },
+        {
+          "startpoint": "primitives/lane[10].unit/op_reg[4]",
+          "endpoint": "primitives/lane[10].unit/out_data_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.104401
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": 0,
+      "worst_startpoint": "primitives/lane[1].unit/op_reg[4]",
+      "worst_endpoint": "primitives/lane[1].unit/out_data_reg[31]",
+      "started_utc": "2026-11-15T14:58:52Z",
+      "finished_utc": "2026-11-15T15:13:41Z",
+      "source_sha256": "97ef696ad7ca91f8de27026975c14e90f39e4a9ddf07d9335b89fe7dc3794ebd"
+    },
+    "softmax": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0034774301361,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 3,
+        "matched_storage_arrays": 3,
+        "passed": true
+      },
+      "storage_array_cell_counts": {
+        "gpt.softmax.kernel/result": 64,
+        "gpt.softmax.kernel/source": 64,
+        "gpt.softmax.kernel/exponent": 32
+      },
+      "total_cell_area": 34774.301361,
+      "local_array_storage_area": 149.184,
+      "area_excluding_local_array_storage": 34625.117361,
+      "leaf_area_sum": 34774.302,
+      "report_minus_leaf_area": -0.000639,
+      "group_area": {
+        "primitive_bank": 33706.482,
+        "native_datapath_control_and_access": 909.0012,
+        "local_array_storage": 149.184,
+        "top_arbitration_and_control": 9.6348
+      },
+      "group_cell_counts": {
+        "primitive_bank": 77285,
+        "native_datapath_control_and_access": 1873,
+        "local_array_storage": 160,
+        "top_arbitration_and_control": 46
+      },
+      "storage_cell_references": {
+        "SAEDRVT14_FDP_V2_1": 160
+      },
+      "bank_module_access_area_included": 0.0,
+      "bank_module_access_hierarchy_available": false,
+      "sequential_cell_count": 5839,
+      "sequential_cell_area": 5444.2836,
+      "design_warning_codes": {
+        "LINT-2": 10,
+        "LINT-8": 10,
+        "LINT-28": 2839,
+        "LINT-33": 100
+      },
+      "storage_rule": {
+        "prefix": "gpt.softmax.kernel/",
+        "relative_path_pattern": "(?:source|result|exponent)_reg\\[",
+        "sequential": true
+      },
+      "worst_setup_slack_ns": 0.037377,
+      "total_negative_setup_slack_ns_report_precision": 0.0,
+      "violating_setup_paths": 0,
+      "no_violated_constraints": true,
+      "reported_setup_paths": [
+        {
+          "startpoint": "primitives/lane[2].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[2].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.037377
+        },
+        {
+          "startpoint": "primitives/lane[0].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[0].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.038924
+        },
+        {
+          "startpoint": "primitives/lane[4].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[4].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.04081
+        },
+        {
+          "startpoint": "primitives/lane[8].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[8].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.042504
+        },
+        {
+          "startpoint": "primitives/lane[12].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[12].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.048086
+        },
+        {
+          "startpoint": "primitives/lane[0].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[0].unit/divider/result_reg[30]",
+          "status": "MET",
+          "slack_ns": 0.052732
+        },
+        {
+          "startpoint": "primitives/lane[14].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[14].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.053652
+        },
+        {
+          "startpoint": "primitives/lane[4].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[4].unit/divider/result_reg[30]",
+          "status": "MET",
+          "slack_ns": 0.054683
+        },
+        {
+          "startpoint": "primitives/lane[2].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[2].unit/divider/result_reg[30]",
+          "status": "MET",
+          "slack_ns": 0.054765
+        },
+        {
+          "startpoint": "primitives/lane[7].unit/divider/square_root_reg",
+          "endpoint": "primitives/lane[7].unit/divider/result_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.056023
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": 0,
+      "worst_startpoint": "primitives/lane[2].unit/divider/square_root_reg",
+      "worst_endpoint": "primitives/lane[2].unit/divider/result_reg[31]",
+      "started_utc": "2026-11-15T15:03:53Z",
+      "finished_utc": "2026-11-15T15:11:13Z",
+      "source_sha256": "1df9e2c99087b6588cd79a00b45fe2a8060ff848b8b62d065e3db7fd8f1c2944"
+    },
+    "gpt_vector": {
+      "complete": true,
+      "evidence_audit": {
+        "source_hash_matches": true,
+        "timing_check_has_no_warnings": true,
+        "constraint_hash_matches": true,
+        "leaf_area_reconciles": true,
+        "leaf_area_tolerance": 0.0217237700918,
+        "storage_arrays_match_expected_count": true,
+        "expected_storage_arrays": 24,
+        "matched_storage_arrays": 24,
+        "passed": true
+      },
+      "storage_array_cell_counts": {
+        "gpt.vector_unit.kernel/source_store/banks[0].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[1].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[2].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[3].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[4].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[5].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[6].memory/words": 4096,
+        "gpt.vector_unit.kernel/source_store/banks[7].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[0].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[1].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[2].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[3].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[4].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[5].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[6].memory/words": 4096,
+        "gpt.vector_unit.kernel/other_store/banks[7].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[0].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[1].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[2].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[3].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[4].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[5].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[6].memory/words": 4096,
+        "gpt.vector_unit.kernel/result_store/banks[7].memory/words": 4096
+      },
+      "total_cell_area": 217237.700918,
+      "local_array_storage_area": 91658.6496,
+      "area_excluding_local_array_storage": 125579.051318,
+      "leaf_area_sum": 217237.7004,
+      "report_minus_leaf_area": 0.000518,
+      "group_area": {
+        "primitive_bank": 33719.6688,
+        "local_array_storage": 91658.6496,
+        "native_datapath_control_and_access": 91849.7472,
+        "top_arbitration_and_control": 9.6348
+      },
+      "group_cell_counts": {
+        "primitive_bank": 78541,
+        "local_array_storage": 98304,
+        "native_datapath_control_and_access": 305938,
+        "top_arbitration_and_control": 46
+      },
+      "storage_cell_references": {
+        "SAEDRVT14_FDP_V2_1": 64874,
+        "SAEDRVT14_FDP_V2LP_1": 13536,
+        "SAEDRVT14_FDP_V2LP_0P5": 19894
+      },
+      "bank_module_access_area_included": 89013.564,
+      "bank_module_access_hierarchy_available": true,
+      "sequential_cell_count": 104219,
+      "sequential_cell_area": 97176.6816,
+      "design_warning_codes": {
+        "LINT-2": 21,
+        "LINT-8": 21,
+        "LINT-28": 3102,
+        "LINT-33": 94
+      },
+      "storage_rule": {
+        "prefix": "gpt.vector_unit.kernel/",
+        "relative_path_pattern": "(?:source|other|result)_store/banks\\[\\d+\\]\\.memory/words_reg\\[",
+        "sequential": true
+      },
+      "worst_setup_slack_ns": -0.234015,
+      "total_negative_setup_slack_ns_report_precision": -0.51,
+      "violating_setup_paths": 4,
+      "no_violated_constraints": false,
+      "reported_setup_paths": [
+        {
+          "startpoint": "gpt.vector_unit.kernel/product_reg[12]",
+          "endpoint": "gpt.vector_unit.kernel/biased_reg[31]",
+          "status": "VIOLATED",
+          "slack_ns": -0.234015
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/product_reg[12]",
+          "endpoint": "gpt.vector_unit.kernel/biased_reg[30]",
+          "status": "VIOLATED",
+          "slack_ns": -0.154168
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/delta_reg[5]",
+          "endpoint": "gpt.vector_unit.kernel/square_reg[31]",
+          "status": "VIOLATED",
+          "slack_ns": -0.070336
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/product_reg[12]",
+          "endpoint": "gpt.vector_unit.kernel/biased_reg[29]",
+          "status": "VIOLATED",
+          "slack_ns": -0.050129
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/delta_reg[6]",
+          "endpoint": "gpt.vector_unit.kernel/square_reg[30]",
+          "status": "MET",
+          "slack_ns": 0.011729
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/magnitude_reg[0]",
+          "endpoint": "gpt.vector_unit.kernel/product_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.013188
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+          "endpoint": "gpt.vector_unit.kernel/value_reg[30]",
+          "status": "MET",
+          "slack_ns": 0.05155
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+          "endpoint": "gpt.vector_unit.kernel/value_reg[31]",
+          "status": "MET",
+          "slack_ns": 0.056048
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/delta_reg[6]",
+          "endpoint": "gpt.vector_unit.kernel/square_reg[29]",
+          "status": "MET",
+          "slack_ns": 0.061799
+        },
+        {
+          "startpoint": "gpt.vector_unit.kernel/product_reg[12]",
+          "endpoint": "gpt.vector_unit.kernel/biased_reg[28]",
+          "status": "MET",
+          "slack_ns": 0.069302
+        }
+      ],
+      "listed_setup_paths_cover_all_violations": true,
+      "total_negative_slack_ns_from_listed_paths": -0.508648,
+      "worst_startpoint": "gpt.vector_unit.kernel/product_reg[12]",
+      "worst_endpoint": "gpt.vector_unit.kernel/biased_reg[31]",
+      "started_utc": "2026-11-15T14:25:58Z",
+      "finished_utc": "2026-11-15T15:03:53Z",
+      "source_sha256": "a44d44854006d788ab4ba82226693d308d1a581f536b8b2b1ed0ee3edc6929aa"
+    }
+  },
+  "sum_completed_families": {
+    "total_cell_area": 562961.717177,
+    "local_array_storage_area": 177284.5824,
+    "area_excluding_local_array_storage": 385677.134777
+  },
+  "limits": [
+    "Six independent 16-lane ASIC endpoints install 96 primitive lanes; the CGRA has 16 PEs. Native throughput alignment is not established.",
+    "Includes compute, native control, primitive bank, command arbitration, local array access and pipeline/runtime state.",
+    "Excludes DMA, external SPM, endpoint adapters and SoC interconnect.",
+    "Storage subtraction retains array read/write selection and access logic.",
+    "Ideal-clock synthesis with wire-load estimates is not physical timing signoff.",
+    "No simulation or performance rerun; historical performance results do not validate modified schedules."
+  ]
+}

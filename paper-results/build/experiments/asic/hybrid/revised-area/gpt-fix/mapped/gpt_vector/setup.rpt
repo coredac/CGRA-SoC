@@ -1,0 +1,1400 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -input_pins
+        -nets
+        -max_paths 10
+Design : ExpandedAsic
+Version: T-2022.03-SP5-6
+Date   : Sun Nov 15 23:47:11 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: tt0p8v25c   Library: saed14rvt_tt0p8v25c
+Wire Load Model Mode: enclosed
+
+  Startpoint: gpt.vector_unit.kernel/value_reg[1]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/value_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW01_add_6
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                                         Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                0.000000   0.000000
+  clock network delay (ideal)                                           0.000000   0.000000
+  gpt.vector_unit.kernel/value_reg[1]/CK (SAEDRVT14_FDP_V2_1)           0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/value_reg[1]/Q (SAEDRVT14_FDP_V2_1)            0.024757   0.024757 f
+  gpt.vector_unit.kernel/value[1] (net)                          11     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (GptVectorNative_DW01_add_6)     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (net)                            0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/U1_1/A (SAEDRVT14_ADDF_V1_0P5)        0.514809   0.539565 f
+  gpt.vector_unit.kernel/add_1556/U1_1/CO (SAEDRVT14_ADDF_V1_0P5)       0.023476   0.563042 f
+  gpt.vector_unit.kernel/add_1556/carry[2] (net)                  1     0.000000   0.563042 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.575920 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CO (SAEDRVT14_ADDF_V1_0P5)       0.024820   0.600741 f
+  gpt.vector_unit.kernel/add_1556/carry[3] (net)                  1     0.000000   0.600741 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.613619 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.638442 f
+  gpt.vector_unit.kernel/add_1556/carry[4] (net)                  1     0.000000   0.638442 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.651321 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.676143 f
+  gpt.vector_unit.kernel/add_1556/carry[5] (net)                  1     0.000000   0.676143 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.689022 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.713844 f
+  gpt.vector_unit.kernel/add_1556/carry[6] (net)                  1     0.000000   0.713844 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.726723 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.751545 f
+  gpt.vector_unit.kernel/add_1556/carry[7] (net)                  1     0.000000   0.751545 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.764424 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.789247 f
+  gpt.vector_unit.kernel/add_1556/carry[8] (net)                  1     0.000000   0.789247 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.802125 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.826948 f
+  gpt.vector_unit.kernel/add_1556/carry[9] (net)                  1     0.000000   0.826948 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.839827 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.864649 f
+  gpt.vector_unit.kernel/add_1556/carry[10] (net)                 1     0.000000   0.864649 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.877528 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CO (SAEDRVT14_ADDF_V1_0P5)      0.024822   0.902350 f
+  gpt.vector_unit.kernel/add_1556/carry[11] (net)                 1     0.000000   0.902350 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.915229 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CO (SAEDRVT14_ADDF_V1_0P5)      0.025776   0.941005 f
+  gpt.vector_unit.kernel/add_1556/carry[12] (net)                 1     0.000000   0.941005 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CI (SAEDRVT14_ADDF_V1_1)        0.015937   0.956942 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CO (SAEDRVT14_ADDF_V1_1)        0.019499   0.976441 f
+  gpt.vector_unit.kernel/add_1556/carry[13] (net)                 1     0.000000   0.976441 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.989320 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.012817 f
+  gpt.vector_unit.kernel/add_1556/carry[14] (net)                 1     0.000000   1.012817 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.025696 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.051470 f
+  gpt.vector_unit.kernel/add_1556/carry[15] (net)                 1     0.000000   1.051470 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.067407 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.086906 f
+  gpt.vector_unit.kernel/add_1556/carry[16] (net)                 1     0.000000   1.086906 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.099784 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.124236 f
+  gpt.vector_unit.kernel/add_1556/carry[17] (net)                 1     0.000000   1.124236 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.140173 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.159670 f
+  gpt.vector_unit.kernel/add_1556/carry[18] (net)                 1     0.000000   1.159670 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.172548 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.197000 f
+  gpt.vector_unit.kernel/add_1556/carry[19] (net)                 1     0.000000   1.197000 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.212937 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.232434 f
+  gpt.vector_unit.kernel/add_1556/carry[20] (net)                 1     0.000000   1.232434 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.245312 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.269764 f
+  gpt.vector_unit.kernel/add_1556/carry[21] (net)                 1     0.000000   1.269764 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.285701 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.305198 f
+  gpt.vector_unit.kernel/add_1556/carry[22] (net)                 1     0.000000   1.305198 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.318076 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.341574 f
+  gpt.vector_unit.kernel/add_1556/carry[23] (net)                 1     0.000000   1.341574 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.354452 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.380227 f
+  gpt.vector_unit.kernel/add_1556/carry[24] (net)                 1     0.000000   1.380227 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.396164 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.415662 f
+  gpt.vector_unit.kernel/add_1556/carry[25] (net)                 1     0.000000   1.415662 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.428541 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.452993 f
+  gpt.vector_unit.kernel/add_1556/carry[26] (net)                 1     0.000000   1.452993 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.468930 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CO (SAEDRVT14_ADDF_V1_1)        0.019252   1.488182 f
+  gpt.vector_unit.kernel/add_1556/carry[27] (net)                 1     0.000000   1.488182 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.500051 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CO (SAEDRVT14_ADDF_V2_0P5)      0.015833   1.515885 f
+  gpt.vector_unit.kernel/add_1556/carry[28] (net)                 1     0.000000   1.515885 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.531822 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CO (SAEDRVT14_ADDF_V1_1)        0.018441   1.550263 f
+  gpt.vector_unit.kernel/add_1556/carry[29] (net)                 1     0.000000   1.550263 f
+  gpt.vector_unit.kernel/add_1556/U1_29/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.562132 f
+  gpt.vector_unit.kernel/add_1556/U1_29/CO (SAEDRVT14_ADDF_V2_0P5)      0.014858   1.576990 f
+  gpt.vector_unit.kernel/add_1556/carry[30] (net)                 1     0.000000   1.576990 f
+  gpt.vector_unit.kernel/add_1556/U1_30/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.588860 f
+  gpt.vector_unit.kernel/add_1556/U1_30/CO (SAEDRVT14_ADDF_V2_0P5)      0.014641   1.603501 f
+  gpt.vector_unit.kernel/add_1556/carry[31] (net)                 1     0.000000   1.603501 f
+  gpt.vector_unit.kernel/add_1556/U1_31/A3 (SAEDRVT14_EO3_1)            0.008864   1.612365 f
+  gpt.vector_unit.kernel/add_1556/U1_31/X (SAEDRVT14_EO3_1)             0.029991   1.642357 f
+  gpt.vector_unit.kernel/add_1556/SUM[31] (net)                   1     0.000000   1.642357 f
+  gpt.vector_unit.kernel/add_1556/SUM[31] (GptVectorNative_DW01_add_6)  0.000000   1.642357 f
+  gpt.vector_unit.kernel/N217 (net)                                     0.000000   1.642357 f
+  gpt.vector_unit.kernel/U665/C1 (SAEDRVT14_AO222_1)                    0.088009   1.730366 f
+  gpt.vector_unit.kernel/U665/X (SAEDRVT14_AO222_1)                     0.023447   1.753813 f
+  gpt.vector_unit.kernel/n199 (net)                               1     0.000000   1.753813 f
+  gpt.vector_unit.kernel/U130/C (SAEDRVT14_AO221_0P5)                   0.071161   1.824975 f
+  gpt.vector_unit.kernel/U130/X (SAEDRVT14_AO221_0P5)                   0.015681   1.840655 f
+  gpt.vector_unit.kernel/n196 (net)                               1     0.000000   1.840655 f
+  gpt.vector_unit.kernel/U105/A2 (SAEDRVT14_OR2_1)                      0.088456   1.929111 f
+  gpt.vector_unit.kernel/U105/X (SAEDRVT14_OR2_1)                       0.009881   1.938992 f
+  gpt.vector_unit.kernel/n1301 (net)                              1     0.000000   1.938992 f
+  gpt.vector_unit.kernel/value_reg[31]/D (SAEDRVT14_FDP_V2LP_1)         0.057616   1.996608 f
+  data arrival time                                                                1.996608
+
+  clock core (rise edge)                                                2.000000   2.000000
+  clock network delay (ideal)                                           0.000000   2.000000
+  gpt.vector_unit.kernel/value_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)        0.000000   2.000000 r
+  library setup time                                                    -0.000744  1.999256
+  data required time                                                               1.999256
+  --------------------------------------------------------------------------------------------
+  data required time                                                               1.999256
+  data arrival time                                                                -1.996608
+  --------------------------------------------------------------------------------------------
+  slack (MET)                                                                      0.002648
+
+
+  Startpoint: gpt.vector_unit.kernel/bias_low_reg[16]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/biased_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+
+  Point                                                     Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------
+  clock core (rise edge)                                            0.000000   0.000000
+  clock network delay (ideal)                                       0.000000   0.000000
+  gpt.vector_unit.kernel/bias_low_reg[16]/CK (SAEDRVT14_FDP_V2_1)   0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/bias_low_reg[16]/Q (SAEDRVT14_FDP_V2_1)    0.019236   0.019236 f
+  gpt.vector_unit.kernel/bias_low[16] (net)                   1     0.000000   0.019236 f
+  gpt.vector_unit.kernel/add_1604/U1_0/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.125454 f
+  gpt.vector_unit.kernel/add_1604/U1_0/CO (SAEDRVT14_ADDF_V2_0P5)   0.012287   0.137742 f
+  gpt.vector_unit.kernel/add_1604/carry[1] (net)              1     0.000000   0.137742 f
+  gpt.vector_unit.kernel/add_1604/U1_1/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.214660 f
+  gpt.vector_unit.kernel/add_1604/U1_1/CO (SAEDRVT14_ADDF_V2_0P5)   0.027664   0.242324 f
+  gpt.vector_unit.kernel/add_1604/carry[2] (net)              1     0.000000   0.242324 f
+  gpt.vector_unit.kernel/add_1604/U1_2/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.348543 f
+  gpt.vector_unit.kernel/add_1604/U1_2/CO (SAEDRVT14_ADDF_V2_0P5)   0.013113   0.361656 f
+  gpt.vector_unit.kernel/add_1604/carry[3] (net)              1     0.000000   0.361656 f
+  gpt.vector_unit.kernel/add_1604/U1_3/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.438575 f
+  gpt.vector_unit.kernel/add_1604/U1_3/CO (SAEDRVT14_ADDF_V2_0P5)   0.026993   0.465567 f
+  gpt.vector_unit.kernel/add_1604/carry[4] (net)              1     0.000000   0.465567 f
+  gpt.vector_unit.kernel/add_1604/U1_4/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.542486 f
+  gpt.vector_unit.kernel/add_1604/U1_4/CO (SAEDRVT14_ADDF_V2_0P5)   0.026993   0.569479 f
+  gpt.vector_unit.kernel/add_1604/carry[5] (net)              1     0.000000   0.569479 f
+  gpt.vector_unit.kernel/add_1604/U1_5/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.646398 f
+  gpt.vector_unit.kernel/add_1604/U1_5/CO (SAEDRVT14_ADDF_V2_0P5)   0.026993   0.673390 f
+  gpt.vector_unit.kernel/add_1604/carry[6] (net)              1     0.000000   0.673390 f
+  gpt.vector_unit.kernel/add_1604/U1_6/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.750309 f
+  gpt.vector_unit.kernel/add_1604/U1_6/CO (SAEDRVT14_ADDF_V2_0P5)   0.027664   0.777973 f
+  gpt.vector_unit.kernel/add_1604/carry[7] (net)              1     0.000000   0.777973 f
+  gpt.vector_unit.kernel/add_1604/U1_7/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.884191 f
+  gpt.vector_unit.kernel/add_1604/U1_7/CO (SAEDRVT14_ADDF_V2_0P5)   0.013798   0.897990 f
+  gpt.vector_unit.kernel/add_1604/carry[8] (net)              1     0.000000   0.897990 f
+  gpt.vector_unit.kernel/add_1604/U1_8/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   1.004208 f
+  gpt.vector_unit.kernel/add_1604/U1_8/CO (SAEDRVT14_ADDF_V2_0P5)   0.013113   1.017322 f
+  gpt.vector_unit.kernel/add_1604/carry[9] (net)              1     0.000000   1.017322 f
+  gpt.vector_unit.kernel/add_1604/U1_9/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   1.094240 f
+  gpt.vector_unit.kernel/add_1604/U1_9/CO (SAEDRVT14_ADDF_V2_0P5)   0.026993   1.121233 f
+  gpt.vector_unit.kernel/add_1604/carry[10] (net)             1     0.000000   1.121233 f
+  gpt.vector_unit.kernel/add_1604/U1_10/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.198152 f
+  gpt.vector_unit.kernel/add_1604/U1_10/CO (SAEDRVT14_ADDF_V2_0P5)  0.026993   1.225145 f
+  gpt.vector_unit.kernel/add_1604/carry[11] (net)             1     0.000000   1.225145 f
+  gpt.vector_unit.kernel/add_1604/U1_11/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.302063 f
+  gpt.vector_unit.kernel/add_1604/U1_11/CO (SAEDRVT14_ADDF_V2_0P5)  0.026993   1.329056 f
+  gpt.vector_unit.kernel/add_1604/carry[12] (net)             1     0.000000   1.329056 f
+  gpt.vector_unit.kernel/add_1604/U1_12/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.405975 f
+  gpt.vector_unit.kernel/add_1604/U1_12/CO (SAEDRVT14_ADDF_V2_0P5)  0.027664   1.433639 f
+  gpt.vector_unit.kernel/add_1604/carry[13] (net)             1     0.000000   1.433639 f
+  gpt.vector_unit.kernel/add_1604/U1_13/CI (SAEDRVT14_ADDF_V2_0P5)  0.106219   1.539857 f
+  gpt.vector_unit.kernel/add_1604/U1_13/CO (SAEDRVT14_ADDF_V2_0P5)  0.013798   1.553656 f
+  gpt.vector_unit.kernel/add_1604/carry[14] (net)             1     0.000000   1.553656 f
+  gpt.vector_unit.kernel/add_1604/U1_14/CI (SAEDRVT14_ADDF_V2_0P5)  0.106219   1.659874 f
+  gpt.vector_unit.kernel/add_1604/U1_14/CO (SAEDRVT14_ADDF_V2_0P5)  0.013638   1.673512 f
+  gpt.vector_unit.kernel/add_1604/carry[15] (net)             1     0.000000   1.673512 f
+  gpt.vector_unit.kernel/U9/A2 (SAEDRVT14_EN2_0P5)                  0.099368   1.772880 f
+  gpt.vector_unit.kernel/U9/X (SAEDRVT14_EN2_0P5)                   0.014909   1.787790 r
+  gpt.vector_unit.kernel/N590 (net)                           1     0.000000   1.787790 r
+  gpt.vector_unit.kernel/U422/A2 (SAEDRVT14_ND2_CDC_1)              0.074152   1.861941 r
+  gpt.vector_unit.kernel/U422/X (SAEDRVT14_ND2_CDC_1)               0.003277   1.865219 f
+  gpt.vector_unit.kernel/n613 (net)                           1     0.000000   1.865219 f
+  gpt.vector_unit.kernel/U1330/B (SAEDRVT14_OAI21_0P5)              0.054269   1.919487 f
+  gpt.vector_unit.kernel/U1330/X (SAEDRVT14_OAI21_0P5)              0.004996   1.924484 r
+  gpt.vector_unit.kernel/n1523 (net)                          1     0.000000   1.924484 r
+  gpt.vector_unit.kernel/biased_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)  0.057616   1.982100 r
+  data arrival time                                                            1.982100
+
+  clock core (rise edge)                                            2.000000   2.000000
+  clock network delay (ideal)                                       0.000000   2.000000
+  gpt.vector_unit.kernel/biased_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5) 0.000000   2.000000 r
+  library setup time                                                -0.010810  1.989190
+  data required time                                                           1.989190
+  ----------------------------------------------------------------------------------------
+  data required time                                                           1.989190
+  data arrival time                                                            -1.982100
+  ----------------------------------------------------------------------------------------
+  slack (MET)                                                                  0.007090
+
+
+  Startpoint: gpt.vector_unit.kernel/magnitude_reg[0]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/product_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW02_mult_1
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                               Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                      0.000000   0.000000
+  clock network delay (ideal)                                                 0.000000   0.000000
+  gpt.vector_unit.kernel/magnitude_reg[0]/CK (SAEDRVT14_FDP_V2_1)             0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/magnitude_reg[0]/Q (SAEDRVT14_FDP_V2_1)              0.020190   0.020190 f
+  gpt.vector_unit.kernel/magnitude[0] (net)                             3     0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/A[0] (GptVectorNative_DW02_mult_1)         0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/A[0] (net)                                 0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/U11/A (SAEDRVT14_INV_S_0P5)                0.061847   0.082037 f
+  gpt.vector_unit.kernel/mult_1596/U11/X (SAEDRVT14_INV_S_0P5)                0.015649   0.097686 r
+  gpt.vector_unit.kernel/mult_1596/n6 (net)                             8     0.000000   0.097686 r
+  gpt.vector_unit.kernel/mult_1596/U145/A (SAEDRVT14_BUF_S_1)                 0.016755   0.114441 r
+  gpt.vector_unit.kernel/mult_1596/U145/X (SAEDRVT14_BUF_S_1)                 0.018649   0.133090 r
+  gpt.vector_unit.kernel/mult_1596/n130 (net)                          12     0.000000   0.133090 r
+  gpt.vector_unit.kernel/mult_1596/U774/A2 (SAEDRVT14_NR2_1)                  0.015400   0.148490 r
+  gpt.vector_unit.kernel/mult_1596/U774/X (SAEDRVT14_NR2_1)                   0.012779   0.161269 f
+  gpt.vector_unit.kernel/mult_1596/ab[0][3] (net)                       2     0.000000   0.161269 f
+  gpt.vector_unit.kernel/mult_1596/U80/A (SAEDRVT14_INV_1)                    0.009660   0.170929 f
+  gpt.vector_unit.kernel/mult_1596/U80/X (SAEDRVT14_INV_1)                    0.004714   0.175643 r
+  gpt.vector_unit.kernel/mult_1596/n61 (net)                            1     0.000000   0.175643 r
+  gpt.vector_unit.kernel/mult_1596/U50/A2 (SAEDRVT14_NR2_MM_0P5)              0.006898   0.182541 r
+  gpt.vector_unit.kernel/mult_1596/U50/X (SAEDRVT14_NR2_MM_0P5)               0.008911   0.191453 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[1][2] (net)                   1     0.000000   0.191453 f
+  gpt.vector_unit.kernel/mult_1596/S2_2_2/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.220992 f
+  gpt.vector_unit.kernel/mult_1596/S2_2_2/CO (SAEDRVT14_ADDF_V1_1)            0.022737   0.243729 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[2][2] (net)                   1     0.000000   0.243729 f
+  gpt.vector_unit.kernel/mult_1596/S2_3_2/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.273269 f
+  gpt.vector_unit.kernel/mult_1596/S2_3_2/CO (SAEDRVT14_ADDF_V1_1)            0.021890   0.295158 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[3][2] (net)                   1     0.000000   0.295158 f
+  gpt.vector_unit.kernel/mult_1596/S2_4_2/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.324698 f
+  gpt.vector_unit.kernel/mult_1596/S2_4_2/CO (SAEDRVT14_ADDF_V1_1)            0.021134   0.345832 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[4][2] (net)                   1     0.000000   0.345832 f
+  gpt.vector_unit.kernel/mult_1596/S2_5_2/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.368794 f
+  gpt.vector_unit.kernel/mult_1596/S2_5_2/CO (SAEDRVT14_ADDF_V1_0P5)          0.028901   0.397695 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[5][2] (net)                   1     0.000000   0.397695 f
+  gpt.vector_unit.kernel/mult_1596/S2_6_2/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.427235 f
+  gpt.vector_unit.kernel/mult_1596/S2_6_2/CO (SAEDRVT14_ADDF_V1_1)            0.022754   0.449989 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[6][2] (net)                   1     0.000000   0.449989 f
+  gpt.vector_unit.kernel/mult_1596/S2_7_2/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.472951 f
+  gpt.vector_unit.kernel/mult_1596/S2_7_2/CO (SAEDRVT14_ADDF_V1_0P5)          0.028901   0.501852 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[7][2] (net)                   1     0.000000   0.501852 f
+  gpt.vector_unit.kernel/mult_1596/S2_8_2/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.531391 f
+  gpt.vector_unit.kernel/mult_1596/S2_8_2/CO (SAEDRVT14_ADDF_V1_1)            0.022754   0.554145 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[8][2] (net)                   1     0.000000   0.554145 f
+  gpt.vector_unit.kernel/mult_1596/S2_9_2/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.577107 f
+  gpt.vector_unit.kernel/mult_1596/S2_9_2/CO (SAEDRVT14_ADDF_V1_0P5)          0.028901   0.606009 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[9][2] (net)                   1     0.000000   0.606009 f
+  gpt.vector_unit.kernel/mult_1596/S2_10_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   0.635548 f
+  gpt.vector_unit.kernel/mult_1596/S2_10_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   0.658302 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[10][2] (net)                  1     0.000000   0.658302 f
+  gpt.vector_unit.kernel/mult_1596/S2_11_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.681264 f
+  gpt.vector_unit.kernel/mult_1596/S2_11_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   0.710166 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[11][2] (net)                  1     0.000000   0.710166 f
+  gpt.vector_unit.kernel/mult_1596/S2_12_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   0.739705 f
+  gpt.vector_unit.kernel/mult_1596/S2_12_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   0.762459 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[12][2] (net)                  1     0.000000   0.762459 f
+  gpt.vector_unit.kernel/mult_1596/S2_13_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.785421 f
+  gpt.vector_unit.kernel/mult_1596/S2_13_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   0.814322 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[13][2] (net)                  1     0.000000   0.814322 f
+  gpt.vector_unit.kernel/mult_1596/S2_14_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   0.843862 f
+  gpt.vector_unit.kernel/mult_1596/S2_14_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   0.866616 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[14][2] (net)                  1     0.000000   0.866616 f
+  gpt.vector_unit.kernel/mult_1596/S2_15_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.889578 f
+  gpt.vector_unit.kernel/mult_1596/S2_15_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   0.918479 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[15][2] (net)                  1     0.000000   0.918479 f
+  gpt.vector_unit.kernel/mult_1596/S2_16_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   0.948018 f
+  gpt.vector_unit.kernel/mult_1596/S2_16_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   0.970772 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[16][2] (net)                  1     0.000000   0.970772 f
+  gpt.vector_unit.kernel/mult_1596/S2_17_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.993734 f
+  gpt.vector_unit.kernel/mult_1596/S2_17_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   1.022636 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[17][2] (net)                  1     0.000000   1.022636 f
+  gpt.vector_unit.kernel/mult_1596/S2_18_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.052175 f
+  gpt.vector_unit.kernel/mult_1596/S2_18_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   1.074929 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[18][2] (net)                  1     0.000000   1.074929 f
+  gpt.vector_unit.kernel/mult_1596/S2_19_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.097891 f
+  gpt.vector_unit.kernel/mult_1596/S2_19_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   1.126792 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[19][2] (net)                  1     0.000000   1.126792 f
+  gpt.vector_unit.kernel/mult_1596/S2_20_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.156332 f
+  gpt.vector_unit.kernel/mult_1596/S2_20_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   1.179086 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[20][2] (net)                  1     0.000000   1.179086 f
+  gpt.vector_unit.kernel/mult_1596/S2_21_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.202048 f
+  gpt.vector_unit.kernel/mult_1596/S2_21_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   1.230949 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[21][2] (net)                  1     0.000000   1.230949 f
+  gpt.vector_unit.kernel/mult_1596/S2_22_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.260489 f
+  gpt.vector_unit.kernel/mult_1596/S2_22_2/CO (SAEDRVT14_ADDF_V1_1)           0.022754   1.283243 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[22][2] (net)                  1     0.000000   1.283243 f
+  gpt.vector_unit.kernel/mult_1596/S2_23_2/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.306205 f
+  gpt.vector_unit.kernel/mult_1596/S2_23_2/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   1.335106 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[23][2] (net)                  1     0.000000   1.335106 f
+  gpt.vector_unit.kernel/mult_1596/S2_24_2/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.364645 f
+  gpt.vector_unit.kernel/mult_1596/S2_24_2/S (SAEDRVT14_ADDF_V1_1)            0.033044   1.397690 r
+  gpt.vector_unit.kernel/mult_1596/SUMB[24][2] (net)                    1     0.000000   1.397690 r
+  gpt.vector_unit.kernel/mult_1596/S2_25_1/CI (SAEDRVT14_ADDF_V1_0P5)         0.011755   1.409444 r
+  gpt.vector_unit.kernel/mult_1596/S2_25_1/S (SAEDRVT14_ADDF_V1_0P5)          0.037583   1.447027 f
+  gpt.vector_unit.kernel/mult_1596/SUMB[25][1] (net)                    1     0.000000   1.447027 f
+  gpt.vector_unit.kernel/mult_1596/S1_26_0/CI (SAEDRVT14_ADDF_V1_0P5)         0.011755   1.458782 f
+  gpt.vector_unit.kernel/mult_1596/S1_26_0/CO (SAEDRVT14_ADDF_V1_0P5)         0.026919   1.485701 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[26][0] (net)                  1     0.000000   1.485701 f
+  gpt.vector_unit.kernel/mult_1596/S1_27_0/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.515240 f
+  gpt.vector_unit.kernel/mult_1596/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)           0.022754   1.537994 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[27][0] (net)                  1     0.000000   1.537994 f
+  gpt.vector_unit.kernel/mult_1596/S1_28_0/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.560956 f
+  gpt.vector_unit.kernel/mult_1596/S1_28_0/CO (SAEDRVT14_ADDF_V1_0P5)         0.028901   1.589858 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[28][0] (net)                  1     0.000000   1.589858 f
+  gpt.vector_unit.kernel/mult_1596/S1_29_0/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.619397 f
+  gpt.vector_unit.kernel/mult_1596/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)           0.023506   1.642903 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[29][0] (net)                  1     0.000000   1.642903 f
+  gpt.vector_unit.kernel/mult_1596/S1_30_0/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.672442 f
+  gpt.vector_unit.kernel/mult_1596/S1_30_0/CO (SAEDRVT14_ADDF_V1_1)           0.019096   1.691538 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[30][0] (net)                  1     0.000000   1.691538 f
+  gpt.vector_unit.kernel/mult_1596/U51/A2 (SAEDRVT14_EN3_U_0P5)               0.010246   1.701785 f
+  gpt.vector_unit.kernel/mult_1596/U51/X (SAEDRVT14_EN3_U_0P5)                0.023986   1.725771 f
+  gpt.vector_unit.kernel/mult_1596/n57 (net)                            1     0.000000   1.725771 f
+  gpt.vector_unit.kernel/mult_1596/U52/A3 (SAEDRVT14_EN3_U_0P5)               0.008339   1.734110 f
+  gpt.vector_unit.kernel/mult_1596/U52/X (SAEDRVT14_EN3_U_0P5)                0.025429   1.759539 r
+  gpt.vector_unit.kernel/mult_1596/PRODUCT[31] (net)                    1     0.000000   1.759539 r
+  gpt.vector_unit.kernel/mult_1596/PRODUCT[31] (GptVectorNative_DW02_mult_1)  0.000000   1.759539 r
+  gpt.vector_unit.kernel/N570 (net)                                           0.000000   1.759539 r
+  gpt.vector_unit.kernel/U828/A1 (SAEDRVT14_ND2_CDC_1)                        0.092763   1.852302 r
+  gpt.vector_unit.kernel/U828/X (SAEDRVT14_ND2_CDC_1)                         0.004972   1.857273 f
+  gpt.vector_unit.kernel/n642 (net)                                     1     0.000000   1.857273 f
+  gpt.vector_unit.kernel/U827/B (SAEDRVT14_OAI21_0P75)                        0.055518   1.912792 f
+  gpt.vector_unit.kernel/U827/X (SAEDRVT14_OAI21_0P75)                        0.005343   1.918135 r
+  gpt.vector_unit.kernel/n1546 (net)                                    1     0.000000   1.918135 r
+  gpt.vector_unit.kernel/product_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)           0.057616   1.975751 r
+  data arrival time                                                                      1.975751
+
+  clock core (rise edge)                                                      2.000000   2.000000
+  clock network delay (ideal)                                                 0.000000   2.000000
+  gpt.vector_unit.kernel/product_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5)          0.000000   2.000000 r
+  library setup time                                                          -0.010923  1.989077
+  data required time                                                                     1.989077
+  --------------------------------------------------------------------------------------------------
+  data required time                                                                     1.989077
+  data arrival time                                                                      -1.975751
+  --------------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.013326
+
+
+  Startpoint: gpt.vector_unit.kernel/value_reg[1]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/value_reg[30]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW01_add_6
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                                         Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                0.000000   0.000000
+  clock network delay (ideal)                                           0.000000   0.000000
+  gpt.vector_unit.kernel/value_reg[1]/CK (SAEDRVT14_FDP_V2_1)           0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/value_reg[1]/Q (SAEDRVT14_FDP_V2_1)            0.024757   0.024757 f
+  gpt.vector_unit.kernel/value[1] (net)                          11     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (GptVectorNative_DW01_add_6)     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (net)                            0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/U1_1/A (SAEDRVT14_ADDF_V1_0P5)        0.514809   0.539565 f
+  gpt.vector_unit.kernel/add_1556/U1_1/CO (SAEDRVT14_ADDF_V1_0P5)       0.023476   0.563042 f
+  gpt.vector_unit.kernel/add_1556/carry[2] (net)                  1     0.000000   0.563042 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.575920 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CO (SAEDRVT14_ADDF_V1_0P5)       0.024820   0.600741 f
+  gpt.vector_unit.kernel/add_1556/carry[3] (net)                  1     0.000000   0.600741 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.613619 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.638442 f
+  gpt.vector_unit.kernel/add_1556/carry[4] (net)                  1     0.000000   0.638442 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.651321 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.676143 f
+  gpt.vector_unit.kernel/add_1556/carry[5] (net)                  1     0.000000   0.676143 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.689022 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.713844 f
+  gpt.vector_unit.kernel/add_1556/carry[6] (net)                  1     0.000000   0.713844 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.726723 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.751545 f
+  gpt.vector_unit.kernel/add_1556/carry[7] (net)                  1     0.000000   0.751545 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.764424 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.789247 f
+  gpt.vector_unit.kernel/add_1556/carry[8] (net)                  1     0.000000   0.789247 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.802125 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.826948 f
+  gpt.vector_unit.kernel/add_1556/carry[9] (net)                  1     0.000000   0.826948 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.839827 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.864649 f
+  gpt.vector_unit.kernel/add_1556/carry[10] (net)                 1     0.000000   0.864649 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.877528 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CO (SAEDRVT14_ADDF_V1_0P5)      0.024822   0.902350 f
+  gpt.vector_unit.kernel/add_1556/carry[11] (net)                 1     0.000000   0.902350 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.915229 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CO (SAEDRVT14_ADDF_V1_0P5)      0.025776   0.941005 f
+  gpt.vector_unit.kernel/add_1556/carry[12] (net)                 1     0.000000   0.941005 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CI (SAEDRVT14_ADDF_V1_1)        0.015937   0.956942 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CO (SAEDRVT14_ADDF_V1_1)        0.019499   0.976441 f
+  gpt.vector_unit.kernel/add_1556/carry[13] (net)                 1     0.000000   0.976441 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.989320 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.012817 f
+  gpt.vector_unit.kernel/add_1556/carry[14] (net)                 1     0.000000   1.012817 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.025696 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.051470 f
+  gpt.vector_unit.kernel/add_1556/carry[15] (net)                 1     0.000000   1.051470 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.067407 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.086906 f
+  gpt.vector_unit.kernel/add_1556/carry[16] (net)                 1     0.000000   1.086906 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.099784 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.124236 f
+  gpt.vector_unit.kernel/add_1556/carry[17] (net)                 1     0.000000   1.124236 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.140173 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.159670 f
+  gpt.vector_unit.kernel/add_1556/carry[18] (net)                 1     0.000000   1.159670 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.172548 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.197000 f
+  gpt.vector_unit.kernel/add_1556/carry[19] (net)                 1     0.000000   1.197000 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.212937 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.232434 f
+  gpt.vector_unit.kernel/add_1556/carry[20] (net)                 1     0.000000   1.232434 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.245312 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.269764 f
+  gpt.vector_unit.kernel/add_1556/carry[21] (net)                 1     0.000000   1.269764 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.285701 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.305198 f
+  gpt.vector_unit.kernel/add_1556/carry[22] (net)                 1     0.000000   1.305198 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.318076 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.341574 f
+  gpt.vector_unit.kernel/add_1556/carry[23] (net)                 1     0.000000   1.341574 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.354452 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.380227 f
+  gpt.vector_unit.kernel/add_1556/carry[24] (net)                 1     0.000000   1.380227 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.396164 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.415662 f
+  gpt.vector_unit.kernel/add_1556/carry[25] (net)                 1     0.000000   1.415662 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.428541 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.452993 f
+  gpt.vector_unit.kernel/add_1556/carry[26] (net)                 1     0.000000   1.452993 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.468930 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CO (SAEDRVT14_ADDF_V1_1)        0.019252   1.488182 f
+  gpt.vector_unit.kernel/add_1556/carry[27] (net)                 1     0.000000   1.488182 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.500051 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CO (SAEDRVT14_ADDF_V2_0P5)      0.015833   1.515885 f
+  gpt.vector_unit.kernel/add_1556/carry[28] (net)                 1     0.000000   1.515885 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.531822 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CO (SAEDRVT14_ADDF_V1_1)        0.018441   1.550263 f
+  gpt.vector_unit.kernel/add_1556/carry[29] (net)                 1     0.000000   1.550263 f
+  gpt.vector_unit.kernel/add_1556/U1_29/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.562132 f
+  gpt.vector_unit.kernel/add_1556/U1_29/CO (SAEDRVT14_ADDF_V2_0P5)      0.014858   1.576990 f
+  gpt.vector_unit.kernel/add_1556/carry[30] (net)                 1     0.000000   1.576990 f
+  gpt.vector_unit.kernel/add_1556/U1_30/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.588860 f
+  gpt.vector_unit.kernel/add_1556/U1_30/S (SAEDRVT14_ADDF_V2_0P5)       0.012128   1.600988 f
+  gpt.vector_unit.kernel/add_1556/SUM[30] (net)                   1     0.000000   1.600988 f
+  gpt.vector_unit.kernel/add_1556/SUM[30] (GptVectorNative_DW01_add_6)  0.000000   1.600988 f
+  gpt.vector_unit.kernel/N216 (net)                                     0.000000   1.600988 f
+  gpt.vector_unit.kernel/U664/C1 (SAEDRVT14_AO222_1)                    0.088009   1.688997 f
+  gpt.vector_unit.kernel/U664/X (SAEDRVT14_AO222_1)                     0.024189   1.713186 f
+  gpt.vector_unit.kernel/n212 (net)                               1     0.000000   1.713186 f
+  gpt.vector_unit.kernel/U311/C (SAEDRVT14_AO221_0P5)                   0.071161   1.784347 f
+  gpt.vector_unit.kernel/U311/X (SAEDRVT14_AO221_0P5)                   0.015677   1.800025 f
+  gpt.vector_unit.kernel/n211 (net)                               1     0.000000   1.800025 f
+  gpt.vector_unit.kernel/U111/A2 (SAEDRVT14_OR2_1)                      0.088456   1.888480 f
+  gpt.vector_unit.kernel/U111/X (SAEDRVT14_OR2_1)                       0.009877   1.898358 f
+  gpt.vector_unit.kernel/n1302 (net)                              1     0.000000   1.898358 f
+  gpt.vector_unit.kernel/value_reg[30]/D (SAEDRVT14_FDP_V2LP_1)         0.057616   1.955974 f
+  data arrival time                                                                1.955974
+
+  clock core (rise edge)                                                2.000000   2.000000
+  clock network delay (ideal)                                           0.000000   2.000000
+  gpt.vector_unit.kernel/value_reg[30]/CK (SAEDRVT14_FDP_V2LP_1)        0.000000   2.000000 r
+  library setup time                                                    -0.000744  1.999256
+  data required time                                                               1.999256
+  --------------------------------------------------------------------------------------------
+  data required time                                                               1.999256
+  data arrival time                                                                -1.955974
+  --------------------------------------------------------------------------------------------
+  slack (MET)                                                                      0.043283
+
+
+  Startpoint: gpt.vector_unit.kernel/magnitude_reg[0]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/product_reg[30]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW02_mult_1
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                               Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                      0.000000   0.000000
+  clock network delay (ideal)                                                 0.000000   0.000000
+  gpt.vector_unit.kernel/magnitude_reg[0]/CK (SAEDRVT14_FDP_V2_1)             0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/magnitude_reg[0]/Q (SAEDRVT14_FDP_V2_1)              0.020190   0.020190 f
+  gpt.vector_unit.kernel/magnitude[0] (net)                             3     0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/A[0] (GptVectorNative_DW02_mult_1)         0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/A[0] (net)                                 0.000000   0.020190 f
+  gpt.vector_unit.kernel/mult_1596/U11/A (SAEDRVT14_INV_S_0P5)                0.061847   0.082037 f
+  gpt.vector_unit.kernel/mult_1596/U11/X (SAEDRVT14_INV_S_0P5)                0.015649   0.097686 r
+  gpt.vector_unit.kernel/mult_1596/n6 (net)                             8     0.000000   0.097686 r
+  gpt.vector_unit.kernel/mult_1596/U145/A (SAEDRVT14_BUF_S_1)                 0.016755   0.114441 r
+  gpt.vector_unit.kernel/mult_1596/U145/X (SAEDRVT14_BUF_S_1)                 0.018649   0.133090 r
+  gpt.vector_unit.kernel/mult_1596/n130 (net)                          12     0.000000   0.133090 r
+  gpt.vector_unit.kernel/mult_1596/U777/A2 (SAEDRVT14_NR2_1)                  0.015400   0.148490 r
+  gpt.vector_unit.kernel/mult_1596/U777/X (SAEDRVT14_NR2_1)                   0.012779   0.161269 f
+  gpt.vector_unit.kernel/mult_1596/ab[0][2] (net)                       2     0.000000   0.161269 f
+  gpt.vector_unit.kernel/mult_1596/U79/A (SAEDRVT14_INV_1)                    0.009660   0.170929 f
+  gpt.vector_unit.kernel/mult_1596/U79/X (SAEDRVT14_INV_1)                    0.004747   0.175676 r
+  gpt.vector_unit.kernel/mult_1596/n59 (net)                            1     0.000000   0.175676 r
+  gpt.vector_unit.kernel/mult_1596/U55/A2 (SAEDRVT14_NR2_1)                   0.007085   0.182761 r
+  gpt.vector_unit.kernel/mult_1596/U55/X (SAEDRVT14_NR2_1)                    0.007763   0.190524 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[1][1] (net)                   1     0.000000   0.190524 f
+  gpt.vector_unit.kernel/mult_1596/S2_2_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.213486 f
+  gpt.vector_unit.kernel/mult_1596/S2_2_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.027901   0.241387 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[2][1] (net)                   1     0.000000   0.241387 f
+  gpt.vector_unit.kernel/mult_1596/S2_3_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.264349 f
+  gpt.vector_unit.kernel/mult_1596/S2_3_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.028753   0.293102 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[3][1] (net)                   1     0.000000   0.293102 f
+  gpt.vector_unit.kernel/mult_1596/S2_4_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.316064 f
+  gpt.vector_unit.kernel/mult_1596/S2_4_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.028750   0.344814 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[4][1] (net)                   1     0.000000   0.344814 f
+  gpt.vector_unit.kernel/mult_1596/S2_5_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.367776 f
+  gpt.vector_unit.kernel/mult_1596/S2_5_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.028750   0.396526 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[5][1] (net)                   1     0.000000   0.396526 f
+  gpt.vector_unit.kernel/mult_1596/S2_6_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.419488 f
+  gpt.vector_unit.kernel/mult_1596/S2_6_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.028750   0.448238 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[6][1] (net)                   1     0.000000   0.448238 f
+  gpt.vector_unit.kernel/mult_1596/S2_7_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.471200 f
+  gpt.vector_unit.kernel/mult_1596/S2_7_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.030291   0.501491 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[7][1] (net)                   1     0.000000   0.501491 f
+  gpt.vector_unit.kernel/mult_1596/S2_8_1/B (SAEDRVT14_ADDF_V1_1)             0.029539   0.531030 f
+  gpt.vector_unit.kernel/mult_1596/S2_8_1/CO (SAEDRVT14_ADDF_V1_1)            0.022754   0.553784 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[8][1] (net)                   1     0.000000   0.553784 f
+  gpt.vector_unit.kernel/mult_1596/S2_9_1/B (SAEDRVT14_ADDF_V1_0P5)           0.022962   0.576746 f
+  gpt.vector_unit.kernel/mult_1596/S2_9_1/CO (SAEDRVT14_ADDF_V1_0P5)          0.027362   0.604108 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[9][1] (net)                   1     0.000000   0.604108 f
+  gpt.vector_unit.kernel/mult_1596/S2_10_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.627070 f
+  gpt.vector_unit.kernel/mult_1596/S2_10_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.655820 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[10][1] (net)                  1     0.000000   0.655820 f
+  gpt.vector_unit.kernel/mult_1596/S2_11_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.678782 f
+  gpt.vector_unit.kernel/mult_1596/S2_11_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.707532 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[11][1] (net)                  1     0.000000   0.707532 f
+  gpt.vector_unit.kernel/mult_1596/S2_12_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.730494 f
+  gpt.vector_unit.kernel/mult_1596/S2_12_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.759244 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[12][1] (net)                  1     0.000000   0.759244 f
+  gpt.vector_unit.kernel/mult_1596/S2_13_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.782206 f
+  gpt.vector_unit.kernel/mult_1596/S2_13_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.810956 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[13][1] (net)                  1     0.000000   0.810956 f
+  gpt.vector_unit.kernel/mult_1596/S2_14_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.833918 f
+  gpt.vector_unit.kernel/mult_1596/S2_14_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.862668 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[14][1] (net)                  1     0.000000   0.862668 f
+  gpt.vector_unit.kernel/mult_1596/S2_15_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.885630 f
+  gpt.vector_unit.kernel/mult_1596/S2_15_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.914380 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[15][1] (net)                  1     0.000000   0.914380 f
+  gpt.vector_unit.kernel/mult_1596/S2_16_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.937342 f
+  gpt.vector_unit.kernel/mult_1596/S2_16_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   0.966092 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[16][1] (net)                  1     0.000000   0.966092 f
+  gpt.vector_unit.kernel/mult_1596/S2_17_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   0.989054 f
+  gpt.vector_unit.kernel/mult_1596/S2_17_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.017804 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[17][1] (net)                  1     0.000000   1.017804 f
+  gpt.vector_unit.kernel/mult_1596/S2_18_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.040766 f
+  gpt.vector_unit.kernel/mult_1596/S2_18_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.069516 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[18][1] (net)                  1     0.000000   1.069516 f
+  gpt.vector_unit.kernel/mult_1596/S2_19_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.092478 f
+  gpt.vector_unit.kernel/mult_1596/S2_19_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.121228 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[19][1] (net)                  1     0.000000   1.121228 f
+  gpt.vector_unit.kernel/mult_1596/S2_20_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.144190 f
+  gpt.vector_unit.kernel/mult_1596/S2_20_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.172940 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[20][1] (net)                  1     0.000000   1.172940 f
+  gpt.vector_unit.kernel/mult_1596/S2_21_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.195902 f
+  gpt.vector_unit.kernel/mult_1596/S2_21_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.224652 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[21][1] (net)                  1     0.000000   1.224652 f
+  gpt.vector_unit.kernel/mult_1596/S2_22_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.247615 f
+  gpt.vector_unit.kernel/mult_1596/S2_22_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.276364 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[22][1] (net)                  1     0.000000   1.276364 f
+  gpt.vector_unit.kernel/mult_1596/S2_23_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.299326 f
+  gpt.vector_unit.kernel/mult_1596/S2_23_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.328076 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[23][1] (net)                  1     0.000000   1.328076 f
+  gpt.vector_unit.kernel/mult_1596/S2_24_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.351039 f
+  gpt.vector_unit.kernel/mult_1596/S2_24_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.028750   1.379788 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[24][1] (net)                  1     0.000000   1.379788 f
+  gpt.vector_unit.kernel/mult_1596/S2_25_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.402750 f
+  gpt.vector_unit.kernel/mult_1596/S2_25_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.030291   1.433041 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[25][1] (net)                  1     0.000000   1.433041 f
+  gpt.vector_unit.kernel/mult_1596/S2_26_1/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.462581 f
+  gpt.vector_unit.kernel/mult_1596/S2_26_1/CO (SAEDRVT14_ADDF_V1_1)           0.023506   1.486086 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[26][1] (net)                  1     0.000000   1.486086 f
+  gpt.vector_unit.kernel/mult_1596/S2_27_1/B (SAEDRVT14_ADDF_V1_1)            0.029539   1.515626 f
+  gpt.vector_unit.kernel/mult_1596/S2_27_1/CO (SAEDRVT14_ADDF_V1_1)           0.021134   1.536760 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[27][1] (net)                  1     0.000000   1.536760 f
+  gpt.vector_unit.kernel/mult_1596/S2_28_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.559722 f
+  gpt.vector_unit.kernel/mult_1596/S2_28_1/CO (SAEDRVT14_ADDF_V1_0P5)         0.027359   1.587081 f
+  gpt.vector_unit.kernel/mult_1596/CARRYB[28][1] (net)                  1     0.000000   1.587081 f
+  gpt.vector_unit.kernel/mult_1596/S2_29_1/B (SAEDRVT14_ADDF_V1_0P5)          0.022962   1.610044 f
+  gpt.vector_unit.kernel/mult_1596/S2_29_1/S (SAEDRVT14_ADDF_V1_0P5)          0.038083   1.648126 r
+  gpt.vector_unit.kernel/mult_1596/SUMB[29][1] (net)                    1     0.000000   1.648126 r
+  gpt.vector_unit.kernel/mult_1596/S1_30_0/CI (SAEDRVT14_ADDF_V1_1)           0.015675   1.663801 r
+  gpt.vector_unit.kernel/mult_1596/S1_30_0/S (SAEDRVT14_ADDF_V1_1)            0.034310   1.698111 f
+  gpt.vector_unit.kernel/mult_1596/PRODUCT[30] (net)                    1     0.000000   1.698111 f
+  gpt.vector_unit.kernel/mult_1596/PRODUCT[30] (GptVectorNative_DW02_mult_1)  0.000000   1.698111 f
+  gpt.vector_unit.kernel/N569 (net)                                           0.000000   1.698111 f
+  gpt.vector_unit.kernel/U826/A1 (SAEDRVT14_ND2_CDC_1)                        0.092763   1.790873 f
+  gpt.vector_unit.kernel/U826/X (SAEDRVT14_ND2_CDC_1)                         0.004644   1.795517 r
+  gpt.vector_unit.kernel/n643 (net)                                     1     0.000000   1.795517 r
+  gpt.vector_unit.kernel/U825/B (SAEDRVT14_OAI21_0P75)                        0.055518   1.851036 r
+  gpt.vector_unit.kernel/U825/X (SAEDRVT14_OAI21_0P75)                        0.006191   1.857227 f
+  gpt.vector_unit.kernel/n1547 (net)                                    1     0.000000   1.857227 f
+  gpt.vector_unit.kernel/product_reg[30]/D (SAEDRVT14_FDP_V2LP_1)             0.057616   1.914843 f
+  data arrival time                                                                      1.914843
+
+  clock core (rise edge)                                                      2.000000   2.000000
+  clock network delay (ideal)                                                 0.000000   2.000000
+  gpt.vector_unit.kernel/product_reg[30]/CK (SAEDRVT14_FDP_V2LP_1)            0.000000   2.000000 r
+  library setup time                                                          -0.015944  1.984056
+  data required time                                                                     1.984056
+  --------------------------------------------------------------------------------------------------
+  data required time                                                                     1.984056
+  data arrival time                                                                      -1.914843
+  --------------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.069213
+
+
+  Startpoint: gpt.vector_unit.kernel/value_reg[1]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/value_reg[29]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW01_add_6
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                                         Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                0.000000   0.000000
+  clock network delay (ideal)                                           0.000000   0.000000
+  gpt.vector_unit.kernel/value_reg[1]/CK (SAEDRVT14_FDP_V2_1)           0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/value_reg[1]/Q (SAEDRVT14_FDP_V2_1)            0.024757   0.024757 f
+  gpt.vector_unit.kernel/value[1] (net)                          11     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (GptVectorNative_DW01_add_6)     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (net)                            0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/U1_1/A (SAEDRVT14_ADDF_V1_0P5)        0.514809   0.539565 f
+  gpt.vector_unit.kernel/add_1556/U1_1/CO (SAEDRVT14_ADDF_V1_0P5)       0.023476   0.563042 f
+  gpt.vector_unit.kernel/add_1556/carry[2] (net)                  1     0.000000   0.563042 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.575920 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CO (SAEDRVT14_ADDF_V1_0P5)       0.024820   0.600741 f
+  gpt.vector_unit.kernel/add_1556/carry[3] (net)                  1     0.000000   0.600741 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.613619 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.638442 f
+  gpt.vector_unit.kernel/add_1556/carry[4] (net)                  1     0.000000   0.638442 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.651321 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.676143 f
+  gpt.vector_unit.kernel/add_1556/carry[5] (net)                  1     0.000000   0.676143 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.689022 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.713844 f
+  gpt.vector_unit.kernel/add_1556/carry[6] (net)                  1     0.000000   0.713844 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.726723 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.751545 f
+  gpt.vector_unit.kernel/add_1556/carry[7] (net)                  1     0.000000   0.751545 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.764424 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.789247 f
+  gpt.vector_unit.kernel/add_1556/carry[8] (net)                  1     0.000000   0.789247 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.802125 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.826948 f
+  gpt.vector_unit.kernel/add_1556/carry[9] (net)                  1     0.000000   0.826948 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.839827 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.864649 f
+  gpt.vector_unit.kernel/add_1556/carry[10] (net)                 1     0.000000   0.864649 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.877528 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CO (SAEDRVT14_ADDF_V1_0P5)      0.024822   0.902350 f
+  gpt.vector_unit.kernel/add_1556/carry[11] (net)                 1     0.000000   0.902350 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.915229 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CO (SAEDRVT14_ADDF_V1_0P5)      0.025776   0.941005 f
+  gpt.vector_unit.kernel/add_1556/carry[12] (net)                 1     0.000000   0.941005 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CI (SAEDRVT14_ADDF_V1_1)        0.015937   0.956942 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CO (SAEDRVT14_ADDF_V1_1)        0.019499   0.976441 f
+  gpt.vector_unit.kernel/add_1556/carry[13] (net)                 1     0.000000   0.976441 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.989320 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.012817 f
+  gpt.vector_unit.kernel/add_1556/carry[14] (net)                 1     0.000000   1.012817 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.025696 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.051470 f
+  gpt.vector_unit.kernel/add_1556/carry[15] (net)                 1     0.000000   1.051470 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.067407 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.086906 f
+  gpt.vector_unit.kernel/add_1556/carry[16] (net)                 1     0.000000   1.086906 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.099784 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.124236 f
+  gpt.vector_unit.kernel/add_1556/carry[17] (net)                 1     0.000000   1.124236 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.140173 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.159670 f
+  gpt.vector_unit.kernel/add_1556/carry[18] (net)                 1     0.000000   1.159670 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.172548 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.197000 f
+  gpt.vector_unit.kernel/add_1556/carry[19] (net)                 1     0.000000   1.197000 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.212937 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.232434 f
+  gpt.vector_unit.kernel/add_1556/carry[20] (net)                 1     0.000000   1.232434 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.245312 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.269764 f
+  gpt.vector_unit.kernel/add_1556/carry[21] (net)                 1     0.000000   1.269764 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.285701 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.305198 f
+  gpt.vector_unit.kernel/add_1556/carry[22] (net)                 1     0.000000   1.305198 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.318076 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.341574 f
+  gpt.vector_unit.kernel/add_1556/carry[23] (net)                 1     0.000000   1.341574 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.354452 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.380227 f
+  gpt.vector_unit.kernel/add_1556/carry[24] (net)                 1     0.000000   1.380227 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.396164 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.415662 f
+  gpt.vector_unit.kernel/add_1556/carry[25] (net)                 1     0.000000   1.415662 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.428541 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.452993 f
+  gpt.vector_unit.kernel/add_1556/carry[26] (net)                 1     0.000000   1.452993 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.468930 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CO (SAEDRVT14_ADDF_V1_1)        0.019252   1.488182 f
+  gpt.vector_unit.kernel/add_1556/carry[27] (net)                 1     0.000000   1.488182 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.500051 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CO (SAEDRVT14_ADDF_V2_0P5)      0.015833   1.515885 f
+  gpt.vector_unit.kernel/add_1556/carry[28] (net)                 1     0.000000   1.515885 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.531822 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CO (SAEDRVT14_ADDF_V1_1)        0.018441   1.550263 f
+  gpt.vector_unit.kernel/add_1556/carry[29] (net)                 1     0.000000   1.550263 f
+  gpt.vector_unit.kernel/add_1556/U1_29/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.562132 f
+  gpt.vector_unit.kernel/add_1556/U1_29/S (SAEDRVT14_ADDF_V2_0P5)       0.011628   1.573760 f
+  gpt.vector_unit.kernel/add_1556/SUM[29] (net)                   1     0.000000   1.573760 f
+  gpt.vector_unit.kernel/add_1556/SUM[29] (GptVectorNative_DW01_add_6)  0.000000   1.573760 f
+  gpt.vector_unit.kernel/N215 (net)                                     0.000000   1.573760 f
+  gpt.vector_unit.kernel/U310/C1 (SAEDRVT14_AO222_1)                    0.088009   1.661770 f
+  gpt.vector_unit.kernel/U310/X (SAEDRVT14_AO222_1)                     0.024189   1.685959 f
+  gpt.vector_unit.kernel/n326 (net)                               1     0.000000   1.685959 f
+  gpt.vector_unit.kernel/U308/C (SAEDRVT14_AO221_0P5)                   0.071161   1.757120 f
+  gpt.vector_unit.kernel/U308/X (SAEDRVT14_AO221_0P5)                   0.015681   1.772801 f
+  gpt.vector_unit.kernel/n325 (net)                               1     0.000000   1.772801 f
+  gpt.vector_unit.kernel/U289/A2 (SAEDRVT14_OR2_1)                      0.088456   1.861256 f
+  gpt.vector_unit.kernel/U289/X (SAEDRVT14_OR2_1)                       0.009877   1.871134 f
+  gpt.vector_unit.kernel/n1400 (net)                              1     0.000000   1.871134 f
+  gpt.vector_unit.kernel/value_reg[29]/D (SAEDRVT14_FDP_V2LP_1)         0.057616   1.928750 f
+  data arrival time                                                                1.928750
+
+  clock core (rise edge)                                                2.000000   2.000000
+  clock network delay (ideal)                                           0.000000   2.000000
+  gpt.vector_unit.kernel/value_reg[29]/CK (SAEDRVT14_FDP_V2LP_1)        0.000000   2.000000 r
+  library setup time                                                    -0.000744  1.999256
+  data required time                                                               1.999256
+  --------------------------------------------------------------------------------------------
+  data required time                                                               1.999256
+  data arrival time                                                                -1.928750
+  --------------------------------------------------------------------------------------------
+  slack (MET)                                                                      0.070506
+
+
+  Startpoint: gpt.vector_unit.kernel/value_reg[1]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/value_reg[28]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+  GptVectorNative_DW01_add_6
+                     ForQA                 saed14rvt_tt0p8v25c
+
+  Point                                                         Fanout      Incr       Path
+  --------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                0.000000   0.000000
+  clock network delay (ideal)                                           0.000000   0.000000
+  gpt.vector_unit.kernel/value_reg[1]/CK (SAEDRVT14_FDP_V2_1)           0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/value_reg[1]/Q (SAEDRVT14_FDP_V2_1)            0.024757   0.024757 f
+  gpt.vector_unit.kernel/value[1] (net)                          11     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (GptVectorNative_DW01_add_6)     0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/A[1] (net)                            0.000000   0.024757 f
+  gpt.vector_unit.kernel/add_1556/U1_1/A (SAEDRVT14_ADDF_V1_0P5)        0.514809   0.539565 f
+  gpt.vector_unit.kernel/add_1556/U1_1/CO (SAEDRVT14_ADDF_V1_0P5)       0.023476   0.563042 f
+  gpt.vector_unit.kernel/add_1556/carry[2] (net)                  1     0.000000   0.563042 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.575920 f
+  gpt.vector_unit.kernel/add_1556/U1_2/CO (SAEDRVT14_ADDF_V1_0P5)       0.024820   0.600741 f
+  gpt.vector_unit.kernel/add_1556/carry[3] (net)                  1     0.000000   0.600741 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.613619 f
+  gpt.vector_unit.kernel/add_1556/U1_3/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.638442 f
+  gpt.vector_unit.kernel/add_1556/carry[4] (net)                  1     0.000000   0.638442 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.651321 f
+  gpt.vector_unit.kernel/add_1556/U1_4/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.676143 f
+  gpt.vector_unit.kernel/add_1556/carry[5] (net)                  1     0.000000   0.676143 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.689022 f
+  gpt.vector_unit.kernel/add_1556/U1_5/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.713844 f
+  gpt.vector_unit.kernel/add_1556/carry[6] (net)                  1     0.000000   0.713844 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.726723 f
+  gpt.vector_unit.kernel/add_1556/U1_6/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.751545 f
+  gpt.vector_unit.kernel/add_1556/carry[7] (net)                  1     0.000000   0.751545 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.764424 f
+  gpt.vector_unit.kernel/add_1556/U1_7/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.789247 f
+  gpt.vector_unit.kernel/add_1556/carry[8] (net)                  1     0.000000   0.789247 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.802125 f
+  gpt.vector_unit.kernel/add_1556/U1_8/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.826948 f
+  gpt.vector_unit.kernel/add_1556/carry[9] (net)                  1     0.000000   0.826948 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CI (SAEDRVT14_ADDF_V1_0P5)       0.012879   0.839827 f
+  gpt.vector_unit.kernel/add_1556/U1_9/CO (SAEDRVT14_ADDF_V1_0P5)       0.024822   0.864649 f
+  gpt.vector_unit.kernel/add_1556/carry[10] (net)                 1     0.000000   0.864649 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.877528 f
+  gpt.vector_unit.kernel/add_1556/U1_10/CO (SAEDRVT14_ADDF_V1_0P5)      0.024822   0.902350 f
+  gpt.vector_unit.kernel/add_1556/carry[11] (net)                 1     0.000000   0.902350 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.915229 f
+  gpt.vector_unit.kernel/add_1556/U1_11/CO (SAEDRVT14_ADDF_V1_0P5)      0.025776   0.941005 f
+  gpt.vector_unit.kernel/add_1556/carry[12] (net)                 1     0.000000   0.941005 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CI (SAEDRVT14_ADDF_V1_1)        0.015937   0.956942 f
+  gpt.vector_unit.kernel/add_1556/U1_12/CO (SAEDRVT14_ADDF_V1_1)        0.019499   0.976441 f
+  gpt.vector_unit.kernel/add_1556/carry[13] (net)                 1     0.000000   0.976441 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   0.989320 f
+  gpt.vector_unit.kernel/add_1556/U1_13/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.012817 f
+  gpt.vector_unit.kernel/add_1556/carry[14] (net)                 1     0.000000   1.012817 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.025696 f
+  gpt.vector_unit.kernel/add_1556/U1_14/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.051470 f
+  gpt.vector_unit.kernel/add_1556/carry[15] (net)                 1     0.000000   1.051470 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.067407 f
+  gpt.vector_unit.kernel/add_1556/U1_15/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.086906 f
+  gpt.vector_unit.kernel/add_1556/carry[16] (net)                 1     0.000000   1.086906 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.099784 f
+  gpt.vector_unit.kernel/add_1556/U1_16/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.124236 f
+  gpt.vector_unit.kernel/add_1556/carry[17] (net)                 1     0.000000   1.124236 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.140173 f
+  gpt.vector_unit.kernel/add_1556/U1_17/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.159670 f
+  gpt.vector_unit.kernel/add_1556/carry[18] (net)                 1     0.000000   1.159670 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.172548 f
+  gpt.vector_unit.kernel/add_1556/U1_18/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.197000 f
+  gpt.vector_unit.kernel/add_1556/carry[19] (net)                 1     0.000000   1.197000 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.212937 f
+  gpt.vector_unit.kernel/add_1556/U1_19/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.232434 f
+  gpt.vector_unit.kernel/add_1556/carry[20] (net)                 1     0.000000   1.232434 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.245312 f
+  gpt.vector_unit.kernel/add_1556/U1_20/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.269764 f
+  gpt.vector_unit.kernel/add_1556/carry[21] (net)                 1     0.000000   1.269764 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.285701 f
+  gpt.vector_unit.kernel/add_1556/U1_21/CO (SAEDRVT14_ADDF_V1_1)        0.019496   1.305198 f
+  gpt.vector_unit.kernel/add_1556/carry[22] (net)                 1     0.000000   1.305198 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.318076 f
+  gpt.vector_unit.kernel/add_1556/U1_22/CO (SAEDRVT14_ADDF_V1_0P5)      0.023498   1.341574 f
+  gpt.vector_unit.kernel/add_1556/carry[23] (net)                 1     0.000000   1.341574 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.354452 f
+  gpt.vector_unit.kernel/add_1556/U1_23/CO (SAEDRVT14_ADDF_V1_0P5)      0.025774   1.380227 f
+  gpt.vector_unit.kernel/add_1556/carry[24] (net)                 1     0.000000   1.380227 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.396164 f
+  gpt.vector_unit.kernel/add_1556/U1_24/CO (SAEDRVT14_ADDF_V1_1)        0.019499   1.415662 f
+  gpt.vector_unit.kernel/add_1556/carry[25] (net)                 1     0.000000   1.415662 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CI (SAEDRVT14_ADDF_V1_0P5)      0.012879   1.428541 f
+  gpt.vector_unit.kernel/add_1556/U1_25/CO (SAEDRVT14_ADDF_V1_0P5)      0.024452   1.452993 f
+  gpt.vector_unit.kernel/add_1556/carry[26] (net)                 1     0.000000   1.452993 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.468930 f
+  gpt.vector_unit.kernel/add_1556/U1_26/CO (SAEDRVT14_ADDF_V1_1)        0.019252   1.488182 f
+  gpt.vector_unit.kernel/add_1556/carry[27] (net)                 1     0.000000   1.488182 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CI (SAEDRVT14_ADDF_V2_0P5)      0.011870   1.500051 f
+  gpt.vector_unit.kernel/add_1556/U1_27/CO (SAEDRVT14_ADDF_V2_0P5)      0.015833   1.515885 f
+  gpt.vector_unit.kernel/add_1556/carry[28] (net)                 1     0.000000   1.515885 f
+  gpt.vector_unit.kernel/add_1556/U1_28/CI (SAEDRVT14_ADDF_V1_1)        0.015937   1.531822 f
+  gpt.vector_unit.kernel/add_1556/U1_28/S (SAEDRVT14_ADDF_V1_1)         0.032152   1.563973 r
+  gpt.vector_unit.kernel/add_1556/SUM[28] (net)                   1     0.000000   1.563973 r
+  gpt.vector_unit.kernel/add_1556/SUM[28] (GptVectorNative_DW01_add_6)  0.000000   1.563973 r
+  gpt.vector_unit.kernel/N214 (net)                                     0.000000   1.563973 r
+  gpt.vector_unit.kernel/U307/C1 (SAEDRVT14_AO222_1)                    0.088009   1.651983 r
+  gpt.vector_unit.kernel/U307/X (SAEDRVT14_AO222_1)                     0.013661   1.665644 r
+  gpt.vector_unit.kernel/n331 (net)                               1     0.000000   1.665644 r
+  gpt.vector_unit.kernel/U304/C (SAEDRVT14_AO221_0P5)                   0.071161   1.736805 r
+  gpt.vector_unit.kernel/U304/X (SAEDRVT14_AO221_0P5)                   0.011482   1.748287 r
+  gpt.vector_unit.kernel/n330 (net)                               1     0.000000   1.748287 r
+  gpt.vector_unit.kernel/U297/A2 (SAEDRVT14_OR2_1)                      0.088456   1.836743 r
+  gpt.vector_unit.kernel/U297/X (SAEDRVT14_OR2_1)                       0.007793   1.844536 r
+  gpt.vector_unit.kernel/n1402 (net)                              1     0.000000   1.844536 r
+  gpt.vector_unit.kernel/value_reg[28]/D (SAEDRVT14_FDP_V2LP_1)         0.057616   1.902152 r
+  data arrival time                                                                1.902152
+
+  clock core (rise edge)                                                2.000000   2.000000
+  clock network delay (ideal)                                           0.000000   2.000000
+  gpt.vector_unit.kernel/value_reg[28]/CK (SAEDRVT14_FDP_V2LP_1)        0.000000   2.000000 r
+  library setup time                                                    -0.010258  1.989742
+  data required time                                                               1.989742
+  --------------------------------------------------------------------------------------------
+  data required time                                                               1.989742
+  data arrival time                                                                -1.902152
+  --------------------------------------------------------------------------------------------
+  slack (MET)                                                                      0.087590
+
+
+  Startpoint: gpt.vector_unit.kernel/bias_low_reg[16]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: gpt.vector_unit.kernel/biased_reg[30]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  GptVectorNative    280000                saed14rvt_tt0p8v25c
+
+  Point                                                     Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------
+  clock core (rise edge)                                            0.000000   0.000000
+  clock network delay (ideal)                                       0.000000   0.000000
+  gpt.vector_unit.kernel/bias_low_reg[16]/CK (SAEDRVT14_FDP_V2_1)   0.000000 # 0.000000 r
+  gpt.vector_unit.kernel/bias_low_reg[16]/Q (SAEDRVT14_FDP_V2_1)    0.018994   0.018994 r
+  gpt.vector_unit.kernel/bias_low[16] (net)                   1     0.000000   0.018994 r
+  gpt.vector_unit.kernel/add_1604/U1_0/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.125213 r
+  gpt.vector_unit.kernel/add_1604/U1_0/CO (SAEDRVT14_ADDF_V2_0P5)   0.012112   0.137325 r
+  gpt.vector_unit.kernel/add_1604/carry[1] (net)              1     0.000000   0.137325 r
+  gpt.vector_unit.kernel/add_1604/U1_1/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.214244 r
+  gpt.vector_unit.kernel/add_1604/U1_1/CO (SAEDRVT14_ADDF_V2_0P5)   0.027695   0.241939 r
+  gpt.vector_unit.kernel/add_1604/carry[2] (net)              1     0.000000   0.241939 r
+  gpt.vector_unit.kernel/add_1604/U1_2/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.348158 r
+  gpt.vector_unit.kernel/add_1604/U1_2/CO (SAEDRVT14_ADDF_V2_0P5)   0.013042   0.361200 r
+  gpt.vector_unit.kernel/add_1604/carry[3] (net)              1     0.000000   0.361200 r
+  gpt.vector_unit.kernel/add_1604/U1_3/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.438119 r
+  gpt.vector_unit.kernel/add_1604/U1_3/CO (SAEDRVT14_ADDF_V2_0P5)   0.026951   0.465069 r
+  gpt.vector_unit.kernel/add_1604/carry[4] (net)              1     0.000000   0.465069 r
+  gpt.vector_unit.kernel/add_1604/U1_4/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.541988 r
+  gpt.vector_unit.kernel/add_1604/U1_4/CO (SAEDRVT14_ADDF_V2_0P5)   0.026951   0.568939 r
+  gpt.vector_unit.kernel/add_1604/carry[5] (net)              1     0.000000   0.568939 r
+  gpt.vector_unit.kernel/add_1604/U1_5/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.645858 r
+  gpt.vector_unit.kernel/add_1604/U1_5/CO (SAEDRVT14_ADDF_V2_0P5)   0.026951   0.672808 r
+  gpt.vector_unit.kernel/add_1604/carry[6] (net)              1     0.000000   0.672808 r
+  gpt.vector_unit.kernel/add_1604/U1_6/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   0.749727 r
+  gpt.vector_unit.kernel/add_1604/U1_6/CO (SAEDRVT14_ADDF_V2_0P5)   0.027695   0.777422 r
+  gpt.vector_unit.kernel/add_1604/carry[7] (net)              1     0.000000   0.777422 r
+  gpt.vector_unit.kernel/add_1604/U1_7/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   0.883641 r
+  gpt.vector_unit.kernel/add_1604/U1_7/CO (SAEDRVT14_ADDF_V2_0P5)   0.013790   0.897431 r
+  gpt.vector_unit.kernel/add_1604/carry[8] (net)              1     0.000000   0.897431 r
+  gpt.vector_unit.kernel/add_1604/U1_8/CI (SAEDRVT14_ADDF_V2_0P5)   0.106219   1.003649 r
+  gpt.vector_unit.kernel/add_1604/U1_8/CO (SAEDRVT14_ADDF_V2_0P5)   0.013042   1.016692 r
+  gpt.vector_unit.kernel/add_1604/carry[9] (net)              1     0.000000   1.016692 r
+  gpt.vector_unit.kernel/add_1604/U1_9/A (SAEDRVT14_ADDF_V2_0P5)    0.076919   1.093610 r
+  gpt.vector_unit.kernel/add_1604/U1_9/CO (SAEDRVT14_ADDF_V2_0P5)   0.026951   1.120561 r
+  gpt.vector_unit.kernel/add_1604/carry[10] (net)             1     0.000000   1.120561 r
+  gpt.vector_unit.kernel/add_1604/U1_10/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.197480 r
+  gpt.vector_unit.kernel/add_1604/U1_10/CO (SAEDRVT14_ADDF_V2_0P5)  0.026951   1.224431 r
+  gpt.vector_unit.kernel/add_1604/carry[11] (net)             1     0.000000   1.224431 r
+  gpt.vector_unit.kernel/add_1604/U1_11/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.301350 r
+  gpt.vector_unit.kernel/add_1604/U1_11/CO (SAEDRVT14_ADDF_V2_0P5)  0.026951   1.328300 r
+  gpt.vector_unit.kernel/add_1604/carry[12] (net)             1     0.000000   1.328300 r
+  gpt.vector_unit.kernel/add_1604/U1_12/A (SAEDRVT14_ADDF_V2_0P5)   0.076919   1.405219 r
+  gpt.vector_unit.kernel/add_1604/U1_12/CO (SAEDRVT14_ADDF_V2_0P5)  0.027695   1.432914 r
+  gpt.vector_unit.kernel/add_1604/carry[13] (net)             1     0.000000   1.432914 r
+  gpt.vector_unit.kernel/add_1604/U1_13/CI (SAEDRVT14_ADDF_V2_0P5)  0.106219   1.539133 r
+  gpt.vector_unit.kernel/add_1604/U1_13/CO (SAEDRVT14_ADDF_V2_0P5)  0.013790   1.552923 r
+  gpt.vector_unit.kernel/add_1604/carry[14] (net)             1     0.000000   1.552923 r
+  gpt.vector_unit.kernel/add_1604/U1_14/CI (SAEDRVT14_ADDF_V2_0P5)  0.106219   1.659141 r
+  gpt.vector_unit.kernel/add_1604/U1_14/S (SAEDRVT14_ADDF_V2_0P5)   0.017483   1.676624 f
+  gpt.vector_unit.kernel/N589 (net)                           1     0.000000   1.676624 f
+  gpt.vector_unit.kernel/U480/A1 (SAEDRVT14_ND2_CDC_1)              0.092763   1.769387 f
+  gpt.vector_unit.kernel/U480/X (SAEDRVT14_ND2_CDC_1)               0.004662   1.774049 r
+  gpt.vector_unit.kernel/n614 (net)                           1     0.000000   1.774049 r
+  gpt.vector_unit.kernel/U479/B (SAEDRVT14_OAI21_0P5)               0.054269   1.828318 r
+  gpt.vector_unit.kernel/U479/X (SAEDRVT14_OAI21_0P5)               0.006291   1.834609 f
+  gpt.vector_unit.kernel/n1524 (net)                          1     0.000000   1.834609 f
+  gpt.vector_unit.kernel/biased_reg[30]/D (SAEDRVT14_FDP_V2LP_1)    0.057616   1.892225 f
+  data arrival time                                                            1.892225
+
+  clock core (rise edge)                                            2.000000   2.000000
+  clock network delay (ideal)                                       0.000000   2.000000
+  gpt.vector_unit.kernel/biased_reg[30]/CK (SAEDRVT14_FDP_V2LP_1)   0.000000   2.000000 r
+  library setup time                                                -0.017521  1.982479
+  data required time                                                           1.982479
+  ----------------------------------------------------------------------------------------
+  data required time                                                           1.982479
+  data arrival time                                                            -1.892225
+  ----------------------------------------------------------------------------------------
+  slack (MET)                                                                  0.090254
+
+
+  Startpoint: primitives/lane[0].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[0].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  ArithmeticLane_0   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_0_DW02_mult_0_DW02_mult_20
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[0].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                             0.000000 # 0.000000 r
+  primitives/lane[0].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                             0.027101   0.027101 r
+  primitives/lane[0].unit/n105 (net)                                                  8     0.000000   0.027101 r
+  primitives/lane[0].unit/U743/A3 (SAEDRVT14_OR3_1)                                         0.013358   0.040459 r
+  primitives/lane[0].unit/U743/X (SAEDRVT14_OR3_1)                                          0.018450   0.058909 r
+  primitives/lane[0].unit/n690 (net)                                                  4     0.000000   0.058909 r
+  primitives/lane[0].unit/U505/A1 (SAEDRVT14_NR3_1)                                         0.009679   0.068589 r
+  primitives/lane[0].unit/U505/X (SAEDRVT14_NR3_1)                                          0.014951   0.083540 f
+  primitives/lane[0].unit/n271 (net)                                                  5     0.000000   0.083540 f
+  primitives/lane[0].unit/U252/A (SAEDRVT14_BUF_S_1)                                        0.013910   0.097450 f
+  primitives/lane[0].unit/U252/X (SAEDRVT14_BUF_S_1)                                        0.008491   0.105941 f
+  primitives/lane[0].unit/n320 (net)                                                  3     0.000000   0.105941 f
+  primitives/lane[0].unit/U204/A (SAEDRVT14_INV_1)                                          0.010462   0.116403 f
+  primitives/lane[0].unit/U204/X (SAEDRVT14_INV_1)                                          0.010331   0.126734 r
+  primitives/lane[0].unit/n315 (net)                                                 14     0.000000   0.126734 r
+  primitives/lane[0].unit/U502/B1 (SAEDRVT14_OAI22_0P5)                                     0.012021   0.138755 r
+  primitives/lane[0].unit/U502/X (SAEDRVT14_OAI22_0P5)                                      0.012186   0.150941 f
+  primitives/lane[0].unit/N44 (net)                                                   1     0.000000   0.150941 f
+  primitives/lane[0].unit/mult_500/B[0] (ArithmeticLane_0_DW02_mult_0_DW02_mult_20)         0.000000   0.150941 f
+  primitives/lane[0].unit/mult_500/B[0] (net)                                               0.000000   0.150941 f
+  primitives/lane[0].unit/mult_500/U193/A (SAEDRVT14_INV_S_1)                               0.008400   0.159342 f
+  primitives/lane[0].unit/mult_500/U193/X (SAEDRVT14_INV_S_1)                               0.007988   0.167330 r
+  primitives/lane[0].unit/mult_500/n180 (net)                                         3     0.000000   0.167330 r
+  primitives/lane[0].unit/mult_500/U144/A (SAEDRVT14_BUF_S_1)                               0.012183   0.179513 r
+  primitives/lane[0].unit/mult_500/U144/X (SAEDRVT14_BUF_S_1)                               0.015354   0.194866 r
+  primitives/lane[0].unit/mult_500/n127 (net)                                        15     0.000000   0.194866 r
+  primitives/lane[0].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                                0.014741   0.209607 r
+  primitives/lane[0].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                 0.010906   0.220513 f
+  primitives/lane[0].unit/mult_500/ab[1][0] (net)                                     2     0.000000   0.220513 f
+  primitives/lane[0].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                  0.009660   0.230173 f
+  primitives/lane[0].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                  0.004716   0.234889 r
+  primitives/lane[0].unit/mult_500/n57 (net)                                          1     0.000000   0.234889 r
+  primitives/lane[0].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                              0.007436   0.242324 r
+  primitives/lane[0].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                               0.006208   0.248532 f
+  primitives/lane[0].unit/mult_500/CARRYB[1][0] (net)                                 1     0.000000   0.248532 f
+  primitives/lane[0].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.278071 f
+  primitives/lane[0].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021836   0.299907 f
+  primitives/lane[0].unit/mult_500/CARRYB[2][0] (net)                                 1     0.000000   0.299907 f
+  primitives/lane[0].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.329447 f
+  primitives/lane[0].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021890   0.351336 f
+  primitives/lane[0].unit/mult_500/CARRYB[3][0] (net)                                 1     0.000000   0.351336 f
+  primitives/lane[0].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.380876 f
+  primitives/lane[0].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.402763 f
+  primitives/lane[0].unit/mult_500/CARRYB[4][0] (net)                                 1     0.000000   0.402763 f
+  primitives/lane[0].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.432302 f
+  primitives/lane[0].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.454190 f
+  primitives/lane[0].unit/mult_500/CARRYB[5][0] (net)                                 1     0.000000   0.454190 f
+  primitives/lane[0].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.483729 f
+  primitives/lane[0].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   0.504865 f
+  primitives/lane[0].unit/mult_500/CARRYB[6][0] (net)                                 1     0.000000   0.504865 f
+  primitives/lane[0].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   0.527827 f
+  primitives/lane[0].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   0.556731 f
+  primitives/lane[0].unit/mult_500/CARRYB[7][0] (net)                                 1     0.000000   0.556731 f
+  primitives/lane[0].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.586270 f
+  primitives/lane[0].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   0.609776 f
+  primitives/lane[0].unit/mult_500/CARRYB[8][0] (net)                                 1     0.000000   0.609776 f
+  primitives/lane[0].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.639315 f
+  primitives/lane[0].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.661203 f
+  primitives/lane[0].unit/mult_500/CARRYB[9][0] (net)                                 1     0.000000   0.661203 f
+  primitives/lane[0].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.690742 f
+  primitives/lane[0].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021886   0.712628 f
+  primitives/lane[0].unit/mult_500/CARRYB[10][0] (net)                                1     0.000000   0.712628 f
+  primitives/lane[0].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.742167 f
+  primitives/lane[0].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.764054 f
+  primitives/lane[0].unit/mult_500/CARRYB[11][0] (net)                                1     0.000000   0.764054 f
+  primitives/lane[0].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.793594 f
+  primitives/lane[0].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.815481 f
+  primitives/lane[0].unit/mult_500/CARRYB[12][0] (net)                                1     0.000000   0.815481 f
+  primitives/lane[0].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.845021 f
+  primitives/lane[0].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.866908 f
+  primitives/lane[0].unit/mult_500/CARRYB[13][0] (net)                                1     0.000000   0.866908 f
+  primitives/lane[0].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.896448 f
+  primitives/lane[0].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.918335 f
+  primitives/lane[0].unit/mult_500/CARRYB[14][0] (net)                                1     0.000000   0.918335 f
+  primitives/lane[0].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.947874 f
+  primitives/lane[0].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.969762 f
+  primitives/lane[0].unit/mult_500/CARRYB[15][0] (net)                                1     0.000000   0.969762 f
+  primitives/lane[0].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.999301 f
+  primitives/lane[0].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.021189 f
+  primitives/lane[0].unit/mult_500/CARRYB[16][0] (net)                                1     0.000000   1.021189 f
+  primitives/lane[0].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.050728 f
+  primitives/lane[0].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.072616 f
+  primitives/lane[0].unit/mult_500/CARRYB[17][0] (net)                                1     0.000000   1.072616 f
+  primitives/lane[0].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.102155 f
+  primitives/lane[0].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.124043 f
+  primitives/lane[0].unit/mult_500/CARRYB[18][0] (net)                                1     0.000000   1.124043 f
+  primitives/lane[0].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.153582 f
+  primitives/lane[0].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.175470 f
+  primitives/lane[0].unit/mult_500/CARRYB[19][0] (net)                                1     0.000000   1.175470 f
+  primitives/lane[0].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.205009 f
+  primitives/lane[0].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.226896 f
+  primitives/lane[0].unit/mult_500/CARRYB[20][0] (net)                                1     0.000000   1.226896 f
+  primitives/lane[0].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.256436 f
+  primitives/lane[0].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.278323 f
+  primitives/lane[0].unit/mult_500/CARRYB[21][0] (net)                                1     0.000000   1.278323 f
+  primitives/lane[0].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.307863 f
+  primitives/lane[0].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.329750 f
+  primitives/lane[0].unit/mult_500/CARRYB[22][0] (net)                                1     0.000000   1.329750 f
+  primitives/lane[0].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.359290 f
+  primitives/lane[0].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   1.380426 f
+  primitives/lane[0].unit/mult_500/CARRYB[23][0] (net)                                1     0.000000   1.380426 f
+  primitives/lane[0].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   1.403388 f
+  primitives/lane[0].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   1.432291 f
+  primitives/lane[0].unit/mult_500/CARRYB[24][0] (net)                                1     0.000000   1.432291 f
+  primitives/lane[0].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.461830 f
+  primitives/lane[0].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   1.485336 f
+  primitives/lane[0].unit/mult_500/CARRYB[25][0] (net)                                1     0.000000   1.485336 f
+  primitives/lane[0].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.514876 f
+  primitives/lane[0].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.536763 f
+  primitives/lane[0].unit/mult_500/CARRYB[26][0] (net)                                1     0.000000   1.536763 f
+  primitives/lane[0].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.566303 f
+  primitives/lane[0].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021886   1.588188 f
+  primitives/lane[0].unit/mult_500/CARRYB[27][0] (net)                                1     0.000000   1.588188 f
+  primitives/lane[0].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.617728 f
+  primitives/lane[0].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.639615 f
+  primitives/lane[0].unit/mult_500/CARRYB[28][0] (net)                                1     0.000000   1.639615 f
+  primitives/lane[0].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.669155 f
+  primitives/lane[0].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   1.690291 f
+  primitives/lane[0].unit/mult_500/CARRYB[29][0] (net)                                1     0.000000   1.690291 f
+  primitives/lane[0].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   1.713253 f
+  primitives/lane[0].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.024275   1.737528 f
+  primitives/lane[0].unit/mult_500/CARRYB[30][0] (net)                                1     0.000000   1.737528 f
+  primitives/lane[0].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                 0.010303   1.747831 f
+  primitives/lane[0].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                  0.025197   1.773028 f
+  primitives/lane[0].unit/mult_500/PRODUCT[31] (net)                                  1     0.000000   1.773028 f
+  primitives/lane[0].unit/mult_500/PRODUCT[31] (ArithmeticLane_0_DW02_mult_0_DW02_mult_20)  0.000000   1.773028 f
+  primitives/lane[0].unit/multiply[31] (net)                                                0.000000   1.773028 f
+  primitives/lane[0].unit/U253/A (SAEDRVT14_INV_1)                                          0.008455   1.781483 f
+  primitives/lane[0].unit/U253/X (SAEDRVT14_INV_1)                                          0.004252   1.785735 r
+  primitives/lane[0].unit/n1070 (net)                                                 2     0.000000   1.785735 r
+  primitives/lane[0].unit/U504/A2 (SAEDRVT14_OAI21_0P75)                                    0.011471   1.797206 r
+  primitives/lane[0].unit/U504/X (SAEDRVT14_OAI21_0P75)                                     0.007143   1.804350 f
+  primitives/lane[0].unit/n697 (net)                                                  1     0.000000   1.804350 f
+  primitives/lane[0].unit/U503/C (SAEDRVT14_AO221_0P5)                                      0.007017   1.811366 f
+  primitives/lane[0].unit/U503/X (SAEDRVT14_AO221_0P5)                                      0.016747   1.828114 f
+  primitives/lane[0].unit/n695 (net)                                                  1     0.000000   1.828114 f
+  primitives/lane[0].unit/U507/A2 (SAEDRVT14_OAI21_0P75)                                    0.010042   1.838156 f
+  primitives/lane[0].unit/U507/X (SAEDRVT14_OAI21_0P75)                                     0.007024   1.845180 r
+  primitives/lane[0].unit/n693 (net)                                                  1     0.000000   1.845180 r
+  primitives/lane[0].unit/U985/B (SAEDRVT14_AO21B_0P5)                                      0.005372   1.850553 r
+  primitives/lane[0].unit/U985/X (SAEDRVT14_AO21B_0P5)                                      0.005247   1.855800 f
+  primitives/lane[0].unit/n692 (net)                                                  1     0.000000   1.855800 f
+  primitives/lane[0].unit/U506/C (SAEDRVT14_AO221_0P5)                                      0.007017   1.862817 f
+  primitives/lane[0].unit/U506/X (SAEDRVT14_AO221_0P5)                                      0.014698   1.877515 f
+  primitives/lane[0].unit/n872 (net)                                                  1     0.000000   1.877515 f
+  primitives/lane[0].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)                       0.005686   1.883201 f
+  data arrival time                                                                                    1.883201
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[0].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5)                      0.000000   2.000000 r
+  library setup time                                                                        -0.005493  1.994507
+  data required time                                                                                   1.994507
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.994507
+  data arrival time                                                                                    -1.883201
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.111306
+
+
+  Startpoint: primitives/lane[1].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[1].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       280000                saed14rvt_tt0p8v25c
+  ArithmeticLane_15  8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_15_DW02_mult_0_DW02_mult_19
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                              Fanout      Incr       Path
+  -----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                     0.000000   0.000000
+  clock network delay (ideal)                                                                0.000000   0.000000
+  primitives/lane[1].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                              0.000000 # 0.000000 r
+  primitives/lane[1].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                              0.027101   0.027101 r
+  primitives/lane[1].unit/n2026 (net)                                                  8     0.000000   0.027101 r
+  primitives/lane[1].unit/U743/A3 (SAEDRVT14_OR3_1)                                          0.013358   0.040459 r
+  primitives/lane[1].unit/U743/X (SAEDRVT14_OR3_1)                                           0.018450   0.058909 r
+  primitives/lane[1].unit/n1578 (net)                                                  4     0.000000   0.058909 r
+  primitives/lane[1].unit/U490/A1 (SAEDRVT14_NR3_1)                                          0.009679   0.068589 r
+  primitives/lane[1].unit/U490/X (SAEDRVT14_NR3_1)                                           0.014951   0.083540 f
+  primitives/lane[1].unit/n270 (net)                                                   5     0.000000   0.083540 f
+  primitives/lane[1].unit/U239/A (SAEDRVT14_BUF_S_1)                                         0.013910   0.097450 f
+  primitives/lane[1].unit/U239/X (SAEDRVT14_BUF_S_1)                                         0.008491   0.105941 f
+  primitives/lane[1].unit/n319 (net)                                                   3     0.000000   0.105941 f
+  primitives/lane[1].unit/U191/A (SAEDRVT14_INV_1)                                           0.010462   0.116403 f
+  primitives/lane[1].unit/U191/X (SAEDRVT14_INV_1)                                           0.010331   0.126734 r
+  primitives/lane[1].unit/n314 (net)                                                  14     0.000000   0.126734 r
+  primitives/lane[1].unit/U487/B1 (SAEDRVT14_OAI22_0P5)                                      0.012021   0.138755 r
+  primitives/lane[1].unit/U487/X (SAEDRVT14_OAI22_0P5)                                       0.012186   0.150941 f
+  primitives/lane[1].unit/N44 (net)                                                    1     0.000000   0.150941 f
+  primitives/lane[1].unit/mult_500/B[0] (ArithmeticLane_15_DW02_mult_0_DW02_mult_19)         0.000000   0.150941 f
+  primitives/lane[1].unit/mult_500/B[0] (net)                                                0.000000   0.150941 f
+  primitives/lane[1].unit/mult_500/U193/A (SAEDRVT14_INV_S_1)                                0.008400   0.159342 f
+  primitives/lane[1].unit/mult_500/U193/X (SAEDRVT14_INV_S_1)                                0.007988   0.167330 r
+  primitives/lane[1].unit/mult_500/n180 (net)                                          3     0.000000   0.167330 r
+  primitives/lane[1].unit/mult_500/U144/A (SAEDRVT14_BUF_S_1)                                0.012183   0.179513 r
+  primitives/lane[1].unit/mult_500/U144/X (SAEDRVT14_BUF_S_1)                                0.015354   0.194866 r
+  primitives/lane[1].unit/mult_500/n127 (net)                                         15     0.000000   0.194866 r
+  primitives/lane[1].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                                 0.014741   0.209607 r
+  primitives/lane[1].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                  0.010906   0.220513 f
+  primitives/lane[1].unit/mult_500/ab[1][0] (net)                                      2     0.000000   0.220513 f
+  primitives/lane[1].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                   0.009660   0.230173 f
+  primitives/lane[1].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                   0.004716   0.234889 r
+  primitives/lane[1].unit/mult_500/n57 (net)                                           1     0.000000   0.234889 r
+  primitives/lane[1].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                               0.007436   0.242324 r
+  primitives/lane[1].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                                0.006208   0.248532 f
+  primitives/lane[1].unit/mult_500/CARRYB[1][0] (net)                                  1     0.000000   0.248532 f
+  primitives/lane[1].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.278071 f
+  primitives/lane[1].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021836   0.299907 f
+  primitives/lane[1].unit/mult_500/CARRYB[2][0] (net)                                  1     0.000000   0.299907 f
+  primitives/lane[1].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.329447 f
+  primitives/lane[1].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021890   0.351336 f
+  primitives/lane[1].unit/mult_500/CARRYB[3][0] (net)                                  1     0.000000   0.351336 f
+  primitives/lane[1].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.380876 f
+  primitives/lane[1].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.402763 f
+  primitives/lane[1].unit/mult_500/CARRYB[4][0] (net)                                  1     0.000000   0.402763 f
+  primitives/lane[1].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.432302 f
+  primitives/lane[1].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.454190 f
+  primitives/lane[1].unit/mult_500/CARRYB[5][0] (net)                                  1     0.000000   0.454190 f
+  primitives/lane[1].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.483729 f
+  primitives/lane[1].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021136   0.504865 f
+  primitives/lane[1].unit/mult_500/CARRYB[6][0] (net)                                  1     0.000000   0.504865 f
+  primitives/lane[1].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                          0.022962   0.527827 f
+  primitives/lane[1].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                         0.028903   0.556731 f
+  primitives/lane[1].unit/mult_500/CARRYB[7][0] (net)                                  1     0.000000   0.556731 f
+  primitives/lane[1].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.586270 f
+  primitives/lane[1].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                           0.023506   0.609776 f
+  primitives/lane[1].unit/mult_500/CARRYB[8][0] (net)                                  1     0.000000   0.609776 f
+  primitives/lane[1].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.639315 f
+  primitives/lane[1].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.661203 f
+  primitives/lane[1].unit/mult_500/CARRYB[9][0] (net)                                  1     0.000000   0.661203 f
+  primitives/lane[1].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.690742 f
+  primitives/lane[1].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   0.712628 f
+  primitives/lane[1].unit/mult_500/CARRYB[10][0] (net)                                 1     0.000000   0.712628 f
+  primitives/lane[1].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.742167 f
+  primitives/lane[1].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.764054 f
+  primitives/lane[1].unit/mult_500/CARRYB[11][0] (net)                                 1     0.000000   0.764054 f
+  primitives/lane[1].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.793594 f
+  primitives/lane[1].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.815481 f
+  primitives/lane[1].unit/mult_500/CARRYB[12][0] (net)                                 1     0.000000   0.815481 f
+  primitives/lane[1].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.845021 f
+  primitives/lane[1].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.866908 f
+  primitives/lane[1].unit/mult_500/CARRYB[13][0] (net)                                 1     0.000000   0.866908 f
+  primitives/lane[1].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.896448 f
+  primitives/lane[1].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.918335 f
+  primitives/lane[1].unit/mult_500/CARRYB[14][0] (net)                                 1     0.000000   0.918335 f
+  primitives/lane[1].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.947874 f
+  primitives/lane[1].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.969762 f
+  primitives/lane[1].unit/mult_500/CARRYB[15][0] (net)                                 1     0.000000   0.969762 f
+  primitives/lane[1].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.999301 f
+  primitives/lane[1].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.021189 f
+  primitives/lane[1].unit/mult_500/CARRYB[16][0] (net)                                 1     0.000000   1.021189 f
+  primitives/lane[1].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.050728 f
+  primitives/lane[1].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.072616 f
+  primitives/lane[1].unit/mult_500/CARRYB[17][0] (net)                                 1     0.000000   1.072616 f
+  primitives/lane[1].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.102155 f
+  primitives/lane[1].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.124043 f
+  primitives/lane[1].unit/mult_500/CARRYB[18][0] (net)                                 1     0.000000   1.124043 f
+  primitives/lane[1].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.153582 f
+  primitives/lane[1].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.175470 f
+  primitives/lane[1].unit/mult_500/CARRYB[19][0] (net)                                 1     0.000000   1.175470 f
+  primitives/lane[1].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.205009 f
+  primitives/lane[1].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.226896 f
+  primitives/lane[1].unit/mult_500/CARRYB[20][0] (net)                                 1     0.000000   1.226896 f
+  primitives/lane[1].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.256436 f
+  primitives/lane[1].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.278323 f
+  primitives/lane[1].unit/mult_500/CARRYB[21][0] (net)                                 1     0.000000   1.278323 f
+  primitives/lane[1].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.307863 f
+  primitives/lane[1].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.329750 f
+  primitives/lane[1].unit/mult_500/CARRYB[22][0] (net)                                 1     0.000000   1.329750 f
+  primitives/lane[1].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.359290 f
+  primitives/lane[1].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.380426 f
+  primitives/lane[1].unit/mult_500/CARRYB[23][0] (net)                                 1     0.000000   1.380426 f
+  primitives/lane[1].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.403388 f
+  primitives/lane[1].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   1.432291 f
+  primitives/lane[1].unit/mult_500/CARRYB[24][0] (net)                                 1     0.000000   1.432291 f
+  primitives/lane[1].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.461830 f
+  primitives/lane[1].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   1.485336 f
+  primitives/lane[1].unit/mult_500/CARRYB[25][0] (net)                                 1     0.000000   1.485336 f
+  primitives/lane[1].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.514876 f
+  primitives/lane[1].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.536763 f
+  primitives/lane[1].unit/mult_500/CARRYB[26][0] (net)                                 1     0.000000   1.536763 f
+  primitives/lane[1].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.566303 f
+  primitives/lane[1].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   1.588188 f
+  primitives/lane[1].unit/mult_500/CARRYB[27][0] (net)                                 1     0.000000   1.588188 f
+  primitives/lane[1].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.617728 f
+  primitives/lane[1].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.639615 f
+  primitives/lane[1].unit/mult_500/CARRYB[28][0] (net)                                 1     0.000000   1.639615 f
+  primitives/lane[1].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.669155 f
+  primitives/lane[1].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.690291 f
+  primitives/lane[1].unit/mult_500/CARRYB[29][0] (net)                                 1     0.000000   1.690291 f
+  primitives/lane[1].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.713253 f
+  primitives/lane[1].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.024275   1.737528 f
+  primitives/lane[1].unit/mult_500/CARRYB[30][0] (net)                                 1     0.000000   1.737528 f
+  primitives/lane[1].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                  0.010303   1.747831 f
+  primitives/lane[1].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                   0.025197   1.773028 f
+  primitives/lane[1].unit/mult_500/PRODUCT[31] (net)                                   1     0.000000   1.773028 f
+  primitives/lane[1].unit/mult_500/PRODUCT[31] (ArithmeticLane_15_DW02_mult_0_DW02_mult_19)  0.000000   1.773028 f
+  primitives/lane[1].unit/multiply[31] (net)                                                 0.000000   1.773028 f
+  primitives/lane[1].unit/U240/A (SAEDRVT14_INV_1)                                           0.008455   1.781483 f
+  primitives/lane[1].unit/U240/X (SAEDRVT14_INV_1)                                           0.004252   1.785735 r
+  primitives/lane[1].unit/n1056 (net)                                                  2     0.000000   1.785735 r
+  primitives/lane[1].unit/U489/A2 (SAEDRVT14_OAI21_0P75)                                     0.011471   1.797206 r
+  primitives/lane[1].unit/U489/X (SAEDRVT14_OAI21_0P75)                                      0.007143   1.804350 f
+  primitives/lane[1].unit/n1571 (net)                                                  1     0.000000   1.804350 f
+  primitives/lane[1].unit/U488/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.811366 f
+  primitives/lane[1].unit/U488/X (SAEDRVT14_AO221_0P5)                                       0.016747   1.828114 f
+  primitives/lane[1].unit/n1573 (net)                                                  1     0.000000   1.828114 f
+  primitives/lane[1].unit/U492/A2 (SAEDRVT14_OAI21_0P75)                                     0.010042   1.838156 f
+  primitives/lane[1].unit/U492/X (SAEDRVT14_OAI21_0P75)                                      0.007024   1.845180 r
+  primitives/lane[1].unit/n1575 (net)                                                  1     0.000000   1.845180 r
+  primitives/lane[1].unit/U985/B (SAEDRVT14_AO21B_0P5)                                       0.005372   1.850553 r
+  primitives/lane[1].unit/U985/X (SAEDRVT14_AO21B_0P5)                                       0.005247   1.855800 f
+  primitives/lane[1].unit/n1576 (net)                                                  1     0.000000   1.855800 f
+  primitives/lane[1].unit/U491/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.862817 f
+  primitives/lane[1].unit/U491/X (SAEDRVT14_AO221_0P5)                                       0.014698   1.877515 f
+  primitives/lane[1].unit/n1398 (net)                                                  1     0.000000   1.877515 f
+  primitives/lane[1].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)                        0.005686   1.883201 f
+  data arrival time                                                                                     1.883201
+
+  clock core (rise edge)                                                                     2.000000   2.000000
+  clock network delay (ideal)                                                                0.000000   2.000000
+  primitives/lane[1].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5)                       0.000000   2.000000 r
+  library setup time                                                                         -0.005493  1.994507
+  data required time                                                                                    1.994507
+  -----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                    1.994507
+  data arrival time                                                                                     -1.883201
+  -----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                           0.111306
+
+
+1

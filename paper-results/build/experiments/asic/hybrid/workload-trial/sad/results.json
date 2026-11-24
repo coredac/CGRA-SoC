@@ -1,0 +1,27 @@
+{
+  "complete": true,
+  "total_cell_area": 35790.173373,
+  "local_array_storage_area": 0,
+  "area_excluding_local_array_storage": 35790.173373,
+  "storage_rule": "No bulk local array exists. All operand, accumulator, pipeline and controller registers remain counted.",
+  "group_area": {
+    "primitive_bank": 33638.9496,
+    "native_control_and_operand_state": 2151.2244
+  },
+  "sequential_cell_count": 6008,
+  "leaf_area_sum": 35790.174,
+  "worst_setup_slack_ns": 0.058382,
+  "violating_setup_paths": 0,
+  "no_violated_constraints": true,
+  "source_sha256": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5",
+  "constraints_sha256": "2a86e9269d3ca3cc39a5198a09e36c2685a691d3cb93c65d7675d683004314c5",
+  "evidence_audit": {
+    "exit_ok": true,
+    "source_matches": true,
+    "constraints_match": true,
+    "reports_match": true,
+    "timing_check_clean": true,
+    "unique_leaves": true,
+    "leaf_area_reconciles": true
+  }
+}

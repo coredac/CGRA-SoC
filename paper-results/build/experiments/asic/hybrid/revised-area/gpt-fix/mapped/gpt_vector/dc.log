@@ -1,0 +1,831 @@
+INFO:    Using cached SIF image
+/opt2/synopsys/syn-T-2022.03-SP5-6/bin/dc_shell: /opt2/synopsys/syn-T-2022.03-SP5-6/bin/snps_platform: /bin/csh: bad interpreter: No such file or directory
+
+                           Design Compiler Graphical 
+                                 DC Ultra (TM)
+                                  DFTMAX (TM)
+                              Power Compiler (TM)
+                                 DesignWare (R)
+                                 DC Expert (TM)
+                               Design Vision (TM)
+                               HDL Compiler (TM)
+                               VHDL Compiler (TM)
+                                  DFT Compiler
+                               Design Compiler(R)
+
+              Version T-2022.03-SP5-6 for linux64 - Sep 20, 2023 
+
+                    Copyright (c) 1988 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+Initializing...
+proc run {} {
+  define_design_lib WORK -path work
+  set logic /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db
+  set_app_var target_library [list $logic]
+  set_app_var link_library [list * $logic]
+  set_app_var sh_continue_on_error false
+  set_host_options -max_cores 1
+  if {![analyze -format verilog all.v]} {error "analyze failed"}
+  elaborate ExpandedAsic
+  current_design ExpandedAsic
+  if {![link]} {error "link failed"}
+  create_clock -name core -period 2 [get_ports clk]
+  set_input_delay 0.1 -clock core [remove_from_collection [all_inputs] [get_ports clk]]
+  set_output_delay 0.1 -clock core [all_outputs]
+  set_input_transition 0.1 [remove_from_collection [all_inputs] [get_ports clk]]
+  set_load 1.0 [all_outputs]
+  set_max_transition 0.2 [current_design]
+  set_max_fanout 16 [current_design]
+  set_wire_load_mode enclosed
+  set_fix_multiple_port_nets -all -buffer_constants [get_designs *]
+  if {![compile -map_effort medium -area_effort high]} {error "compile failed"}
+  redirect -file area.rpt {report_area -hierarchy}
+  redirect -file units.rpt {report_units}
+  redirect -file setup.rpt {report_timing -delay_type max -max_paths 10 -nets -input_pins -significant_digits 6}
+  redirect -file constraints.rpt {report_constraint -all_violators -significant_digits 6}
+  redirect -file qor.rpt {report_qor}
+  write -format ddc -hierarchy -output mapped.ddc
+  redirect -file check.rpt {check_design}
+  redirect -file timing_check.rpt {check_timing -include {unconstrained_endpoints no_input_delay partial_input_delay}}
+  redirect -file design.rpt {report_design}
+  set leaves [get_cells -hierarchical -filter {is_hierarchical == false}]
+  foreach ref [lsort -unique [get_attribute $leaves ref_name]] {
+    if {[string match GTECH* $ref] || [sizeof_collection [get_lib_cells -quiet */$ref]] == 0} {error "unmapped $ref"}
+  }
+  set names [get_attribute $leaves full_name]
+  set refs [get_attribute $leaves ref_name]
+  set areas [get_attribute $leaves area]
+  set seqs [get_attribute $leaves is_sequential]
+  set f [open leaves.tsv w]
+  puts $f "path\tref\tarea\tsequential"
+  foreach name $names ref $refs area $areas seq $seqs {puts $f "$name\t$ref\t$area\t$seq"}
+  close $f
+  set f [open SUCCESS w]
+  puts $f complete
+  close $f
+}
+if {[catch run message]} {puts stderr $message; puts stderr $::errorInfo; exit 1}
+Running PRESTO HDLC
+Compiling source file ./all.v
+Presto compilation completed successfully.
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+Loading db file '/opt2/synopsys/syn-T-2022.03-SP5-6/libraries/syn/gtech.db'
+Loading db file '/opt2/synopsys/syn-T-2022.03-SP5-6/libraries/syn/standard.sldb'
+  Loading link library 'saed14rvt_tt0p8v25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Warning:  ./all.v:294: Net native_busy connected to instance gpt.vector_unit.kernel is declared as reg data type but is not driven by an always block. (VER-1004)
+Warning:  ./all.v:294: Net native_done connected to instance gpt.vector_unit.kernel is declared as reg data type but is not driven by an always block. (VER-1004)
+Presto compilation completed successfully. (ExpandedAsic)
+Elaborated 1 design.
+Current design is now 'ExpandedAsic'.
+Information: Building the design 'PrimitiveBank'. (HDL-193)
+
+Inferred memory devices in process
+	in routine PrimitiveBank line 667 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|     active_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|      busy_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (PrimitiveBank)
+Information: Building the design 'GptVectorNative'. (HDL-193)
+Warning:  ./all.v:1574: signed to unsigned part selection occurs. (VER-318)
+Warning:  ./all.v:1575: signed to unsigned part selection occurs. (VER-318)
+Warning:  ./all.v:1576: signed to unsigned part selection occurs. (VER-318)
+Warning:  ./all.v:1584: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./all.v:1600: signed to unsigned part selection occurs. (VER-318)
+Warning:  ./all.v:1604: signed to unsigned part selection occurs. (VER-318)
+Warning:  ./all.v:1617: signed to unsigned assignment occurs. (VER-318)
+Warning:  ./all.v:1633: signed to unsigned assignment occurs. (VER-318)
+
+Statistics for case statements in always block at line 1523 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           1530           |    auto/auto     |
+|           1546           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine GptVectorNative line 1523 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      size_reg       | Flip-flop |  11   |  Y  | N  | N  | N  | N  | N  | N  |
+|   activation_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|       op_reg        | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|    bias_low_reg     | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|     biased_reg      | Flip-flop |  19   |  Y  | N  | N  | N  | N  | N  | N  |
+|      value_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|      delta_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|   coefficient_reg   | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+| square_cross_a_reg  | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|     square_reg      | Flip-flop |  20   |  Y  | N  | N  | N  | N  | N  | N  |
+|      gate_reg       | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|   correction_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|     product_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|  square_upper_reg   | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+| square_cross_b_reg  | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|   square_low_reg    | Flip-flop |  20   |  Y  | N  | N  | N  | N  | N  | N  |
+|    magnitude_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    negative_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|        q_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|     second_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|      scale_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+| round_magnitude_reg | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|      index_reg      | Flip-flop |  10   |  Y  | N  | N  | N  | N  | N  | N  |
+|      done_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    numerator_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|      busy_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|      state_reg      | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (GptVectorNative)
+Information: Building the design 'ArithmeticLane'. (HDL-193)
+Warning:  ./all.v:579: The statements in initial blocks are ignored. (VER-281)
+Warning:  ./all.v:516: signed to unsigned assignment occurs. (VER-318)
+
+Statistics for case statements in always block at line 501 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           505            |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 530 in file
+	'./all.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           542            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine ArithmeticLane line 530 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|     partial_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|     stride_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|       op_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        z_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|        y_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|        x_reg        | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    out_data_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (ArithmeticLane)
+Information: Building the design 'GptVectorMemory'. (HDL-193)
+Warning:  ./all.v:1706: signed to unsigned conversion occurs. (VER-318)
+Statistics for MUX_OPs
+==========================================================
+|   block name/line    | Inputs | Outputs | # sel inputs |
+==========================================================
+| GptVectorMemory/1716 |   8    |   32    |      3       |
+==========================================================
+Presto compilation completed successfully. (GptVectorMemory)
+Information: Building the design 'Restoring'. (HDL-193)
+Warning:  ./all.v:402: The statements in initial blocks are ignored. (VER-281)
+
+Inferred memory devices in process
+	in routine Restoring line 366 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      busy_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     result_reg      | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    remainder_reg    | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|   square_root_reg   | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     divisor_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|    quotient_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+| take_remainder_reg  | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|      count_reg      | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|      done_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    negative_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (Restoring)
+Information: Building the design 'GptVectorBank'. (HDL-193)
+
+Inferred memory devices in process
+	in routine GptVectorBank line 1679 in file
+		'./all.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      words_reg      | Flip-flop | 4096  |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Statistics for MUX_OPs
+========================================================
+|  block name/line   | Inputs | Outputs | # sel inputs |
+========================================================
+| GptVectorBank/1678 |  128   |   32    |      7       |
+========================================================
+Presto compilation completed successfully. (GptVectorBank)
+Current design is 'ExpandedAsic'.
+
+  Linking design 'ExpandedAsic'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (7 designs)               /tmp/cgra-revised-gpt-fix-fJfrb7YV/gpt_vector/ExpandedAsic.db, etc
+  saed14rvt_tt0p8v25c (library) /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db
+
+Current design is 'ExpandedAsic'.
+Current design is 'ExpandedAsic'.
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | T-2022.03-DWBB_202203.5.6 |   *     |
+| Licensed DW Building Blocks        |                         |           |
+============================================================================
+
+====================================================================================================
+| Flow Information                                                                                 |
+----------------------------------------------------------------------------------------------------
+| Flow         | Design Compiler                                                                   |
+====================================================================================================
+| Design Information                                      | Value                                  |
+====================================================================================================
+| Number of Scenarios                                     | 0                                      |
+| Leaf Cell Count                                         | 118385                                 |
+| Number of User Hierarchies                              | 61                                     |
+| Sequential Cell Count                                   | 104303                                 |
+| Macro Count                                             | 0                                      |
+| Number of Power Domains                                 | 0                                      |
+| Number of Path Groups                                   | 2                                      |
+| Number of VT Class                                      | 0                                      |
+| Number of Clocks                                        | 1                                      |
+| Number of Dont Touch Cells                              | 2367                                   |
+| Number of Dont Touch Nets                               | 0                                      |
+| Number of Size Only Cells                               | 0                                      |
+| Design with UPF Data                                    | false                                  |
+----------------------------------------------------------------------------------------------------
+| Variables                                               | Value                                  |
+----------------------------------------------------------------------------------------------------
+| set_fix_multiple_port_nets                              | -all -buffer_constants                 |
+====================================================================================================
+
+Information: There are 742 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'GptVectorBank_0'
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_4'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_2'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_1'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN4_V2_0P5'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_4'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_2'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_1'. (OPT-914)
+Warning: No single bit degenerate for multibit library cell 'SAEDRVT14_FSDN2_V2_0P5'. (OPT-914)
+  Processing 'GptVectorMemory_0'
+  Processing 'GptVectorNative'
+  Processing 'Restoring_0'
+  Processing 'ArithmeticLane_0'
+  Processing 'PrimitiveBank'
+  Processing 'ExpandedAsic'
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Implementation Selection
+  ----------------------------------
+  Processing 'GptVectorNative_DW01_cmp6_0'
+  Processing 'GptVectorNative_DW01_cmp2_0'
+  Processing 'GptVectorNative_DW01_cmp2_1'
+  Processing 'GptVectorNative_DW01_sub_0'
+  Processing 'GptVectorNative_DW01_add_0'
+  Processing 'GptVectorNative_DW01_sub_1'
+  Processing 'GptVectorNative_DW01_add_1'
+  Processing 'GptVectorNative_DW01_sub_2'
+  Processing 'GptVectorNative_DW01_add_2'
+  Processing 'GptVectorNative_DW01_add_3'
+  Processing 'GptVectorNative_DW01_sub_3'
+  Processing 'GptVectorNative_DW01_add_4'
+  Processing 'GptVectorNative_DW01_add_5'
+  Processing 'GptVectorNative_DW01_sub_4'
+  Processing 'GptVectorNative_DW01_cmp2_2'
+  Processing 'GptVectorNative_DW01_sub_5'
+  Processing 'GptVectorNative_DW01_add_6'
+  Processing 'GptVectorNative_DW01_inc_0'
+  Processing 'GptVectorNative_DW01_sub_6'
+  Processing 'GptVectorNative_DW01_cmp2_3'
+  Processing 'GptVectorNative_DW01_cmp2_4'
+  Processing 'ArithmeticLane_1_DW01_add_0_DW01_add_7'
+  Processing 'ArithmeticLane_1_DW01_add_1_DW01_add_8'
+  Processing 'ArithmeticLane_1_DW01_inc_0_DW01_inc_1'
+  Allocating blocks in 'DW_rash_A_width32_SH_width32'
+  Processing 'ArithmeticLane_1_DW_rash_0'
+  Processing 'ArithmeticLane_1_DW_rash_1'
+  Allocating blocks in 'DW01_ash_A_width32_SH_width32'
+  Processing 'ArithmeticLane_1_DW01_ash_0'
+  Processing 'ArithmeticLane_1_DW01_sub_0_DW01_sub_7'
+  Processing 'ArithmeticLane_1_DW01_add_2_DW01_add_9'
+  Processing 'ArithmeticLane_1_DW01_cmp6_0_DW01_cmp6_1'
+  Processing 'ArithmeticLane_1_DW01_cmp6_1_DW01_cmp6_2'
+  Processing 'Restoring_1_DW01_sub_0_DW01_sub_8'
+  Processing 'Restoring_1_DW01_dec_0'
+  Processing 'Restoring_1_DW01_sub_1_DW01_sub_9'
+  Processing 'Restoring_1_DW01_sub_2_DW01_sub_10'
+  Processing 'Restoring_1_DW01_sub_3_DW01_sub_11'
+  Processing 'Restoring_1_DW01_cmp2_0_DW01_cmp2_5'
+  Processing 'ArithmeticLane_2_DW01_add_0_DW01_add_10'
+  Processing 'ArithmeticLane_2_DW01_add_1_DW01_add_11'
+  Processing 'ArithmeticLane_2_DW01_inc_0_DW01_inc_2'
+  Processing 'ArithmeticLane_2_DW_rash_0_DW_rash_2'
+  Processing 'ArithmeticLane_2_DW_rash_1_DW_rash_3'
+  Processing 'ArithmeticLane_2_DW01_ash_0_DW01_ash_1'
+  Processing 'ArithmeticLane_2_DW01_sub_0_DW01_sub_12'
+  Processing 'ArithmeticLane_2_DW01_add_2_DW01_add_12'
+  Processing 'ArithmeticLane_2_DW01_cmp6_0_DW01_cmp6_3'
+  Processing 'ArithmeticLane_2_DW01_cmp6_1_DW01_cmp6_4'
+  Processing 'Restoring_2_DW01_sub_0_DW01_sub_13'
+  Processing 'Restoring_2_DW01_dec_0_DW01_dec_1'
+  Processing 'Restoring_2_DW01_sub_1_DW01_sub_14'
+  Processing 'Restoring_2_DW01_sub_2_DW01_sub_15'
+  Processing 'Restoring_2_DW01_sub_3_DW01_sub_16'
+  Processing 'Restoring_2_DW01_cmp2_0_DW01_cmp2_6'
+  Processing 'ArithmeticLane_3_DW01_add_0_DW01_add_13'
+  Processing 'ArithmeticLane_3_DW01_add_1_DW01_add_14'
+  Processing 'ArithmeticLane_3_DW01_inc_0_DW01_inc_3'
+  Processing 'ArithmeticLane_3_DW_rash_0_DW_rash_4'
+  Processing 'ArithmeticLane_3_DW_rash_1_DW_rash_5'
+  Processing 'ArithmeticLane_3_DW01_ash_0_DW01_ash_2'
+  Processing 'ArithmeticLane_3_DW01_sub_0_DW01_sub_17'
+  Processing 'ArithmeticLane_3_DW01_add_2_DW01_add_15'
+  Processing 'ArithmeticLane_3_DW01_cmp6_0_DW01_cmp6_5'
+  Processing 'ArithmeticLane_3_DW01_cmp6_1_DW01_cmp6_6'
+  Processing 'Restoring_3_DW01_sub_0_DW01_sub_18'
+  Processing 'Restoring_3_DW01_dec_0_DW01_dec_2'
+  Processing 'Restoring_3_DW01_sub_1_DW01_sub_19'
+  Processing 'Restoring_3_DW01_sub_2_DW01_sub_20'
+  Processing 'Restoring_3_DW01_sub_3_DW01_sub_21'
+  Processing 'Restoring_3_DW01_cmp2_0_DW01_cmp2_7'
+  Processing 'ArithmeticLane_4_DW01_add_0_DW01_add_16'
+  Processing 'ArithmeticLane_4_DW01_add_1_DW01_add_17'
+  Processing 'ArithmeticLane_4_DW01_inc_0_DW01_inc_4'
+  Processing 'ArithmeticLane_4_DW_rash_0_DW_rash_6'
+  Processing 'ArithmeticLane_4_DW_rash_1_DW_rash_7'
+  Processing 'ArithmeticLane_4_DW01_ash_0_DW01_ash_3'
+  Processing 'ArithmeticLane_4_DW01_sub_0_DW01_sub_22'
+  Processing 'ArithmeticLane_4_DW01_add_2_DW01_add_18'
+  Processing 'ArithmeticLane_4_DW01_cmp6_0_DW01_cmp6_7'
+  Processing 'ArithmeticLane_4_DW01_cmp6_1_DW01_cmp6_8'
+  Processing 'Restoring_4_DW01_sub_0_DW01_sub_23'
+  Processing 'Restoring_4_DW01_dec_0_DW01_dec_3'
+  Processing 'Restoring_4_DW01_sub_1_DW01_sub_24'
+  Processing 'Restoring_4_DW01_sub_2_DW01_sub_25'
+  Processing 'Restoring_4_DW01_sub_3_DW01_sub_26'
+  Processing 'Restoring_4_DW01_cmp2_0_DW01_cmp2_8'
+  Processing 'ArithmeticLane_5_DW01_add_0_DW01_add_19'
+  Processing 'ArithmeticLane_5_DW01_add_1_DW01_add_20'
+  Processing 'ArithmeticLane_5_DW01_inc_0_DW01_inc_5'
+  Processing 'ArithmeticLane_5_DW_rash_0_DW_rash_8'
+  Processing 'ArithmeticLane_5_DW_rash_1_DW_rash_9'
+  Processing 'ArithmeticLane_5_DW01_ash_0_DW01_ash_4'
+  Processing 'ArithmeticLane_5_DW01_sub_0_DW01_sub_27'
+  Processing 'ArithmeticLane_5_DW01_add_2_DW01_add_21'
+  Processing 'ArithmeticLane_5_DW01_cmp6_0_DW01_cmp6_9'
+  Processing 'ArithmeticLane_5_DW01_cmp6_1_DW01_cmp6_10'
+  Processing 'Restoring_5_DW01_sub_0_DW01_sub_28'
+  Processing 'Restoring_5_DW01_dec_0_DW01_dec_4'
+  Processing 'Restoring_5_DW01_sub_1_DW01_sub_29'
+  Processing 'Restoring_5_DW01_sub_2_DW01_sub_30'
+  Processing 'Restoring_5_DW01_sub_3_DW01_sub_31'
+  Processing 'Restoring_5_DW01_cmp2_0_DW01_cmp2_9'
+  Processing 'ArithmeticLane_6_DW01_add_0_DW01_add_22'
+  Processing 'ArithmeticLane_6_DW01_add_1_DW01_add_23'
+  Processing 'ArithmeticLane_6_DW01_inc_0_DW01_inc_6'
+  Processing 'ArithmeticLane_6_DW_rash_0_DW_rash_10'
+  Processing 'ArithmeticLane_6_DW_rash_1_DW_rash_11'
+  Processing 'ArithmeticLane_6_DW01_ash_0_DW01_ash_5'
+  Processing 'ArithmeticLane_6_DW01_sub_0_DW01_sub_32'
+  Processing 'ArithmeticLane_6_DW01_add_2_DW01_add_24'
+  Processing 'ArithmeticLane_6_DW01_cmp6_0_DW01_cmp6_11'
+  Processing 'ArithmeticLane_6_DW01_cmp6_1_DW01_cmp6_12'
+  Processing 'Restoring_6_DW01_sub_0_DW01_sub_33'
+  Processing 'Restoring_6_DW01_dec_0_DW01_dec_5'
+  Processing 'Restoring_6_DW01_sub_1_DW01_sub_34'
+  Processing 'Restoring_6_DW01_sub_2_DW01_sub_35'
+  Processing 'Restoring_6_DW01_sub_3_DW01_sub_36'
+  Processing 'Restoring_6_DW01_cmp2_0_DW01_cmp2_10'
+  Processing 'ArithmeticLane_7_DW01_add_0_DW01_add_25'
+  Processing 'ArithmeticLane_7_DW01_add_1_DW01_add_26'
+  Processing 'ArithmeticLane_7_DW01_inc_0_DW01_inc_7'
+  Processing 'ArithmeticLane_7_DW_rash_0_DW_rash_12'
+  Processing 'ArithmeticLane_7_DW_rash_1_DW_rash_13'
+  Processing 'ArithmeticLane_7_DW01_ash_0_DW01_ash_6'
+  Processing 'ArithmeticLane_7_DW01_sub_0_DW01_sub_37'
+  Processing 'ArithmeticLane_7_DW01_add_2_DW01_add_27'
+  Processing 'ArithmeticLane_7_DW01_cmp6_0_DW01_cmp6_13'
+  Processing 'ArithmeticLane_7_DW01_cmp6_1_DW01_cmp6_14'
+  Processing 'Restoring_7_DW01_sub_0_DW01_sub_38'
+  Processing 'Restoring_7_DW01_dec_0_DW01_dec_6'
+  Processing 'Restoring_7_DW01_sub_1_DW01_sub_39'
+  Processing 'Restoring_7_DW01_sub_2_DW01_sub_40'
+  Processing 'Restoring_7_DW01_sub_3_DW01_sub_41'
+  Processing 'Restoring_7_DW01_cmp2_0_DW01_cmp2_11'
+  Processing 'ArithmeticLane_8_DW01_add_0_DW01_add_28'
+  Processing 'ArithmeticLane_8_DW01_add_1_DW01_add_29'
+  Processing 'ArithmeticLane_8_DW01_inc_0_DW01_inc_8'
+  Processing 'ArithmeticLane_8_DW_rash_0_DW_rash_14'
+  Processing 'ArithmeticLane_8_DW_rash_1_DW_rash_15'
+  Processing 'ArithmeticLane_8_DW01_ash_0_DW01_ash_7'
+  Processing 'ArithmeticLane_8_DW01_sub_0_DW01_sub_42'
+  Processing 'ArithmeticLane_8_DW01_add_2_DW01_add_30'
+  Processing 'ArithmeticLane_8_DW01_cmp6_0_DW01_cmp6_15'
+  Processing 'ArithmeticLane_8_DW01_cmp6_1_DW01_cmp6_16'
+  Processing 'Restoring_8_DW01_sub_0_DW01_sub_43'
+  Processing 'Restoring_8_DW01_dec_0_DW01_dec_7'
+  Processing 'Restoring_8_DW01_sub_1_DW01_sub_44'
+  Processing 'Restoring_8_DW01_sub_2_DW01_sub_45'
+  Processing 'Restoring_8_DW01_sub_3_DW01_sub_46'
+  Processing 'Restoring_8_DW01_cmp2_0_DW01_cmp2_12'
+  Processing 'ArithmeticLane_9_DW01_add_0_DW01_add_31'
+  Processing 'ArithmeticLane_9_DW01_add_1_DW01_add_32'
+  Processing 'ArithmeticLane_9_DW01_inc_0_DW01_inc_9'
+  Processing 'ArithmeticLane_9_DW_rash_0_DW_rash_16'
+  Processing 'ArithmeticLane_9_DW_rash_1_DW_rash_17'
+  Processing 'ArithmeticLane_9_DW01_ash_0_DW01_ash_8'
+  Processing 'ArithmeticLane_9_DW01_sub_0_DW01_sub_47'
+  Processing 'ArithmeticLane_9_DW01_add_2_DW01_add_33'
+  Processing 'ArithmeticLane_9_DW01_cmp6_0_DW01_cmp6_17'
+  Processing 'ArithmeticLane_9_DW01_cmp6_1_DW01_cmp6_18'
+  Processing 'Restoring_9_DW01_sub_0_DW01_sub_48'
+  Processing 'Restoring_9_DW01_dec_0_DW01_dec_8'
+  Processing 'Restoring_9_DW01_sub_1_DW01_sub_49'
+  Processing 'Restoring_9_DW01_sub_2_DW01_sub_50'
+  Processing 'Restoring_9_DW01_sub_3_DW01_sub_51'
+  Processing 'Restoring_9_DW01_cmp2_0_DW01_cmp2_13'
+  Processing 'ArithmeticLane_10_DW01_add_0_DW01_add_34'
+  Processing 'ArithmeticLane_10_DW01_add_1_DW01_add_35'
+  Processing 'ArithmeticLane_10_DW01_inc_0_DW01_inc_10'
+  Processing 'ArithmeticLane_10_DW_rash_0_DW_rash_18'
+  Processing 'ArithmeticLane_10_DW_rash_1_DW_rash_19'
+  Processing 'ArithmeticLane_10_DW01_ash_0_DW01_ash_9'
+  Processing 'ArithmeticLane_10_DW01_sub_0_DW01_sub_52'
+  Processing 'ArithmeticLane_10_DW01_add_2_DW01_add_36'
+  Processing 'ArithmeticLane_10_DW01_cmp6_0_DW01_cmp6_19'
+  Processing 'ArithmeticLane_10_DW01_cmp6_1_DW01_cmp6_20'
+  Processing 'Restoring_10_DW01_sub_0_DW01_sub_53'
+  Processing 'Restoring_10_DW01_dec_0_DW01_dec_9'
+  Processing 'Restoring_10_DW01_sub_1_DW01_sub_54'
+  Processing 'Restoring_10_DW01_sub_2_DW01_sub_55'
+  Processing 'Restoring_10_DW01_sub_3_DW01_sub_56'
+  Processing 'Restoring_10_DW01_cmp2_0_DW01_cmp2_14'
+  Processing 'ArithmeticLane_11_DW01_add_0_DW01_add_37'
+  Processing 'ArithmeticLane_11_DW01_add_1_DW01_add_38'
+  Processing 'ArithmeticLane_11_DW01_inc_0_DW01_inc_11'
+  Processing 'ArithmeticLane_11_DW_rash_0_DW_rash_20'
+  Processing 'ArithmeticLane_11_DW_rash_1_DW_rash_21'
+  Processing 'ArithmeticLane_11_DW01_ash_0_DW01_ash_10'
+  Processing 'ArithmeticLane_11_DW01_sub_0_DW01_sub_57'
+  Processing 'ArithmeticLane_11_DW01_add_2_DW01_add_39'
+  Processing 'ArithmeticLane_11_DW01_cmp6_0_DW01_cmp6_21'
+  Processing 'ArithmeticLane_11_DW01_cmp6_1_DW01_cmp6_22'
+  Processing 'Restoring_11_DW01_sub_0_DW01_sub_58'
+  Processing 'Restoring_11_DW01_dec_0_DW01_dec_10'
+  Processing 'Restoring_11_DW01_sub_1_DW01_sub_59'
+  Processing 'Restoring_11_DW01_sub_2_DW01_sub_60'
+  Processing 'Restoring_11_DW01_sub_3_DW01_sub_61'
+  Processing 'Restoring_11_DW01_cmp2_0_DW01_cmp2_15'
+  Processing 'ArithmeticLane_12_DW01_add_0_DW01_add_40'
+  Processing 'ArithmeticLane_12_DW01_add_1_DW01_add_41'
+  Processing 'ArithmeticLane_12_DW01_inc_0_DW01_inc_12'
+  Processing 'ArithmeticLane_12_DW_rash_0_DW_rash_22'
+  Processing 'ArithmeticLane_12_DW_rash_1_DW_rash_23'
+  Processing 'ArithmeticLane_12_DW01_ash_0_DW01_ash_11'
+  Processing 'ArithmeticLane_12_DW01_sub_0_DW01_sub_62'
+  Processing 'ArithmeticLane_12_DW01_add_2_DW01_add_42'
+  Processing 'ArithmeticLane_12_DW01_cmp6_0_DW01_cmp6_23'
+  Processing 'ArithmeticLane_12_DW01_cmp6_1_DW01_cmp6_24'
+  Processing 'Restoring_12_DW01_sub_0_DW01_sub_63'
+  Processing 'Restoring_12_DW01_dec_0_DW01_dec_11'
+  Processing 'Restoring_12_DW01_sub_1_DW01_sub_64'
+  Processing 'Restoring_12_DW01_sub_2_DW01_sub_65'
+  Processing 'Restoring_12_DW01_sub_3_DW01_sub_66'
+  Processing 'Restoring_12_DW01_cmp2_0_DW01_cmp2_16'
+  Processing 'ArithmeticLane_13_DW01_add_0_DW01_add_43'
+  Processing 'ArithmeticLane_13_DW01_add_1_DW01_add_44'
+  Processing 'ArithmeticLane_13_DW01_inc_0_DW01_inc_13'
+  Processing 'ArithmeticLane_13_DW_rash_0_DW_rash_24'
+  Processing 'ArithmeticLane_13_DW_rash_1_DW_rash_25'
+  Processing 'ArithmeticLane_13_DW01_ash_0_DW01_ash_12'
+  Processing 'ArithmeticLane_13_DW01_sub_0_DW01_sub_67'
+  Processing 'ArithmeticLane_13_DW01_add_2_DW01_add_45'
+  Processing 'ArithmeticLane_13_DW01_cmp6_0_DW01_cmp6_25'
+  Processing 'ArithmeticLane_13_DW01_cmp6_1_DW01_cmp6_26'
+  Processing 'Restoring_13_DW01_sub_0_DW01_sub_68'
+  Processing 'Restoring_13_DW01_dec_0_DW01_dec_12'
+  Processing 'Restoring_13_DW01_sub_1_DW01_sub_69'
+  Processing 'Restoring_13_DW01_sub_2_DW01_sub_70'
+  Processing 'Restoring_13_DW01_sub_3_DW01_sub_71'
+  Processing 'Restoring_13_DW01_cmp2_0_DW01_cmp2_17'
+  Processing 'ArithmeticLane_14_DW01_add_0_DW01_add_46'
+  Processing 'ArithmeticLane_14_DW01_add_1_DW01_add_47'
+  Processing 'ArithmeticLane_14_DW01_inc_0_DW01_inc_14'
+  Processing 'ArithmeticLane_14_DW_rash_0_DW_rash_26'
+  Processing 'ArithmeticLane_14_DW_rash_1_DW_rash_27'
+  Processing 'ArithmeticLane_14_DW01_ash_0_DW01_ash_13'
+  Processing 'ArithmeticLane_14_DW01_sub_0_DW01_sub_72'
+  Processing 'ArithmeticLane_14_DW01_add_2_DW01_add_48'
+  Processing 'ArithmeticLane_14_DW01_cmp6_0_DW01_cmp6_27'
+  Processing 'ArithmeticLane_14_DW01_cmp6_1_DW01_cmp6_28'
+  Processing 'Restoring_14_DW01_sub_0_DW01_sub_73'
+  Processing 'Restoring_14_DW01_dec_0_DW01_dec_13'
+  Processing 'Restoring_14_DW01_sub_1_DW01_sub_74'
+  Processing 'Restoring_14_DW01_sub_2_DW01_sub_75'
+  Processing 'Restoring_14_DW01_sub_3_DW01_sub_76'
+  Processing 'Restoring_14_DW01_cmp2_0_DW01_cmp2_18'
+  Processing 'ArithmeticLane_15_DW01_add_0_DW01_add_49'
+  Processing 'ArithmeticLane_15_DW01_add_1_DW01_add_50'
+  Processing 'ArithmeticLane_15_DW01_inc_0_DW01_inc_15'
+  Processing 'ArithmeticLane_15_DW_rash_0_DW_rash_28'
+  Processing 'ArithmeticLane_15_DW_rash_1_DW_rash_29'
+  Processing 'ArithmeticLane_15_DW01_ash_0_DW01_ash_14'
+  Processing 'ArithmeticLane_15_DW01_sub_0_DW01_sub_77'
+  Processing 'ArithmeticLane_15_DW01_add_2_DW01_add_51'
+  Processing 'ArithmeticLane_15_DW01_cmp6_0_DW01_cmp6_29'
+  Processing 'ArithmeticLane_15_DW01_cmp6_1_DW01_cmp6_30'
+  Processing 'Restoring_15_DW01_sub_0_DW01_sub_78'
+  Processing 'Restoring_15_DW01_dec_0_DW01_dec_14'
+  Processing 'Restoring_15_DW01_sub_1_DW01_sub_79'
+  Processing 'Restoring_15_DW01_sub_2_DW01_sub_80'
+  Processing 'Restoring_15_DW01_sub_3_DW01_sub_81'
+  Processing 'Restoring_15_DW01_cmp2_0_DW01_cmp2_19'
+  Processing 'ArithmeticLane_0_DW01_add_0_DW01_add_52'
+  Processing 'ArithmeticLane_0_DW01_add_1_DW01_add_53'
+  Processing 'ArithmeticLane_0_DW01_inc_0_DW01_inc_16'
+  Processing 'ArithmeticLane_0_DW_rash_0_DW_rash_30'
+  Processing 'ArithmeticLane_0_DW_rash_1_DW_rash_31'
+  Processing 'ArithmeticLane_0_DW01_ash_0_DW01_ash_15'
+  Processing 'ArithmeticLane_0_DW01_sub_0_DW01_sub_82'
+  Processing 'ArithmeticLane_0_DW01_add_2_DW01_add_54'
+  Processing 'ArithmeticLane_0_DW01_cmp6_0_DW01_cmp6_31'
+  Processing 'ArithmeticLane_0_DW01_cmp6_1_DW01_cmp6_32'
+  Processing 'Restoring_0_DW01_sub_0_DW01_sub_83'
+  Processing 'Restoring_0_DW01_dec_0_DW01_dec_15'
+  Processing 'Restoring_0_DW01_sub_1_DW01_sub_84'
+  Processing 'Restoring_0_DW01_sub_2_DW01_sub_85'
+  Processing 'Restoring_0_DW01_sub_3_DW01_sub_86'
+  Processing 'Restoring_0_DW01_cmp2_0_DW01_cmp2_20'
+  Allocating blocks in 'DW02_mult_A_width11_B_width32'
+  Building model 'DW01_MUX'
+  Processing 'DW01_MUX'
+  Building model 'DW01_mmux_width2'
+  Processing 'DW01_mmux_width2'
+  Building model 'DW01_mmux_width3'
+  Processing 'DW01_mmux_width3'
+  Building model 'DW01_mmux_width4'
+  Processing 'DW01_mmux_width4'
+  Building model 'DW01_mmux_width5'
+  Processing 'DW01_mmux_width5'
+  Building model 'DW01_add_width41' (cla)
+  Processing 'DW01_add_width41'
+  Building model 'DW02_mult_A_width11_B_width32' (csa)
+  Processing 'DW02_mult_A_width11_B_width32'
+  Allocating blocks in 'DW02_mult_A_width32_B_width32'
+  Building model 'DW01_add_width62' (cla)
+  Processing 'DW01_add_width62'
+  Building model 'DW02_mult_A_width32_B_width32' (csa)
+  Processing 'DW02_mult_A_width32_B_width32'
+  Allocating blocks in 'DW02_mult_A_width16_B_width16'
+  Building model 'DW01_add_width30' (cla)
+  Processing 'DW01_add_width30'
+  Building model 'DW02_mult_A_width16_B_width16' (csa)
+  Processing 'DW02_mult_A_width16_B_width16'
+  Processing 'GptVectorNative_DW02_mult_0'
+  Processing 'GptVectorNative_DW01_add_7_DW01_add_55'
+  Processing 'GptVectorNative_DW02_mult_1'
+  Processing 'GptVectorNative_DW01_add_8_DW01_add_56'
+  Processing 'GptVectorNative_DW02_mult_2'
+  Processing 'GptVectorNative_DW01_add_9_DW01_add_57'
+  Processing 'GptVectorNative_DW02_mult_3'
+  Processing 'GptVectorNative_DW01_add_10_DW01_add_58'
+  Processing 'GptVectorNative_DW02_mult_4'
+  Processing 'GptVectorNative_DW01_add_11_DW01_add_59'
+  Processing 'ArithmeticLane_1_DW02_mult_0_DW02_mult_5'
+  Processing 'ArithmeticLane_1_DW01_add_3_DW01_add_60'
+  Processing 'ArithmeticLane_2_DW02_mult_0_DW02_mult_6'
+  Processing 'ArithmeticLane_2_DW01_add_3_DW01_add_61'
+  Processing 'ArithmeticLane_3_DW02_mult_0_DW02_mult_7'
+  Processing 'ArithmeticLane_3_DW01_add_3_DW01_add_62'
+  Processing 'ArithmeticLane_4_DW02_mult_0_DW02_mult_8'
+  Processing 'ArithmeticLane_4_DW01_add_3_DW01_add_63'
+  Processing 'ArithmeticLane_5_DW02_mult_0_DW02_mult_9'
+  Processing 'ArithmeticLane_5_DW01_add_3_DW01_add_64'
+  Processing 'ArithmeticLane_6_DW02_mult_0_DW02_mult_10'
+  Processing 'ArithmeticLane_6_DW01_add_3_DW01_add_65'
+  Processing 'ArithmeticLane_7_DW02_mult_0_DW02_mult_11'
+  Processing 'ArithmeticLane_7_DW01_add_3_DW01_add_66'
+  Processing 'ArithmeticLane_8_DW02_mult_0_DW02_mult_12'
+  Processing 'ArithmeticLane_8_DW01_add_3_DW01_add_67'
+  Processing 'ArithmeticLane_9_DW02_mult_0_DW02_mult_13'
+  Processing 'ArithmeticLane_9_DW01_add_3_DW01_add_68'
+  Processing 'ArithmeticLane_10_DW02_mult_0_DW02_mult_14'
+  Processing 'ArithmeticLane_10_DW01_add_3_DW01_add_69'
+  Processing 'ArithmeticLane_11_DW02_mult_0_DW02_mult_15'
+  Processing 'ArithmeticLane_11_DW01_add_3_DW01_add_70'
+  Processing 'ArithmeticLane_12_DW02_mult_0_DW02_mult_16'
+  Processing 'ArithmeticLane_12_DW01_add_3_DW01_add_71'
+  Processing 'ArithmeticLane_13_DW02_mult_0_DW02_mult_17'
+  Processing 'ArithmeticLane_13_DW01_add_3_DW01_add_72'
+  Processing 'ArithmeticLane_14_DW02_mult_0_DW02_mult_18'
+  Processing 'ArithmeticLane_14_DW01_add_3_DW01_add_73'
+  Processing 'ArithmeticLane_15_DW02_mult_0_DW02_mult_19'
+  Processing 'ArithmeticLane_15_DW01_add_3_DW01_add_74'
+  Processing 'ArithmeticLane_0_DW02_mult_0_DW02_mult_20'
+  Processing 'ArithmeticLane_0_DW01_add_3_DW01_add_75'
+
+  Beginning Mapping Optimizations  (Medium effort)
+  -------------------------------
+Information: The register 'gpt.vector_unit.kernel/product_reg[0]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[1]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[2]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[3]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[4]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[5]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[6]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[7]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[8]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[9]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[10]' will be removed. (OPT-1207)
+Information: The register 'gpt.vector_unit.kernel/product_reg[11]' will be removed. (OPT-1207)
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:09:06  263272.7      6.40  405055.1  796918.4                          
+    0:09:06  263272.7      6.40  405055.1  796918.4                          
+    0:09:33  263660.3      6.40  405039.8  795999.4                          
+    0:09:50  265081.8      6.40  405059.7  785258.3                          
+    0:09:57  267705.8      6.40  404902.3  754316.8                          
+    0:10:01  269249.5      6.49  404778.2  742356.2                          
+    0:10:04  270951.9      6.49  404726.4  731638.6                          
+    0:10:07  273725.4      6.49  404416.6  697620.9                          
+    0:10:10  276488.6      6.49  404105.7  664044.3                          
+    0:10:14  279321.3      6.49  403818.9  627142.4                          
+    0:10:17  282025.2      6.49  403484.7  596450.0                          
+    0:10:20  284858.0      6.49  403198.5  559548.1                          
+    0:10:23  287596.7      6.49  402863.8  528855.7                          
+    0:10:27  290498.9      6.49  402578.7  491953.8                          
+    0:10:30  293273.7      6.49  402254.1  459892.2                          
+    0:10:33  296139.9      6.49  401958.8  424359.6                          
+    0:10:36  299017.7      6.49  401664.3  388385.8                          
+    0:10:39  301780.9      6.49  401338.3  356765.3                          
+    0:10:43  304683.1      6.49  401052.1  319863.4                          
+    0:10:46  307421.9      6.49  400717.7  289171.0                          
+    0:10:49  310324.1      6.49  400432.2  252269.1                          
+    0:10:57  315549.2      6.49  400287.4  183745.6                          
+    0:11:10  323403.6      6.49  400285.2   79575.1                          
+    0:11:24  329214.5      6.49  400285.1    6649.0                          
+    0:11:26  330169.9      6.49  400285.1    3586.0                          
+    0:15:11  329492.7      0.82    6204.5    2092.0                          
+    0:15:26  329461.0      0.80    6202.3    2092.0                          
+    0:15:33  329460.5      0.80    6192.4    2092.0                          
+    0:15:33  329460.5      0.80    6192.4    2092.0                          
+    0:15:37  329460.5      0.80    6192.4    2092.0                          
+    0:15:47  329460.5      0.80    6192.4    2092.0                          
+    0:22:51  219894.9      1.04      13.5    2092.0                          
+    0:25:07  219801.9      0.77       4.2    2092.0                          
+    0:25:36  219751.5      0.76       4.0    2092.0                          
+    0:25:49  219752.4      0.67       3.1    2092.0                          
+    0:26:02  219752.4      0.73       3.3    2092.0                          
+    0:26:14  219753.3      0.75       3.1    2092.0                          
+    0:26:27  219753.9      0.74       4.9    2091.0                          
+    0:26:40  219753.5      0.75       3.1    2091.0                          
+    0:26:53  219754.1      0.75       2.6    2091.0                          
+    0:27:00  219754.1      0.75       2.6    2091.0                          
+    0:27:01  219754.1      0.75       2.6    2091.0                          
+    0:27:23  219882.6      0.75       2.6    1569.0                          
+    0:27:49  219998.4      0.75       2.6    1141.0                          
+    0:28:04  220104.3      0.75       2.6     858.0                          
+    0:28:18  220159.3      0.75       2.6     637.0                          
+    0:28:27  220182.4      0.75       2.6     521.0                          
+    0:28:33  220195.5      0.75       2.6     439.0                          
+    0:28:40  220201.2      0.75       2.6     375.0                          
+    0:28:46  220206.9      0.75       2.6     327.0                          
+    0:28:52  220212.6      0.75       2.6     295.0                          
+    0:28:52  220212.6      0.75       2.6     295.0                          
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:28:53  220212.6      0.75       2.6     295.0                          
+    0:28:54  220219.0      0.00       0.0     295.0                          
+    0:28:59  220219.0      0.00       0.0     295.0                          
+
+
+  Beginning Design Rule Fixing  (max_fanout)
+  ----------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:28:59  220219.0      0.00       0.0     295.0                          
+    0:28:59  220231.4      0.00       0.0     239.0 primitives/lane[13].unit/mult_500/net250147
+    0:29:00  220244.6      0.00       0.0     203.0 primitives/lane[9].unit/mult_500/net250413
+    0:29:06  220260.7      0.00       0.0     151.0 gpt.vector_unit.kernel/div_a[14]
+    0:29:06  220276.0      0.00       0.0     117.0 primitives/lane[3].unit/mult_500/net250842
+    0:29:06  220289.3      0.00       0.0     102.0 primitives/lane[11].unit/mult_500/net250282
+    0:29:07  220299.4      0.00       0.0      90.0 primitives/native_b[29]  
+    0:29:07  220308.3      0.00       0.0      80.0 primitives/native_b[19]  
+    0:29:08  220317.2      0.00       0.0      70.0 primitives/native_b[9]   
+    0:29:09  220326.1      0.00       0.0      60.0 primitives/lane[0].unit/x[11]
+    0:29:09  220334.1      0.00       0.0      51.0 primitives/lane[3].unit/x[14]
+    0:29:11  220341.2      0.00       0.0      43.0 primitives/lane[5].unit/x[14]
+    0:29:11  220349.2      0.00       0.0      34.0 primitives/lane[7].unit/x[13]
+    0:29:12  220357.2      0.00       0.0      25.0 primitives/lane[9].unit/x[12]
+    0:29:13  220365.1      0.00       0.0      16.0 primitives/lane[11].unit/x[11]
+    0:29:13  220373.1      0.00       0.0       7.0 primitives/lane[14].unit/x[14]
+    0:29:14  220379.4      0.00       0.0       0.0                          
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:29:14  220379.4      0.00       0.0       0.0                          
+    0:29:19  220379.4      0.00       0.0       0.0                          
+    0:30:09  219019.6      0.00       0.0       0.0                          
+    0:31:06  217907.2      0.00       0.0       0.0                          
+    0:31:58  217698.6      0.00       0.0       0.0                          
+    0:32:11  217648.7      0.00       0.0       0.0                          
+    0:32:18  217611.7      0.00       0.0       0.0                          
+    0:32:24  217580.8      0.00       0.0       0.0                          
+    0:32:30  217552.7      0.00       0.0       0.0                          
+    0:32:35  217537.2      0.00       0.0       0.0                          
+    0:32:37  217528.3      0.00       0.0       0.0                          
+    0:32:39  217519.5      0.00       0.0       0.0                          
+    0:32:40  217510.5      0.00       0.0       0.0                          
+    0:32:42  217502.0      0.00       0.0       0.0                          
+    0:32:44  217493.4      0.00       0.0       0.0                          
+    0:32:45  217484.9      0.00       0.0       0.0                          
+    0:32:47  217476.4      0.00       0.0       0.0                          
+    0:32:48  217467.9      0.00       0.0       0.0                          
+    0:32:55  217466.3      0.00       0.0       0.0                          
+    0:32:56  217466.3      0.00       0.0       0.0                          
+    0:33:05  217465.9      0.00       0.0       0.0                          
+    0:33:15  217437.5      0.03       0.0       0.0                          
+    0:33:18  217422.9      0.03       0.0       0.0                          
+    0:33:21  217422.9      0.03       0.0       0.0                          
+    0:33:22  217422.9      0.03       0.0       0.0                          
+    0:33:24  217422.9      0.03       0.0       0.0                          
+    0:33:25  217422.9      0.03       0.0       0.0                          
+    0:33:26  217422.9      0.03       0.0       0.0                          
+    0:33:49  217356.7      0.00       0.0       0.0                          
+Loading db file '/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'ExpandedAsic' contains 2 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'primitives/lane[1].unit/native_start': 1980 load(s), 1 driver(s)
+     Net 'gpt.vector_unit.kernel/source_store/banks[1].memory/clk': 104291 load(s), 1 driver(s)
+Writing ddc file 'mapped.ddc'.
+exit 0
+
+Memory usage for this session 1693 Mbytes.
+Memory usage for this session including child processes 1693 Mbytes.
+CPU usage for this session 2137 seconds ( 0.59 hours ).
+Elapsed time for this session 2145 seconds ( 0.60 hours ).
+
+Thank you...

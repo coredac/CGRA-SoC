@@ -1,0 +1,79 @@
+{
+  "unit": "um",
+  "stage": "planned repaired-memory physical implementation",
+  "die_bounds": [
+    0,
+    0,
+    2493.376,
+    2493.2
+  ],
+  "regions": [
+    {
+      "name": "Rocket CPU",
+      "bounds": [
+        10.6,
+        10.6,
+        1040,
+        1280
+      ],
+      "id": "cpu"
+    },
+    {
+      "name": "Gemmini",
+      "bounds": [
+        10.6,
+        1300,
+        1340,
+        2482.6
+      ],
+      "id": "gemmini"
+    },
+    {
+      "name": "CGRA",
+      "bounds": [
+        1360,
+        1000,
+        2482.6,
+        2482.6
+      ],
+      "id": "cgra"
+    },
+    {
+      "name": "Pool",
+      "bounds": [
+        1060,
+        780,
+        1860,
+        980
+      ],
+      "id": "pool"
+    },
+    {
+      "name": "Host SPM",
+      "bounds": [
+        1880,
+        10.6,
+        2482.6,
+        980
+      ],
+      "id": "host"
+    },
+    {
+      "name": "SoC / interconnect",
+      "bounds": [
+        1060,
+        10.6,
+        1860,
+        760
+      ],
+      "id": "soc"
+    }
+  ],
+  "limitations": [
+    "Post-route implementation pending; do not use as routed evidence",
+    "Timing closure not claimed",
+    "Single-port SRAM and standard-cell 1R1W memories replace incompatible dual-port macros"
+  ],
+  "region_policy": "All initial functional cells belong to disjoint hard module bounds. Bounds allow later shared clock-tree and physical cells; they are not exclusive fences.",
+  "fit_note": "CPU enlarged to accommodate 560 physically matched x4 SRAMs with 1 um macro halos; initial macro+halo+old standard-cell estimate occupies 77.7% of CPU region. Gemmini native memory replacements fit the reduced region."
+}

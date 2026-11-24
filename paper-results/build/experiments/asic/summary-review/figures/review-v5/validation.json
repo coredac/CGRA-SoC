@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "axis_labels": true,
+    "old_labels_removed": true,
+    "data_unchanged": true,
+    "footer_absent": true,
+    "compile_clean": true,
+    "visual_review": true
+  },
+  "passed": true
+}

@@ -1,0 +1,76 @@
+{
+  "id": "gcn-cgra2",
+  "workload": "gcn",
+  "shape": "large",
+  "cgras": 2,
+  "frozen_origin": "build/experiments/p1/gcn/cgra2/v001",
+  "frozen_manifest": "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+  "arch": "build/experiments/p1/trim/gcn-cgra2/config/arch.yaml",
+  "soc": "build/experiments/p1/trim/gcn-cgra2/config/soc.yaml",
+  "source": "build/experiments/p1/trim/gcn-cgra2/source",
+  "kernel_directory": null,
+  "arch_sha256": "fd8569066a2d312496b7708b41a5b1683b4fe5062813187bdb6d128ed6144a00",
+  "soc_sha256": "b87deff3d46045ca949df91dd8745272754af2484702ea9c53cb5547c0a93a03",
+  "capacity": {
+    "native_jobs": 1,
+    "commands_per_job": 12,
+    "native_patches_per_job": 2,
+    "cgra_jobs": {
+      "cgra0": 64,
+      "cgra1": 64
+    },
+    "cgra_packets": {
+      "cgra0": 46,
+      "cgra1": 46
+    },
+    "cgra_patch_support": {
+      "cgra0": true,
+      "cgra1": true
+    },
+    "profiles": 2,
+    "stages": 3,
+    "edges": 3,
+    "results": 3
+  },
+  "spm": {
+    "native_bytes": 65536,
+    "cgra_words": 16384,
+    "bank_words": 2048,
+    "banks": 8,
+    "window_bytes": 65536,
+    "peak_words": 8576,
+    "headroom_words": 7808,
+    "minimum_power_of_two_words": 16384
+  },
+  "elaboration_dir": "build/experiments/p1/trim/gcn-cgra2/rtl-build",
+  "rtl_archive": "build/experiments/p1/trim/gcn-cgra2/rtl.tar.gz",
+  "manifest": "build/experiments/p1/trim/gcn-cgra2/manifest.json",
+  "status": "rtl_generated_static_closure_passed",
+  "source_status": "frozen_for_trimmed_hardware",
+  "source_sha256": {
+    "build/experiments/p1/trim/gcn-cgra2/source/p1.c": "598b00fa6408c9b9442ffed6f23804621d451c66b7fd1b4c9de0d5df42ecb026"
+  },
+  "compile_define": "P1_CGRAS=2",
+  "validation": {
+    "configuration": "passed_layout_graph_and_available_kernel_parsers",
+    "rtl": "source_and_hierarchy_closure_passed",
+    "synthesis": "pending",
+    "simulation": "deferred_by_user"
+  },
+  "expected": {
+    "native_jobs": 1,
+    "cgra_hybrid_jobs_per_lane": 64,
+    "cgra_auto_jobs_per_lane": 32,
+    "profiles": 2,
+    "native_command_count": 12,
+    "native_patches": 1,
+    "total_cgra_invocations": 128
+  },
+  "evidence": [
+    "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+    "build/experiments/p1/gcn/cgra2/v001/source/p1.c"
+  ],
+  "rtl_sha256": "b2c46915348ca74b09bd968ae2a03e38397149ab08859ef6f630865ddef52121",
+  "rtl_audit": "build/experiments/p1/trim/gcn-cgra2/rtl-audit.json",
+  "elaboration_present": false
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Isolated full frozen CGRA/DMA RTL with control-ring and PE-control substitutions. No active source update.",
+  "top": "IntegratedCgraWithDmaRTL_single",
+  "pe_variant": "queue",
+  "sources": {
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/IntegratedCgraWithDmaRTL_single__pickled.v": "0ac9a6888b9b7f968eeefc859d6d68933436edb74ac8a594e6db174a2e8258ed",
+    "build/experiments/asic/hybrid/control-trial/ring/candidate/Ring.sv": "c85a65ee3304889d3f419e84b09a717ebef91a1804a3e51f246603f6ebd2159a",
+    "build/experiments/asic/hybrid/control-trial/pe/queue/PeControl.sv": "f0449112f1157feae6382fb4d5f84bf0f7e6271dc9d525bd6bf045be097cc9da"
+  },
+  "replacements": {
+    "ring": {
+      "original": "RingNetworkRTL__ad9b2c0aa02e2f3a",
+      "candidate": "Ring",
+      "helpers": []
+    },
+    "pe": {
+      "original": "CtrlMemDynamicRTL__df08502b9dfbead5",
+      "candidate": "PeControl",
+      "helpers": [
+        "PeQueue_NormalQueueWithClearRTL__17e45bee21dfb909",
+        "PeQueue_NormalQueueRTL__3f50370143e38621",
+        "PeQueue_RegisterFile__82f517189341f536"
+      ]
+    }
+  },
+  "output_sha256": "63ef62d0f7ec15cdaa40f0b52f41a13cbfe6657864cfe98f62db4865b4f0a182",
+  "simulation_run": false,
+  "performance_run": false,
+  "full_design_synthesis_run": false
+}

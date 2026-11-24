@@ -1,0 +1,9 @@
+# ASIC evidence for Figures 1(b) and 5(a)
+
+Figure 5(a) plots two ratios rounded to two decimal places. The speedup uses three configuration-resident ResNet executions per backend. ASIC cycles were 45,571, 44,138 and 44,071. CGRA cycles were 42,177, 40,888 and 40,830. Dividing their arithmetic means gives 1.0797853020703014. The individual logs and records are in [split-onchip](build/experiments/asic/hybrid/split-onchip/).
+
+The core-area ratio uses the revised synthesized CGRA and seven separately provisioned ASIC cores including SAD. The CGRA occupied 544,538.07 SAED14 library area units and the ASICs summed to 598,870.93, giving 0.9092745090854373 before rounding. This comparison counts local arrays and compute/control logic. It excludes endpoint adapters, DMA, external SPM, the shared CPU and GEMM. The recorded speedup was measured on an earlier implementation. The two bars therefore do not establish the speed or area efficiency of one timing-qualified revised implementation. See the [seven-core area results](build/experiments/asic/hybrid/workload-trial/results.json) and the [plotted values](build/experiments/asic/summary-review/figures/review-v5/plot-data.json).
+
+The ASIC row in Figure 1(b) uses a different configuration. The GPT estimate includes Norm, Softmax and GPT-vector with GEMM and shared storage. Its ASIC inputs include the [small GPT runs](build/experiments/asic/full/gpt/results.json), [older endpoint cost](build/experiments/asic/cost-complete/results.json), [mapped component attribution](build/experiments/asic/hybrid/compute-audit/results.json) and the selected revised core areas. The archived policy model documents cycle scaling and storage assumptions.
+
+The [file checksums](asic-SHA256SUMS) are relative to this archive directory. Historical reports retain paths and hashes as originally recorded.

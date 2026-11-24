@@ -1,0 +1,38 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 2048
+  data_mem_size_per_bank: 256
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 1610612736
+    size_bytes: 16384
+  cgra_spm_window:
+    base_address: 1611661312
+    size_bytes: 8192
+communication:
+  stages:
+  - name: gemmini
+    endpoint: gemmini
+  - name: cgra
+    endpoint: cgra
+  - name: pool
+    endpoint: pool
+  dependencies:
+  - source: gemmini
+    destination: cgra
+    size_bytes: 128
+  - source: cgra
+    destination: pool
+    size_bytes: 128
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false

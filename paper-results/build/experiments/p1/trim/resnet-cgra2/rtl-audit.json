@@ -1,0 +1,174 @@
+{
+  "archive": {
+    "id": "resnet-cgra2",
+    "rtl": "build/experiments/p1/trim/resnet-cgra2/rtl.tar.gz",
+    "sha256": "bc1fe5c7e8bf8660d105cf1a5305b1bdddb2703ef179b15ca421f69de9f3e9b4",
+    "validation": "static_generation_only",
+    "small_gate": "not_rerun"
+  },
+  "rtl_sources": 855,
+  "rtl_modules": 972,
+  "digital_top_unique_modules": 911,
+  "digital_top_instances": 26416,
+  "hierarchy": "archived_and_checked",
+  "memory_sources": {
+    "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v": 320399,
+    "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.model.mems.v": 0
+  },
+  "components": [
+    {
+      "role": "cgra",
+      "top": "CGRAAccelerator",
+      "soc_instances": 1,
+      "unique_modules": 139,
+      "instances": 2889,
+      "native_storage": [
+        {
+          "module": "SyncRamRTL__b64b797a8f586146",
+          "role": "cgra_spm",
+          "depth": 1024,
+          "width": 35,
+          "instances": 8
+        }
+      ],
+      "memory_modules": [
+        {
+          "module": "packets_ext",
+          "depth": 672,
+          "width": 194,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "role": "cgra",
+      "top": "CGRAAccelerator_1",
+      "soc_instances": 1,
+      "unique_modules": 139,
+      "instances": 2889,
+      "native_storage": [
+        {
+          "module": "SyncRamRTL__b64b797a8f586146",
+          "role": "cgra_spm",
+          "depth": 1024,
+          "width": 35,
+          "instances": 8
+        }
+      ],
+      "memory_modules": [
+        {
+          "module": "packets_ext",
+          "depth": 672,
+          "width": 194,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "role": "gemmini",
+      "top": "GemminiRoCC",
+      "soc_instances": 1,
+      "unique_modules": 162,
+      "instances": 17345,
+      "native_storage": [
+        {
+          "module": "mem_ext",
+          "role": "gemmini_acc",
+          "depth": 64,
+          "width": 2048,
+          "instances": 2
+        }
+      ],
+      "memory_modules": [
+        {
+          "module": "mem_ext",
+          "depth": 64,
+          "width": 2048,
+          "instances": 2
+        },
+        {
+          "module": "commands_ext",
+          "depth": 216,
+          "width": 265,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "role": "spm",
+      "top": "ClockSinkDomain_3",
+      "soc_instances": 1,
+      "unique_modules": 58,
+      "instances": 1180,
+      "native_storage": [
+        {
+          "module": "mem_ext",
+          "role": "external_spm",
+          "depth": 64,
+          "width": 2048,
+          "instances": 4
+        }
+      ],
+      "memory_modules": [
+        {
+          "module": "mem_ext",
+          "depth": 64,
+          "width": 2048,
+          "instances": 4
+        }
+      ]
+    },
+    {
+      "role": "autolink",
+      "top": "ClockSinkDomain_4",
+      "soc_instances": 1,
+      "unique_modules": 27,
+      "instances": 325,
+      "native_storage": [],
+      "memory_modules": []
+    },
+    {
+      "role": "autolink",
+      "top": "ClockSinkDomain_5",
+      "soc_instances": 1,
+      "unique_modules": 8,
+      "instances": 9,
+      "native_storage": [],
+      "memory_modules": [
+        {
+          "module": "descriptions_ext",
+          "depth": 5,
+          "width": 10337,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "role": "autolink",
+      "top": "ClockSinkDomain_6",
+      "soc_instances": 1,
+      "unique_modules": 26,
+      "instances": 101,
+      "native_storage": [],
+      "memory_modules": []
+    },
+    {
+      "role": "autolink",
+      "top": "ClockSinkDomain_7",
+      "soc_instances": 1,
+      "unique_modules": 15,
+      "instances": 54,
+      "native_storage": [],
+      "memory_modules": []
+    },
+    {
+      "role": "autolink",
+      "top": "ClockSinkDomain_8",
+      "soc_instances": 1,
+      "unique_modules": 12,
+      "instances": 51,
+      "native_storage": [],
+      "memory_modules": []
+    }
+  ]
+}

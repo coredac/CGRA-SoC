@@ -1,0 +1,110 @@
+{
+  "status": "compact_GPT_single_CGRA_data_SPM_area_projection_not_new_synthesis",
+  "revision": "GPT one-CGRA core data SRAM is projected from 128 to 32 KiB using the same macro family. All other absolute component areas are unchanged; data-memory peripheral logic is not re-synthesized. Relative bar heights use the updated workload-local maximum area.",
+  "share": "Each bar sums to100 percent of its own accounted accelerator-subsystem area. Integer labels are rounded percentages and only shown for components at least8 percent.",
+  "relative": "Each bar is divided by the largest total area among the three policies for the SAME workload. No cross-workload denominator.",
+  "groups": {
+    "gem_compute": [
+      "gemmini_core_logic"
+    ],
+    "gem_spm": [
+      "gemmini_core_sram",
+      "external_spm_sram"
+    ],
+    "gem_adapter": [
+      "gemmini_adapter_logic",
+      "gemmini_adapter_sram"
+    ],
+    "cgra_compute": [
+      "cgra_core_logic"
+    ],
+    "cgra_spm": [
+      "cgra_core_sram"
+    ],
+    "cgra_adapter": [
+      "cgra_adapter_logic",
+      "cgra_adapter_sram"
+    ],
+    "autolink": [
+      "shared_scheduler_logic",
+      "shared_cdc_logic",
+      "shared_profile_logic",
+      "shared_profile_sram"
+    ],
+    "others": [
+      "external_spm_logic"
+    ]
+  },
+  "stack_bottom_to_top": [
+    "gem_compute",
+    "gem_spm",
+    "cgra_compute",
+    "cgra_spm",
+    "gem_adapter",
+    "cgra_adapter",
+    "autolink",
+    "others"
+  ],
+  "colors": {
+    "gem_compute": "7698BB",
+    "gem_spm": "A5BED2",
+    "gem_adapter": "D2BF93",
+    "cgra_compute": "80AAA1",
+    "cgra_spm": "B1C7AC",
+    "cgra_adapter": "D3A48A",
+    "autolink": "BA858A",
+    "others": "9E99AA"
+  },
+  "palette": "Muted categorical palette: GEMM blue, CGRA teal/sage, adapters sand/peach, AutoLink dusty rose, Others gray-violet. Adjacent regions transition through blue-green and green-sand rather than directly between blue and orange. Legend follows the stack order row by row.",
+  "borders": "All internal separators use black75 at up to 0.15 pt, capped at 40 percent of the thinner adjacent segment height to avoid erasing small areas. Outer bar outlines remain black at 0.35 pt. Zero-height categories do not add duplicate separators.",
+  "compute_scope": "IP core logic includes local control, routing and registers; not independently synthesized arithmetic-only datapaths.",
+  "gemmini_spm": "Includes accumulator SRAM and the external Gemmini SPM shared with other endpoints. The latter is counted exactly once, reclassified from Shared SPM; no new storage was added.",
+  "adapter": "Combines existing adapter logic and configuration SRAM.",
+  "autolink": "Combines scheduler/stages, CDC, profile control and profile SRAM.",
+  "others": "External SPM peripheral/bridge/local-crossbar logic. CPU/cache/global interconnect remain outside scope and are not assumed zero.",
+  "gcn": "Per-segment uses the prior conditional shared-template subtotal; new binding logic excluded. Each100percent bar is normalized to that subtotal, not a fully synthesized whole-SoC area.",
+  "source": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v20/layers.csv",
+  "source_sha256": "d78aed2454864f8a75cf6a120000699fb412ddb0eaa1c6b4d7b6d4468ca70dd0",
+  "checks": [
+    [
+      "categories partition original breakdown",
+      true
+    ],
+    [
+      "resnet Manual conserved area",
+      true
+    ],
+    [
+      "resnet Hybrid conserved area",
+      true
+    ],
+    [
+      "resnet Auto conserved area",
+      true
+    ],
+    [
+      "gpt2-rows Manual conserved area",
+      true
+    ],
+    [
+      "gpt2-rows Hybrid conserved area",
+      true
+    ],
+    [
+      "gpt2-rows Auto conserved area",
+      true
+    ],
+    [
+      "gcn Manual conserved area",
+      true
+    ],
+    [
+      "gcn Hybrid conserved area",
+      true
+    ],
+    [
+      "gcn Auto conserved area",
+      true
+    ]
+  ]
+}

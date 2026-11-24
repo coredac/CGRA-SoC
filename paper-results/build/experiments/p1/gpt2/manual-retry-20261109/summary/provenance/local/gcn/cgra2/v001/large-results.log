@@ -1,0 +1,24 @@
+[UART] UART0 is here (stdin/stdout).
+P1 GCN schedule=two64 tiles=2 intermediate_bytes=16384 warm_repeats=1
+P1 GCN mode=Manual phase=cold graph=2 nodes=64 cgras=2 repeat=0 cycles=538551 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=9800 capture_cycles=0 input_cycles=3532 execute_cycles=492769 writeback_cycles=35982 total_cycles=538551
+P1 GCN partition=0 rows=32 cached_jobs=0 words=8576 packets=46 captures=0
+P1 GCN partition=1 rows=32 cached_jobs=0 words=8576 packets=46 captures=0
+P1 GCN mode=Manual phase=warm graph=2 nodes=64 cgras=2 repeat=1 cycles=526122 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=2649 capture_cycles=0 input_cycles=2643 execute_cycles=488438 writeback_cycles=35035 total_cycles=526122
+P1 GCN mode=Hybrid phase=cold graph=2 nodes=64 cgras=2 repeat=0 cycles=1382468 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=1071327 capture_cycles=1065351 input_cycles=2662 execute_cycles=276131 writeback_cycles=35010 total_cycles=1382468
+P1 GCN partition=0 rows=32 cached_jobs=64 words=8576 packets=46 captures=1
+P1 GCN partition=1 rows=32 cached_jobs=64 words=8576 packets=46 captures=1
+P1 GCN mode=Hybrid phase=warm graph=2 nodes=64 cgras=2 repeat=1 cycles=313568 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=2654 capture_cycles=0 input_cycles=2648 execute_cycles=275989 writeback_cycles=34925 total_cycles=313568
+P1 GCN mode=Auto phase=cold graph=2 nodes=64 cgras=2 repeat=0 cycles=836382 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=552519 capture_cycles=546751 input_cycles=2661 execute_cycles=248905 writeback_cycles=34958 total_cycles=836382
+P1 GCN partition=0 rows=32 cached_jobs=32 words=8576 packets=46 captures=1
+P1 GCN partition=1 rows=32 cached_jobs=32 words=8576 packets=46 captures=1
+P1 GCN fabric_cycles=248647 overlap_cycles=52992 peak_tiles=2
+P1 GCN mode=Auto phase=warm graph=2 nodes=64 cgras=2 repeat=1 cycles=286515 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=2650 capture_cycles=0 input_cycles=2644 execute_cycles=248894 writeback_cycles=34971 total_cycles=286515
+P1 GCN fabric_cycles=248647 overlap_cycles=52992 peak_tiles=2
+P1 GCN: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra2/v001/soc-build/gen-collateral/TestDriver.v:158: Verilog $finish

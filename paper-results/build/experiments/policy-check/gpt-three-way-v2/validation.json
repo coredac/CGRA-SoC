@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "checks": {
+    "nine points": true,
+    "all cycles and global speedups unchanged": true,
+    "ASIC absolute area and cycles unchanged": true,
+    "ASIC model and topology unchanged": true,
+    "input hashes match": true,
+    "1 CGRA per-task matches review-v20 AE": true,
+    "1 CGRA per-segment matches review-v20 AE": true,
+    "1 CGRA per-graph matches review-v20 AE": true,
+    "4 CGRA per-task matches review-v20 AE": true,
+    "4 CGRA per-segment matches review-v20 AE": true,
+    "4 CGRA per-graph matches review-v20 AE": true,
+    "1 GEMM + 1 CGRA per-task AE formula": true,
+    "1 GEMM + 1 CGRA per-segment AE formula": true,
+    "1 GEMM + 1 CGRA per-graph AE formula": true,
+    "1 GEMM + 4 CGRA per-task AE formula": true,
+    "1 GEMM + 4 CGRA per-segment AE formula": true,
+    "1 GEMM + 4 CGRA per-graph AE formula": true,
+    "1 GEMM + 3 ASIC cores per-task AE formula": true,
+    "1 GEMM + 3 ASIC cores per-segment AE formula": true,
+    "1 GEMM + 3 ASIC cores per-graph AE formula": true,
+    "1 GEMM + 1 CGRA winner unchanged": true,
+    "1 GEMM + 4 CGRA winner unchanged": true,
+    "1 GEMM + 3 ASIC cores winner unchanged": true
+  }
+}

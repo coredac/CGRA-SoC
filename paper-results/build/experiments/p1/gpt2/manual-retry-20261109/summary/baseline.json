@@ -1,0 +1,2229 @@
+{
+  "prepared_utc": "2026-11-09T15:49:48.674600+00:00",
+  "checker_sha256": "1d3a58501c218dc240288887589ddc0651afd444c3639d2230b0295ba31ce5a8",
+  "shapes": {
+    "gcn-star64": {
+      "graph": "star",
+      "nodes": 64
+    },
+    "resnet-large": {
+      "input": [
+        32,
+        32,
+        16
+      ],
+      "output": [
+        16,
+        16,
+        32
+      ]
+    },
+    "gpt-rows": {
+      "length": 64,
+      "hidden": 128,
+      "heads": 2,
+      "ff": 512
+    },
+    "gpt-wide": {
+      "length": 16,
+      "hidden": 768,
+      "heads": 12,
+      "ff": 3072
+    }
+  },
+  "pairs": [
+    {
+      "id": "gcn-star64-cgra1-Manual",
+      "workload": "gcn-star64",
+      "cgras": 1,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 619742,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 608860,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-performance.json",
+          "sha256": "24c6d562e680ee5bf8c6d2767e3a4df96e4ba17c7dd5cf7b8c1ca520868e09b9"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-results.log",
+          "sha256": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/run.yaml",
+          "sha256": "971e854805f35a2d606a2b6aba54030e772dbda34fcd2fda15db046ba41f6ea8"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra1-Hybrid",
+      "workload": "gcn-star64",
+      "cgras": 1,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 1467526,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 402709,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-performance.json",
+          "sha256": "24c6d562e680ee5bf8c6d2767e3a4df96e4ba17c7dd5cf7b8c1ca520868e09b9"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-results.log",
+          "sha256": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/run.yaml",
+          "sha256": "971e854805f35a2d606a2b6aba54030e772dbda34fcd2fda15db046ba41f6ea8"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra1-Auto",
+      "workload": "gcn-star64",
+      "cgras": 1,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 949319,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 402353,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-performance.json",
+          "sha256": "24c6d562e680ee5bf8c6d2767e3a4df96e4ba17c7dd5cf7b8c1ca520868e09b9"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/large-results.log",
+          "sha256": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124"
+        },
+        {
+          "path": "provenance/local/gcn/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra1/v002/run.yaml",
+          "sha256": "971e854805f35a2d606a2b6aba54030e772dbda34fcd2fda15db046ba41f6ea8"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra2-Manual",
+      "workload": "gcn-star64",
+      "cgras": 2,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 538551,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 526122,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-performance.json",
+          "sha256": "3c999c9623a1bceab9083963f438bfe78834083b0fa22cd0d1fba5af2c005176"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-results.log",
+          "sha256": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+          "sha256": "e039936a807f1c7ca8fa2ecb4a36a6041fcbe26239b0e3047e8780145a863d6c"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra2-Hybrid",
+      "workload": "gcn-star64",
+      "cgras": 2,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 1382468,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 313568,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-performance.json",
+          "sha256": "3c999c9623a1bceab9083963f438bfe78834083b0fa22cd0d1fba5af2c005176"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-results.log",
+          "sha256": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+          "sha256": "e039936a807f1c7ca8fa2ecb4a36a6041fcbe26239b0e3047e8780145a863d6c"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra2-Auto",
+      "workload": "gcn-star64",
+      "cgras": 2,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 836382,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 286515,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-performance.json",
+          "sha256": "3c999c9623a1bceab9083963f438bfe78834083b0fa22cd0d1fba5af2c005176"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/large-results.log",
+          "sha256": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e"
+        },
+        {
+          "path": "provenance/local/gcn/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+          "sha256": "e039936a807f1c7ca8fa2ecb4a36a6041fcbe26239b0e3047e8780145a863d6c"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra4-Manual",
+      "workload": "gcn-star64",
+      "cgras": 4,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 536021,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 520148,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-performance.json",
+          "sha256": "b7bf0adcc866e7af46ab1b20088b518b9306a7e841ac7a7631f7a14aacb5db20"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-results.log",
+          "sha256": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/run.yaml",
+          "sha256": "b961586a0189df8d85b50bda24170543076d590e1b91a4e008611f9fbbbc4f04"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra4-Hybrid",
+      "workload": "gcn-star64",
+      "cgras": 4,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 1390099,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 311370,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-performance.json",
+          "sha256": "b7bf0adcc866e7af46ab1b20088b518b9306a7e841ac7a7631f7a14aacb5db20"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-results.log",
+          "sha256": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/run.yaml",
+          "sha256": "b961586a0189df8d85b50bda24170543076d590e1b91a4e008611f9fbbbc4f04"
+        }
+      ]
+    },
+    {
+      "id": "gcn-star64-cgra4-Auto",
+      "workload": "gcn-star64",
+      "cgras": 4,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 786322,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 230602,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-performance.json",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-performance.json",
+          "sha256": "b7bf0adcc866e7af46ab1b20088b518b9306a7e841ac7a7631f7a14aacb5db20"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/large-results.log",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/large-results.log",
+          "sha256": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a"
+        },
+        {
+          "path": "provenance/local/gcn/cgra4/v001/run.yaml",
+          "origin": "build/experiments/p1/gcn/cgra4/v001/run.yaml",
+          "sha256": "b961586a0189df8d85b50bda24170543076d590e1b91a4e008611f9fbbbc4f04"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra1-Manual",
+      "workload": "resnet-large",
+      "cgras": 1,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 642243,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 622431,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-performance.json",
+          "sha256": "f8f375f9b9a7b28484e54f352f10fd781cfe4e626b5ef6060c624bb4072ffc41"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-results.log",
+          "sha256": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/run.yaml",
+          "sha256": "075b3a39cb41c84061181171a199e0421c60ac3e1b0da1c59fbe3b7e698e823e"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra1-Hybrid",
+      "workload": "resnet-large",
+      "cgras": 1,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 660798,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 309863,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-performance.json",
+          "sha256": "f8f375f9b9a7b28484e54f352f10fd781cfe4e626b5ef6060c624bb4072ffc41"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-results.log",
+          "sha256": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/run.yaml",
+          "sha256": "075b3a39cb41c84061181171a199e0421c60ac3e1b0da1c59fbe3b7e698e823e"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra1-Auto",
+      "workload": "resnet-large",
+      "cgras": 1,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 620618,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 265643,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-performance.json",
+          "sha256": "f8f375f9b9a7b28484e54f352f10fd781cfe4e626b5ef6060c624bb4072ffc41"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/large-results.log",
+          "sha256": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70"
+        },
+        {
+          "path": "provenance/local/resnet/cgra1/v002/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra1/v002/run.yaml",
+          "sha256": "075b3a39cb41c84061181171a199e0421c60ac3e1b0da1c59fbe3b7e698e823e"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra1-Manual",
+      "workload": "gpt-rows",
+      "cgras": 1,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 18448100,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 18270931,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-performance.json",
+          "sha256": "33142b24f1a783617fe98fabbeb24e8c05e66b88ff6d11d9f862e0f5a2c3c4e9"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/run.yaml",
+          "sha256": "f4c383ceaf1a65d9ed1dadd9209dfb0a82abbb9048606793f003289409e0fbd6"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-manual.log",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-manual.log",
+          "sha256": "1ecd1e2294d54165c2e913380d889b8002d60bc7068435516f8e9e8f45cdae0f"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra1-Hybrid",
+      "workload": "gpt-rows",
+      "cgras": 1,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 16675497,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 16341700,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-performance.json",
+          "sha256": "33142b24f1a783617fe98fabbeb24e8c05e66b88ff6d11d9f862e0f5a2c3c4e9"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/run.yaml",
+          "sha256": "f4c383ceaf1a65d9ed1dadd9209dfb0a82abbb9048606793f003289409e0fbd6"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-hybrid.log",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-hybrid.log",
+          "sha256": "6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra1-Auto",
+      "workload": "gpt-rows",
+      "cgras": 1,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 16598945,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 16262298,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-performance.json",
+          "sha256": "33142b24f1a783617fe98fabbeb24e8c05e66b88ff6d11d9f862e0f5a2c3c4e9"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/run.yaml",
+          "sha256": "f4c383ceaf1a65d9ed1dadd9209dfb0a82abbb9048606793f003289409e0fbd6"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra1/v002/large/rows-auto.log",
+          "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-auto.log",
+          "sha256": "1864c6d05d5f50e6a1b9c4bc5756cd50817ec9faee1cdbcc5647f8a3b2dc8313"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra2-Manual",
+      "workload": "resnet-large",
+      "cgras": 2,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 524812,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 501672,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-performance.json",
+          "sha256": "cfcd9749adc2ac7e04973754246e3a94533464248e1cd5cc1e88bc53a2ee9897"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-results.log",
+          "sha256": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/run.yaml",
+          "sha256": "6b07d7270487a59c9191d93fda634fdfae0a72c29ffd22c5d89dd80ff3bddfe8"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra2-Hybrid",
+      "workload": "resnet-large",
+      "cgras": 2,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 547802,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 193915,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-performance.json",
+          "sha256": "cfcd9749adc2ac7e04973754246e3a94533464248e1cd5cc1e88bc53a2ee9897"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-results.log",
+          "sha256": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/run.yaml",
+          "sha256": "6b07d7270487a59c9191d93fda634fdfae0a72c29ffd22c5d89dd80ff3bddfe8"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra2-Auto",
+      "workload": "resnet-large",
+      "cgras": 2,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 529699,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 173087,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-performance.json",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-performance.json",
+          "sha256": "cfcd9749adc2ac7e04973754246e3a94533464248e1cd5cc1e88bc53a2ee9897"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/large-results.log",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/large-results.log",
+          "sha256": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8"
+        },
+        {
+          "path": "provenance/local/resnet/cgra2/v001/run.yaml",
+          "origin": "build/experiments/p1/resnet/cgra2/v001/run.yaml",
+          "sha256": "6b07d7270487a59c9191d93fda634fdfae0a72c29ffd22c5d89dd80ff3bddfe8"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra2-Manual",
+      "workload": "gpt-rows",
+      "cgras": 2,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 12887567,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 12578157,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-performance.json",
+          "sha256": "2271966c9c5473b61c343ce128baae6729ec53163afc7e47864766fd9f660090"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/run.yaml",
+          "sha256": "9145eca836c4853d2c2b8465456882d1607fb01a0c29ba6a00a2ff49f5cb4d2f"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-manual.log",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-manual.log",
+          "sha256": "620227bd9b308783aa572f31680ce5e02e6a09766e903423b5208e5f0b09cfa5"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra2-Hybrid",
+      "workload": "gpt-rows",
+      "cgras": 2,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 9042143,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 8466036,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-performance.json",
+          "sha256": "2271966c9c5473b61c343ce128baae6729ec53163afc7e47864766fd9f660090"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/run.yaml",
+          "sha256": "9145eca836c4853d2c2b8465456882d1607fb01a0c29ba6a00a2ff49f5cb4d2f"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-hybrid.log",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-hybrid.log",
+          "sha256": "577f00cf86f9abe0c8a4434cae944ef5c309f8b42b2f6aa94b82bb8ea43dbc0b"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra2-Auto",
+      "workload": "gpt-rows",
+      "cgras": 2,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 8951640,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 8372251,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-performance.json",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-performance.json",
+          "sha256": "2271966c9c5473b61c343ce128baae6729ec53163afc7e47864766fd9f660090"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/run.yaml",
+          "sha256": "9145eca836c4853d2c2b8465456882d1607fb01a0c29ba6a00a2ff49f5cb4d2f"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra2/v001/large/rows-auto.log",
+          "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-auto.log",
+          "sha256": "4973c22c0da6689c0d5f0ec5d96c3534b4ed64d2bad1558545faa1a962fe85ec"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra4-Manual",
+      "workload": "resnet-large",
+      "cgras": 4,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 515635,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 487617,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/result.json",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/result.json",
+          "sha256": "412ffca2748ba3a7d740a6ff7ee418fb2ac026fc1ce38f018eda357eed63cd9c"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/run.log",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/run.log",
+          "sha256": "c4bd67bba5cfb3c7eca27f17c90eb7ecf11e737d9800091e3da9a636f1d66f8d"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/exit",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/hashes.sha256",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/hashes.sha256",
+          "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/start",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/start",
+          "sha256": "e3d41c8f119c8a447e5e653cf0aa8cf684c31b343f75401cb50a329ce769c473"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/end",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/end",
+          "sha256": "f1ebd3fe025f0dd6ed7ff59b0029b05562c951ebe770548935aafdb560827031"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra4-Hybrid",
+      "workload": "resnet-large",
+      "cgras": 4,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 507371,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 134590,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/result.json",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/result.json",
+          "sha256": "d79713ec8c6f2eeb07285232ece50a7c08d8ab21c09cf12179ce95cd070428f3"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log",
+          "sha256": "5cfdcb2b00f1e96a598ae3c1c4b80a1cd4100483791e4fa778698a91fe1abc93"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/exit",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/hashes.sha256",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/hashes.sha256",
+          "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/start",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/start",
+          "sha256": "dd8a31bd919c8fffbd4c5387c5a287bec6b1fca77dec61e3ea95b601ddeefb99"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/end",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/end",
+          "sha256": "c794472a191052a40977b577e54bf4a964d1ef46cefda26d5a36aa6a5bf56310"
+        }
+      ]
+    },
+    {
+      "id": "resnet-large-cgra4-Auto",
+      "workload": "resnet-large",
+      "cgras": 4,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 502677,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 125708,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/result.json",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/result.json",
+          "sha256": "8364dba9f60e27dc6ded0f63b18f7a4b3ead37c00a104dedb250cd4763825317"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/run.log",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/run.log",
+          "sha256": "257d818e4ce4056a8e0e3252ba1f69f98834730292c3b80015de5a8da088e9d1"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/exit",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/hashes.sha256",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/hashes.sha256",
+          "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/start",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/start",
+          "sha256": "dbf865574eef85c6f7f95b705d7a025c251becfe493d420ed2c259fd1851508f"
+        },
+        {
+          "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/end",
+          "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/end",
+          "sha256": "9e18ad61588de8db2bcde8a94b84ba200cd3547d0682eac107bb24a139c05dc7"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra4-Hybrid",
+      "workload": "gpt-rows",
+      "cgras": 4,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 5534000,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 4561151,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra4/v001/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra4/v001/large/run.yaml",
+          "sha256": "b3333d754444da0321215aa796518fd8c532e8466555c7e800f8db31c36a7100"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra4/v001/large/rows-hybrid.log",
+          "origin": "build/experiments/p1/gpt2/cgra4/v001/large/rows-hybrid.log",
+          "sha256": "d32c790c7775bde709c5ba757d323335f82568c953afb17c96b20abae05920c7"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra4-Auto",
+      "workload": "gpt-rows",
+      "cgras": 4,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 5414871,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 4434498,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/cgra4/v001/large/run.yaml",
+          "origin": "build/experiments/p1/gpt2/cgra4/v001/large/run.yaml",
+          "sha256": "b3333d754444da0321215aa796518fd8c532e8466555c7e800f8db31c36a7100"
+        },
+        {
+          "path": "provenance/local/gpt2/cgra4/v001/large/rows-auto.log",
+          "origin": "build/experiments/p1/gpt2/cgra4/v001/large/rows-auto.log",
+          "sha256": "228040dc3f2a780b74d22789f3ae7ad7e0a3d76b94724697d68e34ea5365fc02"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra2-Hybrid",
+      "workload": "gpt-wide",
+      "cgras": 2,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 13601164,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 13190158,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/result.json",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/result.json",
+          "sha256": "10280318b7b8d02eb696dbe7ae520553fe0577ff77c388daf0738b4f52d2e1b4"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/run.log",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/run.log",
+          "sha256": "b3fe96feb4d0bfe06231c003557484780170e3d127fd554bb3db4ee2e39a5ac3"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/exit",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/hashes.sha256",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/hashes.sha256",
+          "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/start",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/start",
+          "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/end",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/end",
+          "sha256": "081d75cbf5bdc9813e436921bb08322c99f54cbbea05638757c8b34a31213313"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra2-Auto",
+      "workload": "gpt-wide",
+      "cgras": 2,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 12873394,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 12455983,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/result.json",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/result.json",
+          "sha256": "9b7aace0245ba58dc753482edcd1ee23592758771e3598fabc5963f829cfca16"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/run.log",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/run.log",
+          "sha256": "291562be7fe94f368d2e19eb396f42daf657d0c58d3fd302be09de8846d14575"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/exit",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/hashes.sha256",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/hashes.sha256",
+          "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/start",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/start",
+          "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/end",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/end",
+          "sha256": "ee512fd85d0b30fdfb6fefaba3510691fa4ae4f2916724158076e362fcbe3bb1"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra4-Hybrid",
+      "workload": "gpt-wide",
+      "cgras": 4,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 8376568,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 7659473,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/result.json",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/result.json",
+          "sha256": "46ed863cee04af65a6aa29d178159aac13db1d26648f014503a8fc9d6e9e8d2e"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/run.log",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/run.log",
+          "sha256": "3e0b9ebe477418dbe9a4fe163cad7e5aa855d91e7bffb456ae0343deb3c3f747"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/exit",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/hashes.sha256",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/hashes.sha256",
+          "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/start",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/start",
+          "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/end",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/end",
+          "sha256": "e79f923df35a187bc5f6f107e4d5d6be3dc7d5a17c16ed43cab1d6678c869735"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra4-Auto",
+      "workload": "gpt-wide",
+      "cgras": 4,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 7685687,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 6962642,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/result.json",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/result.json",
+          "sha256": "65541903f3aa45c31068e9616740c2a1a7e1157078538fd99cb75affee2af8f0"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/run.log",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/run.log",
+          "sha256": "12726e24a0332379dd15fc86a4149bcadc0525261e344c925166685178ec3f91"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/exit",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/hashes.sha256",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/hashes.sha256",
+          "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/start",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/start",
+          "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/end",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/end",
+          "sha256": "5f96b6bd0712f824c2b96823710d8f2046e44d54009ae1517ffd797c6867927a"
+        }
+      ]
+    },
+    {
+      "id": "gpt-rows-cgra4-Manual",
+      "workload": "gpt-rows",
+      "cgras": 4,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 13188682,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 12689077,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/result.json",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/result.json",
+          "sha256": "2d0b6b241e038280e3b608e547dad3ee7b47c8fafdf2940b17ff0310a36f284c"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/run.log",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/run.log",
+          "sha256": "fcce5bbc139fd61112a2d4a8cc78b86425df277ea4244dac01cd7d1a11fabee6"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/exit",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/hashes.sha256",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/hashes.sha256",
+          "sha256": "9b77360c7cb6bf801cef6b5875a049b8f40fa57ce9821404183554373b3d1f95"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/start",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/start",
+          "sha256": "51248de4032a9359b9dbebea8ce855843e8b0621c9afee8f8a4d714492519948"
+        },
+        {
+          "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/end",
+          "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/end",
+          "sha256": "8f717fe5589e14522aae2a6ee8af9db5716010c1de43105eceb42a5d17da15c2"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra1-Manual",
+      "workload": "gpt-wide",
+      "cgras": 1,
+      "mode": "Manual",
+      "records": [
+        {
+          "mode": "Manual",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 27685692,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Manual",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 27576559,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/remote/wide-manual/result.json",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/result.json",
+          "sha256": "6e41a678d3f0e1b57b1d32d0c9b7f4f1aea81a743317bf3a01585df84ab0e7c8"
+        },
+        {
+          "path": "provenance/remote/wide-manual/run.log",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/run.log",
+          "sha256": "592f150a6816afbf21be51c8d6bba69db63505b8d327305cc56e8f3acb5e20c8"
+        },
+        {
+          "path": "provenance/remote/wide-manual/exit",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/remote/wide-manual/hashes.sha256",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/hashes.sha256",
+          "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+        },
+        {
+          "path": "provenance/remote/wide-manual/start",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/start",
+          "sha256": "2fadef17b9bd4348af6f2c004e436d8467f430424ba2e688ddf4aee9c0efee3e"
+        },
+        {
+          "path": "provenance/remote/wide-manual/end",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/end",
+          "sha256": "042a2e0474669898fa32ce614bce0c4768c7ec80fe70ee94ac85c1b53dbc46f4"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra1-Hybrid",
+      "workload": "gpt-wide",
+      "cgras": 1,
+      "mode": "Hybrid",
+      "records": [
+        {
+          "mode": "Hybrid",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 24571435,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Hybrid",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 24344186,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/remote/wide-hybrid/result.json",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/result.json",
+          "sha256": "8546e374104cea8c70fdc8a67ef3ff70189109bd18a7129d48e6383530196f2a"
+        },
+        {
+          "path": "provenance/remote/wide-hybrid/run.log",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/run.log",
+          "sha256": "6c90a39567f49020bb314159ade17eede82b3b4acd93d2205ad3a0abf99b6cdd"
+        },
+        {
+          "path": "provenance/remote/wide-hybrid/exit",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/remote/wide-hybrid/hashes.sha256",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/hashes.sha256",
+          "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+        },
+        {
+          "path": "provenance/remote/wide-hybrid/start",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/start",
+          "sha256": "2fadef17b9bd4348af6f2c004e436d8467f430424ba2e688ddf4aee9c0efee3e"
+        },
+        {
+          "path": "provenance/remote/wide-hybrid/end",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/end",
+          "sha256": "8349a4771d72769a7427f60446d32ce35e21526d46af091e6ca5f2438e8e4b4a"
+        }
+      ]
+    },
+    {
+      "id": "gpt-wide-cgra1-Auto",
+      "workload": "gpt-wide",
+      "cgras": 1,
+      "mode": "Auto",
+      "records": [
+        {
+          "mode": "Auto",
+          "phase": "cold",
+          "repeat": 0,
+          "cycles": 23867767,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 0
+        },
+        {
+          "mode": "Auto",
+          "phase": "warm",
+          "repeat": 1,
+          "cycles": 23632704,
+          "checked": 0,
+          "mismatches": 0,
+          "status": 0,
+          "input": 1
+        }
+      ],
+      "exit": 0,
+      "evidence": [
+        {
+          "path": "provenance/remote/wide-auto/result.json",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/result.json",
+          "sha256": "03bb11f5feffbfc64adc4774ad3ee8cd4c2ec8348a4940b9af49e102a0c1d58a"
+        },
+        {
+          "path": "provenance/remote/wide-auto/run.log",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/run.log",
+          "sha256": "94eed812bcbadb0e3714bb053764b5818475599668e5f5131a10ad25a5dd977b"
+        },
+        {
+          "path": "provenance/remote/wide-auto/exit",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/exit",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "provenance/remote/wide-auto/hashes.sha256",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/hashes.sha256",
+          "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+        },
+        {
+          "path": "provenance/remote/wide-auto/start",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/start",
+          "sha256": "3eeef1a418a8d9c2cfcf115d28bcaeeff7aeafcb909f501a3ca20f52c2c535b1"
+        },
+        {
+          "path": "provenance/remote/wide-auto/end",
+          "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/end",
+          "sha256": "156643adc06dfe396385182668e70032af2027c48a6de6022749c001b54ed37e"
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    {
+      "job": "cgra2-wide-manual",
+      "cgras": 2,
+      "input_sha256": [
+        "413dd7d966eb32e46b2da8ddd44cdee48e00601310b67606d5f642e7eabebe2e",
+        "09747f0f47d3f474e23665c2973742949d7839ea47517c92d95fb237b2443df2"
+      ],
+      "input_provenance": {
+        "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-manual/hashes.sha256",
+        "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-manual/hashes.sha256",
+        "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+      }
+    },
+    {
+      "job": "cgra4-wide-manual",
+      "cgras": 4,
+      "input_sha256": [
+        "4e0328056ebd0eb5af5b3933bdcab0bc46caf5b36f85579cba45d51a826a6257",
+        "0cc06ef36f36e245b80b34bedab080c9c0bfcddf1d3515afce6a74be671b5a0e"
+      ],
+      "input_provenance": {
+        "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-manual/hashes.sha256",
+        "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-manual/hashes.sha256",
+        "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "provenance/local/gcn/cgra1/v002/large-performance.json",
+      "origin": "build/experiments/p1/gcn/cgra1/v002/large-performance.json",
+      "sha256": "24c6d562e680ee5bf8c6d2767e3a4df96e4ba17c7dd5cf7b8c1ca520868e09b9"
+    },
+    {
+      "path": "provenance/local/gcn/cgra1/v002/large-results.log",
+      "origin": "build/experiments/p1/gcn/cgra1/v002/large-results.log",
+      "sha256": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124"
+    },
+    {
+      "path": "provenance/local/gcn/cgra1/v002/run.yaml",
+      "origin": "build/experiments/p1/gcn/cgra1/v002/run.yaml",
+      "sha256": "971e854805f35a2d606a2b6aba54030e772dbda34fcd2fda15db046ba41f6ea8"
+    },
+    {
+      "path": "provenance/local/gcn/cgra2/v001/large-performance.json",
+      "origin": "build/experiments/p1/gcn/cgra2/v001/large-performance.json",
+      "sha256": "3c999c9623a1bceab9083963f438bfe78834083b0fa22cd0d1fba5af2c005176"
+    },
+    {
+      "path": "provenance/local/gcn/cgra2/v001/large-results.log",
+      "origin": "build/experiments/p1/gcn/cgra2/v001/large-results.log",
+      "sha256": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e"
+    },
+    {
+      "path": "provenance/local/gcn/cgra2/v001/run.yaml",
+      "origin": "build/experiments/p1/gcn/cgra2/v001/run.yaml",
+      "sha256": "e039936a807f1c7ca8fa2ecb4a36a6041fcbe26239b0e3047e8780145a863d6c"
+    },
+    {
+      "path": "provenance/local/gcn/cgra4/v001/large-performance.json",
+      "origin": "build/experiments/p1/gcn/cgra4/v001/large-performance.json",
+      "sha256": "b7bf0adcc866e7af46ab1b20088b518b9306a7e841ac7a7631f7a14aacb5db20"
+    },
+    {
+      "path": "provenance/local/gcn/cgra4/v001/large-results.log",
+      "origin": "build/experiments/p1/gcn/cgra4/v001/large-results.log",
+      "sha256": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a"
+    },
+    {
+      "path": "provenance/local/gcn/cgra4/v001/run.yaml",
+      "origin": "build/experiments/p1/gcn/cgra4/v001/run.yaml",
+      "sha256": "b961586a0189df8d85b50bda24170543076d590e1b91a4e008611f9fbbbc4f04"
+    },
+    {
+      "path": "provenance/local/resnet/cgra1/v002/large-performance.json",
+      "origin": "build/experiments/p1/resnet/cgra1/v002/large-performance.json",
+      "sha256": "f8f375f9b9a7b28484e54f352f10fd781cfe4e626b5ef6060c624bb4072ffc41"
+    },
+    {
+      "path": "provenance/local/resnet/cgra1/v002/large-results.log",
+      "origin": "build/experiments/p1/resnet/cgra1/v002/large-results.log",
+      "sha256": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70"
+    },
+    {
+      "path": "provenance/local/resnet/cgra1/v002/run.yaml",
+      "origin": "build/experiments/p1/resnet/cgra1/v002/run.yaml",
+      "sha256": "075b3a39cb41c84061181171a199e0421c60ac3e1b0da1c59fbe3b7e698e823e"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra1/v002/large/rows-performance.json",
+      "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-performance.json",
+      "sha256": "33142b24f1a783617fe98fabbeb24e8c05e66b88ff6d11d9f862e0f5a2c3c4e9"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra1/v002/large/run.yaml",
+      "origin": "build/experiments/p1/gpt2/cgra1/v002/large/run.yaml",
+      "sha256": "f4c383ceaf1a65d9ed1dadd9209dfb0a82abbb9048606793f003289409e0fbd6"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra1/v002/large/rows-manual.log",
+      "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-manual.log",
+      "sha256": "1ecd1e2294d54165c2e913380d889b8002d60bc7068435516f8e9e8f45cdae0f"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra1/v002/large/rows-hybrid.log",
+      "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-hybrid.log",
+      "sha256": "6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra1/v002/large/rows-auto.log",
+      "origin": "build/experiments/p1/gpt2/cgra1/v002/large/rows-auto.log",
+      "sha256": "1864c6d05d5f50e6a1b9c4bc5756cd50817ec9faee1cdbcc5647f8a3b2dc8313"
+    },
+    {
+      "path": "provenance/local/resnet/cgra2/v001/large-performance.json",
+      "origin": "build/experiments/p1/resnet/cgra2/v001/large-performance.json",
+      "sha256": "cfcd9749adc2ac7e04973754246e3a94533464248e1cd5cc1e88bc53a2ee9897"
+    },
+    {
+      "path": "provenance/local/resnet/cgra2/v001/large-results.log",
+      "origin": "build/experiments/p1/resnet/cgra2/v001/large-results.log",
+      "sha256": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8"
+    },
+    {
+      "path": "provenance/local/resnet/cgra2/v001/run.yaml",
+      "origin": "build/experiments/p1/resnet/cgra2/v001/run.yaml",
+      "sha256": "6b07d7270487a59c9191d93fda634fdfae0a72c29ffd22c5d89dd80ff3bddfe8"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra2/v001/large/rows-performance.json",
+      "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-performance.json",
+      "sha256": "2271966c9c5473b61c343ce128baae6729ec53163afc7e47864766fd9f660090"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra2/v001/large/run.yaml",
+      "origin": "build/experiments/p1/gpt2/cgra2/v001/large/run.yaml",
+      "sha256": "9145eca836c4853d2c2b8465456882d1607fb01a0c29ba6a00a2ff49f5cb4d2f"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra2/v001/large/rows-manual.log",
+      "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-manual.log",
+      "sha256": "620227bd9b308783aa572f31680ce5e02e6a09766e903423b5208e5f0b09cfa5"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra2/v001/large/rows-hybrid.log",
+      "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-hybrid.log",
+      "sha256": "577f00cf86f9abe0c8a4434cae944ef5c309f8b42b2f6aa94b82bb8ea43dbc0b"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra2/v001/large/rows-auto.log",
+      "origin": "build/experiments/p1/gpt2/cgra2/v001/large/rows-auto.log",
+      "sha256": "4973c22c0da6689c0d5f0ec5d96c3534b4ed64d2bad1558545faa1a962fe85ec"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/result.json",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/result.json",
+      "sha256": "412ffca2748ba3a7d740a6ff7ee418fb2ac026fc1ce38f018eda357eed63cd9c"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/run.log",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/run.log",
+      "sha256": "c4bd67bba5cfb3c7eca27f17c90eb7ecf11e737d9800091e3da9a636f1d66f8d"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/exit",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/hashes.sha256",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/hashes.sha256",
+      "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/start",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/start",
+      "sha256": "e3d41c8f119c8a447e5e653cf0aa8cf684c31b343f75401cb50a329ce769c473"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/end",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Manual/end",
+      "sha256": "f1ebd3fe025f0dd6ed7ff59b0029b05562c951ebe770548935aafdb560827031"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/result.json",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/result.json",
+      "sha256": "d79713ec8c6f2eeb07285232ece50a7c08d8ab21c09cf12179ce95cd070428f3"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log",
+      "sha256": "5cfdcb2b00f1e96a598ae3c1c4b80a1cd4100483791e4fa778698a91fe1abc93"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/exit",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/hashes.sha256",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/hashes.sha256",
+      "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/start",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/start",
+      "sha256": "dd8a31bd919c8fffbd4c5387c5a287bec6b1fca77dec61e3ea95b601ddeefb99"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/end",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/end",
+      "sha256": "c794472a191052a40977b577e54bf4a964d1ef46cefda26d5a36aa6a5bf56310"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/result.json",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/result.json",
+      "sha256": "8364dba9f60e27dc6ded0f63b18f7a4b3ead37c00a104dedb250cd4763825317"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/run.log",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/run.log",
+      "sha256": "257d818e4ce4056a8e0e3252ba1f69f98834730292c3b80015de5a8da088e9d1"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/exit",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/hashes.sha256",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/hashes.sha256",
+      "sha256": "8ea7ade8b45e25d9e5a2763b4643496d8ed475e2a9bae04781e642b708865bdc"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/start",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/start",
+      "sha256": "dbf865574eef85c6f7f95b705d7a025c251becfe493d420ed2c259fd1851508f"
+    },
+    {
+      "path": "provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/end",
+      "origin": "build/experiments/p1/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Auto/end",
+      "sha256": "9e18ad61588de8db2bcde8a94b84ba200cd3547d0682eac107bb24a139c05dc7"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra4/v001/large/run.yaml",
+      "origin": "build/experiments/p1/gpt2/cgra4/v001/large/run.yaml",
+      "sha256": "b3333d754444da0321215aa796518fd8c532e8466555c7e800f8db31c36a7100"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra4/v001/large/rows-hybrid.log",
+      "origin": "build/experiments/p1/gpt2/cgra4/v001/large/rows-hybrid.log",
+      "sha256": "d32c790c7775bde709c5ba757d323335f82568c953afb17c96b20abae05920c7"
+    },
+    {
+      "path": "provenance/local/gpt2/cgra4/v001/large/rows-auto.log",
+      "origin": "build/experiments/p1/gpt2/cgra4/v001/large/rows-auto.log",
+      "sha256": "228040dc3f2a780b74d22789f3ae7ad7e0a3d76b94724697d68e34ea5365fc02"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/result.json",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/result.json",
+      "sha256": "10280318b7b8d02eb696dbe7ae520553fe0577ff77c388daf0738b4f52d2e1b4"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/run.log",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/run.log",
+      "sha256": "b3fe96feb4d0bfe06231c003557484780170e3d127fd554bb3db4ee2e39a5ac3"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/exit",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/hashes.sha256",
+      "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/start",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/start",
+      "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/end",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-hybrid/end",
+      "sha256": "081d75cbf5bdc9813e436921bb08322c99f54cbbea05638757c8b34a31213313"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/result.json",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/result.json",
+      "sha256": "9b7aace0245ba58dc753482edcd1ee23592758771e3598fabc5963f829cfca16"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/run.log",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/run.log",
+      "sha256": "291562be7fe94f368d2e19eb396f42daf657d0c58d3fd302be09de8846d14575"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/exit",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/hashes.sha256",
+      "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/start",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/start",
+      "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/end",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-auto/end",
+      "sha256": "ee512fd85d0b30fdfb6fefaba3510691fa4ae4f2916724158076e362fcbe3bb1"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/result.json",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/result.json",
+      "sha256": "46ed863cee04af65a6aa29d178159aac13db1d26648f014503a8fc9d6e9e8d2e"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/run.log",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/run.log",
+      "sha256": "3e0b9ebe477418dbe9a4fe163cad7e5aa855d91e7bffb456ae0343deb3c3f747"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/exit",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/hashes.sha256",
+      "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/start",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/start",
+      "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/end",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-hybrid/end",
+      "sha256": "e79f923df35a187bc5f6f107e4d5d6be3dc7d5a17c16ed43cab1d6678c869735"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/result.json",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/result.json",
+      "sha256": "65541903f3aa45c31068e9616740c2a1a7e1157078538fd99cb75affee2af8f0"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/run.log",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/run.log",
+      "sha256": "12726e24a0332379dd15fc86a4149bcadc0525261e344c925166685178ec3f91"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/exit",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/hashes.sha256",
+      "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/start",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/start",
+      "sha256": "0fc73887ea186d533d53dd622c67a7512d53ab03cf5604d3071f2212870ce008"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/end",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-auto/end",
+      "sha256": "5f96b6bd0712f824c2b96823710d8f2046e44d54009ae1517ffd797c6867927a"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/result.json",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/result.json",
+      "sha256": "2d0b6b241e038280e3b608e547dad3ee7b47c8fafdf2940b17ff0310a36f284c"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/run.log",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/run.log",
+      "sha256": "fcce5bbc139fd61112a2d4a8cc78b86425df277ea4244dac01cd7d1a11fabee6"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/exit",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/hashes.sha256",
+      "sha256": "9b77360c7cb6bf801cef6b5875a049b8f40fa57ce9821404183554373b3d1f95"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/start",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/start",
+      "sha256": "51248de4032a9359b9dbebea8ce855843e8b0621c9afee8f8a4d714492519948"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/end",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-rows-manual/end",
+      "sha256": "8f717fe5589e14522aae2a6ee8af9db5716010c1de43105eceb42a5d17da15c2"
+    },
+    {
+      "path": "provenance/remote/wide-manual/result.json",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/result.json",
+      "sha256": "6e41a678d3f0e1b57b1d32d0c9b7f4f1aea81a743317bf3a01585df84ab0e7c8"
+    },
+    {
+      "path": "provenance/remote/wide-manual/run.log",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/run.log",
+      "sha256": "592f150a6816afbf21be51c8d6bba69db63505b8d327305cc56e8f3acb5e20c8"
+    },
+    {
+      "path": "provenance/remote/wide-manual/exit",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/remote/wide-manual/hashes.sha256",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/hashes.sha256",
+      "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+    },
+    {
+      "path": "provenance/remote/wide-manual/start",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/start",
+      "sha256": "2fadef17b9bd4348af6f2c004e436d8467f430424ba2e688ddf4aee9c0efee3e"
+    },
+    {
+      "path": "provenance/remote/wide-manual/end",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-manual/end",
+      "sha256": "042a2e0474669898fa32ce614bce0c4768c7ec80fe70ee94ac85c1b53dbc46f4"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/result.json",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/result.json",
+      "sha256": "8546e374104cea8c70fdc8a67ef3ff70189109bd18a7129d48e6383530196f2a"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/run.log",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/run.log",
+      "sha256": "6c90a39567f49020bb314159ade17eede82b3b4acd93d2205ad3a0abf99b6cdd"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/exit",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/hashes.sha256",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/hashes.sha256",
+      "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/start",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/start",
+      "sha256": "2fadef17b9bd4348af6f2c004e436d8467f430424ba2e688ddf4aee9c0efee3e"
+    },
+    {
+      "path": "provenance/remote/wide-hybrid/end",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-hybrid/end",
+      "sha256": "8349a4771d72769a7427f60446d32ce35e21526d46af091e6ca5f2438e8e4b4a"
+    },
+    {
+      "path": "provenance/remote/wide-auto/result.json",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/result.json",
+      "sha256": "03bb11f5feffbfc64adc4774ad3ee8cd4c2ec8348a4940b9af49e102a0c1d58a"
+    },
+    {
+      "path": "provenance/remote/wide-auto/run.log",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/run.log",
+      "sha256": "94eed812bcbadb0e3714bb053764b5818475599668e5f5131a10ad25a5dd977b"
+    },
+    {
+      "path": "provenance/remote/wide-auto/exit",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "provenance/remote/wide-auto/hashes.sha256",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/hashes.sha256",
+      "sha256": "d441e610a02ad7b77e1bab34358642f7375ab16fcee4b4c07ba353b2c4c3a3ca"
+    },
+    {
+      "path": "provenance/remote/wide-auto/start",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/start",
+      "sha256": "3eeef1a418a8d9c2cfcf115d28bcaeeff7aeafcb909f501a3ca20f52c2c535b1"
+    },
+    {
+      "path": "provenance/remote/wide-auto/end",
+      "origin": "ssh://jjqin25@hpc6.cse.cuhk.edu.hk/tmp/p1-gpt2-perf-v003-20261106-r1/jobs/wide-auto/end",
+      "sha256": "156643adc06dfe396385182668e70032af2027c48a6de6022749c001b54ed37e"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-manual/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra2-wide-manual/hashes.sha256",
+      "sha256": "6140dcdd772d391745d4a6b5249908d26408b93347ea50b9c37696772187671b"
+    },
+    {
+      "path": "provenance/local/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-manual/hashes.sha256",
+      "origin": "build/experiments/p1/gpt2/resume-20261107/results-20261109/jobs/cgra4-wide-manual/hashes.sha256",
+      "sha256": "0e488a04027272dc9b079adbd74bfb06db73cfc929942fd39d9f948b675ad98c"
+    }
+  ]
+}

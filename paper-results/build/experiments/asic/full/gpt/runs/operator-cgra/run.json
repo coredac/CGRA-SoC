@@ -1,0 +1,31 @@
+{
+  "name": "operator-cgra",
+  "mode": 0,
+  "backend": 0,
+  "status": "complete",
+  "command": [
+    "/home/jjqin/CGRA-SoC/build/experiments/asic/system/simulator-validated",
+    "+permissive",
+    "+dramsim",
+    "+dramsim_ini_dir=/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini",
+    "+max-cycles=10000000",
+    "+loadmem=/home/jjqin/CGRA-SoC/build/experiments/asic/full/gpt/gpt.riscv",
+    "+permissive-off",
+    "/home/jjqin/CGRA-SoC/build/experiments/asic/full/gpt/gpt.riscv",
+    "0",
+    "0"
+  ],
+  "cwd": "/home/jjqin/CGRA-SoC/build/experiments/asic/full/gpt/runs/operator-cgra",
+  "stack_bytes": 33554432,
+  "environment": {
+    "LD_LIBRARY_PATH": "/home/jjqin/CGRA-SoC/chipyard/.conda-env/lib"
+  },
+  "sha256": {
+    "build/experiments/asic/full/gpt/gpt.riscv": "2a6f504da17ecfe3e4f8be7a6f89c5c6b6422c6a3afe9af1a2d48613f5255ee8",
+    "build/experiments/asic/system/simulator-validated": "8a89685122106a88dae4d88638de93b13a20b3a01ee955ec9b9e009a8967b22d"
+  },
+  "start_epoch": 1794469439.6740243,
+  "pid": 3,
+  "exit": 0,
+  "elapsed_seconds": 2182.0641136169434
+}

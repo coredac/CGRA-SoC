@@ -1,0 +1,62 @@
+Information: Timer using 4 threads
+Warning: Technology layer 'M1' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'M2' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'MRDL' setting 'routing-direction' is not valid (NEX-001)
+Warning: Technology layer 'MRDL' setting 'pitch' is not valid (NEX-001)
+Warning: Corner tt:  0 process number, 2 process label, 0 voltage, and 0 temperature mismatches. (PVT-030)
+Warning: 2635524 cells affected for early, 2635524 for late. (PVT-031)
+Warning: 0 port driving_cells affected for early, 0 for late. (PVT-034)
+****************************************
+Report : pvt
+Design : ChipTop
+Version: T-2022.03-SP5
+Date   : Tue Nov 17 00:54:45 2026
+****************************************
+
+--------------------------------------------------------------------------------
+Warning: Corner tt:  0 process number, 2 process label, 0 voltage, and 0 temperature mismatches. (PVT-030)
+Warning: 2635524 cells affected for early, 2635524 for late. (PVT-031)
+Warning: 0 port driving_cells affected for early, 0 for late. (PVT-034)
+--------------------------------------------------------------------------------
+
+Warning: Mismatched process label in corner tt. (PVT-023)
+Library has 1 pane
+Entry 70:
+  Lib: saed14rvt_frame_timing_ccs
+  Pane: 0
+* Process Label:  specified: (none)        effective: tt0p8v25c   
+  Process Number: specified: 1             effective: 1           
+  Rail 0 (default) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 1 (VDD) Voltage: specified: 0.80          dynamic: --            effective: 0.80          static: 0.80        
+  Rail 2 (VDDH) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 3 (VDDL) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 4 (VDDP) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 5 (VDDR) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 6 (VSS) Voltage: specified: 0.00          dynamic: --            effective: 0.00          static: 0.00        
+  Temperature:    specified: 25.00         effective: 25.00       
+  Primary rail: 1  Secondary rail: --  N-bias rail: --  P-bias rail: --
+  early cell refs: 2629030  port refs: 0     driving_cell refs: 0     lib refs: 0   
+  late  cell refs: 2629030  port refs: 0     driving_cell refs: 0     lib refs: 0   
+
+Warning: Mismatched process label in corner tt. (PVT-023)
+Library has 1 pane
+Entry 72:
+  Lib: saed14rvt_frame_timing_ccs
+  Pane: 0
+* Process Label:  specified: (none)        effective: tt0p8v25c   
+  Process Number: specified: 1             effective: 1           
+  Rail 0 (default) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 1 (VDD) Voltage: specified: 0.80          dynamic: --            effective: 0.80          static: 0.80        
+  Rail 2 (VDDH) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 3 (VDDL) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 4 (VDDP) Voltage: specified: --            dynamic: --            effective: 0.80          static: 0.80        
+  Rail 5 (VDDR) Voltage: specified: 0.80          dynamic: --            effective: 0.80          static: 0.80        
+  Rail 6 (VSS) Voltage: specified: 0.00          dynamic: --            effective: 0.00          static: 0.00        
+  Temperature:    specified: 25.00         effective: 25.00       
+  Primary rail: 5  Secondary rail: --  N-bias rail: --  P-bias rail: --
+  early cell refs: 6494     port refs: 0     driving_cell refs: 0     lib refs: 0   
+  late  cell refs: 6494     port refs: 0     driving_cell refs: 0     lib refs: 0   
+
+
+
+1

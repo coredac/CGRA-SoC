@@ -1,0 +1,80 @@
+{
+  "id": "resnet-cgra4",
+  "workload": "resnet",
+  "shape": "large",
+  "cgras": 4,
+  "frozen_origin": "build/experiments/p1/resnet/cgra4/v001",
+  "frozen_manifest": "build/experiments/p1/resnet/cgra4/v001/run.yaml",
+  "arch": "build/experiments/p1/trim/resnet-cgra4/config/arch.yaml",
+  "soc": "build/experiments/p1/trim/resnet-cgra4/config/soc.yaml",
+  "source": "build/experiments/p1/trim/resnet-cgra4/source",
+  "kernel_directory": "build/experiments/p1/trim/resnet-cgra4/config/kernels",
+  "arch_sha256": "fd8569066a2d312496b7708b41a5b1683b4fe5062813187bdb6d128ed6144a00",
+  "soc_sha256": "b841c69c6c383b531995574e9f9fa36f2c613d24bb89ad953bad930d0c4e8dc0",
+  "capacity": {
+    "native_jobs": 24,
+    "commands_per_job": 9,
+    "native_patches_per_job": 2,
+    "cgra_jobs": {
+      "cgra0": 4,
+      "cgra1": 4,
+      "cgra2": 4,
+      "cgra3": 4
+    },
+    "cgra_packets": {
+      "cgra0": 84,
+      "cgra1": 84,
+      "cgra2": 84,
+      "cgra3": 84
+    },
+    "cgra_patch_support": {
+      "cgra0": false,
+      "cgra1": false,
+      "cgra2": false,
+      "cgra3": false
+    },
+    "profiles": 3,
+    "stages": 20,
+    "edges": 28,
+    "results": 20
+  },
+  "spm": {
+    "native_bytes": 65536,
+    "cgra_words": 8192,
+    "bank_words": 1024,
+    "banks": 8,
+    "window_bytes": 32768,
+    "peak_words": 6144,
+    "headroom_words": 2048,
+    "minimum_power_of_two_words": 8192
+  },
+  "elaboration_dir": "build/experiments/p1/trim/resnet-cgra4/rtl-build",
+  "rtl_archive": "build/experiments/p1/trim/resnet-cgra4/rtl.tar.gz",
+  "manifest": "build/experiments/p1/trim/resnet-cgra4/manifest.json",
+  "status": "rtl_generated_static_closure_passed",
+  "source_status": "frozen_for_trimmed_hardware",
+  "source_sha256": {
+    "build/experiments/p1/trim/resnet-cgra4/source/p1.c": "0b05853701b75597fb14d238d589bd15c064ad7376ce227392b364916fbf790d"
+  },
+  "compile_define": "P1_CGRAS=4",
+  "validation": {
+    "configuration": "passed_layout_graph_and_available_kernel_parsers",
+    "rtl": "source_and_hierarchy_closure_passed",
+    "synthesis": "pending",
+    "simulation": "deferred_by_user"
+  },
+  "expected": {
+    "native_jobs": 24,
+    "cgra_jobs_per_lane": 4,
+    "profiles": 3,
+    "native_command_count": 9,
+    "total_accelerator_tasks": 40
+  },
+  "evidence": [
+    "build/experiments/p1/resnet/cgra4/v001/run.yaml",
+    "build/experiments/p1/resnet/cgra4/v001/source/p1.c"
+  ],
+  "rtl_sha256": "25890058bd7a0823703262ad76825d91f513c69d239bf5c502f69d31526f754c",
+  "rtl_audit": "build/experiments/p1/trim/resnet-cgra4/rtl-audit.json",
+  "elaboration_present": false
+}

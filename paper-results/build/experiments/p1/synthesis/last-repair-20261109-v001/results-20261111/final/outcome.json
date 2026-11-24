@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "finished": "2026-11-10T20:23:56.280361+00:00",
+  "selected": "/tmp/p1-saed14-last-repair-20261109-v001/batch",
+  "command": [
+    "/bin/python3",
+    "/tmp/p1-saed14-last-repair-20261109-v001/collect.py",
+    "--base",
+    "/tmp/p1-saed14-reuse-repair-20261106-v001",
+    "--patch",
+    "/tmp/p1-saed14-gemmini-repair-20261107-v001/batch",
+    "--output",
+    "/tmp/p1-saed14-last-repair-20261109-v001/final/results.json",
+    "--hierarchy",
+    "/tmp/p1-saed14-last-repair-20261109-v001/batch"
+  ],
+  "returncode": 0
+}

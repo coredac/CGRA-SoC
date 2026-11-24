@@ -1,0 +1,117 @@
+{
+  "scope": "Requested multi-ASIC core-area scenario, replacing the previous complete-endpoint proxy only for this exploratory calculation",
+  "performance_assumption": "Historical end-to-end cycle ratios are hypothetically unchanged. This is unverified; expanded native schedules and GPT timing repair change latency.",
+  "measurement_status": "Areas are mapped core measurements; speedups are historical hardware measurements; all combined AE values are conditional estimates, not measured new-hardware AE.",
+  "formula": "Conditional AE = historical speedup * sum of installed ASIC core areas / modified CGRA core area",
+  "common_frequency_qualified": false,
+  "cgra_internal_slack_ns_at_2ns": -0.759389,
+  "includes": [
+    "native arithmetic and control",
+    "primitive-bank arbitration",
+    "pipeline/runtime state",
+    "local data and configuration storage and access"
+  ],
+  "excludes": [
+    "endpoint adapters and their descriptor caches",
+    "DMA",
+    "external data SPM and its access",
+    "SoC interconnect",
+    "common CPU and GEMM"
+  ],
+  "installed_resources": {
+    "cgra_pes": 16,
+    "six_asic_primitive_lanes": 96,
+    "seven_asic_primitive_lanes": 112,
+    "equal_useful_throughput_proven": false
+  },
+  "area": {
+    "unit": "SAED14 library area units",
+    "cgra": 544538.068098,
+    "six_asic": 563080.753566,
+    "seven_asic": 598870.926939
+  },
+  "inventory": [
+    {
+      "core": "Add",
+      "native_function": "Elementwise addition",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 34553.855376,
+      "optional": false
+    },
+    {
+      "core": "ReLU",
+      "native_function": "ReLU activation",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 34550.525372,
+      "optional": false
+    },
+    {
+      "core": "GCN",
+      "native_function": "Sparse graph feature aggregation with optional native ReLU",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 176676.036229,
+      "optional": false
+    },
+    {
+      "core": "Norm",
+      "native_function": "LayerNorm stages and normalization",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 65169.297921,
+      "optional": false
+    },
+    {
+      "core": "Softmax",
+      "native_function": "Softmax stages",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 34774.301361,
+      "optional": false
+    },
+    {
+      "core": "GPT-vector",
+      "native_function": "GELU approximation, requantization, residual add and saturation",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 217356.737307,
+      "optional": false
+    },
+    {
+      "core": "SAD (optional)",
+      "native_function": "Sum of absolute differences, independently provisioned sequencer",
+      "primitive_lanes": 16,
+      "area_including_local_storage": 35790.173373,
+      "optional": true
+    }
+  ],
+  "rows": [
+    {
+      "workload": "ResNet",
+      "historical_speedup": 1.0797853020703014,
+      "conditional_ae_six": 1.1165543002400595,
+      "conditional_ae_seven": 1.1875239999374518,
+      "historical_asic_baseline": "Independent Add/ReLU ASIC; on-chip intermediates"
+    },
+    {
+      "workload": "GPT-2",
+      "historical_speedup": 1.0211075492221717,
+      "conditional_ae_six": 1.0558784444515197,
+      "conditional_ae_seven": 1.1229915047868413,
+      "historical_asic_baseline": "General ASIC, regional Hybrid"
+    },
+    {
+      "workload": "GCN",
+      "historical_speedup": 1.0044567869229706,
+      "conditional_ae_six": 1.038660688095879,
+      "conditional_ae_seven": 1.1046793645774466,
+      "historical_asic_baseline": "General ASIC, regional Hybrid"
+    }
+  ],
+  "equal_weight_arithmetic_mean": {
+    "historical_speedup": 1.0351165460718146,
+    "conditional_ae_six": 1.0703644775958194,
+    "conditional_ae_seven": 1.1383982897672467
+  },
+  "sad_scope": "Optional additional independent provision; not required by the three selected workloads, and existing primitive interfaces already express the required arithmetic. Seven-core scenario must be labelled separately.",
+  "sources": {
+    "build/experiments/asic/summary-review/borrowed-area.json": "4839f6674b29c56c169ac93118d36b710706783488abdc0c330bdd3cd810f3a8",
+    "build/experiments/asic/hybrid/workload-trial/results.json": "6deba3f8a7d0abc5c6bbb68f6f0ef9e7d16c5e8efea6ab91ec2756bed106e5c2"
+  }
+}

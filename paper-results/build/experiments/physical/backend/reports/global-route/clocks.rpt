@@ -1,0 +1,21 @@
+****************************************
+Report : clock
+Design : ChipTop
+Mode   : functional
+Version: T-2022.03-SP5
+Date   : Wed Nov 18 22:33:03 2026
+****************************************
+
+
+Attributes:
+    p - Propagated clock
+    G - Generated  clock
+    U - Unexpanded generated clock
+
+Clock          Period   Waveform            Attrs     Sources
+--------------------------------------------------------------------------------
+core             2.00   {0 1}               p         {clock_uncore}
+jtag           100.00   {0 50}              p         {jtag_TCK}
+serial          10.00   {0 5}               p         {serial_tl_0_clock_in}
+
+1

@@ -1,0 +1,202 @@
+status: rows_completed_wide_interrupted_by_user
+stop_observed_utc: '2026-11-05 12:47'
+stop_evidence: Previous execution handles unavailable after interruption; wide final exits unconfirmed. Preserve partial logs; do not restart.
+active_sessions: {}
+interrupted_sessions:
+  wide_manual: 71040
+  wide_hybrid: 80145
+  wide_auto: 7348
+started_utc: {rows: '2026-11-04 06:33', wide: '2026-11-04 06:35'}
+hardware: ../config/soc.yaml
+rtl: ../rtl/soc-sim.tar.gz
+simulator: chipyard/sims/verilator/simulator-chipyard.harness-MultiAccelRocketConfig
+simulator_sha256: a26e7849c6e2e91d7aef20005e02ed48bd28611d31bd2dda1b2cce2afab27beb
+small_gate: ../smoke/performance.json
+runner: run.sh
+command: bash build/experiments/p1/gpt2/cgra1/v002/large/run.sh SHAPE MODE
+shapes:
+  rows: {length: 64, hidden: 128, heads: 2, ff: 512}
+  wide: {length: 16, hidden: 768, heads: 12, ff: 3072}
+modes: [manual, hybrid, auto]
+arguments: mode_number 1 1
+samples: One preparation-inclusive cold and one cached warm inference per mode, with different inputs.
+numerical_check: Disabled for larger cases as requested; completion and process exit still required.
+harness_cycle_limit: 200000000
+scope: Same v002 hardware and binaries already compiled and host-plan checked; no RTL regeneration or new optimization.
+results: pending
+partial_wide:
+  observed_utc: '2026-11-04 20:08:30'
+  phase: cold
+  manual: 27689509
+  hybrid: 24571497
+  auto: 23867270
+  captures: [29, 23, 16]
+  captures_scope: Hybrid/Auto cold; Manual captures are 0/0/0.
+  breakdown_cycles:
+    manual: {staging: 17309, setup: 124665, capture: 12, execute: 27547523, total: 27689509}
+    hybrid: {staging: 17309, setup: 124665, capture: 119979, execute: 24309544, total: 24571497}
+    auto: {staging: 17309, setup: 125121, capture: 120239, execute: 23604601, total: 23867270}
+  counters:
+    manual: {captures: [0, 0, 0], cached_jobs: [0, 0], cached_profiles: 0, reports: 0, auto_launches: 0}
+    hybrid: {captures: [29, 23, 16], cached_jobs: [29, 23], cached_profiles: 16, reports: 612, auto_launches: 15}
+    auto: {captures: [29, 23, 16], cached_jobs: [29, 23], cached_profiles: 16, reports: 450, auto_launches: 1}
+  dma_bytes_each_mode: {input: 12288, output: 12288, affine: 12288}
+  input: 0
+  repeat: 0
+  disjoint_phase_sums_verified: true
+  checked: 0
+  mismatches: 0
+  status_errors: 0
+  interpretation: All three wide cold inferences completed status checks; Auto is 2.8660 percent below Hybrid in these samples. All warm records and process exits remain pending; this is partial timing evidence, not a completed setting or numerical pass.
+partial_rows:
+  observed_utc: '2026-11-05 03:58:35'
+  status: completed
+  performance: rows-performance.json
+  performance_sha256: 33142b24f1a783617fe98fabbeb24e8c05e66b88ff6d11d9f862e0f5a2c3c4e9
+  phase: cold
+  manual: 18448100
+  hybrid: 16675497
+  auto: 16598945
+  checked: 0
+  status_errors: 0
+  interpretation: All three rows modes completed both cold and warm timing/status checks with PASS and exit0. Each record has checked0, so this is timing-only completion, not numerical output validation. Auto is 0.4591 percent below Hybrid cold in this single sample. All three wide processes remain running with their warm records and exits pending; the overall setting remains pending.
+  manual_result:
+    status: completed
+    completed_utc: '2026-11-05 03:55'
+    session: 74726
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-manual.log
+    driver_log_sha256: 1ecd1e2294d54165c2e913380d889b8002d60bc7068435516f8e9e8f45cdae0f
+    uart_log_repo: chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-manual.log
+    uart_log_sha256: 4974abf0918cf693190a17be15fa886e17c3720d4ad0c90e9f6664dfa6f9db27
+    disjoint_phase_sums_verified: true
+    records:
+      - phase: cold
+        repeat: 0
+        input: 0
+        cycles: 18448100
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [0, 0, 0]
+        breakdown_cycles: {staging: 11522, setup: 138057, capture: 73, execute: 18298448, total: 18448100}
+        cached_jobs: [0, 0]
+        cached_profiles: 0
+        reports: 0
+        auto_launches: 0
+        dma_bytes: {input: 8192, output: 8192, affine: 2048}
+      - phase: warm
+        repeat: 1
+        input: 1
+        cycles: 18270931
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [0, 0, 0]
+        breakdown_cycles: {staging: 12175, setup: 15, capture: 4, execute: 18258737, total: 18270931}
+        cached_jobs: [0, 0]
+        cached_profiles: 0
+        reports: 0
+        auto_launches: 0
+        dma_bytes: {input: 8192, output: 8192, affine: 0}
+  auto_result:
+    status: completed
+    completed_utc: '2026-11-05 00:08'
+    session: 93538
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-auto.log
+    driver_log_sha256: 1864c6d05d5f50e6a1b9c4bc5756cd50817ec9faee1cdbcc5647f8a3b2dc8313
+    uart_log_repo: chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-auto.log
+    uart_log_sha256: b2eb5c247977c625ed4e7990a57c5ada42fa2d0437455e1f6b40b597425ed649
+    disjoint_phase_sums_verified: true
+    records:
+      - phase: cold
+        repeat: 0
+        input: 0
+        cycles: 16598945
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [59, 32, 31]
+        breakdown_cycles: {staging: 11678, setup: 138888, capture: 177534, execute: 16270845, total: 16598945}
+        cached_jobs: [59, 32]
+        cached_profiles: 31
+        reports: 286
+        auto_launches: 1
+        dma_bytes: {input: 8192, output: 8192, affine: 2048}
+      - phase: warm
+        repeat: 1
+        input: 1
+        cycles: 16262298
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [0, 0, 0]
+        breakdown_cycles: {staging: 11851, setup: 5, capture: 4, execute: 16250438, total: 16262298}
+        cached_jobs: [59, 32]
+        cached_profiles: 31
+        reports: 286
+        auto_launches: 1
+        dma_bytes: {input: 8192, output: 8192, affine: 0}
+  hybrid_result:
+    status: completed
+    completed_utc: '2026-11-05 00:18'
+    session: 33109
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-hybrid.log
+    driver_log_sha256: 6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a
+    uart_log_repo: chipyard/sims/verilator/output/chipyard.harness.TestHarness.MultiAccelRocketConfig/rows-hybrid.log
+    uart_log_sha256: 09b74553cd9c46930a26975bf0cc32bc9c1da8a3ab583410631d27f14c1231f6
+    disjoint_phase_sums_verified: true
+    records:
+      - phase: cold
+        repeat: 0
+        input: 0
+        cycles: 16675497
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [59, 32, 31]
+        breakdown_cycles: {staging: 11522, setup: 138057, capture: 176114, execute: 16349804, total: 16675497}
+        cached_jobs: [59, 32]
+        cached_profiles: 31
+        reports: 394
+        auto_launches: 15
+        dma_bytes: {input: 8192, output: 8192, affine: 2048}
+      - phase: warm
+        repeat: 1
+        input: 1
+        cycles: 16341700
+        checked: 0
+        mismatches: 0
+        status: 0
+        captures: [0, 0, 0]
+        breakdown_cycles: {staging: 12130, setup: 18, capture: 4, execute: 16329548, total: 16341700}
+        cached_jobs: [59, 32]
+        cached_profiles: 31
+        reports: 394
+        auto_launches: 15
+        dma_bytes: {input: 8192, output: 8192, affine: 0}
+  execution_delta: Auto execute is78959cycles shorter, while staging/setup/capture together cost2407cycles more, yielding76552cycles net savings. Execute includes DMA, scheduling, waits and report drain as well as arithmetic; it is not pure compute time.
+  schedule_review: Independent source/log review confirms all72 projection tiles form36 Auto pairs, reducing stage-summary reports394->286 and CPU launches15->1. Both cached modes capture59native jobs,32CGRA programs and31profiles. Pairing is active; unchanged non-projection work can dilute its relative benefit, but current logs do not identify an operator-level bottleneck or isolate overlap savings.
+review:
+  result: Independent read-only review found no proven resource, address, execution-counter or projection-pairing defect for rows/wide.
+  publication_ranges_bytes: [[24576, 28672], [126976, 131072]]
+  retained_end_exclusive: {rows: 94208, wide: 126976}
+  maximum_native_commands: 133
+  maximum_native_patches: 18
+  maximum_cgra_job_packets: 178
+  maximum_examined_cgra_launch_steps: 55296
+  static_cgra_controls: {smoke: 118204, rows: 4123776, wide: 5785376}
+  clock_ratio: Two harness cycles per CPU cycle; 200M harness cycles permit100M CPU cycles including boot and untimed overhead.
+  budget_caveat: Linear scaling from small Manual suggests approximately71M CPU cycles for rows and100M for wide across cold plus warm; this is not a bound. Timeout alone is not evidence of deadlock.
+monitoring:
+  checked_utc: '2026-11-05 03:58:35'
+  status: All three rows processes completed with PASS and exit 0. Three original wide sessions remain running (Manual 71040, Hybrid 80145 and Auto 7348); their warm records and process exits remain pending. Only rows is complete; the overall setting is not complete.
+  build: Verified normal O3 simulator with one Verilator thread, no waveform tracing or coverage; simulator hash still matches.
+  runtime_scale: Smoke binary-copy to final-log timestamps suggest 22.6/24.6/36.1 minutes for Auto/Hybrid/Manual. Static-control scaling gives roughly13-29 hours for the larger cases, before accounting for changed native work and six-process contention. These are scale estimates, not completion forecasts.
+  progress_visibility: Firmware prints timing only after a complete inference; silence alone does not establish a hang.
+  future_option: The separate four-thread N2 Auto trial subsequently passed exact numerical and cycle checks; see ../threads4/run.yaml. Its11m19s wall time versus the23m baseline timestamp proxy is exploratory, not a controlled throughput claim. These six large runs remain on the original single-thread simulator. MAKEFLAGS changes build parallelism, not simulation threads.

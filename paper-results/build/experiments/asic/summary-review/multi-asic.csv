@@ -1,0 +1,4 @@
+workload,historical_speedup,conditional_ae_six,conditional_ae_seven,historical_asic_baseline
+ResNet,1.0797853020703014,1.1165543002400595,1.1875239999374518,Independent Add/ReLU ASIC; on-chip intermediates
+GPT-2,1.0211075492221717,1.0558784444515197,1.1229915047868413,"General ASIC, regional Hybrid"
+GCN,1.0044567869229706,1.038660688095879,1.1046793645774466,"General ASIC, regional Hybrid"

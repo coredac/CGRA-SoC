@@ -1,0 +1,633 @@
+{
+  "families": [
+    {
+      "family": "rockettile_dcache_data_arrays_0_ext",
+      "top": "RouteMem0",
+      "source": "RouteMem0.sv",
+      "ports": [
+        [
+          "RW0_addr",
+          "input",
+          7
+        ],
+        [
+          "RW0_clk",
+          "input",
+          1
+        ],
+        [
+          "RW0_wdata",
+          "input",
+          256
+        ],
+        [
+          "RW0_rdata",
+          "output",
+          256
+        ],
+        [
+          "RW0_en",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmode",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmask",
+          "input",
+          32
+        ]
+      ],
+      "instances": 4,
+      "depth": 128,
+      "width": 256,
+      "source_sha256": "c0fff16fc422226c15c6db5e22b5a43f8dda58800467fa65a2c4afe5d7836ce7",
+      "golden_sha256": "d36bde83ccf7a51b8264cb7eab88a815db9ef1b66cb1856e31aed73be584de0e",
+      "implementation": "single-port SRAM",
+      "macro": "SRAM1RW128x4",
+      "macro_instances": 64,
+      "macro_area_um2": 99211.194368,
+      "physical_bits": 32768,
+      "mask_lanes": 32,
+      "depth_banks": 1,
+      "width_slices_per_lane": 2
+    },
+    {
+      "family": "rockettile_dcache_tag_array_ext",
+      "top": "RouteMem1",
+      "source": "RouteMem1.sv",
+      "ports": [
+        [
+          "RW0_addr",
+          "input",
+          6
+        ],
+        [
+          "RW0_clk",
+          "input",
+          1
+        ],
+        [
+          "RW0_wdata",
+          "input",
+          88
+        ],
+        [
+          "RW0_rdata",
+          "output",
+          88
+        ],
+        [
+          "RW0_en",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmode",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmask",
+          "input",
+          4
+        ]
+      ],
+      "instances": 1,
+      "depth": 64,
+      "width": 88,
+      "source_sha256": "df37abaf58f0a2a28502bc5ae040f5267474bb4e0a9104759686eabd60e1bdc7",
+      "golden_sha256": "bf974ec1507f9cf3658753c9ba68bb2316971b4d118c260bbf2f8e79f9c8eb98",
+      "implementation": "single-port SRAM",
+      "macro": "SRAM1RW64x4",
+      "macro_instances": 24,
+      "macro_area_um2": 21156.377088,
+      "physical_bits": 6144,
+      "mask_lanes": 4,
+      "depth_banks": 1,
+      "width_slices_per_lane": 6
+    },
+    {
+      "family": "mem_ext",
+      "top": "RouteMem2",
+      "source": "RouteMem2.sv",
+      "ports": [
+        [
+          "R0_addr",
+          "input",
+          7
+        ],
+        [
+          "R0_clk",
+          "input",
+          1
+        ],
+        [
+          "R0_data",
+          "output",
+          512
+        ],
+        [
+          "R0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_addr",
+          "input",
+          7
+        ],
+        [
+          "W0_clk",
+          "input",
+          1
+        ],
+        [
+          "W0_data",
+          "input",
+          512
+        ],
+        [
+          "W0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_mask",
+          "input",
+          64
+        ]
+      ],
+      "instances": 2,
+      "depth": 128,
+      "width": 512,
+      "source_sha256": "98c784b32d2faffd7b9832001db2f407b2b11e924f6beb968ebc2bab4fba5646",
+      "golden_sha256": "98c784b32d2faffd7b9832001db2f407b2b11e924f6beb968ebc2bab4fba5646",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    },
+    {
+      "family": "commands_ext",
+      "top": "RouteMem3",
+      "source": "RouteMem3.sv",
+      "ports": [
+        [
+          "R0_addr",
+          "input",
+          4
+        ],
+        [
+          "R0_clk",
+          "input",
+          1
+        ],
+        [
+          "R0_data",
+          "output",
+          265
+        ],
+        [
+          "R0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_addr",
+          "input",
+          4
+        ],
+        [
+          "W0_clk",
+          "input",
+          1
+        ],
+        [
+          "W0_data",
+          "input",
+          265
+        ],
+        [
+          "W0_en",
+          "input",
+          1
+        ]
+      ],
+      "instances": 1,
+      "depth": 16,
+      "width": 265,
+      "source_sha256": "7d96785afa3dad73d684d1aad9dc8b8f75e70c91cdd6f2e7c07b6e78dfc31b2d",
+      "golden_sha256": "7d96785afa3dad73d684d1aad9dc8b8f75e70c91cdd6f2e7c07b6e78dfc31b2d",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    },
+    {
+      "family": "packets_ext",
+      "top": "RouteMem4",
+      "source": "RouteMem4.sv",
+      "ports": [
+        [
+          "R0_addr",
+          "input",
+          7
+        ],
+        [
+          "R0_clk",
+          "input",
+          1
+        ],
+        [
+          "R0_data",
+          "output",
+          194
+        ],
+        [
+          "R0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_addr",
+          "input",
+          7
+        ],
+        [
+          "W0_clk",
+          "input",
+          1
+        ],
+        [
+          "W0_data",
+          "input",
+          194
+        ],
+        [
+          "W0_en",
+          "input",
+          1
+        ]
+      ],
+      "instances": 1,
+      "depth": 96,
+      "width": 194,
+      "source_sha256": "e95a87a9349bbe40803a72f347fcbb5c84a9b1dbf882dca37944b218d54fee79",
+      "golden_sha256": "e95a87a9349bbe40803a72f347fcbb5c84a9b1dbf882dca37944b218d54fee79",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    },
+    {
+      "family": "patches_ext",
+      "top": "RouteMem5",
+      "source": "RouteMem5.sv",
+      "ports": [
+        [
+          "R0_addr",
+          "input",
+          7
+        ],
+        [
+          "R0_clk",
+          "input",
+          1
+        ],
+        [
+          "R0_data",
+          "output",
+          67
+        ],
+        [
+          "R0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_addr",
+          "input",
+          7
+        ],
+        [
+          "W0_clk",
+          "input",
+          1
+        ],
+        [
+          "W0_data",
+          "input",
+          67
+        ],
+        [
+          "W0_en",
+          "input",
+          1
+        ]
+      ],
+      "instances": 1,
+      "depth": 96,
+      "width": 67,
+      "source_sha256": "f3b642887a466552931491e04e1955bd5fcc4728c5aeb8900d182a37c4065ac9",
+      "golden_sha256": "f3b642887a466552931491e04e1955bd5fcc4728c5aeb8900d182a37c4065ac9",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    },
+    {
+      "family": "rockettile_icache_tag_array_ext",
+      "top": "RouteMem6",
+      "source": "RouteMem6.sv",
+      "ports": [
+        [
+          "RW0_addr",
+          "input",
+          6
+        ],
+        [
+          "RW0_clk",
+          "input",
+          1
+        ],
+        [
+          "RW0_wdata",
+          "input",
+          84
+        ],
+        [
+          "RW0_rdata",
+          "output",
+          84
+        ],
+        [
+          "RW0_en",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmode",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmask",
+          "input",
+          4
+        ]
+      ],
+      "instances": 1,
+      "depth": 64,
+      "width": 84,
+      "source_sha256": "748172e604e71ae33ad37b8bd7b9bfab878873e76694dab13fee8523d35f924a",
+      "golden_sha256": "4ac01d70cc841005dcb1eeba0dfe76e12c976b2bf5b99ca26a26779f53e780fe",
+      "implementation": "single-port SRAM",
+      "macro": "SRAM1RW64x4",
+      "macro_instances": 24,
+      "macro_area_um2": 21156.377088,
+      "physical_bits": 6144,
+      "mask_lanes": 4,
+      "depth_banks": 1,
+      "width_slices_per_lane": 6
+    },
+    {
+      "family": "rockettile_icache_data_arrays_0_ext",
+      "top": "RouteMem7",
+      "source": "RouteMem7.sv",
+      "ports": [
+        [
+          "RW0_addr",
+          "input",
+          7
+        ],
+        [
+          "RW0_clk",
+          "input",
+          1
+        ],
+        [
+          "RW0_wdata",
+          "input",
+          128
+        ],
+        [
+          "RW0_rdata",
+          "output",
+          128
+        ],
+        [
+          "RW0_en",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmode",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmask",
+          "input",
+          4
+        ]
+      ],
+      "instances": 8,
+      "depth": 128,
+      "width": 128,
+      "source_sha256": "d4bb1c04461fe59dda6e4434b842962083823817c1b417ae53c4a37417e18206",
+      "golden_sha256": "9e7205f4a77a9e9fbe21f20af938787591e53c1d74e36e2185c2b319ce736b28",
+      "implementation": "single-port SRAM",
+      "macro": "SRAM1RW128x4",
+      "macro_instances": 32,
+      "macro_area_um2": 49605.597184,
+      "physical_bits": 16384,
+      "mask_lanes": 4,
+      "depth_banks": 1,
+      "width_slices_per_lane": 8
+    },
+    {
+      "family": "mem_0_ext",
+      "top": "RouteMem8",
+      "source": "RouteMem8.sv",
+      "ports": [
+        [
+          "RW0_addr",
+          "input",
+          11
+        ],
+        [
+          "RW0_clk",
+          "input",
+          1
+        ],
+        [
+          "RW0_wdata",
+          "input",
+          64
+        ],
+        [
+          "RW0_rdata",
+          "output",
+          64
+        ],
+        [
+          "RW0_en",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmode",
+          "input",
+          1
+        ],
+        [
+          "RW0_wmask",
+          "input",
+          8
+        ]
+      ],
+      "instances": 1,
+      "depth": 2048,
+      "width": 64,
+      "source_sha256": "d3528b8b4bcae119c34d4958acc41ae6ab2353f55ca352e3b4525561d88860ef",
+      "golden_sha256": "33ea3065ff88ad1d7b9ae5eea30cf72b475ffda005d97ca54fc0ac291d4693b8",
+      "implementation": "single-port SRAM",
+      "macro": "SRAM1RW128x4",
+      "macro_instances": 256,
+      "macro_area_um2": 396844.777472,
+      "physical_bits": 131072,
+      "mask_lanes": 8,
+      "depth_banks": 16,
+      "width_slices_per_lane": 2
+    },
+    {
+      "family": "mem_1_ext",
+      "top": "RouteMem9",
+      "source": "RouteMem9.sv",
+      "ports": [
+        [
+          "R0_addr",
+          "input",
+          6
+        ],
+        [
+          "R0_clk",
+          "input",
+          1
+        ],
+        [
+          "R0_data",
+          "output",
+          512
+        ],
+        [
+          "R0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_addr",
+          "input",
+          6
+        ],
+        [
+          "W0_clk",
+          "input",
+          1
+        ],
+        [
+          "W0_data",
+          "input",
+          512
+        ],
+        [
+          "W0_en",
+          "input",
+          1
+        ],
+        [
+          "W0_mask",
+          "input",
+          64
+        ]
+      ],
+      "instances": 4,
+      "depth": 64,
+      "width": 512,
+      "source_sha256": "94a93c2cb19df641e41c06114dc0245d181147fdd436e8df8ebfd1ae92c7a57b",
+      "golden_sha256": "94a93c2cb19df641e41c06114dc0245d181147fdd436e8df8ebfd1ae92c7a57b",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    },
+    {
+      "family": "SyncRamRTL__368190512c452b7f",
+      "top": "RouteMem10",
+      "source": "RouteMem10.sv",
+      "ports": [
+        [
+          "clk",
+          "input",
+          1
+        ],
+        [
+          "raddr",
+          "input",
+          8
+        ],
+        [
+          "rdata",
+          "output",
+          35
+        ],
+        [
+          "ren",
+          "input",
+          1
+        ],
+        [
+          "reset",
+          "input",
+          1
+        ],
+        [
+          "waddr",
+          "input",
+          8
+        ],
+        [
+          "wdata",
+          "input",
+          35
+        ],
+        [
+          "wen",
+          "input",
+          1
+        ]
+      ],
+      "instances": 8,
+      "depth": 256,
+      "width": 35,
+      "source_sha256": "b7e628b16176470aec64a0ac05c5bfe397044ad26dc57acbc99a693a152f51a5",
+      "golden_sha256": "b7e628b16176470aec64a0ac05c5bfe397044ad26dc57acbc99a693a152f51a5",
+      "implementation": "original RTL to standard cells",
+      "macro_instances": 0
+    }
+  ],
+  "macro_counts": {
+    "SRAM1RW128x4": 768,
+    "SRAM1RW64x4": 48
+  },
+  "macro_instances": 816,
+  "macro_area_um2": 1232847.086592,
+  "standard_storage_bits": 363120,
+  "macro_storage_bits": 405504,
+  "expected_replaced_definitions": 32,
+  "old_macro_instances": 727,
+  "input_sha256": {
+    "soc/rtl/gen-collateral/chipyard.harness.TestHarness.PhysicalPoolConfig.top.mems.v": "1f35afbfe99bce4ea2c1ecb9a512e70c05dc8396701425336ff9b8f3b437105d",
+    "cgra/export/IntegratedCgraWithDmaRTL_single__pickled.v": "fa8f198b5c30be00693c59f153c5de7c6e297c3bad686c10f80976b5c2790508",
+    "backend/route-repair/catalog.json": "85eab895477285e46abdb0ee9b24a31dcb243137d99aeaa27ef985a5c85b8d35",
+    "memory/catalog.json": "34e11afeb268e9161a5736788ef1821487dc568ae3b89dacf445f17ef7c947fb",
+    "memory/manifest.json": "3039daac43de75c9c1385f01010b1d95e50bedbfb5a12f9a4a195d949f826040"
+  },
+  "library": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/single/saed14sram_tt0p8v25c.lib",
+  "area_note": "Macro area uses physical LEF size; installed Liberty area differs and is not used as a physical area measurement.",
+  "validation": "Static generation and interface checks only; synthesis and formal equivalence not yet run. No simulation or performance rerun."
+}

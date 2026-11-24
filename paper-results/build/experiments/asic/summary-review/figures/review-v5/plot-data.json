@@ -1,0 +1,39 @@
+{
+  "source": "/home/jjqin/CGRA-SoC/build/experiments/asic/summary-review/multi-asic.json",
+  "source_sha256": "b4d543cec1b2fea2f37e0477f8aa4b10d363528c1dcae6027484e9131ab767ec",
+  "performance_workload": "ResNet",
+  "performance_aggregation": "Three configuration-resident executions per backend; ratio of arithmetic mean cycles; not the three-workload mean",
+  "bars": [
+    {
+      "metric": "speedup",
+      "backend": "ASIC",
+      "value": 1.0
+    },
+    {
+      "metric": "speedup",
+      "backend": "CGRA",
+      "value": 1.0797853020703014
+    },
+    {
+      "metric": "core_area",
+      "backend": "ASIC",
+      "value": 1.0
+    },
+    {
+      "metric": "core_area",
+      "backend": "CGRA",
+      "value": 0.9092745090854373
+    }
+  ],
+  "font_pt": 8,
+  "intended_width_cm": 7.3,
+  "bar_width_pt": 10,
+  "label_decimal_places": 2,
+  "zero_based_bar_axis": true,
+  "single_axis": true,
+  "same_hardware_revision": false,
+  "version_scope_note_visible": false,
+  "version_scope_record": "caption.txt",
+  "footer_removed": true,
+  "source_results_modified": false
+}

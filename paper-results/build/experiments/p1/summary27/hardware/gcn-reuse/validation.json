@@ -1,0 +1,89 @@
+{
+  "checks": [
+    [
+      "nine area entries",
+      true
+    ],
+    [
+      "nine cycle entries",
+      true
+    ],
+    [
+      "gcn-cgra1 Manual original cycles",
+      true
+    ],
+    [
+      "gcn-cgra1 Hybrid original cycles",
+      true
+    ],
+    [
+      "gcn-cgra1 Auto original cycles",
+      true
+    ],
+    [
+      "gcn-cgra2 Manual original cycles",
+      true
+    ],
+    [
+      "gcn-cgra2 Hybrid original cycles",
+      true
+    ],
+    [
+      "gcn-cgra2 Auto original cycles",
+      true
+    ],
+    [
+      "gcn-cgra4 Manual original cycles",
+      true
+    ],
+    [
+      "gcn-cgra4 Hybrid original cycles",
+      true
+    ],
+    [
+      "gcn-cgra4 Auto original cycles",
+      true
+    ],
+    [
+      "gcn-cgra1 independent SRAM recount",
+      true
+    ],
+    [
+      "gcn-cgra1 Manual area unchanged",
+      true
+    ],
+    [
+      "gcn-cgra1 Auto area unchanged",
+      true
+    ],
+    [
+      "gcn-cgra2 independent SRAM recount",
+      true
+    ],
+    [
+      "gcn-cgra2 Manual area unchanged",
+      true
+    ],
+    [
+      "gcn-cgra2 Auto area unchanged",
+      true
+    ],
+    [
+      "gcn-cgra4 independent SRAM recount",
+      true
+    ],
+    [
+      "gcn-cgra4 Manual area unchanged",
+      true
+    ],
+    [
+      "gcn-cgra4 Auto area unchanged",
+      true
+    ],
+    [
+      "source hashes",
+      true
+    ]
+  ],
+  "passed": true
+}

@@ -1,0 +1,8 @@
+{
+  "arithmetic_pairs_checked": 74372,
+  "random_seed": "0x475054",
+  "all_checks_passed": true,
+  "square_identity": "For B=2^16, (a0+B*a1)(b0+B*b1) mod B^2 = a0*b0+B*((a1*b0+a0*b1) mod B) mod B^2. Splitting a0*b0 into high/low words and truncating each high-word addition modulo B preserves this identity. Signed and unsigned 32-bit products have the same low32 bits.",
+  "polynomial_coefficients_equal_modulo_2_32": true,
+  "limits": "Arithmetic identity and deterministic software checks cover combinational expressions; this is not whole-FSM formal equivalence or RTL simulation. Busy/done preservation relies on unchanged FSM actions outside added pipeline states."
+}

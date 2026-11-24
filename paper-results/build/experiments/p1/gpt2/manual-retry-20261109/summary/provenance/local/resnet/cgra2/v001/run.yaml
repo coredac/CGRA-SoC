@@ -1,0 +1,162 @@
+status: completed_small_and_large
+cleanup: After both runs completed and results were archived, removed only soc-build/chipyard.harness.TestHarness.MultiAccelRocketConfig generated C++/object/precompiled-header intermediates, approximately1.3GiB, to recover account quota for GPT2cgra4. Simulator, RTL/gen-collateral, source/interfaces, allfirmware and results remain; removed files are regenerable.
+sessions: Small36740 and large86798 fully drained with exit0.
+large_results:
+  completed_utc: '2026-11-04 14:31'
+  exit_code: 0
+  performance: large-performance.json
+  raw_log: large-results.log
+  raw_log_sha256: c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8
+  completed_inferences: 6
+  checked_inferences: 0
+  manual: {cold: 524812, warm: 501672}
+  hybrid: {cold: 547802, warm: 193915}
+  auto: {cold: 529699, warm: 173087}
+  status_errors: 0
+  interpretation: Auto warm latency10.7408percent below Hybrid; cold Manual remains fastest. Four-group timing contrasts with the one-group small case where Auto was8.0867percent slower than Hybrid. Large completion/status checks passed; numerical checks disabled as requested. One sample per mode/phase, no variance claim. Simulator and ELF hashes unchanged at completion.
+large_log: large.log
+build_log: small-build.log
+generated_audit: Independent read-only review passed two CGRA instances,8192 words each/eight synchronous1024-word banks/ten controls/14-bit counters/194-bit packets/672 packet entries each/two slots each; Gemmini DIM64/64KiB SPM/32KiB accumulator/216 command entries/four slots; five profiles/ten stages/fourteen edges/Queue10 results. ELF devices has two endpoints and expected/output arrays each hold128 INT32 values. API/fixture and archived/running ELF hashes match. No accidental preflight bindings/plan include was found. Numerical gate remains separate.
+artifacts:
+  rtl: rtl/soc-sim.tar.gz
+  rtl_sha256: 9763e493b09b3be309b8ba95ba9180f7635523fa930724586578f04de49bb5f0
+  simulator: simulator
+  simulator_sha256: 66e773f7cb6ad1d57665530949a78c358d52a833f85507edb15c62f488075708
+  small_binary: small.riscv
+  small_binary_sha256: fba3f694fba3805ff87604ecd9303945a7b3358fc5427e77b6adc67c29c73b05
+  large_binary: large.riscv
+  large_binary_sha256: 3bf54b3dce07ca188d85ae4dd8248df5da2be87c2cff31b3bffe65953ad7f7ce
+  large_fixture: large/generated/p1_resnet_data.h
+  large_fixture_sha256: 21f788cd4cea2cf8e1ce5d9a56944361e1e48fd9cef295ca52e29a6668b288b1
+  interfaces: source/interfaces.tar.gz
+  interfaces_sha256: 79be4ea0a862c8d54452cf9f4be59c7e86613a2aa5a346127baa2971abe22944
+  generated_hardware_headers_and_small_fixture: artifacts/
+  note: These are matching simulation RTL, firmware and synchronous inferred-memory interfaces; no technology SRAM or area result is established.
+configuration: MultiAccelRocketConfig
+base: ../../cgra1/v002/run.yaml
+source: source/p1.c
+source_origin: tests/cgra-gemmini/resnet/p1.c
+arch: config/arch.yaml
+soc: config/soc.yaml
+kernel_metadata: [config/kernels/kernel_relu_runtime_4x4.yaml, config/kernels/kernel_add_relu_runtime_4x4.yaml]
+kernel_schedules: [config/kernels/runtime/relu.yaml, config/kernels/runtime/add_relu.yaml]
+compile_define: P1_CGRAS=2
+scope: One native Gemmini64 and two independent homogeneous 4x4 CGRAs; unchanged projected residual block and rotated Auto schedule. Shared integration generation, simulator build, allsix small numerical checks and six large timing/status checks passed with exit0.
+small_results:
+  session: 36740
+  exit_code: 0
+  performance: small-performance.json
+  raw_log: small-results.log
+  checked_inferences: 6
+  outputs_per_inference: 128
+  manual: {cold: 105327, warm: 88122}
+  hybrid: {cold: 104594, warm: 9089}
+  auto: {cold: 104833, warm: 9824}
+  mismatches: 0
+  status_errors: 0
+  interpretation: Auto warm is8.0867percent slower than Hybrid in this one-group fixture. It has no cross-group overlap opportunity and adds a profile boundary. Preserve the result; large has four groups. No artificial baseline slowdown or hardware change.
+ownership: Root exclusively owns shared generation and build. Frozen GCN4 Star64 and six GPT2 simulations retain their own simulator, ELF, inputs and logs; no clean targets, runtime-library rebuilds or toolchain updates.
+shapes:
+  small: {input: [8, 8, 4], output: [4, 4, 8], strips: 2, groups: 1, values: 128}
+  large: {input: [32, 32, 16], output: [16, 16, 32], strips: 8, groups: 4, values: 8192}
+grouping: Existing two-row full-width strips are assigned alternately to CGRA0 and CGRA1; no new workload was introduced.
+resources:
+  gemmini: {dim: 64, spm_bytes: 65536, accumulator_bytes: 32768, jobs: 24, commands: 9, patch_capacity: 2, used_patches: 0, slots: 4}
+  cgra_per_device: {words: 8192, banks: 8, bank_words: 1024, packed_words: 2048, jobs: 8, packets: 84, control_slots: 10, counter_bits: 14, slots: 2}
+  fabric: {profiles: 5, stages: 10, dependencies: 14, results: 10}
+  native_working_bytes: {required_spm: 30976, reserved_spm: 32768, required_accumulator: 16384, reserved_accumulator: 16384}
+  small_live_words_per_device: 320
+  large_live_words_per_device: 8192
+  large_cgra_ranges: {relu: [0, 2048], skip: [2048, 3072], main: [3072, 4096], retained_output: [4096, 8192]}
+  large_gemmini_publications: {lane0: [32768, 36864], lane1: [36864, 40960]}
+  maximum_control_steps: {relu: 10250, add: 5130}
+  packet_bits: 194
+  native_address_bits: 13
+  range_convention: Half-open byte ranges for Gemmini and word ranges for CGRA.
+capacity_reasons:
+  memory: Four groups retain four 1024-word outputs per device after 4096 scratch words, requiring exactly 8192 physical words. This replaces the one-CGRA 16384-word geometry and requires matching RTL-derived layout before firmware compilation.
+  gemmini_memory: Native Conv requires 30976 bytes within its reserved lower half, so the existing 65536-byte power-of-two SPM remains necessary; both lanes reserve 8192 publication bytes in the upper half.
+  gemmini_slots: Preserve the existing conservative bound of two slots per active lane. Hybrid Projection0 and Projection1 can each retain one publication while a main path needs another slot. First and Second do not retain publications simultaneously within a lane because Second waits for Activate and CGRA consumes First on copy completion. Four slots cover the two projections and two main paths.
+  auto_slots: Rotated Auto Projection and Second have no data readers within their producing profile; fixed payload addresses survive slot release until the next profile's explicit root copies. Current First may overlap previous Add, whose completion protects current Projection and Second writes on each lane. The common hardware must also support Hybrid, so it retains four native slots.
+  cgra_slots: Two per device allow previous Add input preparation while current Activate output remains live until Second finishes reading it.
+  jobs: Eight strips reserve three native jobs each, while four groups reserve ReLU and Add on each CGRA.
+  profiles: Hybrid captures four group profiles; Auto captures initial core, three middle core-plus-previous-Add profiles and final Add, for five profiles.
+  graph: Hybrid peaks at ten stages and twelve edges; middle Auto profiles peak at ten stages and fourteen edges, including both publication-reuse completion dependencies per lane.
+  reports: Ten results hold the largest profile's complete report set; software concurrently drains all forty reports across the large run.
+  native_patches: Existing native Gemmini cache parameter requires a power of two greater than one; this source captures zero field patches.
+  source_capacity_check: p1.c does not enforce a minimum slot count; the four-slot choice follows source graph ownership and the established design.yaml bound.
+schedules:
+  small:
+    hybrid_profiles: 1
+    hybrid_stages: [10]
+    hybrid_edges: [12]
+    auto_profiles: 2
+    auto_stages: [8, 2]
+    auto_edges: [8, 4]
+    stage_reports: 10
+  large:
+    hybrid_profiles: 4
+    hybrid_stages: [10, 10, 10, 10]
+    hybrid_edges: [12, 12, 12, 12]
+    auto_profiles: 5
+    auto_stages: [8, 10, 10, 10, 2]
+    auto_edges: [8, 14, 14, 14, 4]
+    stage_reports: 40
+preflight:
+  command: PYTHONDONTWRITEBYTECODE=1 chipyard/.conda-env/bin/python build/experiments/p1/resnet/cgra2/v001/checks/preflight.py
+  harness: checks/plan.c
+  results: checks/results.json
+  loaders: Actual SoC, accelerator-layout and AutoLink configuration loaders passed. AutoLink loader reads only DMA beat and cache-block geometry from existing shared Scala; this does not validate that shared RTL matches this configuration.
+  APIs: Both fast APIs emitted into generated using the current generator, isolated kernel metadata and this architecture/SoC. ReLU uses 90 static and 76 cached packets; Add uses 102 static and 84 cached packets. Controls occupy [0,5) and [5,10).
+  hashes: checks/results.json records SHA-256 for isolated source, configuration, metadata, fixture, API and preflight text files.
+  formatting: clang-format, Black check and git diff --check passed. Black was available through OpenFPGA/.venv/bin/black; no packages were installed.
+  host_plans: Both shapes compiled and passed using verbatim declarations, plan and profile-builder functions extracted from source/p1.c. Checks cover counts, capacities, task and job coverage, endpoint mapping, acyclicity, both publication-reuse dependencies, native workspace limits and local memory bounds.
+  host_numerics: Cropped native Conv parameters, INT8 saturation, ReLU, residual addition and gathered output matched all 128 small and 8192 large reference values in host C. This is a software plan/reference check, not an RTL numerical gate.
+  isolated_headers: Accelerator descriptors, graph and control ABI were emitted from this SoC. Archived DIM64/65536-byte Gemmini parameters are copied into generated and generated/include to avoid current shared parameter leakage. CGRA layout was deliberately not copied.
+  firmware_syntax: Matching 13-bit-address layout subsequently generated; both archived firmware builds and independent ELF audits passed. Original preflight snapshots predate this step.
+  reference_simulation: Subsequently passed; see reduced_spm_reference.
+  hardware_generation: Matching integration generated and archived; see artifacts and generated RTL audit.
+  simulator_build: Completed; archived simulator used for both small and large runs.
+  top_level_simulation: Small numerical gate and large timing-only runs completed with exit0; see the result sections above.
+gate:
+  fixture: small/generated/p1_resnet_data.h
+  required: After matching generation and rebuild, run Manual, Hybrid and Auto with full output/status checking on the unchanged small fixture before large timing-only runs.
+  coverage: The two original small strips exercise both CGRAs and both retained outputs, but form only one group. They do not exercise a middle rotated profile or its publication-reuse dependencies in hardware.
+  performance_limit: Small has one group and Auto is8.0867percent slower than Hybrid warm. Large has four groups and Auto is10.7408percent faster than Hybrid warm. Retain both outcomes; neither establishes variability or statistical significance.
+next:
+  - This setting is complete for the first cold/warm sweep; retain its archived inputs, simulator, RTL and results while advancing other settings.
+execution:
+  wrapper: p1.c
+  implementation_sha256: 0b05853701b75597fb14d238d589bd15c064ad7376ce227392b364916fbf790d
+  preparation: Current runner and generator help checked; nine source/config/fixture hashes match preflight. Fresh small fixture and both fast API hashes match the checked compact configuration. Independent runtime-dependency review permits overlap with frozen GCN4; startup available RAM22GiB and disk671GiB,32 online CPUs.
+  build_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/soc-build
+  sim: /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/simulator
+  output_dir: /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/output
+  tmpdir: /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/tmp
+  make_jobs: 2
+  verilator_threads: 4
+  small_arguments: '-1 1 0'
+  small_harness_cycle_limit: 20000000
+  large_arguments: '-1 1 1'
+  large_harness_cycle_limit: 12000000
+  archive: Preserve small fixture, ELF and UART log before generating the large fixture; keep the same simulator for both.
+commands:
+  large: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=12000000 BINARY_ARGS='-1 1 1' ./run-chipyard-cgra-gemmini-demo.sh --arch-yaml build/experiments/p1/resnet/cgra2/v001/config/arch.yaml --soc-yaml build/experiments/p1/resnet/cgra2/v001/config/soc.yaml build/experiments/p1/resnet/cgra2/v001/p1.c
+  small: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/tmp MAKEFLAGS='-j2 build_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/soc-build sim=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/simulator output_dir=/home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra2/v001/output VERILATOR_THREADS=4' CONFIG=MultiAccelRocketConfig RANDOM_SEED=1 LOADMEM=1 timeout_cycles=20000000 BINARY_ARGS='-1 1 0' ./run-chipyard-cgra-gemmini-demo.sh --rebuild --arch-yaml build/experiments/p1/resnet/cgra2/v001/config/arch.yaml --soc-yaml build/experiments/p1/resnet/cgra2/v001/config/soc.yaml build/experiments/p1/resnet/cgra2/v001/p1.c
+limits:
+  performance: Simulated timing is recorded above. One sample per phase/mode does not establish variability, statistical significance or guaranteed mode ordering.
+  progress: Loader, packet and host graph checks do not prove accelerator arbitration, DMA completion or RTL progress.
+  correctness: The original small numerical gate does not cover middle-profile reuse; larger timing-only runs do not establish full numerical correctness.
+  area: Inferred synchronous storage and cache capacities do not establish technology SRAM mapping or measured area.
+reduced_spm_reference:
+  status: passed
+  manifest: reference/run.yaml
+  source: reference/reference.py
+  log: reference/run.log
+  results: reference/results.json
+  process_exit_code: 0
+  target: Actual homogeneous 4x4 FU set, 8192 words in eight synchronous 1024-word banks, ten resident control slots, 14-bit execution counters and disabled context switching/global reduction.
+  checked: Twenty resident ReLU/Add jobs, 48448 exact native SRAM reads and all 8320 output values from the original small and large fixtures, including both final [7168,8192) regions through word 8191.
+  reuse: Both static programs loaded once per shape/lane case and reused across all four large groups while every previously produced output remained live and was rechecked.
+  scope: Both lane assignments ran sequentially on one translated component; Gemmini, DMA, AutoLink and simultaneous two-CGRA behavior remain outside this reference. Subsequent matching SoC generation, firmware compilation and small all-mode numerical validation passed separately, as recorded above.
+  isolation: Translation, Verilator build and simulation stayed in reference; no shared RTL, API or simulator state was changed. The process and all owned tool sessions are drained.

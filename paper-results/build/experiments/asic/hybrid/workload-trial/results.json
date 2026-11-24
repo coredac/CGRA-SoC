@@ -1,0 +1,75 @@
+{
+  "area_unit": "SAED14 library area units",
+  "clock_ns": 2,
+  "baseline_sha256": "af52e2076619e7ce7689297b406566ae0c78479920019e6e9fa09897e295e35b",
+  "family_report_sha256": "c983e2dda10e46157cbe7063d7cd55aeb0d44b24cd9e0e1fd0bce4ce4324edd8",
+  "selected_gpt_report_sha256": "7a3de661a74f9547cb0f6674feab0e29e25f550d4b979de2a6f2947ffcc0196a",
+  "families": {
+    "add": {
+      "total_cell_area": 34553.855376,
+      "area_excluding_local_array_storage": 34553.855376,
+      "worst_setup_slack_ns": 0.104329,
+      "no_violated_constraints": true,
+      "source_sha256": "dc0c0fc9e388c0ed544c3bac03522486f39551ca685829b8f9fe0d0c08ec2f44"
+    },
+    "relu": {
+      "total_cell_area": 34550.525372,
+      "area_excluding_local_array_storage": 34550.525372,
+      "worst_setup_slack_ns": 0.104401,
+      "no_violated_constraints": true,
+      "source_sha256": "1dfb92933d0cd75db0a14801d8a2542cbf2ee6abd2d54c4c9e075bcde7335f1e"
+    },
+    "gcn": {
+      "total_cell_area": 176676.036229,
+      "area_excluding_local_array_storage": 106475.729029,
+      "worst_setup_slack_ns": 0.000325,
+      "no_violated_constraints": true,
+      "source_sha256": "dc83f31f5a4c0c248f045cb67dac46465765a104f8d5238bf7ed67d93e4e230b"
+    },
+    "norm": {
+      "total_cell_area": 65169.297921,
+      "area_excluding_local_array_storage": 49892.856321,
+      "worst_setup_slack_ns": 0.104401,
+      "no_violated_constraints": true,
+      "source_sha256": "97ef696ad7ca91f8de27026975c14e90f39e4a9ddf07d9335b89fe7dc3794ebd"
+    },
+    "softmax": {
+      "total_cell_area": 34774.301361,
+      "area_excluding_local_array_storage": 34625.117361,
+      "worst_setup_slack_ns": 0.037377,
+      "no_violated_constraints": true,
+      "source_sha256": "1df9e2c99087b6588cd79a00b45fe2a8060ff848b8b62d065e3db7fd8f1c2944"
+    },
+    "gpt_vector": {
+      "total_cell_area": 217356.737307,
+      "area_excluding_local_array_storage": 125698.087707,
+      "worst_setup_slack_ns": 0.002648,
+      "no_violated_constraints": true,
+      "source_sha256": "2fe24df02f22b1d3b61e881e6368d706b626bb07c0d07f43b5705f53ef7dbdd0"
+    },
+    "sad": {
+      "total_cell_area": 35790.173373,
+      "area_excluding_local_array_storage": 35790.173373,
+      "worst_setup_slack_ns": 0.058382,
+      "no_violated_constraints": true,
+      "source_sha256": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5"
+    }
+  },
+  "cgra_including_local_storage": 544538.068098,
+  "six_asic_including_local_storage": 563080.753566,
+  "sad_including_local_storage": 35790.173373,
+  "seven_asic_including_local_storage": 598870.926939,
+  "seven_asic_excluding_local_storage": 421586.34453899995,
+  "cgra_area_saving_vs_seven_percent": 9.072549091456272,
+  "cgra_area_saving_vs_six_percent": 3.29307747611135,
+  "sad_setup_slack_ns": 0.058382,
+  "sad_constraints_met": true,
+  "cgra_internal_setup_slack_ns": -0.759389,
+  "limits": [
+    "Seventh ASIC is optional independent autonomous SAD provisioning; existing primitive interfaces already contain the arithmetic needed for software sequencing.",
+    "Seven expanded endpoints install 112 primitive lanes versus 16 CGRA PEs; equal useful throughput is not established.",
+    "CGRA area reuses the unchanged modified core; SAD mapping on that modified control network is not newly validated.",
+    "No simulator or performance run; synthesis and local static/formal checks are not whole-system validation.",
+    "CGRA still fails 2 ns. This is an area scenario, not timing-qualified performance per area."
+  ]
+}

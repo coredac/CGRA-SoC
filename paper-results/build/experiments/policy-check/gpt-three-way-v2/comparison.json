@@ -1,0 +1,94 @@
+{
+  "old_reference_area": 10755881.348363997,
+  "new_reference_area": 8732372.535943998,
+  "old_relative_AE": {
+    "1 GEMM + 1 CGRA": {
+      "per-task": 1.0,
+      "per-segment": 0.9275099766451138,
+      "per-graph": 0.89027415421778
+    },
+    "1 GEMM + 4 CGRA": {
+      "per-task": 0.604446858553774,
+      "per-segment": 0.9445500531834697,
+      "per-graph": 1.0
+    },
+    "1 GEMM + 3 ASIC cores": {
+      "per-task": 0.9973610018257938,
+      "per-segment": 1.0,
+      "per-graph": 0.9616374948656957
+    }
+  },
+  "new_relative_AE": {
+    "1 GEMM + 1 CGRA": {
+      "per-task": 1.0,
+      "per-segment": 0.8942774675655081,
+      "per-graph": 0.8494124235892302
+    },
+    "1 GEMM + 4 CGRA": {
+      "per-task": 0.6044468585537742,
+      "per-segment": 0.9445500531834697,
+      "per-graph": 1.0
+    },
+    "1 GEMM + 3 ASIC cores": {
+      "per-task": 0.9973610018257938,
+      "per-segment": 1.0,
+      "per-graph": 0.9616374948656958
+    }
+  },
+  "AE_changes": [
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-task",
+      "old_AE": 1.0,
+      "new_AE": 1.0
+    },
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-segment",
+      "old_AE": 0.9275099766451138,
+      "new_AE": 0.8942774675655081
+    },
+    {
+      "composition": "1 GEMM + 1 CGRA",
+      "policy": "per-graph",
+      "old_AE": 0.89027415421778,
+      "new_AE": 0.8494124235892302
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-task",
+      "old_AE": 1.240005823684971,
+      "new_AE": 1.0067229684347772
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-segment",
+      "old_AE": 1.9377180146354465,
+      "new_AE": 1.57317425000976
+    },
+    {
+      "composition": "1 GEMM + 4 CGRA",
+      "policy": "per-graph",
+      "old_AE": 2.0514720295707436,
+      "new_AE": 1.665527670775734
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-task",
+      "old_AE": 1.2481054766852873,
+      "new_AE": 1.0132988300606025
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-segment",
+      "old_AE": 1.251407939954013,
+      "new_AE": 1.0159799994241128
+    },
+    {
+      "composition": "1 GEMM + 3 ASIC cores",
+      "policy": "per-graph",
+      "old_AE": 1.203400796432418,
+      "new_AE": 0.9770044614798549
+    }
+  ]
+}

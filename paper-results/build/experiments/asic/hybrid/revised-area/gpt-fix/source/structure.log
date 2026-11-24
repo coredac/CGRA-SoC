@@ -1,0 +1,1099 @@
+
+-- Running command `read_verilog build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v; hierarchy -check -top ExpandedAsic; proc; opt; check; stat; write_json build/experiments/asic/hybrid/revised-area/gpt-fix/source/structure.json' --
+
+1. Executing Verilog-2005 frontend: build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v
+Parsing Verilog input from `build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v' to AST representation.
+Generating RTLIL representation for module `\ExpandedAsic'.
+Generating RTLIL representation for module `\Restoring'.
+Generating RTLIL representation for module `\ArithmeticLane'.
+Generating RTLIL representation for module `\PrimitiveBank'.
+Generating RTLIL representation for module `\GcnNative'.
+Warning: Replacing memory \product with list of registers. See build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:890
+Warning: Replacing memory \result with list of registers. See build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:835
+Warning: Replacing memory \accumulator with list of registers. See build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:834
+Warning: Replacing memory \value with list of registers. See build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:833
+Generating RTLIL representation for module `\GcnBank'.
+Generating RTLIL representation for module `\GptNormNative'.
+Generating RTLIL representation for module `\GptSoftmaxNative'.
+Generating RTLIL representation for module `\GptVectorNative'.
+Generating RTLIL representation for module `\GptVectorBank'.
+Generating RTLIL representation for module `\GptVectorMemory'.
+Successfully finished Verilog frontend.
+
+2. Executing HIERARCHY pass (managing design hierarchy).
+
+2.1. Analyzing design hierarchy..
+Top module:  \ExpandedAsic
+Used module:     \GptVectorNative
+Used module:         \GptVectorMemory
+Used module:             \GptVectorBank
+Used module:     \PrimitiveBank
+Used module:         \ArithmeticLane
+Used module:             \Restoring
+
+2.2. Analyzing design hierarchy..
+Top module:  \ExpandedAsic
+Used module:     \GptVectorNative
+Used module:         \GptVectorMemory
+Used module:             \GptVectorBank
+Used module:     \PrimitiveBank
+Used module:         \ArithmeticLane
+Used module:             \Restoring
+Removing unused module `\GptSoftmaxNative'.
+Removing unused module `\GptNormNative'.
+Removing unused module `\GcnBank'.
+Removing unused module `\GcnNative'.
+Removed 4 unused modules.
+
+3. Executing PROC pass (convert processes to netlists).
+
+3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86'.
+Found and cleaned up 1 empty switch in `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+Cleaned up 2 empty switches.
+
+3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443 in module GptVectorBank.
+Marked 3 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388 in module GptVectorNative.
+Removed 1 dead cases from process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507 in module GptVectorMemory.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507 in module GptVectorMemory.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120 in module PrimitiveBank.
+Marked 3 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106 in module ArithmeticLane.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86 in module ArithmeticLane.
+Marked 2 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35 in module Restoring.
+Marked 1 switch rules as full_case in process $proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26 in module Restoring.
+Removed a total of 1 dead cases.
+
+3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 23 assignments to connections.
+
+3.4. Executing PROC_INIT pass (extract init attributes).
+
+3.5. Executing PROC_ARST pass (detect async resets in processes).
+
+3.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~24 debug messages>
+
+3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+     1/3: $1$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_EN[31:0]$1449
+     2/3: $1$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_DATA[31:0]$1448
+     3/3: $1$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_ADDR[6:0]$1447
+Creating decoders for process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+     1/31: $2\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.inp[15:0]$1394
+     2/31: $2\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.$result[15:0]$1393
+     3/31: $1\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.inp[15:0]$1392
+     4/31: $1\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.$result[15:0]$1391
+     5/31: $0\done[0:0]
+     6/31: $0\bias_low[16:0]
+     7/31: $0\square_upper[15:0]
+     8/31: $0\square_cross_b[15:0]
+     9/31: $0\square_cross_a[15:0]
+    10/31: $0\square_low[31:0]
+    11/31: $0\activation[31:0]
+    12/31: $0\coefficient[31:0]
+    13/31: $0\magnitude[31:0]
+    14/31: $0\q[31:0]
+    15/31: $0\second[31:0]
+    16/31: $0\round_magnitude[31:0]
+    17/31: $0\scale[31:0]
+    18/31: $0\size[10:0]
+    19/31: $0\numerator[31:0]
+    20/31: $0\biased[31:0]
+    21/31: $0\correction[31:0]
+    22/31: $0\square[31:0]
+    23/31: $0\product[31:0]
+    24/31: $0\delta[31:0]
+    25/31: $0\index[9:0]
+    26/31: $0\op[1:0]
+    27/31: $0\state[4:0]
+    28/31: $0\negative[0:0]
+    29/31: $0\busy[0:0]
+    30/31: $0\value[31:0]
+    31/31: $0\gate[31:0]
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1517'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1516'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1515'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1514'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1513'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1512'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1511'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1510'.
+Creating decoders for process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507'.
+     1/1: $1$mem2reg_rd$\values$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1490_DATA[31:0]$1509
+Creating decoders for process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120'.
+     1/2: $0\active[15:0]
+     2/2: $0\busy[0:0]
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:579$111'.
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+     1/8: $0\partial[31:0]
+     2/8: $0\stride[31:0]
+     3/8: $0\x[31:0]
+     4/8: $0\op[4:0]
+     5/8: $0\state[2:0]
+     6/8: $0\out_data[31:0]
+     7/8: $0\z[31:0]
+     8/8: $0\y[31:0]
+Creating decoders for process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86'.
+     1/1: $1\fast_value[31:0]
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:402$60'.
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+     1/10: $0\done[0:0]
+     2/10: $0\negative[0:0]
+     3/10: $0\take_remainder[0:0]
+     4/10: $0\square_root[0:0]
+     5/10: $0\remainder[32:0]
+     6/10: $0\quotient[31:0]
+     7/10: $0\count[5:0]
+     8/10: $0\busy[0:0]
+     9/10: $0\result[31:0]
+    10/10: $0\divisor[31:0]
+Creating decoders for process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+     1/2: $1\subtract[32:0]
+     2/2: $1\trial[32:0]
+Creating decoders for process `\ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:293$25'.
+Creating decoders for process `\ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:291$24'.
+
+3.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\GptVectorMemory.\values[7]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1517'.
+No latch inferred for signal `\GptVectorMemory.\values[6]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1516'.
+No latch inferred for signal `\GptVectorMemory.\values[5]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1515'.
+No latch inferred for signal `\GptVectorMemory.\values[4]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1514'.
+No latch inferred for signal `\GptVectorMemory.\values[3]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1513'.
+No latch inferred for signal `\GptVectorMemory.\values[2]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1512'.
+No latch inferred for signal `\GptVectorMemory.\values[1]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1511'.
+No latch inferred for signal `\GptVectorMemory.\values[0]' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1510'.
+No latch inferred for signal `\GptVectorMemory.$mem2reg_rd$\values$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1490_DATA' from process `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507'.
+No latch inferred for signal `\ArithmeticLane.\_sv2v_0' from process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:579$111'.
+No latch inferred for signal `\ArithmeticLane.\fast_value' from process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86'.
+No latch inferred for signal `\Restoring.\_sv2v_0' from process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:402$60'.
+No latch inferred for signal `\Restoring.\subtract' from process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+No latch inferred for signal `\Restoring.\trial' from process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+No latch inferred for signal `\Restoring.\next_quotient' from process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+No latch inferred for signal `\Restoring.\next_remainder' from process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+No latch inferred for signal `\ExpandedAsic.\native_done' from process `\ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:293$25'.
+No latch inferred for signal `\ExpandedAsic.\native_busy' from process `\ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:291$24'.
+
+3.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\GptVectorBank.$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_ADDR' using process `\GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+  created $dff cell `$procdff$2428' with positive edge clock.
+Creating register for signal `\GptVectorBank.$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_DATA' using process `\GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+  created $dff cell `$procdff$2429' with positive edge clock.
+Creating register for signal `\GptVectorBank.$memwr$\words$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1681$1441_EN' using process `\GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+  created $dff cell `$procdff$2430' with positive edge clock.
+Creating register for signal `\GptVectorNative.\gate' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2431' with positive edge clock.
+Creating register for signal `\GptVectorNative.\value' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2432' with positive edge clock.
+Creating register for signal `\GptVectorNative.\busy' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2433' with positive edge clock.
+Creating register for signal `\GptVectorNative.\done' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2434' with positive edge clock.
+Creating register for signal `\GptVectorNative.\negative' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2435' with positive edge clock.
+Creating register for signal `\GptVectorNative.\state' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2436' with positive edge clock.
+Creating register for signal `\GptVectorNative.\op' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2437' with positive edge clock.
+Creating register for signal `\GptVectorNative.\index' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2438' with positive edge clock.
+Creating register for signal `\GptVectorNative.\delta' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2439' with positive edge clock.
+Creating register for signal `\GptVectorNative.\product' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2440' with positive edge clock.
+Creating register for signal `\GptVectorNative.\square' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2441' with positive edge clock.
+Creating register for signal `\GptVectorNative.\correction' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2442' with positive edge clock.
+Creating register for signal `\GptVectorNative.\biased' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2443' with positive edge clock.
+Creating register for signal `\GptVectorNative.\numerator' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2444' with positive edge clock.
+Creating register for signal `\GptVectorNative.\size' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2445' with positive edge clock.
+Creating register for signal `\GptVectorNative.\scale' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2446' with positive edge clock.
+Creating register for signal `\GptVectorNative.\round_magnitude' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2447' with positive edge clock.
+Creating register for signal `\GptVectorNative.\second' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2448' with positive edge clock.
+Creating register for signal `\GptVectorNative.\q' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2449' with positive edge clock.
+Creating register for signal `\GptVectorNative.\magnitude' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2450' with positive edge clock.
+Creating register for signal `\GptVectorNative.\coefficient' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2451' with positive edge clock.
+Creating register for signal `\GptVectorNative.\activation' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2452' with positive edge clock.
+Creating register for signal `\GptVectorNative.\square_low' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2453' with positive edge clock.
+Creating register for signal `\GptVectorNative.\square_cross_a' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2454' with positive edge clock.
+Creating register for signal `\GptVectorNative.\square_cross_b' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2455' with positive edge clock.
+Creating register for signal `\GptVectorNative.\square_upper' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2456' with positive edge clock.
+Creating register for signal `\GptVectorNative.\bias_low' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2457' with positive edge clock.
+Creating register for signal `\GptVectorNative.\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.$result' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2458' with positive edge clock.
+Creating register for signal `\GptVectorNative.\sv2v_cast_16$func$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1372.inp' using process `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+  created $dff cell `$procdff$2459' with positive edge clock.
+Creating register for signal `\PrimitiveBank.\busy' using process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120'.
+  created $dff cell `$procdff$2460' with positive edge clock.
+Creating register for signal `\PrimitiveBank.\active' using process `\PrimitiveBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120'.
+  created $dff cell `$procdff$2461' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\y' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2462' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\z' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2463' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\out_data' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2464' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\state' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2465' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\op' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2466' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\x' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2467' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\stride' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2468' with positive edge clock.
+Creating register for signal `\ArithmeticLane.\partial' using process `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+  created $dff cell `$procdff$2469' with positive edge clock.
+Creating register for signal `\Restoring.\divisor' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2470' with positive edge clock.
+Creating register for signal `\Restoring.\result' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2471' with positive edge clock.
+Creating register for signal `\Restoring.\busy' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2472' with positive edge clock.
+Creating register for signal `\Restoring.\count' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2473' with positive edge clock.
+Creating register for signal `\Restoring.\done' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2474' with positive edge clock.
+Creating register for signal `\Restoring.\quotient' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2475' with positive edge clock.
+Creating register for signal `\Restoring.\remainder' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2476' with positive edge clock.
+Creating register for signal `\Restoring.\square_root' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2477' with positive edge clock.
+Creating register for signal `\Restoring.\take_remainder' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2478' with positive edge clock.
+Creating register for signal `\Restoring.\negative' using process `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+  created $dff cell `$procdff$2479' with positive edge clock.
+
+3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+Removing empty process `GptVectorBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1679$1443'.
+Found and cleaned up 6 empty switches in `\GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+Removing empty process `GptVectorNative.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1523$1388'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1517'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1516'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1515'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1514'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1513'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1512'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1511'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1711$1510'.
+Found and cleaned up 1 empty switch in `\GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507'.
+Removing empty process `GptVectorMemory.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1716$1507'.
+Found and cleaned up 3 empty switches in `\PrimitiveBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120'.
+Removing empty process `PrimitiveBank.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:667$120'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:579$111'.
+Found and cleaned up 6 empty switches in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:530$106'.
+Found and cleaned up 1 empty switch in `\ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86'.
+Removing empty process `ArithmeticLane.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:501$86'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:402$60'.
+Found and cleaned up 5 empty switches in `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:366$35'.
+Found and cleaned up 1 empty switch in `\Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+Removing empty process `Restoring.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:354$26'.
+Removing empty process `ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:293$25'.
+Removing empty process `ExpandedAsic.$proc$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:291$24'.
+Cleaned up 24 empty switches.
+
+3.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+<suppressed ~15 debug messages>
+Optimizing module GptVectorMemory.
+<suppressed ~2 debug messages>
+Optimizing module PrimitiveBank.
+<suppressed ~16 debug messages>
+Optimizing module ArithmeticLane.
+<suppressed ~9 debug messages>
+Optimizing module Restoring.
+<suppressed ~4 debug messages>
+Optimizing module ExpandedAsic.
+
+4. Executing OPT pass (performing simple optimizations).
+
+4.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+Optimizing module GptVectorMemory.
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedAsic.
+
+4.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\GptVectorBank'.
+Computing hashes of 8 cells of `\GptVectorBank'.
+Finding duplicate cells in `\GptVectorBank'.
+Finding identical cells in module `\GptVectorNative'.
+Computing hashes of 233 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 181 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 180 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 179 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+<suppressed ~162 debug messages>
+Finding identical cells in module `\GptVectorMemory'.
+Computing hashes of 33 cells of `\GptVectorMemory'.
+Finding duplicate cells in `\GptVectorMemory'.
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 64 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Computing hashes of 48 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+<suppressed ~48 debug messages>
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 122 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Computing hashes of 107 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+<suppressed ~45 debug messages>
+Finding identical cells in module `\Restoring'.
+Computing hashes of 71 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Computing hashes of 67 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+<suppressed ~12 debug messages>
+Finding identical cells in module `\ExpandedAsic'.
+Computing hashes of 20 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+Computing hashes of 14 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+<suppressed ~18 debug messages>
+Removed a total of 95 cells.
+
+4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \GptVectorBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorNative..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/2 on $mux $procmux$1567.
+    dead port 2/2 on $mux $procmux$1567.
+    dead port 1/2 on $mux $procmux$1564.
+    dead port 2/2 on $mux $procmux$1564.
+    dead port 1/2 on $mux $procmux$1561.
+    dead port 2/2 on $mux $procmux$1561.
+    dead port 1/2 on $mux $procmux$1558.
+    dead port 2/2 on $mux $procmux$1558.
+    dead port 1/2 on $mux $procmux$1543.
+    dead port 2/2 on $mux $procmux$1543.
+    dead port 1/2 on $mux $procmux$1540.
+    dead port 2/2 on $mux $procmux$1540.
+Running muxtree optimizer on module \GptVectorMemory..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $ternary$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:523$104: \x -> { 1'0 \x [30:0] }
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $procmux$2394: \busy -> 1'0
+      Replacing known input bits on port A of cell $procmux$2392: \busy -> 1'1
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedAsic..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 12 multiplexer ports.
+<suppressed ~228 debug messages>
+
+4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \GptVectorBank.
+    Consolidated identical input bits for $mux cell $procmux$1519:
+      Old ports: A=0, B=32'11111111111111111111111111111111, Y=$procmux$1519_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$1519_Y [0]
+      New connections: $procmux$1519_Y [31:1] = { $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] $procmux$1519_Y [0] }
+  Optimizing cells in module \GptVectorBank.
+  Optimizing cells in module \GptVectorNative.
+  Optimizing cells in module \GptVectorMemory.
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedAsic.
+Performed a total of 1 changes.
+
+4.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\GptVectorBank'.
+Computing hashes of 8 cells of `\GptVectorBank'.
+Finding duplicate cells in `\GptVectorBank'.
+Finding identical cells in module `\GptVectorNative'.
+Computing hashes of 173 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 172 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+<suppressed ~3 debug messages>
+Finding identical cells in module `\GptVectorMemory'.
+Computing hashes of 33 cells of `\GptVectorMemory'.
+Finding duplicate cells in `\GptVectorMemory'.
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 48 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 107 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 67 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedAsic'.
+Computing hashes of 14 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+Removed a total of 1 cells.
+
+4.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$2453 ($dff) from module GptVectorNative (D = $mul$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1574$1404_Y, Q = \square_low).
+Adding EN signal on $procdff$2452 ($dff) from module GptVectorNative (D = $sshr$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1608$1416_Y, Q = \activation).
+Adding EN signal on $procdff$2454 ($dff) from module GptVectorNative (D = $mul$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1575$1405_Y, Q = \square_cross_a).
+Adding EN signal on $procdff$2457 ($dff) from module GptVectorNative (D = $add$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1600$1414_Y, Q = \bias_low).
+Adding EN signal on $procdff$2456 ($dff) from module GptVectorNative (D = $add$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1580$1407_Y, Q = \square_upper).
+Adding EN signal on $procdff$2455 ($dff) from module GptVectorNative (D = $mul$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1576$1406_Y, Q = \square_cross_b).
+Adding EN signal on $procdff$2450 ($dff) from module GptVectorNative (D = $ternary$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1562$1399_Y, Q = \magnitude).
+Adding EN signal on $procdff$2451 ($dff) from module GptVectorNative (D = $mul$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1570$1403_Y, Q = \coefficient).
+Adding EN signal on $procdff$2431 ($dff) from module GptVectorNative (D = $ternary$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1592$1412_Y, Q = \gate).
+Adding EN signal on $procdff$2432 ($dff) from module GptVectorNative (D = $procmux$2149_Y, Q = \value).
+Adding SRST signal on $procdff$2433 ($dff) from module GptVectorNative (D = $procmux$2139_Y, Q = \busy, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$2539 ($sdff) from module GptVectorNative (D = $procmux$2139_Y, Q = \busy).
+Adding SRST signal on $procdff$2434 ($dff) from module GptVectorNative (D = $procmux$1570_Y, Q = \done, rval = 1'0).
+Adding EN signal on $procdff$2435 ($dff) from module GptVectorNative (D = $procmux$2126_Y, Q = \negative).
+Adding SRST signal on $procdff$2436 ($dff) from module GptVectorNative (D = $procmux$2077_Y, Q = \state, rval = 5'00000).
+Adding EN signal on $auto$ff.cc:337:slice$2563 ($sdff) from module GptVectorNative (D = $procmux$2077_Y, Q = \state).
+Adding EN signal on $procdff$2437 ($dff) from module GptVectorNative (D = \operation, Q = \op).
+Adding EN signal on $procdff$2438 ($dff) from module GptVectorNative (D = $procmux$2033_Y, Q = \index).
+Adding EN signal on $procdff$2439 ($dff) from module GptVectorNative (D = $sub$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1566$1402_Y, Q = \delta).
+Adding EN signal on $procdff$2440 ($dff) from module GptVectorNative (D = $mul$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1596$1413_Y, Q = \product).
+Adding EN signal on $procdff$2441 ($dff) from module GptVectorNative (D = { $add$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1584$1408_Y \square_low [15:0] }, Q = \square).
+Adding EN signal on $procdff$2442 ($dff) from module GptVectorNative (D = $sshr$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1588$1409_Y, Q = \correction).
+Adding EN signal on $procdff$2443 ($dff) from module GptVectorNative (D = { $add$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1604$1415_Y \bias_low [15:0] }, Q = \biased).
+Adding EN signal on $procdff$2444 ($dff) from module GptVectorNative (D = $procmux$1916_Y, Q = \numerator).
+Adding EN signal on $procdff$2445 ($dff) from module GptVectorNative (D = \count, Q = \size).
+Adding EN signal on $procdff$2446 ($dff) from module GptVectorNative (D = \divisor, Q = \scale).
+Adding EN signal on $procdff$2447 ($dff) from module GptVectorNative (D = $procmux$1838_Y, Q = \round_magnitude).
+Adding EN signal on $procdff$2448 ($dff) from module GptVectorNative (D = \other_data, Q = \second).
+Adding EN signal on $procdff$2449 ($dff) from module GptVectorNative (D = $sshl$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1548$1395_Y, Q = \q).
+Setting constant 1-bit at position 0 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 1 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 2 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 3 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 4 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 5 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 6 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 7 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 8 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 9 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 10 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 11 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 12 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 13 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 14 on $procdff$2458 ($dff) from module GptVectorNative.
+Setting constant 1-bit at position 15 on $procdff$2458 ($dff) from module GptVectorNative.
+Adding SRST signal on $procdff$2461 ($dff) from module PrimitiveBank (D = $procmux$2194_Y, Q = \active, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$2644 ($sdff) from module PrimitiveBank (D = \mask, Q = \active).
+Adding SRST signal on $procdff$2460 ($dff) from module PrimitiveBank (D = $procmux$2199_Y, Q = \busy, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$2646 ($sdff) from module PrimitiveBank (D = 1'1, Q = \busy).
+Adding SRST signal on $procdff$2462 ($dff) from module ArithmeticLane (D = $procmux$2313_Y, Q = \y, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2650 ($sdff) from module ArithmeticLane (D = \b, Q = \y).
+Adding SRST signal on $procdff$2463 ($dff) from module ArithmeticLane (D = $procmux$2300_Y, Q = \z, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2654 ($sdff) from module ArithmeticLane (D = \c, Q = \z).
+Adding SRST signal on $procdff$2464 ($dff) from module ArithmeticLane (D = $procmux$2282_Y, Q = \out_data, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2658 ($sdff) from module ArithmeticLane (D = $procmux$2282_Y, Q = \out_data).
+Adding SRST signal on $procdff$2465 ($dff) from module ArithmeticLane (D = $procmux$2261_Y, Q = \state, rval = 3'000).
+Adding EN signal on $auto$ff.cc:337:slice$2668 ($sdff) from module ArithmeticLane (D = $procmux$2261_Y, Q = \state).
+Adding SRST signal on $procdff$2466 ($dff) from module ArithmeticLane (D = $procmux$2253_Y, Q = \op, rval = 5'00000).
+Adding EN signal on $auto$ff.cc:337:slice$2678 ($sdff) from module ArithmeticLane (D = \operation, Q = \op).
+Adding SRST signal on $procdff$2467 ($dff) from module ArithmeticLane (D = $procmux$2240_Y, Q = \x, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2682 ($sdff) from module ArithmeticLane (D = \a, Q = \x).
+Adding SRST signal on $procdff$2468 ($dff) from module ArithmeticLane (D = $procmux$2227_Y, Q = \stride, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2686 ($sdff) from module ArithmeticLane (D = \d, Q = \stride).
+Adding SRST signal on $procdff$2469 ($dff) from module ArithmeticLane (D = $procmux$2210_Y, Q = \partial, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2690 ($sdff) from module ArithmeticLane (D = $procmux$2210_Y, Q = \partial).
+Adding SRST signal on $procdff$2479 ($dff) from module Restoring (D = $procmux$2351_Y, Q = \negative, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$2698 ($sdff) from module Restoring (D = $logic_and$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:383$41_Y, Q = \negative).
+Adding SRST signal on $procdff$2478 ($dff) from module Restoring (D = $procmux$2357_Y, Q = \take_remainder, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$2700 ($sdff) from module Restoring (D = $eq$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:382$39_Y, Q = \take_remainder).
+Adding SRST signal on $procdff$2477 ($dff) from module Restoring (D = $procmux$2363_Y, Q = \square_root, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$2702 ($sdff) from module Restoring (D = $eq$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:381$38_Y, Q = \square_root).
+Adding SRST signal on $procdff$2472 ($dff) from module Restoring (D = $procmux$2397_Y, Q = \busy, rval = 1'0).
+Adding SRST signal on $procdff$2473 ($dff) from module Restoring (D = $procmux$2387_Y, Q = \count, rval = 6'000000).
+Adding EN signal on $auto$ff.cc:337:slice$2705 ($sdff) from module Restoring (D = $procmux$2387_Y, Q = \count).
+Adding SRST signal on $procdff$2474 ($dff) from module Restoring (D = $procmux$2340_Y, Q = \done, rval = 1'0).
+Adding SRST signal on $procdff$2475 ($dff) from module Restoring (D = $procmux$2379_Y, Q = \quotient, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2714 ($sdff) from module Restoring (D = $procmux$2379_Y, Q = \quotient).
+Adding SRST signal on $procdff$2476 ($dff) from module Restoring (D = $procmux$2368_Y, Q = \remainder, rval = 33'000000000000000000000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$2718 ($sdff) from module Restoring (D = \next_remainder, Q = \remainder).
+Adding SRST signal on $procdff$2470 ($dff) from module Restoring (D = $procmux$2417_Y, Q = \divisor, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2722 ($sdff) from module Restoring (D = $procmux$2417_Y, Q = \divisor).
+Adding SRST signal on $procdff$2471 ($dff) from module Restoring (D = $procmux$2407_Y, Q = \result, rval = 0).
+Adding EN signal on $auto$ff.cc:337:slice$2730 ($sdff) from module Restoring (D = $ternary$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:398$59_Y, Q = \result).
+
+4.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \GptVectorBank..
+Finding unused cells or wires in module \GptVectorNative..
+Finding unused cells or wires in module \GptVectorMemory..
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedAsic..
+Removed 97 unused cells and 467 unused wires.
+<suppressed ~104 debug messages>
+
+4.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+<suppressed ~6 debug messages>
+Optimizing module GptVectorMemory.
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+<suppressed ~2 debug messages>
+Optimizing module Restoring.
+<suppressed ~4 debug messages>
+Optimizing module ExpandedAsic.
+
+4.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \GptVectorBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorNative..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorMemory..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedAsic..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~106 debug messages>
+
+4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \GptVectorBank.
+  Optimizing cells in module \GptVectorNative.
+  Optimizing cells in module \GptVectorMemory.
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedAsic.
+Performed a total of 0 changes.
+
+4.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\GptVectorBank'.
+Computing hashes of 5 cells of `\GptVectorBank'.
+Finding duplicate cells in `\GptVectorBank'.
+Finding identical cells in module `\GptVectorNative'.
+Computing hashes of 187 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 160 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Computing hashes of 156 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+<suppressed ~93 debug messages>
+Finding identical cells in module `\GptVectorMemory'.
+Computing hashes of 33 cells of `\GptVectorMemory'.
+Finding duplicate cells in `\GptVectorMemory'.
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 105 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+<suppressed ~15 debug messages>
+Finding identical cells in module `\Restoring'.
+Computing hashes of 57 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+<suppressed ~6 debug messages>
+Finding identical cells in module `\ExpandedAsic'.
+Computing hashes of 14 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+Removed a total of 38 cells.
+
+4.13. Executing OPT_DFF pass (perform DFF optimizations).
+Setting constant 0-bit at position 0 on $auto$ff.cc:337:slice$2639 ($dffe) from module GptVectorNative.
+Setting constant 0-bit at position 1 on $auto$ff.cc:337:slice$2639 ($dffe) from module GptVectorNative.
+
+4.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \GptVectorBank..
+Finding unused cells or wires in module \GptVectorNative..
+Finding unused cells or wires in module \GptVectorMemory..
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedAsic..
+Removed 0 unused cells and 38 unused wires.
+<suppressed ~3 debug messages>
+
+4.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+Optimizing module GptVectorMemory.
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedAsic.
+
+4.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \GptVectorBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorNative..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorMemory..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedAsic..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~106 debug messages>
+
+4.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \GptVectorBank.
+  Optimizing cells in module \GptVectorNative.
+  Optimizing cells in module \GptVectorMemory.
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedAsic.
+Performed a total of 0 changes.
+
+4.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\GptVectorBank'.
+Computing hashes of 5 cells of `\GptVectorBank'.
+Finding duplicate cells in `\GptVectorBank'.
+Finding identical cells in module `\GptVectorNative'.
+Computing hashes of 156 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Finding identical cells in module `\GptVectorMemory'.
+Computing hashes of 33 cells of `\GptVectorMemory'.
+Finding duplicate cells in `\GptVectorMemory'.
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedAsic'.
+Computing hashes of 14 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+Removed a total of 0 cells.
+
+4.20. Executing OPT_DFF pass (perform DFF optimizations).
+Adding SRST signal on $auto$ff.cc:337:slice$2511 ($dffe) from module GptVectorNative (D = $neg$build/experiments/asic/hybrid/revised-area/gpt-fix/source/all.v:1562$1398_Y [1:0], Q = \magnitude [1:0], rval = 2'00).
+
+4.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \GptVectorBank..
+Finding unused cells or wires in module \GptVectorNative..
+Finding unused cells or wires in module \GptVectorMemory..
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedAsic..
+
+4.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+Optimizing module GptVectorMemory.
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedAsic.
+
+4.23. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.24. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \GptVectorBank..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorNative..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \GptVectorMemory..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \PrimitiveBank..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \ArithmeticLane..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \Restoring..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \ExpandedAsic..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~106 debug messages>
+
+4.25. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \GptVectorBank.
+  Optimizing cells in module \GptVectorNative.
+  Optimizing cells in module \GptVectorMemory.
+  Optimizing cells in module \PrimitiveBank.
+  Optimizing cells in module \ArithmeticLane.
+  Optimizing cells in module \Restoring.
+  Optimizing cells in module \ExpandedAsic.
+Performed a total of 0 changes.
+
+4.26. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\GptVectorBank'.
+Computing hashes of 5 cells of `\GptVectorBank'.
+Finding duplicate cells in `\GptVectorBank'.
+Finding identical cells in module `\GptVectorNative'.
+Computing hashes of 157 cells of `\GptVectorNative'.
+Finding duplicate cells in `\GptVectorNative'.
+Finding identical cells in module `\GptVectorMemory'.
+Computing hashes of 33 cells of `\GptVectorMemory'.
+Finding duplicate cells in `\GptVectorMemory'.
+Finding identical cells in module `\PrimitiveBank'.
+Computing hashes of 44 cells of `\PrimitiveBank'.
+Finding duplicate cells in `\PrimitiveBank'.
+Finding identical cells in module `\ArithmeticLane'.
+Computing hashes of 100 cells of `\ArithmeticLane'.
+Finding duplicate cells in `\ArithmeticLane'.
+Finding identical cells in module `\Restoring'.
+Computing hashes of 55 cells of `\Restoring'.
+Finding duplicate cells in `\Restoring'.
+Finding identical cells in module `\ExpandedAsic'.
+Computing hashes of 14 cells of `\ExpandedAsic'.
+Finding duplicate cells in `\ExpandedAsic'.
+Removed a total of 0 cells.
+
+4.27. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.28. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \GptVectorBank..
+Finding unused cells or wires in module \GptVectorNative..
+Finding unused cells or wires in module \GptVectorMemory..
+Finding unused cells or wires in module \PrimitiveBank..
+Finding unused cells or wires in module \ArithmeticLane..
+Finding unused cells or wires in module \Restoring..
+Finding unused cells or wires in module \ExpandedAsic..
+
+4.29. Executing OPT_EXPR pass (perform const folding).
+Optimizing module GptVectorBank.
+Optimizing module GptVectorNative.
+Optimizing module GptVectorMemory.
+Optimizing module PrimitiveBank.
+Optimizing module ArithmeticLane.
+Optimizing module Restoring.
+Optimizing module ExpandedAsic.
+
+4.30. Finished fast OPT passes. (There is nothing left to do.)
+
+5. Executing CHECK pass (checking for obvious problems).
+Checking module GptVectorBank...
+Checking module GptVectorNative...
+Checking module GptVectorMemory...
+Checking module PrimitiveBank...
+Checking module ArithmeticLane...
+Checking module Restoring...
+Checking module ExpandedAsic...
+Found and reported 0 problems.
+
+6. Printing statistics.
+
+=== GptVectorBank ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        9 wires
+      151 wire bits
+        6 public wires
+       80 public wire bits
+        6 ports
+       80 port bits
+        1 memories
+     4096 memory bits
+        5 cells
+        1   $memrd
+        1   $memwr_v2
+        3   $mux
+
+=== GptVectorNative ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      173 wires
+     2022 wire bits
+       48 public wires
+      912 public wire bits
+       20 ports
+      226 port bits
+      154 cells
+        9   $add
+       24   $dffe
+       28   $eq
+        2   $gt
+        5   $logic_and
+        4   $logic_not
+        3   $lt
+        5   $mul
+       19   $mux
+        6   $ne
+        5   $neg
+        2   $not
+        8   $pmux
+       22   $reduce_and
+        5   $reduce_bool
+        1   $reduce_or
+        1   $sdff
+        1   $sdffce
+        2   $sdffe
+        2   $sub
+        3 submodules
+        3   GptVectorMemory
+
+=== GptVectorMemory ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       38 wires
+      366 wire bits
+       14 public wires
+      342 public wire bits
+        6 ports
+       86 port bits
+       25 cells
+       14   $eq
+        8   $logic_and
+        2   $logic_not
+        1   $pmux
+        8 submodules
+        8   GptVectorBank
+
+=== PrimitiveBank ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       96 wires
+     3409 wire bits
+       73 public wires
+     3356 public wire bits
+       21 ports
+     2763 port bits
+       28 cells
+       20   $logic_and
+        1   $logic_not
+        1   $not
+        1   $or
+        2   $reduce_and
+        1   $reduce_or
+        2   $sdffe
+       16 submodules
+       16   ArithmeticLane
+
+=== ArithmeticLane ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      116 wires
+     1288 wire bits
+       33 public wires
+      509 public wire bits
+       19 ports
+      271 port bits
+       99 cells
+        4   $add
+        1   $and
+       30   $eq
+        1   $ge
+        1   $gt
+        5   $logic_and
+        5   $logic_not
+        3   $logic_or
+        1   $lt
+        1   $mul
+       16   $mux
+        6   $ne
+        1   $not
+        1   $or
+        4   $pmux
+        4   $reduce_and
+        2   $reduce_bool
+        8   $sdffe
+        1   $shl
+        1   $shr
+        1   $sshr
+        1   $sub
+        1   $xor
+        1 submodules
+        1   Restoring
+
+=== Restoring ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       63 wires
+      901 wire bits
+       22 public wires
+      342 public wire bits
+       10 ports
+      104 port bits
+       55 cells
+        3   $eq
+        1   $ge
+        4   $logic_and
+        1   $logic_not
+       21   $mux
+        1   $ne
+        3   $neg
+        2   $not
+        1   $or
+        2   $reduce_and
+        2   $reduce_bool
+        2   $reduce_or
+        2   $sdff
+        8   $sdffe
+        2   $sub
+
+=== ExpandedAsic ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       64 wires
+     5701 wire bits
+       59 public wires
+     5696 public wire bits
+       36 ports
+     2931 port bits
+       12 cells
+        9   $logic_and
+        3   $logic_not
+        2 submodules
+        1   GptVectorNative
+        1   PrimitiveBank
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     2853 ExpandedAsic
+      154 GptVectorNative
+       25   GptVectorMemory
+        5     GptVectorBank
+       28 PrimitiveBank
+       99   ArithmeticLane
+       55     Restoring
+
+        +----------Count including submodules.
+        | 
+     3527 wires
+    50878 wire bits
+     1246 public wires
+    26526 public wire bits
+      703 ports
+    14098 port bits
+       24 memories
+    98304 memory bits
+        - processes
+     2853 cells
+       73   $add
+       16   $and
+       24   $dffe
+      598   $eq
+       32   $ge
+       18   $gt
+      202   $logic_and
+      110   $logic_not
+       48   $logic_or
+       19   $lt
+       24   $memrd
+       24   $memwr_v2
+       21   $mul
+      683   $mux
+      118   $ne
+       53   $neg
+       51   $not
+       33   $or
+       75   $pmux
+      120   $reduce_and
+       69   $reduce_bool
+       34   $reduce_or
+       33   $sdff
+        1   $sdffce
+      260   $sdffe
+       16   $shl
+       16   $shr
+       16   $sshr
+       50   $sub
+       16   $xor
+        2 submodules
+        1   GptVectorNative
+        1   PrimitiveBank
+
+7. Executing JSON backend.

@@ -1,0 +1,9 @@
+{
+  "remote_local_hash_checks": {
+    "build/experiments/asic/cost-complete/checkpoints/asic-sram-20261113-v1/AsicAccelerator/out/mapped.ddc": true,
+    "build/experiments/asic/cgra-cost-complete/reports/checkpoint/endpoint/recovered/mapped.ddc": true,
+    "build/experiments/asic/hybrid/compute-audit/asic.tsv": true,
+    "build/experiments/asic/hybrid/compute-audit/cgra.tsv": true
+  },
+  "passed": true
+}

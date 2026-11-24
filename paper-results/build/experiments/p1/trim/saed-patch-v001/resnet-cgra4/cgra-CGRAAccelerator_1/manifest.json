@@ -1,0 +1,349 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "resnet-cgra4",
+  "component": "cgra",
+  "top": "CGRAAccelerator_1",
+  "soc_instances": 1,
+  "archive_sha256": "25890058bd7a0823703262ad76825d91f513c69d239bf5c502f69d31526f754c",
+  "source_modules": 138,
+  "sram_required": true,
+  "expected_macro_instances": 140,
+  "macro_counts": {
+    "SRAM2RW64x128": 12,
+    "SRAM2RW128x32": 128
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 336,
+      "width": 194,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW64x128",
+      "macro_depth": 64,
+      "macro_width": 128,
+      "depth_banks": 6,
+      "width_slices_per_lane": 2,
+      "macro_instances_per_module": 12,
+      "logical_bits": 65184,
+      "physical_bits_per_module": 98304,
+      "macro_area_per_module": 92720.364408,
+      "module": "packets_ext",
+      "original_module_sha256": "61dc58ab5ddf28e262f6ac4f5db6cafb391d7c233324ac547009a02fe4d33954",
+      "module_instances": 1
+    },
+    {
+      "depth": 1024,
+      "width": 35,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW128x32",
+      "macro_depth": 128,
+      "macro_width": 32,
+      "depth_banks": 8,
+      "width_slices_per_lane": 2,
+      "macro_instances_per_module": 16,
+      "logical_bits": 35840,
+      "physical_bits_per_module": 65536,
+      "macro_area_per_module": 84312.866208,
+      "module": "SyncRamRTL__b64b797a8f586146",
+      "original_module_sha256": "d79f402518f70c539beb793692f7cce55d1033ebaf7574763366a5cc4f5aa58d",
+      "semantics": "Fullword writes commit one edge later. An enabled read matching the previous pending write forwards its data; the current write is excluded. Forward state and SRAM read state hold when ren=0. Reset does not discard a pending write or reset data.",
+      "module_instances": 8
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 767223.2940720001,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/IntegratedCgraWithDmaRTL_single__pickled.v",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/IntegratedCgraWithDmaRTL_single__pickled.v",
+      "original_sha256": "c620133ed7f87a64c9c3e1046d61790342b209fffe0111a77016d32cdc624b53",
+      "staged_sha256": "c8197f3f63516d33abcba92459dc347f478a80b94129ef935a624ff9f6d4ca34",
+      "changes": [
+        "Map SyncRamRTL__b64b797a8f586146 to physical SRAM2RW128x32 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoComputeRequest.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSink_AutoComputeRequest.sv",
+      "original_sha256": "0d5df962598d68f3828a382cccbb98a2e9635ece91828559e4b8ffb745f66704",
+      "staged_sha256": "0d5df962598d68f3828a382cccbb98a2e9635ece91828559e4b8ffb745f66704",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoCopyRequest.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSink_AutoCopyRequest.sv",
+      "original_sha256": "60d844caea96d032298ffdf0b02dcb8c55b086ab651e4c2c31d3ce33962a7489",
+      "staged_sha256": "60d844caea96d032298ffdf0b02dcb8c55b086ab651e4c2c31d3ce33962a7489",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoWatch.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSink_AutoWatch.sv",
+      "original_sha256": "8697bb25861b54d93de6b9ac98bb157b0a1b3cf0a3050a3140db21860e005a19",
+      "staged_sha256": "8697bb25861b54d93de6b9ac98bb157b0a1b3cf0a3050a3140db21860e005a19",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_CgraLinkConfig.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSink_CgraLinkConfig.sv",
+      "original_sha256": "5688911fe73585b1bab5e749a3afc0b7e5217adebe20064f1ff4eb09ea03fac3",
+      "staged_sha256": "5688911fe73585b1bab5e749a3afc0b7e5217adebe20064f1ff4eb09ea03fac3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_CgraPatchConfig.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSink_CgraPatchConfig.sv",
+      "original_sha256": "bdacaac28111c7e8841ef77f71f48f6de175ec248dfbeb9c2f794f44732e2f9c",
+      "staged_sha256": "bdacaac28111c7e8841ef77f71f48f6de175ec248dfbeb9c2f794f44732e2f9c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoCopyResult.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSource_AutoCopyResult.sv",
+      "original_sha256": "120032a30e345218f8e55c3c5316345fe41b8ccabd2371ed307b68f5ea612fb6",
+      "staged_sha256": "120032a30e345218f8e55c3c5316345fe41b8ccabd2371ed307b68f5ea612fb6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoEvent.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSource_AutoEvent.sv",
+      "original_sha256": "2aefd4e8e4cbf418afe3e3362bcc6a90ad767b8c95711746811c31a61d81a7d5",
+      "staged_sha256": "2aefd4e8e4cbf418afe3e3362bcc6a90ad767b8c95711746811c31a61d81a7d5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_CgraLinkConfigAck.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncQueueSource_CgraLinkConfigAck.sv",
+      "original_sha256": "fd1bf0aad9bdd24fbe75f95952a110111de008887713ea9254f15ab5dd060a68",
+      "staged_sha256": "fd1bf0aad9bdd24fbe75f95952a110111de008887713ea9254f15ab5dd060a68",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CGRAAccelerator_1.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CGRAAccelerator_1.sv",
+      "original_sha256": "627b580431d34006540c48255008bc14c5d214272c5bbd3ca29420f7854ea927",
+      "staged_sha256": "627b580431d34006540c48255008bc14c5d214272c5bbd3ca29420f7854ea927",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CGRATileLinkDmaAdapter.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CGRATileLinkDmaAdapter.sv",
+      "original_sha256": "7a0c6915b49a3da408c7fc156271a7e3eec43092ad8253214f5166998d7fd496",
+      "staged_sha256": "7a0c6915b49a3da408c7fc156271a7e3eec43092ad8253214f5166998d7fd496",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraLinkAdapter.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CgraLinkAdapter.sv",
+      "original_sha256": "7d18d78c7c6282bed6582af6936d3eb28aedeb210b961461f8c4c3e9e284c93a",
+      "staged_sha256": "7d18d78c7c6282bed6582af6936d3eb28aedeb210b961461f8c4c3e9e284c93a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPackedReader.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CgraPackedReader.sv",
+      "original_sha256": "e9d4e249f9b8b964ab4ff5833fbc9bfc844caa949e68e3275c3928cf4e95bd9b",
+      "staged_sha256": "e9d4e249f9b8b964ab4ff5833fbc9bfc844caa949e68e3275c3928cf4e95bd9b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPackedWriter.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CgraPackedWriter.sv",
+      "original_sha256": "a70cb8681ddb82a75da28bc104501fa38aa1f1ff5ae2118706675e83fcf2dd6b",
+      "staged_sha256": "a70cb8681ddb82a75da28bc104501fa38aa1f1ff5ae2118706675e83fcf2dd6b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraPacketArbiter.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CgraPacketArbiter.sv",
+      "original_sha256": "29e39c3bffee334e62d28ce92eb6c9f8cc26fd78d1116ac66616a96f8962134e",
+      "staged_sha256": "29e39c3bffee334e62d28ce92eb6c9f8cc26fd78d1116ac66616a96f8962134e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CgraSpmManager_1.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/CgraSpmManager_1.sv",
+      "original_sha256": "9e4da8bcfea43df13826379cc169105888aca3f23c34600f0003ea402b5162d8",
+      "staged_sha256": "9e4da8bcfea43df13826379cc169105888aca3f23c34600f0003ea402b5162d8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w235.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ClockCrossingReg_w235.sv",
+      "original_sha256": "78ae432956d2c60dfc04096ba9b4c95ff787b9c59e6f416b4d1a652642d72af3",
+      "staged_sha256": "78ae432956d2c60dfc04096ba9b4c95ff787b9c59e6f416b4d1a652642d72af3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w330.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ClockCrossingReg_w330.sv",
+      "original_sha256": "5028026d78d65c6f5d52cd158d5a32dad555d97f83f9eb01575cb823066eb427",
+      "staged_sha256": "5028026d78d65c6f5d52cd158d5a32dad555d97f83f9eb01575cb823066eb427",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w40.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ClockCrossingReg_w40.sv",
+      "original_sha256": "01036babb48e7c68779c1dde2acd0bab5856476619b2ec64c4e08b4a891adf54",
+      "staged_sha256": "01036babb48e7c68779c1dde2acd0bab5856476619b2ec64c4e08b4a891adf54",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w658.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ClockCrossingReg_w658.sv",
+      "original_sha256": "988258c0d3e38a6d2a8bc0ec5262a80c3458484bf51fcce13ad1529d91321dad",
+      "staged_sha256": "988258c0d3e38a6d2a8bc0ec5262a80c3458484bf51fcce13ad1529d91321dad",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/IntegratedCgraWithDmaRTL_single_wrapper.v",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/IntegratedCgraWithDmaRTL_single_wrapper.v",
+      "original_sha256": "681b98ce60bd7b0f3dd876e7df64289c05cd2717cd3674fd72deaf4276a3df73",
+      "staged_sha256": "cae46c10bea6f028a43f7af8fe1bdd2c3a8239cf627b41b25969f08660c346cd",
+      "changes": [
+        "Make native wrapper address truncation explicit for DC."
+      ]
+    },
+    {
+      "source": "gen-collateral/Queue1_UInt194.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/Queue1_UInt194.sv",
+      "original_sha256": "572708d13500650378f0d0249058c224a9e9247a6af4e803aadbc91b65cf3b78",
+      "staged_sha256": "572708d13500650378f0d0249058c224a9e9247a6af4e803aadbc91b65cf3b78",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_RoCCCommand.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/Queue2_RoCCCommand.sv",
+      "original_sha256": "bb098a6eaeb22473431d9be2648d30098d85beea218b77d97ec6a42c99b1a7cc",
+      "staged_sha256": "bb098a6eaeb22473431d9be2648d30098d85beea218b77d97ec6a42c99b1a7cc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue8_UInt194.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/Queue8_UInt194.sv",
+      "original_sha256": "d9b0adf17b671bedfbbb9d3af3b1fc4d318d0c86aa790ce112c81a53a524ae18",
+      "staged_sha256": "d9b0adf17b671bedfbbb9d3af3b1fc4d318d0c86aa790ce112c81a53a524ae18",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleA_a31d256s8k1z3u.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/Repeater_TLBundleA_a31d256s8k1z3u.sv",
+      "original_sha256": "ccc5e3bcc59678b9d97e8b1a18cd58eedde36075b39f45f0bf79ff31056c97d7",
+      "staged_sha256": "ccc5e3bcc59678b9d97e8b1a18cd58eedde36075b39f45f0bf79ff31056c97d7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleD_a32d256s1k5z4u.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/Repeater_TLBundleD_a32d256s1k5z4u.sv",
+      "original_sha256": "67909a7f448df86e724674facd9dcb0be0165275cd525bd103c1b4dfd45e00cf",
+      "staged_sha256": "67909a7f448df86e724674facd9dcb0be0165275cd525bd103c1b4dfd45e00cf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLFragmenter_9.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/TLFragmenter_9.sv",
+      "original_sha256": "77f5f0c90661eeef5f6c6c2594b2039d3690be2e264783e95925c506a4d06eb8",
+      "staged_sha256": "77f5f0c90661eeef5f6c6c2594b2039d3690be2e264783e95925c506a4d06eb8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_69.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/TLMonitor_69.sv",
+      "original_sha256": "932415f54ab1bc0319876d3b4817a806b6105539c8d7eac1df7de73d1ebde030",
+      "staged_sha256": "932415f54ab1bc0319876d3b4817a806b6105539c8d7eac1df7de73d1ebde030",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_73.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/TLMonitor_73.sv",
+      "original_sha256": "16b66792d80aecfb6e74df880596286fd9d1e2731ef8008380aa15b5c3ec4c5a",
+      "staged_sha256": "16b66792d80aecfb6e74df880596286fd9d1e2731ef8008380aa15b5c3ec4c5a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_74.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/TLMonitor_74.sv",
+      "original_sha256": "5033c1fd78d0a05c72669470ff9829a4ce32873a944715af178fdb9a8d09e41a",
+      "staged_sha256": "5033c1fd78d0a05c72669470ff9829a4ce32873a944715af178fdb9a8d09e41a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLWidthWidget16.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/TLWidthWidget16.sv",
+      "original_sha256": "12fbd1a37b82b116766ec78516b7005ec2194c15527d93fb6068aabe72b2cb6d",
+      "staged_sha256": "12fbd1a37b82b116766ec78516b7005ec2194c15527d93fb6068aabe72b2cb6d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "4ab93fe18c6468eb3f6892d0b0fce009847a36597e92d9ad75d6b47dc421c5ea",
+      "staged_sha256": "48bfc0516f301629a2a62b8c931bb74c570212dd3e9afcd77e031e66361f8c32",
+      "changes": [
+        "Map packets_ext to physical SRAM2RW64x128 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/packets.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/packets.sv",
+      "original_sha256": "db49fb1e6f6db745d2d3afb3e19f5bb1da3051122afd765d6ae7c08d339db80c",
+      "staged_sha256": "db49fb1e6f6db745d2d3afb3e19f5bb1da3051122afd765d6ae7c08d339db80c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x265.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ram_2x265.sv",
+      "original_sha256": "384faddeb3d4551904056f5a778c3c59f72e82bfccfb8caba8ec5108cf4f21ba",
+      "staged_sha256": "384faddeb3d4551904056f5a778c3c59f72e82bfccfb8caba8ec5108cf4f21ba",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_8x194.sv",
+      "staged": "resnet-cgra4/cgra-CGRAAccelerator_1/src/ram_8x194.sv",
+      "original_sha256": "78d20b2b47787dea833c0ab7956638200af784253a4d93360db49633aad62e99",
+      "staged_sha256": "78d20b2b47787dea833c0ab7956638200af784253a4d93360db49633aad62e99",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

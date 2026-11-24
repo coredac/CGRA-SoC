@@ -1,0 +1,75 @@
+{
+  "status": "compact_layout_area_projection_not_new_synthesis_or_simulation",
+  "scope": "Only the three GPT single-CGRA core_data_mem SRAM areas change. All other component areas and every cycle/speedup remain unchanged. All GPT AE values use the new reference area.",
+  "data_SPM_KiB_each": {
+    "1": 32,
+    "2": 16,
+    "4": 8
+  },
+  "data_SPM_KiB_total": {
+    "1": 32,
+    "2": 32,
+    "4": 32
+  },
+  "macro": "SRAM2RW128x32",
+  "macro_unit_area": 5269.554199,
+  "old_macro_count": 512,
+  "projected_macro_count": 128,
+  "macro_count_note": "Preserve the archived banking/port implementation's macro multiplicity; scale capacity using integer counts of the same macro type.",
+  "layer_changes": [
+    {
+      "layer_id": "gpt2-rows-cgra1/CGRAAccelerator/03",
+      "mode": "Manual",
+      "old_sram": 2698011.749892,
+      "new_sram": 674502.937472,
+      "removed_sram": 2023508.81242
+    },
+    {
+      "layer_id": "gpt2-rows-cgra1/CGRAAccelerator/03",
+      "mode": "Hybrid",
+      "old_sram": 2698011.749892,
+      "new_sram": 674502.937472,
+      "removed_sram": 2023508.81242
+    },
+    {
+      "layer_id": "gpt2-rows-cgra1/CGRAAccelerator/03",
+      "mode": "Auto",
+      "old_sram": 2698011.749892,
+      "new_sram": 674502.937472,
+      "removed_sram": 2023508.81242
+    }
+  ],
+  "reference_area": 8732372.535943998,
+  "conditions": [
+    "The existing multicore code only accepts 2 or 4 CGRAs. The 1-lane extension here evaluates capacity equations, not the runnable program.",
+    "To use this as an implementation result, relocate all single-core kernel, DMA and configuration addresses consistently and verify correctness, liveness and port/bank behavior.",
+    "Data-memory peripheral/address logic is retained at its old cost; address remapping is not implemented or simulated.",
+    "Cycle invariance under relocation and physical common-clock timing closure are unverified.",
+    "Prior GCN shared-template and segment-refill modeling assumptions remain unchanged."
+  ],
+  "sources": {
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v19/metrics.csv": "3a859921f2802dadb94fd9bd4cf8d45a4db8e84c2cf37355c53d9b68af0bb256",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v19/layers.csv": "2ec0f84bd4d2256a0aaa7e5e598b4c23ed8ee5b4e7df155d85c29946f22256b9",
+    "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/layers.json": "4c9fd471f91666b56596884d1f63801dfb472d7a29d52ed17a52088a84099bfc",
+    "/home/jjqin/CGRA-SoC/build/experiments/policy-check/sram-alignment/layout.json": "1828aa79d86c9c4c024d7dbe18ab323ed3a67301ddc071653aa42e43836b83bb"
+  },
+  "checks": {
+    "27 settings and 3873 layers": true,
+    "three single-CGRA memory layers adjusted": true,
+    "integer macro inventory": true,
+    "projection fits 32 KiB": true,
+    "all cycles and speedups unchanged": true,
+    "non-GPT metrics unchanged": true,
+    "all other layers unchanged": true,
+    "deductions reconcile": true,
+    "GPT1 per-task area": true,
+    "GPT1 per-segment area": true,
+    "GPT1 per-graph area": true,
+    "GPT2 per-task area": true,
+    "GPT2 per-segment area": true,
+    "GPT2 per-graph area": true,
+    "GPT4 per-task area": true,
+    "GPT4 per-segment area": true,
+    "GPT4 per-graph area": true
+  }
+}

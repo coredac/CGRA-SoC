@@ -1,0 +1,30 @@
+[UART] UART0 is here (stdin/stdout).
+P1 GCN schedule=two64 tiles=2 intermediate_bytes=16384 warm_repeats=1
+P1 GCN mode=Manual phase=cold graph=2 nodes=64 cgras=4 repeat=0 cycles=536021 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=15572 capture_cycles=0 input_cycles=6095 execute_cycles=484250 writeback_cycles=36199 total_cycles=536021
+P1 GCN partition=0 rows=16 cached_jobs=0 words=6528 packets=46 captures=0
+P1 GCN partition=1 rows=16 cached_jobs=0 words=6528 packets=46 captures=0
+P1 GCN partition=2 rows=16 cached_jobs=0 words=6528 packets=46 captures=0
+P1 GCN partition=3 rows=16 cached_jobs=0 words=6528 packets=46 captures=0
+P1 GCN mode=Manual phase=warm graph=2 nodes=64 cgras=4 repeat=1 cycles=520148 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=5411 capture_cycles=0 input_cycles=5385 execute_cycles=479586 writeback_cycles=35151 total_cycles=520148
+P1 GCN mode=Hybrid phase=cold graph=2 nodes=64 cgras=4 repeat=0 cycles=1390099 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=1083365 capture_cycles=1071618 input_cycles=5293 execute_cycles=271352 writeback_cycles=35382 total_cycles=1390099
+P1 GCN partition=0 rows=16 cached_jobs=32 words=6528 packets=46 captures=1
+P1 GCN partition=1 rows=16 cached_jobs=32 words=6528 packets=46 captures=1
+P1 GCN partition=2 rows=16 cached_jobs=32 words=6528 packets=46 captures=1
+P1 GCN partition=3 rows=16 cached_jobs=32 words=6528 packets=46 captures=1
+P1 GCN mode=Hybrid phase=warm graph=2 nodes=64 cgras=4 repeat=1 cycles=311370 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=5316 capture_cycles=0 input_cycles=5303 execute_cycles=271040 writeback_cycles=35014 total_cycles=311370
+P1 GCN mode=Auto phase=cold graph=2 nodes=64 cgras=4 repeat=0 cycles=786322 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=560977 capture_cycles=549506 input_cycles=5287 execute_cycles=190303 writeback_cycles=35042 total_cycles=786322
+P1 GCN partition=0 rows=16 cached_jobs=16 words=6528 packets=46 captures=1
+P1 GCN partition=1 rows=16 cached_jobs=16 words=6528 packets=46 captures=1
+P1 GCN partition=2 rows=16 cached_jobs=16 words=6528 packets=46 captures=1
+P1 GCN partition=3 rows=16 cached_jobs=16 words=6528 packets=46 captures=1
+P1 GCN fabric_cycles=190029 overlap_cycles=44120 peak_tiles=2
+P1 GCN mode=Auto phase=warm graph=2 nodes=64 cgras=4 repeat=1 cycles=230602 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=5314 capture_cycles=0 input_cycles=5303 execute_cycles=190278 writeback_cycles=35010 total_cycles=230602
+P1 GCN fabric_cycles=190033 overlap_cycles=44120 peak_tiles=2
+P1 GCN: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/p1/gcn/cgra4/v001/soc-build/gen-collateral/TestDriver.v:158: Verilog $finish

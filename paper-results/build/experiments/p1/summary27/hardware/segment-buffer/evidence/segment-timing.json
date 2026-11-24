@@ -1,0 +1,359 @@
+[
+  {
+    "id": "gcn-star64-cgra1-Hybrid",
+    "workload": "gcn-star64",
+    "cgras": "1",
+    "cold_cycles": "1467526",
+    "warm_cycles": "402709",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra1/v002/large-results.log",
+    "cold": {
+      "setup_cycles": 1065861,
+      "capture_cycles": 1062574,
+      "input_cycles": 1376,
+      "execute_cycles": 366688,
+      "writeback_cycles": 34977,
+      "total_cycles": 1467526
+    },
+    "warm": {
+      "setup_cycles": 1357,
+      "capture_cycles": 0,
+      "input_cycles": 1351,
+      "execute_cycles": 366481,
+      "writeback_cycles": 34871,
+      "total_cycles": 402709
+    },
+    "resident_cycles": 402709,
+    "capture_cycles": 1062574,
+    "execution_cycles": 366481,
+    "outside_execute_cycles": 36228,
+    "ideal_overlap_lower": 1098802,
+    "serialized_upper": 1465283,
+    "segments": 2,
+    "uniform_segment_estimate": 1282043,
+    "full_schedule_fits_two_buffers": true,
+    "log_sha256": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": 402709
+  },
+  {
+    "id": "gcn-star64-cgra2-Hybrid",
+    "workload": "gcn-star64",
+    "cgras": "2",
+    "cold_cycles": "1382468",
+    "warm_cycles": "313568",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra2/v001/large-results.log",
+    "cold": {
+      "setup_cycles": 1071327,
+      "capture_cycles": 1065351,
+      "input_cycles": 2662,
+      "execute_cycles": 276131,
+      "writeback_cycles": 35010,
+      "total_cycles": 1382468
+    },
+    "warm": {
+      "setup_cycles": 2654,
+      "capture_cycles": 0,
+      "input_cycles": 2648,
+      "execute_cycles": 275989,
+      "writeback_cycles": 34925,
+      "total_cycles": 313568
+    },
+    "resident_cycles": 313568,
+    "capture_cycles": 1065351,
+    "execution_cycles": 275989,
+    "outside_execute_cycles": 37579,
+    "ideal_overlap_lower": 1102930,
+    "serialized_upper": 1378919,
+    "segments": 2,
+    "uniform_segment_estimate": 1240925,
+    "full_schedule_fits_two_buffers": true,
+    "log_sha256": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": 313568
+  },
+  {
+    "id": "gcn-star64-cgra4-Hybrid",
+    "workload": "gcn-star64",
+    "cgras": "4",
+    "cold_cycles": "1390099",
+    "warm_cycles": "311370",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra4/v001/large-results.log",
+    "cold": {
+      "setup_cycles": 1083365,
+      "capture_cycles": 1071618,
+      "input_cycles": 5293,
+      "execute_cycles": 271352,
+      "writeback_cycles": 35382,
+      "total_cycles": 1390099
+    },
+    "warm": {
+      "setup_cycles": 5316,
+      "capture_cycles": 0,
+      "input_cycles": 5303,
+      "execute_cycles": 271040,
+      "writeback_cycles": 35014,
+      "total_cycles": 311370
+    },
+    "resident_cycles": 311370,
+    "capture_cycles": 1071618,
+    "execution_cycles": 271040,
+    "outside_execute_cycles": 40330,
+    "ideal_overlap_lower": 1111948,
+    "serialized_upper": 1382988,
+    "segments": 2,
+    "uniform_segment_estimate": 1247468,
+    "full_schedule_fits_two_buffers": true,
+    "log_sha256": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": 311370
+  },
+  {
+    "id": "resnet-large-cgra1-Hybrid",
+    "workload": "resnet-large",
+    "cgras": "1",
+    "cold_cycles": "660798",
+    "warm_cycles": "309863",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra1/v002/large-results.log",
+    "cold": {
+      "setup_cycles": 350318,
+      "capture_cycles": 346555,
+      "execute_cycles": 275374,
+      "writeback_cycles": 35106,
+      "total_cycles": 660798
+    },
+    "warm": {
+      "setup_cycles": 6,
+      "capture_cycles": 0,
+      "execute_cycles": 274753,
+      "writeback_cycles": 35104,
+      "total_cycles": 309863
+    },
+    "resident_cycles": 309863,
+    "capture_cycles": 346555,
+    "execution_cycles": 274753,
+    "outside_execute_cycles": 35110,
+    "ideal_overlap_lower": 381665,
+    "serialized_upper": 656418,
+    "segments": 8,
+    "uniform_segment_estimate": 416010,
+    "full_schedule_fits_two_buffers": false,
+    "log_sha256": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": null
+  },
+  {
+    "id": "resnet-large-cgra2-Hybrid",
+    "workload": "resnet-large",
+    "cgras": "2",
+    "cold_cycles": "547802",
+    "warm_cycles": "193915",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra2/v001/large-results.log",
+    "cold": {
+      "setup_cycles": 353713,
+      "capture_cycles": 347304,
+      "execute_cycles": 158909,
+      "writeback_cycles": 35180,
+      "total_cycles": 547802
+    },
+    "warm": {
+      "setup_cycles": 9,
+      "capture_cycles": 0,
+      "execute_cycles": 158753,
+      "writeback_cycles": 35153,
+      "total_cycles": 193915
+    },
+    "resident_cycles": 193915,
+    "capture_cycles": 347304,
+    "execution_cycles": 158753,
+    "outside_execute_cycles": 35162,
+    "ideal_overlap_lower": 382466,
+    "serialized_upper": 541219,
+    "segments": 4,
+    "uniform_segment_estimate": 422155,
+    "full_schedule_fits_two_buffers": false,
+    "log_sha256": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": null
+  },
+  {
+    "id": "resnet-large-cgra4-Hybrid",
+    "workload": "resnet-large",
+    "cgras": "4",
+    "cold_cycles": "507371",
+    "warm_cycles": "134590",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log",
+    "cold": {
+      "setup_cycles": 370498,
+      "capture_cycles": 354306,
+      "execute_cycles": 100683,
+      "writeback_cycles": 36190,
+      "total_cycles": 507371
+    },
+    "warm": {
+      "setup_cycles": 9,
+      "capture_cycles": 0,
+      "execute_cycles": 99339,
+      "writeback_cycles": 35242,
+      "total_cycles": 134590
+    },
+    "resident_cycles": 134590,
+    "capture_cycles": 354306,
+    "execution_cycles": 99339,
+    "outside_execute_cycles": 35251,
+    "ideal_overlap_lower": 389557,
+    "serialized_upper": 488896,
+    "segments": 2,
+    "uniform_segment_estimate": 439227,
+    "full_schedule_fits_two_buffers": true,
+    "log_sha256": "5cfdcb2b00f1e96a598ae3c1c4b80a1cd4100483791e4fa778698a91fe1abc93",
+    "capture_included_in_setup": true,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": 134590
+  },
+  {
+    "id": "gpt-rows-cgra1-Hybrid",
+    "workload": "gpt-rows",
+    "cgras": "1",
+    "cold_cycles": "16675497",
+    "warm_cycles": "16341700",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra1/v002/large/rows-hybrid.log",
+    "cold": {
+      "staging_cycles": 11522,
+      "setup_cycles": 138057,
+      "capture_cycles": 176114,
+      "execute_cycles": 16349804,
+      "total_cycles": 16675497
+    },
+    "warm": {
+      "staging_cycles": 12130,
+      "setup_cycles": 18,
+      "capture_cycles": 4,
+      "execute_cycles": 16329548,
+      "total_cycles": 16341700
+    },
+    "resident_cycles": 16341700,
+    "capture_cycles": 176114,
+    "execution_cycles": 16329548,
+    "outside_execute_cycles": 12152,
+    "ideal_overlap_lower": 16341700,
+    "serialized_upper": 16517814,
+    "log_sha256": "6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a",
+    "capture_included_in_setup": false,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": null
+  },
+  {
+    "id": "gpt-rows-cgra2-Hybrid",
+    "workload": "gpt-rows",
+    "cgras": "2",
+    "cold_cycles": "9042143",
+    "warm_cycles": "8466036",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra2/v001/large/rows-hybrid.log",
+    "cold": {
+      "staging_cycles": 12089,
+      "setup_cycles": 268118,
+      "capture_cycles": 286562,
+      "execute_cycles": 8475374,
+      "total_cycles": 9042143
+    },
+    "warm": {
+      "staging_cycles": 11595,
+      "setup_cycles": 30,
+      "capture_cycles": 4,
+      "execute_cycles": 8454407,
+      "total_cycles": 8466036
+    },
+    "resident_cycles": 8466036,
+    "capture_cycles": 286562,
+    "execution_cycles": 8454407,
+    "outside_execute_cycles": 11629,
+    "ideal_overlap_lower": 8466036,
+    "serialized_upper": 8752598,
+    "log_sha256": "577f00cf86f9abe0c8a4434cae944ef5c309f8b42b2f6aa94b82bb8ea43dbc0b",
+    "capture_included_in_setup": false,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": null
+  },
+  {
+    "id": "gpt-rows-cgra4-Hybrid",
+    "workload": "gpt-rows",
+    "cgras": "4",
+    "cold_cycles": "5534000",
+    "warm_cycles": "4561151",
+    "archived_log": "build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra4/v001/large/rows-hybrid.log",
+    "cold": {
+      "staging_cycles": 12177,
+      "setup_cycles": 458856,
+      "capture_cycles": 494365,
+      "execute_cycles": 4568602,
+      "total_cycles": 5534000
+    },
+    "warm": {
+      "staging_cycles": 12242,
+      "setup_cycles": 30,
+      "capture_cycles": 1,
+      "execute_cycles": 4548878,
+      "total_cycles": 4561151
+    },
+    "resident_cycles": 4561151,
+    "capture_cycles": 494365,
+    "execution_cycles": 4548878,
+    "outside_execute_cycles": 12273,
+    "ideal_overlap_lower": 4561151,
+    "serialized_upper": 5055516,
+    "log_sha256": "d32c790c7775bde709c5ba757d323335f82568c953afb17c96b20abae05920c7",
+    "capture_included_in_setup": false,
+    "per_segment_timing_available": false,
+    "bound_assumptions": [
+      "Total capture time equals archived capture measurement; GPT repeated configuration loads may require multiplier.",
+      "Configuration and compute may overlap without extra contention or bank-switch cost.",
+      "Other per-inference staging/writeback cost stays unchanged."
+    ],
+    "retained_two_segment_runtime": null
+  }
+]

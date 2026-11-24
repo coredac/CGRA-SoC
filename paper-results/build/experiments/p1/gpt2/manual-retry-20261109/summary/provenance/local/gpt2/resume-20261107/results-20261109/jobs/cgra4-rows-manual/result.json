@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "numerical": false,
+  "records": [
+    {
+      "mode": "Manual",
+      "phase": "cold",
+      "repeat": 0,
+      "input": 0,
+      "cycles": 13188682,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0
+    },
+    {
+      "mode": "Manual",
+      "phase": "warm",
+      "repeat": 1,
+      "input": 1,
+      "cycles": 12689077,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0
+    }
+  ],
+  "exit": 0
+}

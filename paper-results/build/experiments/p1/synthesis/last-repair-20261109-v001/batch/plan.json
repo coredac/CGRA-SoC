@@ -1,0 +1,928 @@
+{
+  "settings": {
+    "libraries": {
+      "logic": {
+        "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+        "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+      },
+      "sram": {
+        "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+        "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+      }
+    },
+    "tool_id": "T-2022.03-SP5-6",
+    "period_ns": 10,
+    "io_delay_ns": 0.1,
+    "compile": "compile -map_effort low -area_effort none",
+    "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+    "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+  },
+  "jobs": {
+    "5d4c4108d668f22e2dd7c5a02de302373484e41f532b56b52da219cf2dd378c9": {
+      "id": "5d4c4108d668f22e2dd7c5a02de302373484e41f532b56b52da219cf2dd378c9",
+      "kind": "subtree",
+      "top": "R5d4c4108d668f22e2dd7c5a02de302373484e41f532b56b52da219cf2dd378c9",
+      "original_top": "AutoStage",
+      "source_sha256": "0e2ddb669e9fa67f564aee564b8a92d09ad2c5f98e691d2a35782126b216280d",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage.sv.gz": "5dd8028b0392f5e72bfea786fca46ab8a8de938388c4bc7d9f311b9aaeaaaf84"
+      },
+      "job_tcl_sha256": "b8a680e24de9ccd6a5d96314bbde0eb9c3441737699c583888f4edd583996399"
+    },
+    "81e56a54b19277e99d9adceaa06f978a7c34a26aa55702173a8a84dfa059d86d": {
+      "id": "81e56a54b19277e99d9adceaa06f978a7c34a26aa55702173a8a84dfa059d86d",
+      "kind": "subtree",
+      "top": "R81e56a54b19277e99d9adceaa06f978a7c34a26aa55702173a8a84dfa059d86d",
+      "original_top": "AutoStage_1",
+      "source_sha256": "f026bf01d17c82644c8ee2be6b44b374d73694a051c90f6ecd1652fb733deef2",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_1.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_1.sv.gz": "69e216a4a8387ae3e0e72f56319f66e373e4eb38a5a5f8cf42d9bbca8a706a04"
+      },
+      "job_tcl_sha256": "97a4a041dfc8d9b70550c620c2e08fd1eee22f2386662d6a89d8479ca07021e9"
+    },
+    "3c17d6e4f432a1910fdfb3e0e79cbd4bd11ad15d5a8d0f74be8e3a353a465cb1": {
+      "id": "3c17d6e4f432a1910fdfb3e0e79cbd4bd11ad15d5a8d0f74be8e3a353a465cb1",
+      "kind": "subtree",
+      "top": "R3c17d6e4f432a1910fdfb3e0e79cbd4bd11ad15d5a8d0f74be8e3a353a465cb1",
+      "original_top": "AutoStage_2",
+      "source_sha256": "f345169adc0d79e870804b41f5b684eb7d67aba21ac6989b400e5b601cc064e8",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_2.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_2.sv.gz": "9d156290215793f817abaeab396defae2b6eae7fd7315dca2d02c6298d37a52f"
+      },
+      "job_tcl_sha256": "fda4a621db033520baa48b6326bf765f2885bd8f62e9dff675d62bdc55326c95"
+    },
+    "ea641cb3d53649dc25a4c82d55f4591cd714f64889c9e5fb3d12616b5306d901": {
+      "id": "ea641cb3d53649dc25a4c82d55f4591cd714f64889c9e5fb3d12616b5306d901",
+      "kind": "subtree",
+      "top": "Rea641cb3d53649dc25a4c82d55f4591cd714f64889c9e5fb3d12616b5306d901",
+      "original_top": "AutoStage_3",
+      "source_sha256": "e42e4a1d6e98d4a29789e18f419e5ebe95c01b51aacb02b3b21d4b3c4dc4f363",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_3.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_3.sv.gz": "1efb61af0f609c60ce8e161603eba472d0c1539d263ec0c141bd802bdc5a9baf"
+      },
+      "job_tcl_sha256": "c25259024f986ffa54c6c9925412bf37e62cbd522568c3c734381e3e1618a421"
+    },
+    "6ad7dfc88bfbbd108b97b13daf120dcb66614c5ccd6cc7e3118999566164b32f": {
+      "id": "6ad7dfc88bfbbd108b97b13daf120dcb66614c5ccd6cc7e3118999566164b32f",
+      "kind": "subtree",
+      "top": "R6ad7dfc88bfbbd108b97b13daf120dcb66614c5ccd6cc7e3118999566164b32f",
+      "original_top": "AutoStage_4",
+      "source_sha256": "87eadadd7937a9a214a3ee34cf9a2960759430fd6ca5cc4541114c63b6cdd7cd",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_4.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_4.sv.gz": "0da41c9e946d26328887c83c1b91d85dd123652249f16fa2ddf8c2abf1c31ed7"
+      },
+      "job_tcl_sha256": "ae9451632473d9f1f22a85a361c235c393d5b5e7486bf2198208f765b2d74c88"
+    },
+    "4046b8615f990237dfcac64dd92a4f8621703a6694cb55fef261947cd016216a": {
+      "id": "4046b8615f990237dfcac64dd92a4f8621703a6694cb55fef261947cd016216a",
+      "kind": "subtree",
+      "top": "R4046b8615f990237dfcac64dd92a4f8621703a6694cb55fef261947cd016216a",
+      "original_top": "AutoStage_5",
+      "source_sha256": "d0ecd73b189436367d488dd35d9c6c0d2d8e9440f88872bd4005f1c469eaa873",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_5.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_5.sv.gz": "36ca15a2350b8794331874ce30284d4ff462407192a0f58568a88f4142e92c09"
+      },
+      "job_tcl_sha256": "29f3000d47a6e8726c443dce7b36ab2a92e01d902b602efcb24478155ae11618"
+    },
+    "8b13a9f59d279bb2b82ac6c38c91d874af4e72685e2bba623b3e746f75653a65": {
+      "id": "8b13a9f59d279bb2b82ac6c38c91d874af4e72685e2bba623b3e746f75653a65",
+      "kind": "subtree",
+      "top": "R8b13a9f59d279bb2b82ac6c38c91d874af4e72685e2bba623b3e746f75653a65",
+      "original_top": "AutoStage_6",
+      "source_sha256": "285dadc29c7a2fa612bc3e13cc4b49193582e381ff77394a833ad2e8d2d5a9fb",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_6.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_6.sv.gz": "30034355d88a6740a25fe34473661858420a9e26f57aa38eab2e093b2bdb2952"
+      },
+      "job_tcl_sha256": "a34b1e32da28abd0843f7b7a1aca7de1d174f6422b9538eec45a83b072beef9e"
+    },
+    "4b80efa0b8b012bc8c1fdc24a05b72cbc7ae7597a59d201587f1aa876d0fce20": {
+      "id": "4b80efa0b8b012bc8c1fdc24a05b72cbc7ae7597a59d201587f1aa876d0fce20",
+      "kind": "subtree",
+      "top": "R4b80efa0b8b012bc8c1fdc24a05b72cbc7ae7597a59d201587f1aa876d0fce20",
+      "original_top": "AutoStage_7",
+      "source_sha256": "87665bd1c722b0e1f7771a43c74261e992e3c3e1cf9c8a3a07086cda447bd474",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_7.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_7.sv.gz": "480e33adc651d53defae6fe9bea75aa4668291b9d4fa7af2b9c5d8f654549856"
+      },
+      "job_tcl_sha256": "9d6d95bea7fd6c17beb60f318d3475eafca4f9dfaadb14c5ab0d169df320d89d"
+    },
+    "3e39d2fa896046d7bb4dbb18e44fcc4d080c932f58e927fa79a83d123d7322ad": {
+      "id": "3e39d2fa896046d7bb4dbb18e44fcc4d080c932f58e927fa79a83d123d7322ad",
+      "kind": "subtree",
+      "top": "R3e39d2fa896046d7bb4dbb18e44fcc4d080c932f58e927fa79a83d123d7322ad",
+      "original_top": "AutoStage_8",
+      "source_sha256": "b27a511c9663d5cebcbdb5bb2e6b4840b1e8bbb06d0455f493a3bcd98792a92c",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_8.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_8.sv.gz": "f6a8b01412bb349cd88d1f4fa1c9a12b14dda1fac37c024f8075ab33b2374568"
+      },
+      "job_tcl_sha256": "f9c41fe02498e3d7b73b58d65890d76c5af70388c61aad80d08af7f7c883f017"
+    },
+    "149b3fe5d0e543b8d382c9097ad95e94a14f258b8b0ac622bfa27766dc50e435": {
+      "id": "149b3fe5d0e543b8d382c9097ad95e94a14f258b8b0ac622bfa27766dc50e435",
+      "kind": "subtree",
+      "top": "R149b3fe5d0e543b8d382c9097ad95e94a14f258b8b0ac622bfa27766dc50e435",
+      "original_top": "AutoStage_9",
+      "source_sha256": "b773c06f2fc1c8bd68545da908bb3b8c72d80dcb7f43950ebf78fed7cdbe8275",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_9.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_9.sv.gz": "84f8eb354dfb0edf83b1e88ee8e222ad3b9d453096bf1afd3ad7239599d824dd"
+      },
+      "job_tcl_sha256": "75806165ba23016f090c1e8db65c1f5ee5d95b51f90b291c9914c2534aa806b9"
+    },
+    "4e21d435ea86af74a4af547c197aff2d18547e522dc9d486e3a190e3d1053400": {
+      "id": "4e21d435ea86af74a4af547c197aff2d18547e522dc9d486e3a190e3d1053400",
+      "kind": "subtree",
+      "top": "R4e21d435ea86af74a4af547c197aff2d18547e522dc9d486e3a190e3d1053400",
+      "original_top": "AutoStage_10",
+      "source_sha256": "b5d2ed7c2842fcb053c671eb079abd0b2321c7cda3f754c353d501dc253f09cf",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_10.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_10.sv.gz": "98ad2089ea5a49afa103abe6a9a505dee868609a461f7f0c0054f0a32e01e89a"
+      },
+      "job_tcl_sha256": "5bae2c62611ecc66df3f4d67efb5bacbb8f021c2053c44317c29cde6e3ecbd6d"
+    },
+    "6d3e6c8073c5e71319100e781281dcbc91e7244b61f381562a1435e51da060bc": {
+      "id": "6d3e6c8073c5e71319100e781281dcbc91e7244b61f381562a1435e51da060bc",
+      "kind": "subtree",
+      "top": "R6d3e6c8073c5e71319100e781281dcbc91e7244b61f381562a1435e51da060bc",
+      "original_top": "AutoStage_11",
+      "source_sha256": "4e950e1589dd93da5e59b868d966ec5f1c994c3f21146146dad04651e262e6c4",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_11.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_11.sv.gz": "a50171d22e203cafcc7c93fdb7c24b044e9efa7eff8e18c644cbbf13c72917c4"
+      },
+      "job_tcl_sha256": "722e7921e5c47c0fff0007674e8ca8b328fbc0f03764ca67e13f629964e8351a"
+    },
+    "29b3c48fcdda5a2ab153bb8973402c986db14565b145a4197bdd24668c5620ff": {
+      "id": "29b3c48fcdda5a2ab153bb8973402c986db14565b145a4197bdd24668c5620ff",
+      "kind": "subtree",
+      "top": "R29b3c48fcdda5a2ab153bb8973402c986db14565b145a4197bdd24668c5620ff",
+      "original_top": "AutoStage_12",
+      "source_sha256": "9f28bef371ae395bc0230a9ea041d8ba5ce4d55502ba74ae24a2dda75280c0ae",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_12.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_12.sv.gz": "cbfa3d1995d4efedb56ca3443ff4b38ed879f1f936207dfad47fc4eb9c9b0c7e"
+      },
+      "job_tcl_sha256": "aa12d8283ed27794aa2e2865f257a032455449a58570c1f57a2cccb5727075a1"
+    },
+    "9308637b1c37014aee92a799275bd44a58f37c52f2e4c7c0a2935ff43b4642eb": {
+      "id": "9308637b1c37014aee92a799275bd44a58f37c52f2e4c7c0a2935ff43b4642eb",
+      "kind": "subtree",
+      "top": "R9308637b1c37014aee92a799275bd44a58f37c52f2e4c7c0a2935ff43b4642eb",
+      "original_top": "AutoStage_13",
+      "source_sha256": "3bdc320c5e7d7ee99db8e19bfbb546673b2e8a965e9dd750635acb233f23af16",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_13.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_13.sv.gz": "f5432d1610b3c375b530b6ca4dcee78dbd9f370edd8851d8ff81af824ad568e5"
+      },
+      "job_tcl_sha256": "a7df5a07a2f52229f72b28703b70a570b83c49ea529a2f2b21cd7ea30029aacb"
+    },
+    "f8c116f8b0734191c378325dd5a4d7179584a5bb92b636cfa81c749831bf73da": {
+      "id": "f8c116f8b0734191c378325dd5a4d7179584a5bb92b636cfa81c749831bf73da",
+      "kind": "subtree",
+      "top": "Rf8c116f8b0734191c378325dd5a4d7179584a5bb92b636cfa81c749831bf73da",
+      "original_top": "AutoStage_14",
+      "source_sha256": "08542a92b1cbbd44fd4092f9f2d53f4382e1174da1e573fa03d199064f35f727",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_14.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_14.sv.gz": "4852a0547d573ceafd05178fbe1caa2692d4a4690902a80740d2e6a3001d5ffb"
+      },
+      "job_tcl_sha256": "563bcf580088dc845df99ecd38cc95f99e73ceda1d9862e67852ad30ee71ae80"
+    },
+    "e7bbcfb74451459c17c4f26da064ec36975412db6e7124a3b9e02895fddd252c": {
+      "id": "e7bbcfb74451459c17c4f26da064ec36975412db6e7124a3b9e02895fddd252c",
+      "kind": "subtree",
+      "top": "Re7bbcfb74451459c17c4f26da064ec36975412db6e7124a3b9e02895fddd252c",
+      "original_top": "AutoStage_15",
+      "source_sha256": "5cb6022db31041da39bf48a25b8dd7a2147de9973058f500ff95bd60c077051f",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_15.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_15.sv.gz": "d6ac9965dc129f15efc34c768dc96e94829a4e928b08c4ce10ed30e0bdca79b5"
+      },
+      "job_tcl_sha256": "2b4d8c0e97617b9b3f5d633864c72dc1f28a5b35eafcc8cdb319ba1e21651432"
+    },
+    "11cc449196859f60502c68e89e865ae29d4a90c8d267c78080f8977ce4ca0026": {
+      "id": "11cc449196859f60502c68e89e865ae29d4a90c8d267c78080f8977ce4ca0026",
+      "kind": "subtree",
+      "top": "R11cc449196859f60502c68e89e865ae29d4a90c8d267c78080f8977ce4ca0026",
+      "original_top": "AutoStage_16",
+      "source_sha256": "716b40d4b345b8de7b24f6116e000c2a0d6ddeb491606048279f85a0f057aee9",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_16.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_16.sv.gz": "473fb1e31c48aec9b9f24ed991ecdc649232121f9e44eadd970c351c0e7e59dc"
+      },
+      "job_tcl_sha256": "daee2b3bbfc2425a4d47f25ff0beb2cb1abbcfbe25a97ff3d7a40a87f9ddf6ae"
+    },
+    "c5d873ddf5025c920a680088e4c14c83fe12ef09af40cde73c3cf36a71e3ae33": {
+      "id": "c5d873ddf5025c920a680088e4c14c83fe12ef09af40cde73c3cf36a71e3ae33",
+      "kind": "subtree",
+      "top": "Rc5d873ddf5025c920a680088e4c14c83fe12ef09af40cde73c3cf36a71e3ae33",
+      "original_top": "AutoStage_17",
+      "source_sha256": "959a845d021c8d7056ff0916c477a4bcc08232e22a0782862f48cc22ab439872",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_17.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_17.sv.gz": "d7b91c305167cf3f6a0e699d2d3b5dcdb59279b33eef35cd757da24f1e692f24"
+      },
+      "job_tcl_sha256": "df77add2f19304b357dc82decb26356d6b74b89da6239aaefc506be8fd0ff79a"
+    },
+    "2d625adc62cf54252070e06d887c15b897e7407e713f67394d0c08da4c076077": {
+      "id": "2d625adc62cf54252070e06d887c15b897e7407e713f67394d0c08da4c076077",
+      "kind": "subtree",
+      "top": "R2d625adc62cf54252070e06d887c15b897e7407e713f67394d0c08da4c076077",
+      "original_top": "AutoStage_18",
+      "source_sha256": "d5ba8f7b06c33aa892aa66e55e6264e890aae56c619e227f51a47ad15624bd6c",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_18.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_18.sv.gz": "8bfcf89e8e915f157f50d11340b2e36b8dd82052f371d35fb5b6bb9a440d3206"
+      },
+      "job_tcl_sha256": "b4c4238a42eddfa239eb70bf3ab1aeaab2dccc6db4c209c7561d9e4b0b15d86c"
+    },
+    "ef0641a3e84a8a6dda46b4a2ce172b6ac9d9ae509392b3d9ed2dbc66862af913": {
+      "id": "ef0641a3e84a8a6dda46b4a2ce172b6ac9d9ae509392b3d9ed2dbc66862af913",
+      "kind": "subtree",
+      "top": "Ref0641a3e84a8a6dda46b4a2ce172b6ac9d9ae509392b3d9ed2dbc66862af913",
+      "original_top": "AutoStage_19",
+      "source_sha256": "c5549a2c22d26a45ee0d061d328eff6860a56052718e44d11a8334de6b1f5d96",
+      "dependencies": [],
+      "cached_boundaries": {},
+      "analyzed_modules": 1,
+      "excluded_boundaries": [],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AutoStage_19.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AutoStage_19.sv.gz": "9008063fccecdaa252f2a672007fb0e464f428e18102e0d563029074de32dc61"
+      },
+      "job_tcl_sha256": "c9b572f32b578500f54e547afa210aff278f67df765af405b9364b3a24fbc730"
+    },
+    "f1fb85ef07d8b0889cbf40c2fc328985968ac3b9b5ac9f4b260e688acc15c060": {
+      "id": "f1fb85ef07d8b0889cbf40c2fc328985968ac3b9b5ac9f4b260e688acc15c060",
+      "kind": "component",
+      "top": "Rf1fb85ef07d8b0889cbf40c2fc328985968ac3b9b5ac9f4b260e688acc15c060",
+      "original_top": "ClockSinkDomain_4",
+      "source_sha256": "c962352ca194eaf470e9a48cbc196339e274581fdc4cf10912cc09b6a729da24",
+      "dependencies": [
+        "11cc449196859f60502c68e89e865ae29d4a90c8d267c78080f8977ce4ca0026",
+        "149b3fe5d0e543b8d382c9097ad95e94a14f258b8b0ac622bfa27766dc50e435",
+        "29b3c48fcdda5a2ab153bb8973402c986db14565b145a4197bdd24668c5620ff",
+        "2d625adc62cf54252070e06d887c15b897e7407e713f67394d0c08da4c076077",
+        "3c17d6e4f432a1910fdfb3e0e79cbd4bd11ad15d5a8d0f74be8e3a353a465cb1",
+        "3e39d2fa896046d7bb4dbb18e44fcc4d080c932f58e927fa79a83d123d7322ad",
+        "4046b8615f990237dfcac64dd92a4f8621703a6694cb55fef261947cd016216a",
+        "4b80efa0b8b012bc8c1fdc24a05b72cbc7ae7597a59d201587f1aa876d0fce20",
+        "4e21d435ea86af74a4af547c197aff2d18547e522dc9d486e3a190e3d1053400",
+        "5d4c4108d668f22e2dd7c5a02de302373484e41f532b56b52da219cf2dd378c9",
+        "6ad7dfc88bfbbd108b97b13daf120dcb66614c5ccd6cc7e3118999566164b32f",
+        "6d3e6c8073c5e71319100e781281dcbc91e7244b61f381562a1435e51da060bc",
+        "81e56a54b19277e99d9adceaa06f978a7c34a26aa55702173a8a84dfa059d86d",
+        "8b13a9f59d279bb2b82ac6c38c91d874af4e72685e2bba623b3e746f75653a65",
+        "9308637b1c37014aee92a799275bd44a58f37c52f2e4c7c0a2935ff43b4642eb",
+        "c5d873ddf5025c920a680088e4c14c83fe12ef09af40cde73c3cf36a71e3ae33",
+        "e7bbcfb74451459c17c4f26da064ec36975412db6e7124a3b9e02895fddd252c",
+        "ea641cb3d53649dc25a4c82d55f4591cd714f64889c9e5fb3d12616b5306d901",
+        "ef0641a3e84a8a6dda46b4a2ce172b6ac9d9ae509392b3d9ed2dbc66862af913",
+        "f8c116f8b0734191c378325dd5a4d7179584a5bb92b636cfa81c749831bf73da"
+      ],
+      "cached_boundaries": {
+        "AutoStage": "5d4c4108d668f22e2dd7c5a02de302373484e41f532b56b52da219cf2dd378c9",
+        "AutoStage_1": "81e56a54b19277e99d9adceaa06f978a7c34a26aa55702173a8a84dfa059d86d",
+        "AutoStage_2": "3c17d6e4f432a1910fdfb3e0e79cbd4bd11ad15d5a8d0f74be8e3a353a465cb1",
+        "AutoStage_3": "ea641cb3d53649dc25a4c82d55f4591cd714f64889c9e5fb3d12616b5306d901",
+        "AutoStage_4": "6ad7dfc88bfbbd108b97b13daf120dcb66614c5ccd6cc7e3118999566164b32f",
+        "AutoStage_5": "4046b8615f990237dfcac64dd92a4f8621703a6694cb55fef261947cd016216a",
+        "AutoStage_6": "8b13a9f59d279bb2b82ac6c38c91d874af4e72685e2bba623b3e746f75653a65",
+        "AutoStage_7": "4b80efa0b8b012bc8c1fdc24a05b72cbc7ae7597a59d201587f1aa876d0fce20",
+        "AutoStage_8": "3e39d2fa896046d7bb4dbb18e44fcc4d080c932f58e927fa79a83d123d7322ad",
+        "AutoStage_9": "149b3fe5d0e543b8d382c9097ad95e94a14f258b8b0ac622bfa27766dc50e435",
+        "AutoStage_10": "4e21d435ea86af74a4af547c197aff2d18547e522dc9d486e3a190e3d1053400",
+        "AutoStage_11": "6d3e6c8073c5e71319100e781281dcbc91e7244b61f381562a1435e51da060bc",
+        "AutoStage_12": "29b3c48fcdda5a2ab153bb8973402c986db14565b145a4197bdd24668c5620ff",
+        "AutoStage_13": "9308637b1c37014aee92a799275bd44a58f37c52f2e4c7c0a2935ff43b4642eb",
+        "AutoStage_14": "f8c116f8b0734191c378325dd5a4d7179584a5bb92b636cfa81c749831bf73da",
+        "AutoStage_15": "e7bbcfb74451459c17c4f26da064ec36975412db6e7124a3b9e02895fddd252c",
+        "AutoStage_16": "11cc449196859f60502c68e89e865ae29d4a90c8d267c78080f8977ce4ca0026",
+        "AutoStage_17": "c5d873ddf5025c920a680088e4c14c83fe12ef09af40cde73c3cf36a71e3ae33",
+        "AutoStage_18": "2d625adc62cf54252070e06d887c15b897e7407e713f67394d0c08da4c076077",
+        "AutoStage_19": "ef0641a3e84a8a6dda46b4a2ce172b6ac9d9ae509392b3d9ed2dbc66862af913"
+      },
+      "analyzed_modules": 16,
+      "excluded_boundaries": [
+        "AutoStage",
+        "AutoStage_1",
+        "AutoStage_10",
+        "AutoStage_11",
+        "AutoStage_12",
+        "AutoStage_13",
+        "AutoStage_14",
+        "AutoStage_15",
+        "AutoStage_16",
+        "AutoStage_17",
+        "AutoStage_18",
+        "AutoStage_19",
+        "AutoStage_2",
+        "AutoStage_3",
+        "AutoStage_4",
+        "AutoStage_5",
+        "AutoStage_6",
+        "AutoStage_7",
+        "AutoStage_8",
+        "AutoStage_9"
+      ],
+      "macro_counts": {},
+      "sources": [
+        "src/000_AsyncQueueSink_AutoCopyResult.sv",
+        "src/001_AsyncQueueSink_AutoEvent.sv",
+        "src/002_AsyncQueueSource_AutoComputeRequest.sv",
+        "src/003_AsyncQueueSource_AutoCopyRequest.sv",
+        "src/004_AsyncQueueSource_AutoWatch.sv",
+        "src/005_AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+        "src/006_AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+        "src/007_AsyncValidSync.sv",
+        "src/008_AutoScheduler.sv",
+        "src/009_AutoTileCursor.sv",
+        "src/010_ClockCrossingReg_w17.sv",
+        "src/011_ClockCrossingReg_w54.sv",
+        "src/012_ClockSinkDomain_4.sv",
+        "src/013_Queue8_AutoTileEvent.sv",
+        "src/014_RRArbiter_3.sv",
+        "src/015_ram_8x272.sv"
+      ],
+      "origin": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "settings": {
+        "libraries": {
+          "logic": {
+            "path": "/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db",
+            "sha256": "d75b4e46990e1cfb763bf463da83f1ac3e46200f5c605744410302e39608be0e"
+          },
+          "sram": {
+            "path": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.db",
+            "sha256": "bd09e39a94e742d6d3973d182efa094db173e66f97d68872e4aae1e0ac31aef6"
+          }
+        },
+        "tool_id": "T-2022.03-SP5-6",
+        "period_ns": 10,
+        "io_delay_ns": 0.1,
+        "compile": "compile -map_effort low -area_effort none",
+        "synth_sha256": "0604270b58f6f7832f2f7291c6641089c080fd1eb0e77b12b2571cf57fa2dfbd",
+        "stage_sha256": "bcf129d46dd84a0a0c34777dc9ab9243d0d30fb1a22f146416763a78388d3b88"
+      },
+      "source_files": {
+        "src/000_AsyncQueueSink_AutoCopyResult.sv.gz": "b81e92b6087c8b5ee9bda954a5b7d2b6d66cf753ac40915dd671e17198e6e82e",
+        "src/001_AsyncQueueSink_AutoEvent.sv.gz": "46387af6a5029f68cf5442791109706aead0402dea2fa84c621d8f2d1a08f16b",
+        "src/002_AsyncQueueSource_AutoComputeRequest.sv.gz": "2e68fa859f082430330ad1f1828d3eea6b23f85edf787c8c99a9810f9b95b15c",
+        "src/003_AsyncQueueSource_AutoCopyRequest.sv.gz": "00ffc94314b3043f2e344a4e6faf6dd6cd006accd13ad303ad9867cb9159dda0",
+        "src/004_AsyncQueueSource_AutoWatch.sv.gz": "97cf0b772011bf13357d706e4820bb94ad237ee67360c1b6d5aeabc7658912c8",
+        "src/005_AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv.gz": "4e5105ebb18533c5bb24047fd98530c713a072b8162f2b5433b2c2a1c3076470",
+        "src/006_AsyncResetSynchronizerShiftReg_w1_d3_i0.sv.gz": "9627ae60dc4b1763b1f526fe1b8288df20b011f269f80c302707ddaac33dc53b",
+        "src/007_AsyncValidSync.sv.gz": "e2c48446dfa0865fc8c78252e1760ab4360fa70d07b3b78136050fec27977632",
+        "src/008_AutoScheduler.sv.gz": "77f573ff9638eafa08aa0c3545ca7374df3ddeedd0ce01cd5ff6f27115dacee8",
+        "src/009_AutoTileCursor.sv.gz": "a7a1083190b4466336707c6f62cd027233ebc3ee2ab998c24c2b5bacd0f2118f",
+        "src/010_ClockCrossingReg_w17.sv.gz": "97a7e81efc4f8aeeb1e90388c3a33a959409a6c9d5a7a9fa23636b26d8c963b1",
+        "src/011_ClockCrossingReg_w54.sv.gz": "5762fa25a9f607f12ae687128f4e6380ae8c45161c46ba3ba2e5862059e9a125",
+        "src/012_ClockSinkDomain_4.sv.gz": "c24945983a98252572568d25ffefe84a868a0f67cfff9872c3774b77b3d64992",
+        "src/013_Queue8_AutoTileEvent.sv.gz": "8fd8a1643962b93a1c484e2289be1c4af627b9ece4b777199db28f15a30246aa",
+        "src/014_RRArbiter_3.sv.gz": "0e639c44950417bb76016a34e713d8b8720c276efe6e715ec5aca1d45c7e1374",
+        "src/015_ram_8x272.sv.gz": "31850e5d01a3a9aec186dc7340a64a5b0cf85ae3f75b50448771ac6174b811fd"
+      },
+      "job_tcl_sha256": "f66e3d7d055ec9cf7702dfdf974942da4c5bec904b12eff550118cc323b5294d"
+    }
+  },
+  "components": [
+    {
+      "entry": "resnet-cgra4",
+      "component": "autolink",
+      "top": "ClockSinkDomain_4",
+      "soc_instances": 1,
+      "job": "f1fb85ef07d8b0889cbf40c2fc328985968ac3b9b5ac9f4b260e688acc15c060",
+      "source_manifest": "/home/jjqin/CGRA-SoC/build/experiments/p1/synthesis/last-repair-20261109-v001/input/resnet-cgra4/autolink-ClockSinkDomain_4/manifest.json",
+      "archive_sha256": "25890058bd7a0823703262ad76825d91f513c69d239bf5c502f69d31526f754c",
+      "validation": "static_generation_only",
+      "small_gate": "not_rerun",
+      "command_cache_adaptation": null
+    }
+  ],
+  "area_policy": "Actual mapped component netlist and report_area; SRAM included and separately inventoried. No SRAM subtraction. Frozen subtrees retain standalone 10 ns mapping with dont_touch; parent timing is reported, not guaranteed."
+}

@@ -1,0 +1,37 @@
+{
+  "sv2v_exit": 0,
+  "verilator_lint_exit": 0,
+  "verilator_warnings": 0,
+  "yosys_check_exit": 0,
+  "yosys_check_problems": 0,
+  "latches": 0,
+  "instances": {
+    "PrimitiveBank": 1,
+    "ArithmeticLane": 16,
+    "Restoring": 16
+  },
+  "arithmetic": {
+    "passed": true,
+    "cases": 4222,
+    "fixture_result": 24,
+    "semantics": "B-A wraps to 32 bits before signed absolute value; all sums wrap to 32 bits",
+    "limit": "Software arithmetic identities only; no RTL or workload simulation"
+  },
+  "controller_proof": {
+    "passed": true,
+    "steps": 108,
+    "source": "ExpandedSad.sv",
+    "bank_model": "BankModel.sv",
+    "wrapper": "ControlProof.sv",
+    "script": "proof.ys",
+    "log": "control-proof.log",
+    "scope": "Three concrete masked blocks produce33; public ADD conflict returns30; arbitrary native output readiness; hold stability, public/native exclusion, reset at18 and completion after restart. Bank model implements native ADD/SUB/PASS with two-cycle response. This is not full PrimitiveBank/controller equivalence or arbitrary-data whole-endpoint proof."
+  },
+  "simulator_run": false,
+  "performance_run": false,
+  "limitations": [
+    "No whole-workload equivalence or CGRA performance claim.",
+    "Software arithmetic checks do not exercise RTL.",
+    "Initial sv2v formal translation strips assertions and was discarded; final proof reads SystemVerilog directly with async2sync and chformal lowering."
+  ]
+}

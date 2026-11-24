@@ -1,0 +1,1178 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gcn-cgra2",
+  "component": "gemmini",
+  "top": "GemminiRoCC",
+  "soc_instances": 1,
+  "archive_sha256": "b2c46915348ca74b09bd968ae2a03e38397149ab08859ef6f630865ddef52121",
+  "source_modules": 160,
+  "sram_required": true,
+  "expected_macro_instances": 521,
+  "macro_counts": {
+    "SRAM2RW64x8": 512,
+    "SRAM2RW16x32": 9
+  },
+  "macro_lib": "/opt2/synopsys/14mm/SAED14nm_EDK_SRAM_v_05072020/lib/sram/logic_synth/dual/saed14sram_tt0p8v25c.lib",
+  "mapped_memories": [
+    {
+      "depth": 64,
+      "width": 2048,
+      "mask_lanes": 256,
+      "macro": "SRAM2RW64x8",
+      "macro_depth": 64,
+      "macro_width": 8,
+      "depth_banks": 1,
+      "width_slices_per_lane": 1,
+      "macro_instances_per_module": 256,
+      "logical_bits": 131072,
+      "physical_bits_per_module": 131072,
+      "macro_area_per_module": 487375.977984,
+      "module": "mem_ext",
+      "original_module_sha256": "48b9ffb95b9c941061fa0c6b524ce60c6e48607baf47f57a0176ecd6f4be6d59",
+      "module_instances": 2
+    },
+    {
+      "depth": 12,
+      "width": 265,
+      "mask_lanes": 1,
+      "macro": "SRAM2RW16x32",
+      "macro_depth": 16,
+      "macro_width": 32,
+      "depth_banks": 1,
+      "width_slices_per_lane": 9,
+      "macro_instances_per_module": 9,
+      "logical_bits": 3180,
+      "physical_bits_per_module": 4608,
+      "macro_area_per_module": 12757.641642,
+      "module": "commands_ext",
+      "original_module_sha256": "3a7ba5e41816f670777bb722dd978dfbcc2a7feb72ac925f4c79bc9e03f936fe",
+      "module_instances": 1
+    }
+  ],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 987509.5976099999,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/AccPipe.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AccPipe.sv",
+      "original_sha256": "84ed55e4c33488fdadeb738572812f23e7a07e215659084e24d3070bc221cd89",
+      "staged_sha256": "84ed55e4c33488fdadeb738572812f23e7a07e215659084e24d3070bc221cd89",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccPipeShared.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AccPipeShared.sv",
+      "original_sha256": "f752589a25d59b760175104ff0511285b875f6ff9b5a0a5facac3b32a89f91ac",
+      "staged_sha256": "f752589a25d59b760175104ff0511285b875f6ff9b5a0a5facac3b32a89f91ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccumulatorMem.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AccumulatorMem.sv",
+      "original_sha256": "b06931d5c5dcf91e848306061f47ad4c124a6c106191066189c335ec213187bf",
+      "staged_sha256": "b06931d5c5dcf91e848306061f47ad4c124a6c106191066189c335ec213187bf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AccumulatorScale.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AccumulatorScale.sv",
+      "original_sha256": "ceddea1455452b82f62489d294870338753b1a663f061151bcf7460abab6d937",
+      "staged_sha256": "ceddea1455452b82f62489d294870338753b1a663f061151bcf7460abab6d937",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AlwaysOutTransposer.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AlwaysOutTransposer.sv",
+      "original_sha256": "e5597417db8a4e7b95356ec12689451f4448a649f9b969329e390f9348f777dd",
+      "staged_sha256": "e5597417db8a4e7b95356ec12689451f4448a649f9b969329e390f9348f777dd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter2_ScratchpadReadReq.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter2_ScratchpadReadReq.sv",
+      "original_sha256": "68f7a0e6666d0576dd7f66dbd9840e8e0d792e79e853e8822b4ef27b4fd6202c",
+      "staged_sha256": "68f7a0e6666d0576dd7f66dbd9840e8e0d792e79e853e8822b4ef27b4fd6202c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter2_TLBundleAWithInfo.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter2_TLBundleAWithInfo.sv",
+      "original_sha256": "d6adaeb1e48b92bc4be76f3e519e7ad8352d8abe1591c6104f480a30dfa099b2",
+      "staged_sha256": "d6adaeb1e48b92bc4be76f3e519e7ad8352d8abe1591c6104f480a30dfa099b2",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_TLBundleAWithInfo.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter3_TLBundleAWithInfo.sv",
+      "original_sha256": "b53b37142c7d264fd82acacc77baed06d9a71b4e4df36eabaec832c636e05281",
+      "staged_sha256": "b53b37142c7d264fd82acacc77baed06d9a71b4e4df36eabaec832c636e05281",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_TLBundleAWithInfo_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter3_TLBundleAWithInfo_1.sv",
+      "original_sha256": "6705d2b191ff818345d8d9c52b59e316a392961303aff34cd3d4afa690f84251",
+      "staged_sha256": "6705d2b191ff818345d8d9c52b59e316a392961303aff34cd3d4afa690f84251",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter3_UInt6.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter3_UInt6.sv",
+      "original_sha256": "3aa13193552ed9c970230b24709b3dead9beaf2b2db97a3e11d4f939be01fb28",
+      "staged_sha256": "3aa13193552ed9c970230b24709b3dead9beaf2b2db97a3e11d4f939be01fb28",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Arbiter5_RoCCCommand.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Arbiter5_RoCCCommand.sv",
+      "original_sha256": "a6a156013ee057c6b31d3d5cd201aea0e96558b9bf874b8c3a86ef3cd423eddb",
+      "staged_sha256": "a6a156013ee057c6b31d3d5cd201aea0e96558b9bf874b8c3a86ef3cd423eddb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoComputeRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoComputeRequest.sv",
+      "original_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "staged_sha256": "fd7ba31ce67ca6332f410ae1f85d0028ad33a07fa5fc1af659f6b6307f52d073",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoCopyRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoCopyRequest.sv",
+      "original_sha256": "233838a9420ef2ded7770961a13c8fcffd919cef550f746f9f2d0931971a91c5",
+      "staged_sha256": "233838a9420ef2ded7770961a13c8fcffd919cef550f746f9f2d0931971a91c5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoWatch.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_AutoWatch.sv",
+      "original_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "staged_sha256": "9b3478fc47e85703e124e095229e567ca74e3fb65abbca872a137dd55b40054a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiLinkConfig.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiLinkConfig.sv",
+      "original_sha256": "c8c60aab4815854f3ed703c197fa2117cd10926496a7698bf259e8830277327a",
+      "staged_sha256": "c8c60aab4815854f3ed703c197fa2117cd10926496a7698bf259e8830277327a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiPatchEntry.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiPatchEntry.sv",
+      "original_sha256": "5943e25fb21c661e6ae1da9733bdba07d55cf40213483fd8b07514acb734c2c0",
+      "staged_sha256": "5943e25fb21c661e6ae1da9733bdba07d55cf40213483fd8b07514acb734c2c0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiPublicationReply.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSink_GemminiPublicationReply.sv",
+      "original_sha256": "0ac51532db6321051287560252ae04e665e1c9c6f7f8d9e1a53962a0ef896b49",
+      "staged_sha256": "0ac51532db6321051287560252ae04e665e1c9c6f7f8d9e1a53962a0ef896b49",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoCopyResult.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSource_AutoCopyResult.sv",
+      "original_sha256": "28a8b2c4e3c3a3663e7fe904628f346ac409318dd3ad5299b1bac2b7b58ad8bf",
+      "staged_sha256": "28a8b2c4e3c3a3663e7fe904628f346ac409318dd3ad5299b1bac2b7b58ad8bf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoEvent.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSource_AutoEvent.sv",
+      "original_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "staged_sha256": "096c1ed1d981acbe54409fd14fc05d3b82035f290a1fe2ebd84446165406c5d4",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiLinkConfigAck.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSource_GemminiLinkConfigAck.sv",
+      "original_sha256": "b85a8cafce0ce0d7fe3b4921badd8db180a8667e4a86718c44c9b1e2987291e5",
+      "staged_sha256": "b85a8cafce0ce0d7fe3b4921badd8db180a8667e4a86718c44c9b1e2987291e5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiPublicationControl.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncQueueSource_GemminiPublicationControl.sv",
+      "original_sha256": "e022b3d40e1e69ac4a41b6c1a7c616f25983489b18e3b444855f96bf2bf14369",
+      "staged_sha256": "e022b3d40e1e69ac4a41b6c1a7c616f25983489b18e3b444855f96bf2bf14369",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/BeatMerger.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/BeatMerger.sv",
+      "original_sha256": "6da8605e154329db0dfe89a51f9a0ace258c5905d7eeef1914f9d9c6575b3311",
+      "staged_sha256": "6da8605e154329db0dfe89a51f9a0ace258c5905d7eeef1914f9d9c6575b3311",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w151.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w151.sv",
+      "original_sha256": "4ca29b2d5af1aa21edd3b4e6a27d62fe1d804cbe0a358c3ea25041b33171d99c",
+      "staged_sha256": "4ca29b2d5af1aa21edd3b4e6a27d62fe1d804cbe0a358c3ea25041b33171d99c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w234.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w234.sv",
+      "original_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "staged_sha256": "e33df854039b747dbcab4590ab4dce9875653e9749f76a85ece2cc8ec1209032",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w329.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w329.sv",
+      "original_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "staged_sha256": "f95d6cb7438883a15f93d9899b3d96215b8bdfd3087ab61f2b7a0fbd2fb9967f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w480.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w480.sv",
+      "original_sha256": "bf945fd71ee134e78d787a44941695dcaee21d7f8e735a8c3fd284e05add7b89",
+      "staged_sha256": "bf945fd71ee134e78d787a44941695dcaee21d7f8e735a8c3fd284e05add7b89",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w652.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w652.sv",
+      "original_sha256": "2965bdc48b74fdb1a46fbce57b6e5b91234ba118e7732352e1c3edbe2ee53961",
+      "staged_sha256": "2965bdc48b74fdb1a46fbce57b6e5b91234ba118e7732352e1c3edbe2ee53961",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w8.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ClockCrossingReg_w8.sv",
+      "original_sha256": "59bfe77ae0540e48a911be51f0f5d5c071c1c54e7137960fb92dfae02e93589d",
+      "staged_sha256": "59bfe77ae0540e48a911be51f0f5d5c071c1c54e7137960fb92dfae02e93589d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CounterController.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/CounterController.sv",
+      "original_sha256": "93e440161d343c8d330d9ad5f4a4ec53683fe8715f4f4f82818abd5bacb5b937",
+      "staged_sha256": "93e440161d343c8d330d9ad5f4a4ec53683fe8715f4f4f82818abd5bacb5b937",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/CounterFile.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/CounterFile.sv",
+      "original_sha256": "fe5bf3e145831373ec07427fb69f394977088c8d60c271980836d4436c052e91",
+      "staged_sha256": "fe5bf3e145831373ec07427fb69f394977088c8d60c271980836d4436c052e91",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DMACommandTracker.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/DMACommandTracker.sv",
+      "original_sha256": "9ebc685aed82fa6dea7e4dca719feee566342ad91f99c43eedf1eb5836ba695b",
+      "staged_sha256": "9ebc685aed82fa6dea7e4dca719feee566342ad91f99c43eedf1eb5836ba695b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DMACommandTracker_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/DMACommandTracker_1.sv",
+      "original_sha256": "1e0404710d89ebd52e65a250207a626b9a44c85cf120a72a01aa0a613a7b957d",
+      "staged_sha256": "1e0404710d89ebd52e65a250207a626b9a44c85cf120a72a01aa0a613a7b957d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DTLB_2.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/DTLB_2.sv",
+      "original_sha256": "06720401dcaf1d3132115f0a26c8e17dcd4867794994dc01da06fce4593e11b5",
+      "staged_sha256": "06720401dcaf1d3132115f0a26c8e17dcd4867794994dc01da06fce4593e11b5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/DecoupledTLB.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/DecoupledTLB.sv",
+      "original_sha256": "518a09f17fa77acc025bc7079554d6de1cdf86235ee0b42435b7dd9c1a6e92e1",
+      "staged_sha256": "518a09f17fa77acc025bc7079554d6de1cdf86235ee0b42435b7dd9c1a6e92e1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ExecuteController.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ExecuteController.sv",
+      "original_sha256": "69f563b8b5738bb4fd278f27cb47d36619729d0df3463921cb680075391c6a24",
+      "staged_sha256": "69f563b8b5738bb4fd278f27cb47d36619729d0df3463921cb680075391c6a24",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/FrontendTLB.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/FrontendTLB.sv",
+      "original_sha256": "018d686b17dc2289c18f8560d1d63beb84e49c8e04de9803ec7e78781e98ba44",
+      "staged_sha256": "018d686b17dc2289c18f8560d1d63beb84e49c8e04de9803ec7e78781e98ba44",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Gemmini.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Gemmini.sv",
+      "original_sha256": "6a8a3e080f22f6a3e147c8b3d600d3c8a10971fdde2c719a5e0f827e7063e7e4",
+      "staged_sha256": "6a8a3e080f22f6a3e147c8b3d600d3c8a10971fdde2c719a5e0f827e7063e7e4",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/GemminiLinkAdapter.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/GemminiLinkAdapter.sv",
+      "original_sha256": "a787f1cc8fa003bda8d21df4b3d389c4826c15882318c6c0b8ac64eac8ccf4da",
+      "staged_sha256": "a787f1cc8fa003bda8d21df4b3d389c4826c15882318c6c0b8ac64eac8ccf4da",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/GemminiPatch.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/GemminiPatch.sv",
+      "original_sha256": "af8bfe8cad69872bd17974e6c6392fe02b03c442e08c46212b85a184359b0070",
+      "staged_sha256": "af8bfe8cad69872bd17974e6c6392fe02b03c442e08c46212b85a184359b0070",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/GemminiRoCC.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/GemminiRoCC.sv",
+      "original_sha256": "88dc4c0f444fec645ca42e209ec720fa9a6537830bfe390a6259c690e4b761bd",
+      "staged_sha256": "88dc4c0f444fec645ca42e209ec720fa9a6537830bfe390a6259c690e4b761bd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Im2Col.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Im2Col.sv",
+      "original_sha256": "36ed7f156f5978dd9b831bcc32c83737bc3e17cb6a938eb64a57f5743aac3f90",
+      "staged_sha256": "36ed7f156f5978dd9b831bcc32c83737bc3e17cb6a938eb64a57f5743aac3f90",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoadController.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoadController.sv",
+      "original_sha256": "10dcaf96ef8516e1df249faa1de8d4b2ebbf869753f3eed8f6cfc26806b08c2c",
+      "staged_sha256": "10dcaf96ef8516e1df249faa1de8d4b2ebbf869753f3eed8f6cfc26806b08c2c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConv.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConv.sv",
+      "original_sha256": "7146c62f6d23c1b933a54f99bbecfdbb66a1bea38f0f3f68466d4294c83c7749",
+      "staged_sha256": "7146c62f6d23c1b933a54f99bbecfdbb66a1bea38f0f3f68466d4294c83c7749",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvExecute.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConvExecute.sv",
+      "original_sha256": "a9a412d2cad280ba1fd4148e3da8a77c6704963056c129f35f3bbc5887c32ccf",
+      "staged_sha256": "a9a412d2cad280ba1fd4148e3da8a77c6704963056c129f35f3bbc5887c32ccf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdBias.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConvLdBias.sv",
+      "original_sha256": "c569bb02ea2e37ff7ed7042b0a5f8798cd31824d0b9d83c8c6e5587ae909e86e",
+      "staged_sha256": "c569bb02ea2e37ff7ed7042b0a5f8798cd31824d0b9d83c8c6e5587ae909e86e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdInput.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConvLdInput.sv",
+      "original_sha256": "f922449810306d6b82f80b6b922ca5d06d8d0847c0634925a1c26f2d67e24040",
+      "staged_sha256": "f922449810306d6b82f80b6b922ca5d06d8d0847c0634925a1c26f2d67e24040",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvLdWeight.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConvLdWeight.sv",
+      "original_sha256": "9fe401a16e54363bf9bc387d26f4ba46cd1b42298221611c29b19b22422d6543",
+      "staged_sha256": "9fe401a16e54363bf9bc387d26f4ba46cd1b42298221611c29b19b22422d6543",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopConvSt.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopConvSt.sv",
+      "original_sha256": "bf05bff5308d842f405dbabf8009fde2433a88d5e9de161120eb38d64c128728",
+      "staged_sha256": "bf05bff5308d842f405dbabf8009fde2433a88d5e9de161120eb38d64c128728",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmul.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmul.sv",
+      "original_sha256": "f83c9f8026b2fc1bee7853bd782b25ccda424decce72e7ea1c257adfab6aa0f1",
+      "staged_sha256": "f83c9f8026b2fc1bee7853bd782b25ccda424decce72e7ea1c257adfab6aa0f1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulExecute.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulExecute.sv",
+      "original_sha256": "8da6bcbfed04a530ba2c6669eeae692cf1be0f6b64f07833180a3436d56dd4fd",
+      "staged_sha256": "8da6bcbfed04a530ba2c6669eeae692cf1be0f6b64f07833180a3436d56dd4fd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdA.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulLdA.sv",
+      "original_sha256": "81034697b4f3b74141348cdc02deb89967ad3d4a583d24ade25ed259d697272f",
+      "staged_sha256": "81034697b4f3b74141348cdc02deb89967ad3d4a583d24ade25ed259d697272f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdB.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulLdB.sv",
+      "original_sha256": "c297566277fa877fd3696cb60ec898cae030589941c71126f1ec1d64e8fad700",
+      "staged_sha256": "c297566277fa877fd3696cb60ec898cae030589941c71126f1ec1d64e8fad700",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulLdD.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulLdD.sv",
+      "original_sha256": "78e9a0e8c06a79a44531416cf317f2cc944abee802a1e49b708173923f38f94f",
+      "staged_sha256": "78e9a0e8c06a79a44531416cf317f2cc944abee802a1e49b708173923f38f94f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulStC.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulStC.sv",
+      "original_sha256": "91715c6c690cb9e5deddef60fae26b5c1a868691b8e0f97bf5a61e9299923994",
+      "staged_sha256": "91715c6c690cb9e5deddef60fae26b5c1a868691b8e0f97bf5a61e9299923994",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/LoopMatmulStCSpad.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/LoopMatmulStCSpad.sv",
+      "original_sha256": "1412528000368f8abfb898c264f78e03ffb43072d42c63d6b83f22d609e45bac",
+      "staged_sha256": "1412528000368f8abfb898c264f78e03ffb43072d42c63d6b83f22d609e45bac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MacUnit.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/MacUnit.sv",
+      "original_sha256": "4ef11661419e5444fe98104a2b22d10d1e3cf83c89babd747962a8a90c557a85",
+      "staged_sha256": "4ef11661419e5444fe98104a2b22d10d1e3cf83c89babd747962a8a90c557a85",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Mesh.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Mesh.sv",
+      "original_sha256": "d268eb56f7f76ae5ab37ed827fa163884c4419baf197bf0244d31957c9193ea8",
+      "staged_sha256": "d268eb56f7f76ae5ab37ed827fa163884c4419baf197bf0244d31957c9193ea8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MeshWithDelays.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/MeshWithDelays.sv",
+      "original_sha256": "90a69de74ad14552d4430226ffe245af1cc56246da234c0ff1717f13d1c58281",
+      "staged_sha256": "90a69de74ad14552d4430226ffe245af1cc56246da234c0ff1717f13d1c58281",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MultiHeadedQueue.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/MultiHeadedQueue.sv",
+      "original_sha256": "1d60d57e47eff6d7bbcd21c6c4b29db05b034759456488cf8cfdf8c1cdb05890",
+      "staged_sha256": "1d60d57e47eff6d7bbcd21c6c4b29db05b034759456488cf8cfdf8c1cdb05890",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/MultiHeadedQueue_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/MultiHeadedQueue_1.sv",
+      "original_sha256": "d4f5940a4c45073e658d339bd6c054420e31f0263faa6ab9cce8bc1e61d83287",
+      "staged_sha256": "d4f5940a4c45073e658d339bd6c054420e31f0263faa6ab9cce8bc1e61d83287",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/OptimizationBarrier_TLBEntryData.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/OptimizationBarrier_TLBEntryData.sv",
+      "original_sha256": "11ca5308269f25df090365fdde5d3672bd0ffefa2fccb8c2aaad4ebc9e7ef9f0",
+      "staged_sha256": "11ca5308269f25df090365fdde5d3672bd0ffefa2fccb8c2aaad4ebc9e7ef9f0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PE.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PE.sv",
+      "original_sha256": "e20b1a7b233ea63095612bfb1ed44f8c0e581a07689749b42b4d7a6914e6ed2c",
+      "staged_sha256": "e20b1a7b233ea63095612bfb1ed44f8c0e581a07689749b42b4d7a6914e6ed2c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PE_4096.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PE_4096.sv",
+      "original_sha256": "d03ac6e192f6e8957af245e551f7eda5259fd85b99901d298a2f3d8c9445f6ea",
+      "staged_sha256": "d03ac6e192f6e8957af245e551f7eda5259fd85b99901d298a2f3d8c9445f6ea",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PMAChecker.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PMAChecker.sv",
+      "original_sha256": "dd3c1b4dad4a32af9b34b0e33f68310a20a41df64ce8d3642e1de056fd011b24",
+      "staged_sha256": "dd3c1b4dad4a32af9b34b0e33f68310a20a41df64ce8d3642e1de056fd011b24",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PMPChecker_s6.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PMPChecker_s6.sv",
+      "original_sha256": "90c1fa82fe60a2d54f3ceb24a58dbb2aa6925ae4b2d8e14960595c38a8c18eac",
+      "staged_sha256": "90c1fa82fe60a2d54f3ceb24a58dbb2aa6925ae4b2d8e14960595c38a8c18eac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline.sv",
+      "original_sha256": "4b4c89930fe19f1bf941c65bbc2621e05ac141e93b87e62dce9d7f113401b5ab",
+      "staged_sha256": "4b4c89930fe19f1bf941c65bbc2621e05ac141e93b87e62dce9d7f113401b5ab",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_1.sv",
+      "original_sha256": "076a37e31297eb42d424295804a1b8839a4aefe44954288a5406b5e226d7f017",
+      "staged_sha256": "076a37e31297eb42d424295804a1b8839a4aefe44954288a5406b5e226d7f017",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_2.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_2.sv",
+      "original_sha256": "27f27f5b8d1085326d65a65924b511d36ffbe9d9236b779831c92881bd732645",
+      "staged_sha256": "27f27f5b8d1085326d65a65924b511d36ffbe9d9236b779831c92881bd732645",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_3.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_3.sv",
+      "original_sha256": "9d91c21a94576d73dc698bb566a9010716cdb34c3d1ff1dbfe6e3124505e68f0",
+      "staged_sha256": "9d91c21a94576d73dc698bb566a9010716cdb34c3d1ff1dbfe6e3124505e68f0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_4.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_4.sv",
+      "original_sha256": "99f257e7196aa3504b2d0dfeb0b47c241e7f08ec4e5b95ca680575cbeb0a8e81",
+      "staged_sha256": "99f257e7196aa3504b2d0dfeb0b47c241e7f08ec4e5b95ca680575cbeb0a8e81",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_5.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_5.sv",
+      "original_sha256": "cd67e4c2676ad88470fef48cba5159b4525786a7f8b7896b28e35526bcde0828",
+      "staged_sha256": "cd67e4c2676ad88470fef48cba5159b4525786a7f8b7896b28e35526bcde0828",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_6.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_6.sv",
+      "original_sha256": "a5ec4d2d51b468b559777b89e9b242cfed1bf7fe06f0bf1c059e2ffec8186b27",
+      "staged_sha256": "a5ec4d2d51b468b559777b89e9b242cfed1bf7fe06f0bf1c059e2ffec8186b27",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Pipeline_7.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Pipeline_7.sv",
+      "original_sha256": "06e23bed67fa395e7cfa9d40e5c2e43e138fc6cd0912715952a0a34c032804fa",
+      "staged_sha256": "06e23bed67fa395e7cfa9d40e5c2e43e138fc6cd0912715952a0a34c032804fa",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PixelRepeater.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PixelRepeater.sv",
+      "original_sha256": "b7011621c1183d4136bfd2a245a1221793ec75e377d7316030c40f97527cfb73",
+      "staged_sha256": "b7011621c1183d4136bfd2a245a1221793ec75e377d7316030c40f97527cfb73",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/PixelRepeater_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/PixelRepeater_1.sv",
+      "original_sha256": "60be38bcb610f47ec9e88cdbda6b6b1ecaad69a960b9bed828d80e2e4f92aee6",
+      "staged_sha256": "60be38bcb610f47ec9e88cdbda6b6b1ecaad69a960b9bed828d80e2e4f92aee6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_AccumulatorReadResp.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_AccumulatorReadResp.sv",
+      "original_sha256": "f0ce434040d9a1ab2026bb76ac097529dd6f6f5cbdfa755edf5b9b7cf90270e7",
+      "staged_sha256": "f0ce434040d9a1ab2026bb76ac097529dd6f6f5cbdfa755edf5b9b7cf90270e7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_ScratchpadReadResp.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_ScratchpadReadResp.sv",
+      "original_sha256": "3e21bb5fc09ff5d43b4a17493a7c48ed4dbe7dcc88a491e2e5206f5dde5771ed",
+      "staged_sha256": "3e21bb5fc09ff5d43b4a17493a7c48ed4dbe7dcc88a491e2e5206f5dde5771ed",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo.sv",
+      "original_sha256": "bff0cfb3ca76f29ef2c499867a3e30011b7422a99d70ed36fcf4e20bdc2cc274",
+      "staged_sha256": "bff0cfb3ca76f29ef2c499867a3e30011b7422a99d70ed36fcf4e20bdc2cc274",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_2.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_2.sv",
+      "original_sha256": "f171d3e6b49fa2a83b1b02a1435eb4c3078f80365de983454b9efc13681fcd10",
+      "staged_sha256": "f171d3e6b49fa2a83b1b02a1435eb4c3078f80365de983454b9efc13681fcd10",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_3.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_3.sv",
+      "original_sha256": "406f9504d188ecfabd60a86d372a34bfd6df9fb304fd5ad7d8d90c541499f7f9",
+      "staged_sha256": "406f9504d188ecfabd60a86d372a34bfd6df9fb304fd5ad7d8d90c541499f7f9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_5.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_5.sv",
+      "original_sha256": "bf2fed9cdbf0937366224fd8785b5269f435d6047b5f1ceb18507b7af83467a8",
+      "staged_sha256": "bf2fed9cdbf0937366224fd8785b5269f435d6047b5f1ceb18507b7af83467a8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_TLBundleAWithInfo_6.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue1_TLBundleAWithInfo_6.sv",
+      "original_sha256": "119266d259d533716fbdd65f5106c59a8de695ad975947a41ab8130bbdbb6669",
+      "staged_sha256": "119266d259d533716fbdd65f5106c59a8de695ad975947a41ab8130bbdbb6669",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_GemminiCmd.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_GemminiCmd.sv",
+      "original_sha256": "a0808aa052546e9c179d16e90c17490a0bdedd75e44a22ff78b54c44ecf0f410",
+      "staged_sha256": "a0808aa052546e9c179d16e90c17490a0bdedd75e44a22ff78b54c44ecf0f410",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_NormalizedInput.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_NormalizedInput.sv",
+      "original_sha256": "e54d283288b36cb595b8d5532734930aa5807cc162f40130279189046e894676",
+      "staged_sha256": "e54d283288b36cb595b8d5532734930aa5807cc162f40130279189046e894676",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_ScratchpadMemWriteRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "a1b70d69ccb45bee2e0310a0d72b0b361b62d48df2ff38e51f659f0d9d6ea984",
+      "staged_sha256": "a1b70d69ccb45bee2e0310a0d72b0b361b62d48df2ff38e51f659f0d9d6ea984",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a32d256s4k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_TLBundleA_a32d256s4k5z4u.sv",
+      "original_sha256": "8ab3fe866734c9c32d3ea6775a85160b6d6c9d73eafab11f7242daad9825008c",
+      "staged_sha256": "8ab3fe866734c9c32d3ea6775a85160b6d6c9d73eafab11f7242daad9825008c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a32d256s5k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_TLBundleA_a32d256s5k5z4u.sv",
+      "original_sha256": "612d7d4ab89d035fad1c7a9252570fd68b312cd0b0a3ced5f359e88651401276",
+      "staged_sha256": "612d7d4ab89d035fad1c7a9252570fd68b312cd0b0a3ced5f359e88651401276",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a32d256s4k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_TLBundleD_a32d256s4k5z4u.sv",
+      "original_sha256": "211b7b48096db1a98c4ab625115a93d2430d5498b5ea5aa1455fa061b8b74e0b",
+      "staged_sha256": "211b7b48096db1a98c4ab625115a93d2430d5498b5ea5aa1455fa061b8b74e0b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a32d256s5k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_TLBundleD_a32d256s5k5z4u.sv",
+      "original_sha256": "62d3c92db37d303d897205636e6f6f97389e2be28b0eaa67f93ae352f831ddca",
+      "staged_sha256": "62d3c92db37d303d897205636e6f6f97389e2be28b0eaa67f93ae352f831ddca",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_VectorScalarMultiplierReq.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_VectorScalarMultiplierReq.sv",
+      "original_sha256": "8d332fae00157ca0b1a3440a902803b96e9a9657b6a0451d04b630f82615a62b",
+      "staged_sha256": "8d332fae00157ca0b1a3440a902803b96e9a9657b6a0451d04b630f82615a62b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_VectorScalarMultiplierReq_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue2_VectorScalarMultiplierReq_1.sv",
+      "original_sha256": "de15d48db525c03f57779462e90dec88e6e9b5c14fa1023a5a7f767d3945b310",
+      "staged_sha256": "de15d48db525c03f57779462e90dec88e6e9b5c14fa1023a5a7f767d3945b310",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_Bool.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue4_Bool.sv",
+      "original_sha256": "2fcaa21589dcf9da32ce223d3456753cf14c6ddae65a9e7068c752cac7ee9d91",
+      "staged_sha256": "2fcaa21589dcf9da32ce223d3456753cf14c6ddae65a9e7068c752cac7ee9d91",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_ExtMemIO_Anon.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue4_ExtMemIO_Anon.sv",
+      "original_sha256": "f8dce2e4ec96357f45280cc7084be6f16b954dc1577c63b4e5765918e1a4eb44",
+      "staged_sha256": "f8dce2e4ec96357f45280cc7084be6f16b954dc1577c63b4e5765918e1a4eb44",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue4_ScratchpadReadResp.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue4_ScratchpadReadResp.sv",
+      "original_sha256": "719c91101d271d318cceebb6e841bc0c71d831161ffb8778ad2f8b801c504606",
+      "staged_sha256": "719c91101d271d318cceebb6e841bc0c71d831161ffb8778ad2f8b801c504606",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ComputeCntlSignals.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue5_ComputeCntlSignals.sv",
+      "original_sha256": "dd41d152a2dd588f9001c46ce377730ad40be02e10633b8cdb6effe4c736b884",
+      "staged_sha256": "dd41d152a2dd588f9001c46ce377730ad40be02e10633b8cdb6effe4c736b884",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ScratchpadMemReadRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue5_ScratchpadMemReadRequest.sv",
+      "original_sha256": "5daf9c9fa4d52170ecbf0914ec3511ea59da7a4bafecca0207a283c94803660c",
+      "staged_sha256": "5daf9c9fa4d52170ecbf0914ec3511ea59da7a4bafecca0207a283c94803660c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_ScratchpadMemWriteRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue5_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "eb7bd5825ad7dd5e2c020dcbffb0dbf68c7282450083613f056b0c1f585c77b8",
+      "staged_sha256": "eb7bd5825ad7dd5e2c020dcbffb0dbf68c7282450083613f056b0c1f585c77b8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue5_im2colRowSignals.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue5_im2colRowSignals.sv",
+      "original_sha256": "df6ac353e461d8695ba7caaef239642683f8a01a45260f1cd6b98ac28de502e6",
+      "staged_sha256": "df6ac353e461d8695ba7caaef239642683f8a01a45260f1cd6b98ac28de502e6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue6_ScratchpadMemWriteRequest.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue6_ScratchpadMemWriteRequest.sv",
+      "original_sha256": "c60adb33b7733f4f5b0110644994431a0958e4adff8d50a1bd7f318eae68fd5b",
+      "staged_sha256": "c60adb33b7733f4f5b0110644994431a0958e4adff8d50a1bd7f318eae68fd5b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue6_TagWithIdAndTotalRows.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue6_TagWithIdAndTotalRows.sv",
+      "original_sha256": "6f6582cd55923f9d06ca03aa3d826dc72163648e1cedbf7c349c678007177973",
+      "staged_sha256": "6f6582cd55923f9d06ca03aa3d826dc72163648e1cedbf7c349c678007177973",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue8_GemminiCmd.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Queue8_GemminiCmd.sv",
+      "original_sha256": "a42acf77401ebbb4917f7c0bdb55a6f5a0c0f12be290b74b660e63fb5535e390",
+      "staged_sha256": "a42acf77401ebbb4917f7c0bdb55a6f5a0c0f12be290b74b660e63fb5535e390",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/RRArbiter.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/RRArbiter.sv",
+      "original_sha256": "7825846f6bba8cb05abe99046bdffe4e91abff3e0923796fd1f9219fef7ddac1",
+      "staged_sha256": "7825846f6bba8cb05abe99046bdffe4e91abff3e0923796fd1f9219fef7ddac1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleA_a31d256s5k1z3u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Repeater_TLBundleA_a31d256s5k1z3u.sv",
+      "original_sha256": "452dfea5e0ce5185ddc8d4c932fb467818dc18db66fe143807342711f6549927",
+      "staged_sha256": "452dfea5e0ce5185ddc8d4c932fb467818dc18db66fe143807342711f6549927",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ReservationStation.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ReservationStation.sv",
+      "original_sha256": "b3aa42ed0e770ff1106b96920cd8eaacc46eaea6ef3e31a7c3ae2011e3654909",
+      "staged_sha256": "b3aa42ed0e770ff1106b96920cd8eaacc46eaea6ef3e31a7c3ae2011e3654909",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Scratchpad.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Scratchpad.sv",
+      "original_sha256": "421575d80cbe6150991a9074690b47f3acf98e0411472faa806da4e0dab2fe56",
+      "staged_sha256": "421575d80cbe6150991a9074690b47f3acf98e0411472faa806da4e0dab2fe56",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ScratchpadBank.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ScratchpadBank.sv",
+      "original_sha256": "1ff957981f12c38c8100dc1639dd3e823980266cccf475edc7df9ddd43806527",
+      "staged_sha256": "1ff957981f12c38c8100dc1639dd3e823980266cccf475edc7df9ddd43806527",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StoreController.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/StoreController.sv",
+      "original_sha256": "f42873691e317210e0f7e9e25743a25e68e59f2107850ed57acf414aaa8c91bc",
+      "staged_sha256": "f42873691e317210e0f7e9e25743a25e68e59f2107850ed57acf414aaa8c91bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamReader.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/StreamReader.sv",
+      "original_sha256": "3d2e71cd8d56571841ea25871f8c81bdac41c4f77b5624d7af3e7086d49d1a11",
+      "staged_sha256": "3d2e71cd8d56571841ea25871f8c81bdac41c4f77b5624d7af3e7086d49d1a11",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamReaderCore.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/StreamReaderCore.sv",
+      "original_sha256": "7676ecdfba46fdf213fd6deb9dee17a18563dc9c1a88b569846ccb95d66882c3",
+      "staged_sha256": "7676ecdfba46fdf213fd6deb9dee17a18563dc9c1a88b569846ccb95d66882c3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamWriter.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/StreamWriter.sv",
+      "original_sha256": "9bacf39a53a3bd844cb0be7c561bcb35577d10e20024da38c59f95fe2f1869c1",
+      "staged_sha256": "9bacf39a53a3bd844cb0be7c561bcb35577d10e20024da38c59f95fe2f1869c1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/StreamWriter_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/StreamWriter_1.sv",
+      "original_sha256": "72f4c2d475f342d19c534e6f454c1f6fa11c444a23882202ca2e5a306f2ea5fb",
+      "staged_sha256": "72f4c2d475f342d19c534e6f454c1f6fa11c444a23882202ca2e5a306f2ea5fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s4k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLBuffer_a32d256s4k5z4u.sv",
+      "original_sha256": "47ee45f8a70302e79b9d3dfcb55444c6af9d8301de23c1259466a59e8619bef3",
+      "staged_sha256": "47ee45f8a70302e79b9d3dfcb55444c6af9d8301de23c1259466a59e8619bef3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s4k5z4u_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLBuffer_a32d256s4k5z4u_1.sv",
+      "original_sha256": "6cebe652b27076e6329858f1174da0db43e389cfe007137f36e86eb5a1d96a63",
+      "staged_sha256": "6cebe652b27076e6329858f1174da0db43e389cfe007137f36e86eb5a1d96a63",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a32d256s5k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLBuffer_a32d256s5k5z4u.sv",
+      "original_sha256": "f1d0646d8016d0927f5a9ae1daa50bab27f2ce414a656bc98af29bfbc4eed99f",
+      "staged_sha256": "f1d0646d8016d0927f5a9ae1daa50bab27f2ce414a656bc98af29bfbc4eed99f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLFragmenter_5.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLFragmenter_5.sv",
+      "original_sha256": "80a9253a16c5ea769fa18966a120f42d3a17ff8231d8d26d4166f45bc97d1322",
+      "staged_sha256": "80a9253a16c5ea769fa18966a120f42d3a17ff8231d8d26d4166f45bc97d1322",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_56.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_56.sv",
+      "original_sha256": "586f3f7ecae97661947757f83fa9aa7aacae03dcb5f0e51eea1125fe73a0f70b",
+      "staged_sha256": "586f3f7ecae97661947757f83fa9aa7aacae03dcb5f0e51eea1125fe73a0f70b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_57.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_57.sv",
+      "original_sha256": "fe570cb788e77ca2226692d5f91dd70dfa39652086bae2fbf975365e414c8025",
+      "staged_sha256": "fe570cb788e77ca2226692d5f91dd70dfa39652086bae2fbf975365e414c8025",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_58.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_58.sv",
+      "original_sha256": "99377c34092467aa3f6857fe0d19627df8adb80dcdc0bc215665d810e6a53439",
+      "staged_sha256": "99377c34092467aa3f6857fe0d19627df8adb80dcdc0bc215665d810e6a53439",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_59.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_59.sv",
+      "original_sha256": "853308a21b9f2918b4b8f2b796fa4ff52f24cbe00b5fcbd7202a140210ee64b9",
+      "staged_sha256": "853308a21b9f2918b4b8f2b796fa4ff52f24cbe00b5fcbd7202a140210ee64b9",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_60.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_60.sv",
+      "original_sha256": "ff1f1854d633a895c27f55df5098a3f3790b6b62a09d1fd71f141ee00c55b784",
+      "staged_sha256": "ff1f1854d633a895c27f55df5098a3f3790b6b62a09d1fd71f141ee00c55b784",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_61.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_61.sv",
+      "original_sha256": "54fbbb0a791515eea6e748ae804d46ccd8abee7be5706ecfd09eda1ec9bdb53c",
+      "staged_sha256": "54fbbb0a791515eea6e748ae804d46ccd8abee7be5706ecfd09eda1ec9bdb53c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_62.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLMonitor_62.sv",
+      "original_sha256": "716ca596ee3e2f8277454cf16a18ccf5ca5cef856edd9cea4521f4ce182069dd",
+      "staged_sha256": "716ca596ee3e2f8277454cf16a18ccf5ca5cef856edd9cea4521f4ce182069dd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i1_o2_a32d256s5k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLXbar_i1_o2_a32d256s5k5z4u.sv",
+      "original_sha256": "4e2d7b0db5b2f5ba7e6c566ae655b8f6cbf9ef64ffd1ebb4f688e00d435ac09e",
+      "staged_sha256": "4e2d7b0db5b2f5ba7e6c566ae655b8f6cbf9ef64ffd1ebb4f688e00d435ac09e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLXbar_i2_o1_a32d256s5k5z4u.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TLXbar_i2_o1_a32d256s5k5z4u.sv",
+      "original_sha256": "a17e4370cda704caf367ebdb2b246f6fe06cf1b3e7fdea600ce32365ceda50c1",
+      "staged_sha256": "a17e4370cda704caf367ebdb2b246f6fe06cf1b3e7fdea600ce32365ceda50c1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TagQueue.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TagQueue.sv",
+      "original_sha256": "5f758d4bd1591887c0976eabcb16a58b0f2e17f5ed46d67551a68e2adcf50a2d",
+      "staged_sha256": "5f758d4bd1591887c0976eabcb16a58b0f2e17f5ed46d67551a68e2adcf50a2d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Tile.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/Tile.sv",
+      "original_sha256": "ef94d67055977300e07970ec4e358f6fa049e5857b3e8860e86ac308017fb1a5",
+      "staged_sha256": "ef94d67055977300e07970ec4e358f6fa049e5857b3e8860e86ac308017fb1a5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TransposePreloadUnroller.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TransposePreloadUnroller.sv",
+      "original_sha256": "9d6c845d902345ace24b1f260cf8d5b912006229c3252ae367bbeb9d7ee11230",
+      "staged_sha256": "9d6c845d902345ace24b1f260cf8d5b912006229c3252ae367bbeb9d7ee11230",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TwoPortSyncMem.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/TwoPortSyncMem.sv",
+      "original_sha256": "5fd3a0b4cf6da6b61159f5a3f5ddd59a9ca521fc97e8147e84263d046d2329ca",
+      "staged_sha256": "5fd3a0b4cf6da6b61159f5a3f5ddd59a9ca521fc97e8147e84263d046d2329ca",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/VectorScalarMultiplier.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/VectorScalarMultiplier.sv",
+      "original_sha256": "25d9c50025f37c09a6a4f9be96ec64b5bbfded3e57ac10d09cec3c21550e288d",
+      "staged_sha256": "25d9c50025f37c09a6a4f9be96ec64b5bbfded3e57ac10d09cec3c21550e288d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/VectorScalarMultiplier_1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/VectorScalarMultiplier_1.sv",
+      "original_sha256": "ff3e5bada35886b0928cba965e1088347a598764cc2c4acf4d3186b473195de0",
+      "staged_sha256": "ff3e5bada35886b0928cba965e1088347a598764cc2c4acf4d3186b473195de0",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/WeightedArbiter.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/WeightedArbiter.sv",
+      "original_sha256": "aa7ac5794d64462a6f3d641c67731444feed1f067c169e29edd3e6134ce911e8",
+      "staged_sha256": "aa7ac5794d64462a6f3d641c67731444feed1f067c169e29edd3e6134ce911e8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/XactTracker.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/XactTracker.sv",
+      "original_sha256": "2faae6985fd241142781c02fb950fccc63f216bb5dab05ef7cb89e20812b3201",
+      "staged_sha256": "2faae6985fd241142781c02fb950fccc63f216bb5dab05ef7cb89e20812b3201",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ZeroWriter.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ZeroWriter.sv",
+      "original_sha256": "39a49ec3b5f3cb673cd5e8e36a4f4e8da4edcab23d491b68b0835184d1aa8a11",
+      "staged_sha256": "39a49ec3b5f3cb673cd5e8e36a4f4e8da4edcab23d491b68b0835184d1aa8a11",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/chipyard.harness.TestHarness.MultiAccelRocketConfig.top.mems.v",
+      "original_sha256": "d4cde2a891cc57cde221e16200169b694fe31d1020c215f9535145ceb5720f52",
+      "staged_sha256": "95154cccc1491b2a19a51c38a3cc1e871e22e9c3284cc4ff101f8e883a99a8fc",
+      "changes": [
+        "Map mem_ext to physical SRAM2RW64x8 instances.",
+        "Map commands_ext to physical SRAM2RW16x32 instances."
+      ]
+    },
+    {
+      "source": "gen-collateral/commands.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/commands.sv",
+      "original_sha256": "572dff1312c60a95fde1231bcdf54f7c08a608a3562b1d53f7d6154f63f8195f",
+      "staged_sha256": "572dff1312c60a95fde1231bcdf54f7c08a608a3562b1d53f7d6154f63f8195f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/mem.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/mem.sv",
+      "original_sha256": "46c4e1daa1a93bfd971f307a86489d1d71b8a4f84fabeb5c760c74a2da82619b",
+      "staged_sha256": "46c4e1daa1a93bfd971f307a86489d1d71b8a4f84fabeb5c760c74a2da82619b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x2051.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x2051.sv",
+      "original_sha256": "e4a17b2fb36d6bc73d0e136c92fed097f8dcae92031f535d05be459784a86274",
+      "staged_sha256": "e4a17b2fb36d6bc73d0e136c92fed097f8dcae92031f535d05be459784a86274",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x2341.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x2341.sv",
+      "original_sha256": "1f30a96b39aada97de07491b1dc262308f487a6cf86822db66c7ce70f1354fd6",
+      "staged_sha256": "1f30a96b39aada97de07491b1dc262308f487a6cf86822db66c7ce70f1354fd6",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x274.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x274.sv",
+      "original_sha256": "ccffe254e249ecd382922768ee054a37d1fca343c3acedc3eb0165301867033b",
+      "staged_sha256": "ccffe254e249ecd382922768ee054a37d1fca343c3acedc3eb0165301867033b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x276.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x276.sv",
+      "original_sha256": "fb717385bce1a4be18b640fb6cba9e25060ce7afe0acfdd6e203e074489ba9ac",
+      "staged_sha256": "fb717385bce1a4be18b640fb6cba9e25060ce7afe0acfdd6e203e074489ba9ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x277.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x277.sv",
+      "original_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "staged_sha256": "10f49efbfa80b097ccc9cd1cd081ac0975e1837b97448bc6f4d3d0477565995f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x335.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x335.sv",
+      "original_sha256": "a405bb40a351c9ad2b1600e722ecdf6395a8ae7b5f7fae04d738ef6c0c64865d",
+      "staged_sha256": "a405bb40a351c9ad2b1600e722ecdf6395a8ae7b5f7fae04d738ef6c0c64865d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x336.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x336.sv",
+      "original_sha256": "e2e73e4f011525c5bf5bc61552261ca68c76e4d16acd361015a9d78e9755fa5a",
+      "staged_sha256": "e2e73e4f011525c5bf5bc61552261ca68c76e4d16acd361015a9d78e9755fa5a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x383.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x383.sv",
+      "original_sha256": "d0b2a9281f0785c9a9dd5ef3f8d33af23018674331d5e42ffa12ad5ea2541dc5",
+      "staged_sha256": "d0b2a9281f0785c9a9dd5ef3f8d33af23018674331d5e42ffa12ad5ea2541dc5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x613.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_2x613.sv",
+      "original_sha256": "9b5ea30ee71c57d303dee828ae06408649a43912dc53ea474853dd6bc4f5fe83",
+      "staged_sha256": "9b5ea30ee71c57d303dee828ae06408649a43912dc53ea474853dd6bc4f5fe83",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x1.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_4x1.sv",
+      "original_sha256": "54fcf4f94067ed86c8ae1d89862485c1b774c0f2d1e0886905fd711c8ad240a7",
+      "staged_sha256": "54fcf4f94067ed86c8ae1d89862485c1b774c0f2d1e0886905fd711c8ad240a7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x513.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_4x513.sv",
+      "original_sha256": "006c62839131475369de94324685f110b26090afebbdde787890e1f73c3f166b",
+      "staged_sha256": "006c62839131475369de94324685f110b26090afebbdde787890e1f73c3f166b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_4x584.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_4x584.sv",
+      "original_sha256": "d64b7275a93cf2419b81789ed258f583bd67f0459402d038cb4d1e1a9342da26",
+      "staged_sha256": "d64b7275a93cf2419b81789ed258f583bd67f0459402d038cb4d1e1a9342da26",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x186.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_5x186.sv",
+      "original_sha256": "0ea19714420756ec3afee95d0ccb66c3f6afd384ff4066aad3fa706b24c84b16",
+      "staged_sha256": "0ea19714420756ec3afee95d0ccb66c3f6afd384ff4066aad3fa706b24c84b16",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x223.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_5x223.sv",
+      "original_sha256": "33aa2e30ac2975d239f09cba1fd6110594186b8f54df469666107c7ec839829d",
+      "staged_sha256": "33aa2e30ac2975d239f09cba1fd6110594186b8f54df469666107c7ec839829d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_5x91.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_5x91.sv",
+      "original_sha256": "5f5c5e131dd781127668b5124901150ab0abb243b1712f62dc6c8448147946a1",
+      "staged_sha256": "5f5c5e131dd781127668b5124901150ab0abb243b1712f62dc6c8448147946a1",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_6x10.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_6x10.sv",
+      "original_sha256": "c493f7284b1e5e69aad59dc62ceeaffbb29ea7afd1da13ed2dead1d3eceeab1e",
+      "staged_sha256": "c493f7284b1e5e69aad59dc62ceeaffbb29ea7afd1da13ed2dead1d3eceeab1e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_6x383.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_6x383.sv",
+      "original_sha256": "856725cdc525d177da7f84b32f95bef602b595a667bab35500e4fa6e17d4a45e",
+      "staged_sha256": "856725cdc525d177da7f84b32f95bef602b595a667bab35500e4fa6e17d4a45e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_8x246.sv",
+      "staged": "gcn-cgra2/gemmini-GemminiRoCC/src/ram_8x246.sv",
+      "original_sha256": "dbd315306b2f23f7b453a3e9a9c035018958ef27b352bfebdb1f2a74f743140a",
+      "staged_sha256": "dbd315306b2f23f7b453a3e9a9c035018958ef27b352bfebdb1f2a74f743140a",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

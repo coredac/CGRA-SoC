@@ -1,0 +1,13 @@
+****************************************
+Report : scenario
+Design : ChipTop
+Version: T-2022.03-SP5
+Date   : Wed Nov 18 22:33:03 2026
+****************************************
+
+                                                                     Leakage  Dynamic                              Cell  Signal
+Name            Mode            Corner          Active  Setup  Hold  Power    Power    Max_tran  Max_cap  Min_cap  EM    EM
+-------------------------------------------------------------------------------------------------------------------------------
+functional_tt * functional      tt              true    true   true  false    false    true      true     true     false false
+
+1

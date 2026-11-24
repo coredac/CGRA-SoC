@@ -1,0 +1,24 @@
+Warning: Command 'report_switching_activity' is deprecated, please use 'report_activity' instead. (POW-090)
+****************************************
+Report : switching_activity
+        -coverage
+Design : ChipTop
+Version: T-2022.03-SP5
+Date   : Wed Nov 18 23:04:41 2026
+****************************************
+Mode: functional
+Corner: tt
+Time unit: 1ns
+Fastest clock: core with period 2.0
+
+Coverage is defined as the percent of nets with toggle rate greater than 0.000000
+-----------------------------------------------------------------------------------------------------------
+
+Switching Activity Coverage for "ChipTop"
+-----------------------------------------------------------------------------------------------------------
+
+Block                                                  % Nets Covered     # Nets Covered         Total Nets
+
+ChipTop                                                        100.00            5808848            5808848
+-----------------------------------------------------------------------------------------------------------
+1

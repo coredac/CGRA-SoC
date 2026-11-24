@@ -1,0 +1,121 @@
+{
+  "top": "AsicAccelerator",
+  "scope": "Full current general ASIC endpoint: five units, 128 KiB common SPM, descriptor cache, adapter, DMA, publication, memory arbiter and endpoint TileLink interface. Excludes upstream shared fabric, Rocket and Gemmini.",
+  "transform": "Only Core common memory and GptVector arrays are partitioned hierarchically. Capacity, arithmetic and interface cycles unchanged. The adjacent manifest records whether the common SPM uses SRAM macros.",
+  "validation": "Original versus transformed Core tested cycle by cycle for all five units; adjacent equivalence.json records the exact models, commands, hashes and limits.",
+  "source_sha256": {
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsicAccelerator.sv": "dad1c8239ef3ce756ee6791deb969aef6412083e89eeb6f011498464ff545d32",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsicDma.sv": "9f7eebee50f71c7a2362f35fab0f89c491e01a11e35230dc0c6a782eb6018dcd",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/CgraSpmManager_1.sv": "03f3b7cf4c77570102de5b46a9e6bd6ef759cb645432dd9072c43a70e43cc70c",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/TLMonitor_77.sv": "3cb4abba51ca7f5d547a86deef6a5942f82ff8e0bcc9e75ffbc7634730906c51",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/plusarg_reader.v": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/TLFragmenter_9.sv": "4554b300a41da50c0d7e7bb1af167a90d839ba8e224399cab2afa553c4ca28e7",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/TLMonitor_78.sv": "2dc50a1f8c0e21ccb9167ad1ad05e3f28cc52512173640f27bca037ae59088eb",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/Repeater_TLBundleA_a31d256s8k1z3u.sv": "ccc5e3bcc59678b9d97e8b1a18cd58eedde36075b39f45f0bf79ff31056c97d7",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsicLinkAdapter.sv": "93a76f9f2fd99a7099c3d3c0c5485a58f4991e2dbd4f584bf18b2ad4dd955525",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/Core.sv": "b5f0c0cf2730a2e517139b8cddcd216b63aca6ded1c76ed5b67337e584329e4c",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/banks.sv": "5da50854c8e6abb319d36dc2fc45cd86d61edc86584a48c19910bcea656e2af9",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/Gcn.sv": "71794532b4ec9fde0c18d00ebebce3f7db2ac1e7f3c604314de1658d09c19409",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/Vector.sv": "9f45b61bf31d98b3f0fae8224e6c13355534445b4ee3dd32bb48249137c2cdfa",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/norm.sv": "228c0611339df813aed0f37d90f93aa0d9b2ffbf60b65acca8a2b178fc0c012f",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/div.sv": "ec8475187b5bfbccfcf85052966db14d90905386481622f808a7a0f52162189b",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/softmax.sv": "a4eb5bc0ddeb62c60c1ffac36bf54d0c2213303a6530b6ef598bc849e98ec0e1",
+    "build/experiments/asic/cost-complete/banked-sram/candidate/vector.sv": "fe3859a1dc073ecff8d5c06a6b369a29f278ae691df8128e70f73a67878ea247",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncQueueSink_AutoWatch.sv": "61f66a943639c9eeecda9d205614407c20ccf3afa9e6dbbabcbf9470f1152cbe",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/ClockCrossingReg_w328.sv": "cf9b40c791373216b85e4535d6980a6ad3acc4e24de63eef52a9d22d6c52947f",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncValidSync.sv": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncQueueSource_AutoEvent.sv": "ae289dae87ec98cebd6e6193ad2b4eb816f31fb1d1e85d9bc65574b26ee22886",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncQueueSink_AutoCopyRequest.sv": "21eb59e115b8af794ef92bf651df07a25650eebc3c80e99b9ff8e90b896c4422",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/ClockCrossingReg_w654.sv": "be7cd4756d7d9ada34d4023f4f17467b6d7679948bef5fba13aa54e048e994f5",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncQueueSource_AutoCopyResult.sv": "120032a30e345218f8e55c3c5316345fe41b8ccabd2371ed307b68f5ea612fb6",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsyncQueueSink_AutoComputeRequest.sv": "f5b52e0c586dfa9ef1020884e6eb1c0ac8efdc181bb81a026e4497b4b56e8b26",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/ClockCrossingReg_w233.sv": "9586329cb17c90efe77936a2be4d86d888d6c9f28c0e1ea67e82f4ffd995790e",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/AsicMemoryPort.sv": "2aa114e75a40712ee6a8b73a960af1054ca50d1924574b71fa10be4f7dd20305",
+    "build/experiments/asic/cost-complete/revision/rtl/gen-collateral/Arbiter2_AsicMemory.sv": "6ff22359f74da392ebec7165a10d054988b313eee65efa2c318faa2bc7c71461"
+  },
+  "jobs": [
+    {
+      "top": "Sync128",
+      "dependencies": [],
+      "sources": [
+        "Sync128"
+      ]
+    },
+    {
+      "top": "Sync32768",
+      "dependencies": [
+        "Sync128"
+      ],
+      "sources": [
+        "Sync32768"
+      ]
+    },
+    {
+      "top": "AsicCore",
+      "dependencies": [
+        "Gcn",
+        "Vector",
+        "GptNorm",
+        "GptSoftmax",
+        "GptVector",
+        "Sync32768"
+      ],
+      "sources": [
+        "AsicCore"
+      ]
+    },
+    {
+      "top": "AsicAccelerator",
+      "dependencies": [
+        "AsicCore"
+      ],
+      "sources": [
+        "Arbiter2_AsicMemory",
+        "AsicAccelerator",
+        "AsicDma",
+        "AsicLinkAdapter",
+        "AsicMemoryPort",
+        "AsyncQueueSink_AutoComputeRequest",
+        "AsyncQueueSink_AutoCopyRequest",
+        "AsyncQueueSink_AutoWatch",
+        "AsyncQueueSource_AutoCopyResult",
+        "AsyncQueueSource_AutoEvent",
+        "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0",
+        "AsyncResetSynchronizerShiftReg_w1_d3_i0",
+        "AsyncResetSynchronizerShiftReg_w1_d3_i0_1",
+        "AsyncValidSync",
+        "CgraSpmManager_1",
+        "ClockCrossingReg_w233",
+        "ClockCrossingReg_w328",
+        "ClockCrossingReg_w654",
+        "Repeater_TLBundleA_a31d256s8k1z3u",
+        "TLFragmenter_9",
+        "TLMonitor_77",
+        "TLMonitor_78",
+        "plusarg_reader"
+      ]
+    }
+  ],
+  "cached_units": {
+    "Gcn": "/tmp/cgra-asic-20261111-v001/Gcn",
+    "Vector": "/tmp/cgra-asic-20261111-v001/Vector",
+    "GptNorm": "/tmp/cgra-asic-20261111-iterative/GptNorm",
+    "GptSoftmax": "/tmp/cgra-asic-20261111-iterative/GptSoftmax"
+  },
+  "expected_core_banks": {
+    "Async128": 24,
+    "Sync128": 256
+  },
+  "macro_types": [
+    "SRAM2RW128x32"
+  ],
+  "logical_data_bytes": 155740,
+  "clock_period_ns": 10,
+  "io_delay_ns": 0.1,
+  "compile": "compile -map_effort low -area_effort none; mapped child designs held fixed",
+  "area_units": "SAED14 library units; not a verified square-micrometer conversion",
+  "shared_cache": "/tmp/asic-banked-20261113-v1"
+}

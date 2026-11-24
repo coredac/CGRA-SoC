@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "checks": {
+    "18 paired series": true,
+    "27 settings": true,
+    "speedup_low/1/per-task three heights": true,
+    "speedup_low/1/per-segment three heights": true,
+    "speedup_low/1/per-graph three heights": true,
+    "speedup_low/2/per-task three heights": true,
+    "speedup_low/2/per-segment three heights": true,
+    "speedup_low/2/per-graph three heights": true,
+    "speedup_low/4/per-task three heights": true,
+    "speedup_low/4/per-segment three heights": true,
+    "speedup_low/4/per-graph three heights": true,
+    "ae_low/1/per-task three heights": true,
+    "ae_low/1/per-segment three heights": true,
+    "ae_low/1/per-graph three heights": true,
+    "ae_low/2/per-task three heights": true,
+    "ae_low/2/per-segment three heights": true,
+    "ae_low/2/per-graph three heights": true,
+    "ae_low/4/per-task three heights": true,
+    "ae_low/4/per-segment three heights": true,
+    "ae_low/4/per-graph three heights": true,
+    "18 separate maximum labels": true,
+    "clean PDF compilation": true,
+    "plot source hash matches": true,
+    "area checks pass": true,
+    "intro checks pass": true,
+    "three-way table checks pass": true
+  },
+  "visual_review": "Speedup-AE inspected after separating the GPT1 speedup and GPT2 AE labels; area and intro PDFs inspected, no clipping or label overlap. Existing styles preserved.",
+  "status": "Compact-layout projection; source experiments preserved."
+}

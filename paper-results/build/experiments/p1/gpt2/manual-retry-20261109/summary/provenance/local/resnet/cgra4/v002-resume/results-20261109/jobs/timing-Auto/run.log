@@ -1,0 +1,14 @@
+[UART] UART0 is here (stdin/stdout).
+== Loading device model file '/tmp/p1-resnet4-perf-20261107-v001/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/tmp/p1-resnet4-perf-20261107-v001/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+P1 ResNet shape=32x32x16->16x16x32 strips=8 cgras=4 groups=2 gemmini_jobs=24 cgra_jobs_per_device=4 stages=20 edges=24 live_words_per_device=6144 publication_bytes=16384 warm_repeats=1
+P1 ResNet Auto schedule=rotated_add profiles=3 stage_bound=20 edge_bound=28
+P1 ResNet mode=Auto phase=cold cgras=4 repeat=0 cycles=502677 checked=0 mismatches=0 status=0 captures=1
+P1 ResNet setup_cycles=373876 capture_cycles=357684 execute_cycles=92445 writeback_cycles=36356 total_cycles=502677
+P1 ResNet mode=Auto phase=warm cgras=4 repeat=1 cycles=125708 checked=0 mismatches=0 status=0 captures=0
+P1 ResNet setup_cycles=9 capture_cycles=0 execute_cycles=90520 writeback_cycles=35179 total_cycles=125708
+P1 ResNet: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/p1/resnet/cgra4/v001/soc-build/gen-collateral/TestDriver.v:158: Verilog $finish

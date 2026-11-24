@@ -1,0 +1,26 @@
+Using libraries: stage.ndm saed14rvt_frame_timing_ccs pin-repaired-v6
+Visiting block stage.ndm:ChipTop.design
+Design 'ChipTop' was successfully linked.
+****************************************
+Report : area
+Design : ChipTop
+Version: T-2022.03-SP5
+Date   : Wed Nov 18 22:32:57 2026
+****************************************
+
+Number of ports:                      1332028
+Number of nets:                       5808848
+Number of cells:                      3821749
+Number of combinational cells:        3034450
+Number of sequential cells:            787299
+Number of macros/black boxes:             816
+Number of buf/inv:                     704757
+Number of references:                     278
+
+Combinational area:                1078851.80
+Buf/Inv area:                       165291.74
+Noncombinational area:              733384.02
+Macro/Black Box area:              1239426.40
+
+Total cell area:                   3051662.22
+1

@@ -1,0 +1,185 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "gpt2-rows-cgra4",
+  "component": "autolink",
+  "top": "ClockSinkDomain_4",
+  "soc_instances": 1,
+  "archive_sha256": "0af4da54ea07e0ccbc4d0bb61ca82d0d63a2d23a9ef1b21bbea18f13801add20",
+  "source_modules": 23,
+  "sram_required": false,
+  "expected_macro_instances": 0,
+  "macro_counts": {},
+  "macro_lib": null,
+  "mapped_memories": [],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 0,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoCopyResult.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncQueueSink_AutoCopyResult.sv",
+      "original_sha256": "632d81108c36448708f5e51b99769b55272a0f7ed76075d2316112086135d452",
+      "staged_sha256": "632d81108c36448708f5e51b99769b55272a0f7ed76075d2316112086135d452",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_AutoEvent.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncQueueSink_AutoEvent.sv",
+      "original_sha256": "753761c3f361cb0c9843b8072e35e23d65e329e11bb88c1934895f2be758d693",
+      "staged_sha256": "753761c3f361cb0c9843b8072e35e23d65e329e11bb88c1934895f2be758d693",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoComputeRequest.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncQueueSource_AutoComputeRequest.sv",
+      "original_sha256": "b16c1537c67230406411b6214511d003f4d73e55bdffea9dc3a674e505f0989b",
+      "staged_sha256": "b16c1537c67230406411b6214511d003f4d73e55bdffea9dc3a674e505f0989b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoCopyRequest.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncQueueSource_AutoCopyRequest.sv",
+      "original_sha256": "9007b030b287ae31507e9d1d905b856ae26cf8cc974d886668bd160d0f21296d",
+      "staged_sha256": "9007b030b287ae31507e9d1d905b856ae26cf8cc974d886668bd160d0f21296d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_AutoWatch.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncQueueSource_AutoWatch.sv",
+      "original_sha256": "5bbb29b33eb44db612230fea5b165f6151f8d2495e1de65a3b3628311225da26",
+      "staged_sha256": "5bbb29b33eb44db612230fea5b165f6151f8d2495e1de65a3b3628311225da26",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoScheduler.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoScheduler.sv",
+      "original_sha256": "3e38ef4fc9dceebaed67cbd289dcf07738668ecd168b5dd095233982628bb18c",
+      "staged_sha256": "3e38ef4fc9dceebaed67cbd289dcf07738668ecd168b5dd095233982628bb18c",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage.sv",
+      "original_sha256": "d9f2918ffab106f7b143553ec72d1f96a30f65d8e6ac591d6607a50b103fba8a",
+      "staged_sha256": "d9f2918ffab106f7b143553ec72d1f96a30f65d8e6ac591d6607a50b103fba8a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage_1.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage_1.sv",
+      "original_sha256": "3b65cc31f42f8573628b3cf5ce971c07a656bb9e3b273f5c00d42f56ee93a27d",
+      "staged_sha256": "3b65cc31f42f8573628b3cf5ce971c07a656bb9e3b273f5c00d42f56ee93a27d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage_2.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage_2.sv",
+      "original_sha256": "ce52335fd1766738817c58f9362212db572009ee22e3d92927f442b954742d2d",
+      "staged_sha256": "ce52335fd1766738817c58f9362212db572009ee22e3d92927f442b954742d2d",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage_3.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage_3.sv",
+      "original_sha256": "1c4ea808d987a9ee835083767ce681835211589feb2af96540f2cd0d84f236bf",
+      "staged_sha256": "1c4ea808d987a9ee835083767ce681835211589feb2af96540f2cd0d84f236bf",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage_4.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage_4.sv",
+      "original_sha256": "78f6d4ad82d395aea7358fd467fb5da2efdd18ef802b7481a486e04c9f478e88",
+      "staged_sha256": "78f6d4ad82d395aea7358fd467fb5da2efdd18ef802b7481a486e04c9f478e88",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoStage_5.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoStage_5.sv",
+      "original_sha256": "8f2e12491555e2c82aec17dd565061847b7eec8bef4c3777bc4f6111238cfa26",
+      "staged_sha256": "8f2e12491555e2c82aec17dd565061847b7eec8bef4c3777bc4f6111238cfa26",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AutoTileCursor.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/AutoTileCursor.sv",
+      "original_sha256": "9d6161ab390bdd4e706871b96198cbda0c2cf6c5d05e3026cc080746c4167124",
+      "staged_sha256": "9d6161ab390bdd4e706871b96198cbda0c2cf6c5d05e3026cc080746c4167124",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w16.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/ClockCrossingReg_w16.sv",
+      "original_sha256": "2f53c2581ffdc3536b9a753c37da2134e056ab27ac02aac65e566556c67e5e4a",
+      "staged_sha256": "2f53c2581ffdc3536b9a753c37da2134e056ab27ac02aac65e566556c67e5e4a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w53.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/ClockCrossingReg_w53.sv",
+      "original_sha256": "da9a1bac88135d0b9c62e05e443a11ad5662843611f1ca73fce0fd337ff2ad0f",
+      "staged_sha256": "da9a1bac88135d0b9c62e05e443a11ad5662843611f1ca73fce0fd337ff2ad0f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockSinkDomain_4.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/ClockSinkDomain_4.sv",
+      "original_sha256": "6821ce200b626581d1b3e173ed2ce7c670b16c70ec98700d544b642f99897213",
+      "staged_sha256": "6821ce200b626581d1b3e173ed2ce7c670b16c70ec98700d544b642f99897213",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_AutoTileEvent.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/Queue2_AutoTileEvent.sv",
+      "original_sha256": "d16649ed8c3dd7897a6560537a122685f1c92e24d1996afe1801d7eee372d874",
+      "staged_sha256": "d16649ed8c3dd7897a6560537a122685f1c92e24d1996afe1801d7eee372d874",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/RRArbiter_3.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/RRArbiter_3.sv",
+      "original_sha256": "1d058fb48b08feeef33b95fbf0759d6bad6c7b454e27cc497df31f402baae017",
+      "staged_sha256": "1d058fb48b08feeef33b95fbf0759d6bad6c7b454e27cc497df31f402baae017",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x270.sv",
+      "staged": "gpt2-rows-cgra4/autolink-ClockSinkDomain_4/src/ram_2x270.sv",
+      "original_sha256": "553ae03568a20021520c56a251c57d59f79819c9b4b61f04b59ddeb98637758d",
+      "staged_sha256": "553ae03568a20021520c56a251c57d59f79819c9b4b61f04b59ddeb98637758d",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}

@@ -1,0 +1,21 @@
+[UART] UART0 is here (stdin/stdout).
+P1 GCN schedule=two64 tiles=2 intermediate_bytes=16384 warm_repeats=1
+P1 GCN mode=Manual phase=cold graph=2 nodes=64 cgras=1 repeat=0 cycles=619742 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=6673 capture_cycles=0 input_cycles=2104 execute_cycles=577268 writeback_cycles=35801 total_cycles=619742
+P1 GCN partition=0 rows=64 cached_jobs=0 words=12672 packets=46 captures=0
+P1 GCN mode=Manual phase=warm graph=2 nodes=64 cgras=1 repeat=1 cycles=608860 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=1496 capture_cycles=0 input_cycles=1490 execute_cycles=572466 writeback_cycles=34898 total_cycles=608860
+P1 GCN mode=Hybrid phase=cold graph=2 nodes=64 cgras=1 repeat=0 cycles=1467526 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=1065861 capture_cycles=1062574 input_cycles=1376 execute_cycles=366688 writeback_cycles=34977 total_cycles=1467526
+P1 GCN partition=0 rows=64 cached_jobs=128 words=12672 packets=46 captures=1
+P1 GCN mode=Hybrid phase=warm graph=2 nodes=64 cgras=1 repeat=1 cycles=402709 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=1357 capture_cycles=0 input_cycles=1351 execute_cycles=366481 writeback_cycles=34871 total_cycles=402709
+P1 GCN mode=Auto phase=cold graph=2 nodes=64 cgras=1 repeat=0 cycles=949319 checked=0 mismatches=0 status=0 captures=1
+P1 GCN setup_cycles=548220 capture_cycles=545262 input_cycles=1344 execute_cycles=366174 writeback_cycles=34925 total_cycles=949319
+P1 GCN partition=0 rows=64 cached_jobs=64 words=12672 packets=46 captures=1
+P1 GCN fabric_cycles=365898 overlap_cycles=1411 peak_tiles=2
+P1 GCN mode=Auto phase=warm graph=2 nodes=64 cgras=1 repeat=1 cycles=402353 checked=0 mismatches=0 status=0 captures=0
+P1 GCN setup_cycles=1332 capture_cycles=0 input_cycles=1326 execute_cycles=366147 writeback_cycles=34874 total_cycles=402353
+P1 GCN fabric_cycles=365895 overlap_cycles=1411 peak_tiles=2
+P1 GCN: PASS
+- /home/jjqin/CGRA-SoC/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

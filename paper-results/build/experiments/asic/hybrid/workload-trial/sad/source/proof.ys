@@ -1,0 +1,6 @@
+read_verilog -formal -sv ExpandedSad.sv BankModel.sv ControlProof.sv
+prep -top ControlProof -flatten
+async2sync
+chformal -lower
+opt
+sat -seq 108 -set-def-inputs -prove-asserts -verify -timeout 60

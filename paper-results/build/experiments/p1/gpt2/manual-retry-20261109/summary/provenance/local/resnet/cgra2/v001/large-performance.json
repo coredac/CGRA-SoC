@@ -1,0 +1,132 @@
+{
+  "status": "passed_timing_only",
+  "exit_code": 0,
+  "case": "32x32x16->16x16x32",
+  "cgras": 2,
+  "groups": 4,
+  "outputs_per_inference": 8192,
+  "checked_inferences": 0,
+  "completed_inferences": 6,
+  "raw_log": "large-results.log",
+  "arguments": "-1 1 1",
+  "binary": "large.riscv",
+  "rtl": "rtl/soc-sim.tar.gz",
+  "cpu_mhz": 500,
+  "harness_mhz": 1000,
+  "phase_accounting": "Setup includes capture. Total = setup + execute + writeback.",
+  "sampling": "One configuration-cold and one warm sample per mode; no statistical-significance claim.",
+  "modes": {
+    "Manual": {
+      "cold": 524812,
+      "warm": 501672
+    },
+    "Hybrid": {
+      "cold": 547802,
+      "warm": 193915
+    },
+    "Auto": {
+      "cold": 529699,
+      "warm": 173087
+    }
+  },
+  "auto_vs_hybrid_warm_percent": 10.740788489802233,
+  "interpretation": "All completion/status checks passed; large outputs were not numerically checked. Cold Manual < Auto < Hybrid latency; warm Manual > Hybrid > Auto. Small one-group Auto was slower than Hybrid, while this four-group case is faster. Same frozen hardware and source strategy; no baseline slowdown.",
+  "runs": [
+    {
+      "mode": "Manual",
+      "phase": "cold",
+      "cgras": 2,
+      "repeat": 0,
+      "cycles": 524812,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 10800,
+      "capture_cycles": 0,
+      "execute_cycles": 477639,
+      "writeback_cycles": 36373,
+      "total_cycles": 524812
+    },
+    {
+      "mode": "Manual",
+      "phase": "warm",
+      "cgras": 2,
+      "repeat": 1,
+      "cycles": 501672,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 9,
+      "capture_cycles": 0,
+      "execute_cycles": 466456,
+      "writeback_cycles": 35207,
+      "total_cycles": 501672
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "cold",
+      "cgras": 2,
+      "repeat": 0,
+      "cycles": 547802,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 1,
+      "setup_cycles": 353713,
+      "capture_cycles": 347304,
+      "execute_cycles": 158909,
+      "writeback_cycles": 35180,
+      "total_cycles": 547802
+    },
+    {
+      "mode": "Hybrid",
+      "phase": "warm",
+      "cgras": 2,
+      "repeat": 1,
+      "cycles": 193915,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 9,
+      "capture_cycles": 0,
+      "execute_cycles": 158753,
+      "writeback_cycles": 35153,
+      "total_cycles": 193915
+    },
+    {
+      "mode": "Auto",
+      "phase": "cold",
+      "cgras": 2,
+      "repeat": 0,
+      "cycles": 529699,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 1,
+      "setup_cycles": 356583,
+      "capture_cycles": 350589,
+      "execute_cycles": 137945,
+      "writeback_cycles": 35171,
+      "total_cycles": 529699
+    },
+    {
+      "mode": "Auto",
+      "phase": "warm",
+      "cgras": 2,
+      "repeat": 1,
+      "cycles": 173087,
+      "checked": 0,
+      "mismatches": 0,
+      "status": 0,
+      "captures": 0,
+      "setup_cycles": 6,
+      "capture_cycles": 0,
+      "execute_cycles": 137909,
+      "writeback_cycles": 35172,
+      "total_cycles": 173087
+    }
+  ]
+}

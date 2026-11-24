@@ -1,0 +1,17 @@
+[UART] UART0 is here (stdin/stdout).
+== Loading device model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+GCN COMPARE scope=full-small-GCN nodes=16 inner=64 columns=128 reference-intermediates=0 common-Rocket=1 common-Gemmini=1 common-AutoLink=1 CGRA-row-jobs=16 ASIC-operator-jobs=2
+GCN COMPARE backend=ASIC mode=chain phase=cold input=0 sample=0 total_cycles=100905 staging_cycles=36654 setup_cycles=3868 projection_cycles=3257 spm_copy_cycles=3417 nonmatrix_cycles=46707 output_cycles=7002 cpu_submissions=1 cached_jobs=2 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE hardware active_cycles=56945 core_starts=2 read_bytes=8928 write_bytes=8192 native_cpu_starts=0 config_commands=12
+GCN COMPARE backend=ASIC mode=chain phase=warm input=1 sample=1 total_cycles=95722 staging_cycles=36851 setup_cycles=28 projection_cycles=2373 spm_copy_cycles=3371 nonmatrix_cycles=46233 output_cycles=6866 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE hardware active_cycles=56081 core_starts=2 read_bytes=8192 write_bytes=8192 native_cpu_starts=0 config_commands=0
+GCN COMPARE backend=ASIC mode=chain phase=warm input=0 sample=2 total_cycles=93576 staging_cycles=34620 setup_cycles=15 projection_cycles=2352 spm_copy_cycles=3379 nonmatrix_cycles=46238 output_cycles=6972 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE hardware active_cycles=56182 core_starts=2 read_bytes=8192 write_bytes=8192 native_cpu_starts=0 config_commands=0
+GCN COMPARE backend=ASIC mode=chain phase=warm input=1 sample=3 total_cycles=93550 staging_cycles=34558 setup_cycles=8 projection_cycles=2342 spm_copy_cycles=3381 nonmatrix_cycles=46242 output_cycles=7019 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE hardware active_cycles=56232 core_starts=2 read_bytes=8192 write_bytes=8192 native_cpu_starts=0 config_commands=0
+GCN COMPARE: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/asic/cost-complete/revision/rtl/gen-collateral/TestDriver.v:158: Verilog $finish

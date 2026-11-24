@@ -1,0 +1,11 @@
+[
+  "/home/jjqin/CGRA-SoC/chipyard/sims/verilator/simulator-chipyard.harness-MultiAccelRocketConfig",
+  "+permissive",
+  "+dramsim",
+  "+dramsim_ini_dir=/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini",
+  "+max-cycles=10000000",
+  "+loadmem=/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/split-onchip/medium.riscv",
+  "+permissive-off",
+  "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/split-onchip/medium.riscv",
+  "1"
+]

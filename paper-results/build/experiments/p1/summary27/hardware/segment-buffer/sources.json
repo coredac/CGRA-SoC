@@ -1,0 +1,21 @@
+{
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/configs.json": "6d58968683c2aa357dc9f78ba657486963f4ae2cefd71678ec39cee05a7db192",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/layers.json": "4c9fd471f91666b56596884d1f63801dfb472d7a29d52ed17a52088a84099bfc",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/area.csv": "efce0bb604b35a76f6e700f26051610a0a9c3f38991c78354bcf46aa629611e5",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/policy-cost/method.json": "56bf3b636e765645e5874c0252616386c9ab3b2822e52cd770579999dd01940b",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/estimate.py": "deaa8c783a8bb37b97389303e8c200aec298e17a0c99713934836e3a81353d27",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/evidence/p1_segment_audit.py": "9c2c0a66446e949b8db97c3555a862d6212507e5ff47fd928ab5628e1119bb40",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/evidence/p1_segments_1.json": "4a78abedae9bd85a7516e114b0bb7c9ccd71eef74dbfeb8fae7375d9f5029bd9",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/evidence/p1_segments_2.json": "4d237178a9fc1702fa113c2f6d97a08b7e730deb06ad1a64339d7818284cdec9",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/evidence/p1_segments_4.json": "33da13e89b3250e63dd1ad434974f6d574e8a12c59d0b36f5ecef4ad6dd03df8",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/hardware/segment-buffer/evidence/segment-timing.json": "304f121b66b21e49ba3e086b367874f195e915224b022b9d6d9da9df4ca7efe2",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra1/v002/large-results.log": "328c8aadc010aa94703db11c0cda973fab6b2e20e4fb8757af63ed5053824124",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra2/v001/large-results.log": "a792f72af4f3f13728c572c371447d7bd0a5547fb09f238040f14eb472fd638e",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gcn/cgra4/v001/large-results.log": "e276908dee5269456781dbd742e12ac57eada342381455a5a7166132518fb47a",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra1/v002/large-results.log": "b9772dd8d4491261ce6858a68fc4e498b1df20104a5ed3d7d627459701731d70",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra2/v001/large-results.log": "c4f282514026c4e646de811ac38ac98cb9e6ce14a900f66bbcc17c4b8378bfe8",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/resnet/cgra4/v002-resume/results-20261109/jobs/timing-Hybrid/run.log": "5cfdcb2b00f1e96a598ae3c1c4b80a1cd4100483791e4fa778698a91fe1abc93",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra1/v002/large/rows-hybrid.log": "6851fff63a8ce6386d2849b408dfa6ded2b65cf84fdc61befad20a8e98b00f1a",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra2/v001/large/rows-hybrid.log": "577f00cf86f9abe0c8a4434cae944ef5c309f8b42b2f6aa94b82bb8ea43dbc0b",
+  "/home/jjqin/CGRA-SoC/build/experiments/p1/gpt2/manual-retry-20261109/summary/provenance/local/gpt2/cgra4/v001/large/rows-hybrid.log": "d32c790c7775bde709c5ba757d323335f82568c953afb17c96b20abae05920c7"
+}

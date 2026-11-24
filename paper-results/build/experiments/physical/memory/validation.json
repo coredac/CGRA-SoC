@@ -1,0 +1,38 @@
+{
+  "variant": "no_l2",
+  "integrated_verilator_lint_exit": 0,
+  "warnings": {
+    "TIMESCALEMOD": 157,
+    "WIDTHEXPAND": 242,
+    "WIDTHTRUNC": 2,
+    "LATCH": 1,
+    "UNOPTFLAT": 9
+  },
+  "unmapped_warnings": {
+    "TIMESCALEMOD": 157,
+    "WIDTHEXPAND": 242,
+    "WIDTHTRUNC": 2,
+    "LATCH": 1,
+    "UNOPTFLAT": 9
+  },
+  "errors": [],
+  "mapped_memory_warnings": [],
+  "l2_absent": true,
+  "tl_broadcast_instances": 1,
+  "tl_monitor_instances": 0,
+  "nominal_payload_bytes": 90112,
+  "no_simulator_run": true,
+  "no_performance_run": true,
+  "formal_equivalence_run": false,
+  "outputs_sha256": {
+    "map.py": "647dd7a42fa1cbd71838ac2f55852a19cfb37b5fef9279345f33e19f6387827d",
+    "SocMemories.sv": "ceb53ef59c71cd6d8a8f1fb48cb6a8dfacb9181a8b2c9d2fa9bde216cbe7ba2c",
+    "IntegratedCgraWithDmaRTL_single__pickled.v": "9877e092b36a8ac35563837a891b0f43f393439e8288c1c53fa7304a7b4c6213",
+    "sources.f": "7b6c337155f6a87dbb0cffc82cd1f512bf504cc674384717d5ed572488407f0b",
+    "lint.f": "e86ddd19cbca6c9885c8d15c528c7530c60d13a3e92b1155be800d08e2153e62",
+    "SramPorts.sv": "0dc24b77966dcce0d55bbde3a375c2697c58b2b40a41103a2705968d7b906246",
+    "lint.log": "5f4222c6960b375604e99df9ee89366898eca50c9eb4228e848f12769ca56dc0",
+    "manifest.json": "3039daac43de75c9c1385f01010b1d95e50bedbfb5a12f9a4a195d949f826040",
+    "README.md": "adc50221400d092a68bf10d28d329a14e5aa3eeb5bf469eb453a81a3e4049d4e"
+  }
+}

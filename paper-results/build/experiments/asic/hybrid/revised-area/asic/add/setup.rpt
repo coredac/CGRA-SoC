@@ -1,0 +1,1799 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -input_pins
+        -nets
+        -max_paths 10
+Design : ExpandedAsic
+Version: T-2022.03-SP5-6
+Date   : Sun Nov 15 22:25:25 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: tt0p8v25c   Library: saed14rvt_tt0p8v25c
+Wire Load Model Mode: enclosed
+
+  Startpoint: primitives/lane[9].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[9].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_7   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_7_DW02_mult_0_DW02_mult_6
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                            Fanout      Incr       Path
+  ---------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                   0.000000   0.000000
+  clock network delay (ideal)                                                              0.000000   0.000000
+  primitives/lane[9].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                            0.000000 # 0.000000 r
+  primitives/lane[9].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                            0.027101   0.027101 r
+  primitives/lane[9].unit/n1986 (net)                                                8     0.000000   0.027101 r
+  primitives/lane[9].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.040459 r
+  primitives/lane[9].unit/U743/X (SAEDRVT14_OR3_1)                                         0.018450   0.058909 r
+  primitives/lane[9].unit/n1538 (net)                                                4     0.000000   0.058909 r
+  primitives/lane[9].unit/U816/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.068589 r
+  primitives/lane[9].unit/U816/X (SAEDRVT14_NR3_1)                                         0.014951   0.083540 f
+  primitives/lane[9].unit/n231 (net)                                                 5     0.000000   0.083540 f
+  primitives/lane[9].unit/U181/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.097450 f
+  primitives/lane[9].unit/U181/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.105941 f
+  primitives/lane[9].unit/n283 (net)                                                 3     0.000000   0.105941 f
+  primitives/lane[9].unit/U134/A (SAEDRVT14_INV_1)                                         0.010462   0.116403 f
+  primitives/lane[9].unit/U134/X (SAEDRVT14_INV_1)                                         0.010417   0.126819 r
+  primitives/lane[9].unit/n278 (net)                                                14     0.000000   0.126819 r
+  primitives/lane[9].unit/U813/B1 (SAEDRVT14_OAI22_0P5)                                    0.012021   0.138841 r
+  primitives/lane[9].unit/U813/X (SAEDRVT14_OAI22_0P5)                                     0.012232   0.151072 f
+  primitives/lane[9].unit/N44 (net)                                                  1     0.000000   0.151072 f
+  primitives/lane[9].unit/mult_500/B[0] (ArithmeticLane_7_DW02_mult_0_DW02_mult_6)         0.000000   0.151072 f
+  primitives/lane[9].unit/mult_500/B[0] (net)                                              0.000000   0.151072 f
+  primitives/lane[9].unit/mult_500/U200/A (SAEDRVT14_INV_S_1)                              0.008400   0.159473 f
+  primitives/lane[9].unit/mult_500/U200/X (SAEDRVT14_INV_S_1)                              0.008049   0.167521 r
+  primitives/lane[9].unit/mult_500/n180 (net)                                        3     0.000000   0.167521 r
+  primitives/lane[9].unit/mult_500/U152/A (SAEDRVT14_BUF_S_1)                              0.012183   0.179704 r
+  primitives/lane[9].unit/mult_500/U152/X (SAEDRVT14_BUF_S_1)                              0.015365   0.195069 r
+  primitives/lane[9].unit/mult_500/n127 (net)                                       15     0.000000   0.195069 r
+  primitives/lane[9].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                               0.014741   0.209810 r
+  primitives/lane[9].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                0.010906   0.220716 f
+  primitives/lane[9].unit/mult_500/ab[1][0] (net)                                    2     0.000000   0.220716 f
+  primitives/lane[9].unit/mult_500/U80/A (SAEDRVT14_INV_1)                                 0.009660   0.230376 f
+  primitives/lane[9].unit/mult_500/U80/X (SAEDRVT14_INV_1)                                 0.004715   0.235091 r
+  primitives/lane[9].unit/mult_500/n57 (net)                                         1     0.000000   0.235091 r
+  primitives/lane[9].unit/mult_500/U96/A1 (SAEDRVT14_NR2_MM_1)                             0.007436   0.242527 r
+  primitives/lane[9].unit/mult_500/U96/X (SAEDRVT14_NR2_MM_1)                              0.006208   0.248734 f
+  primitives/lane[9].unit/mult_500/CARRYB[1][0] (net)                                1     0.000000   0.248734 f
+  primitives/lane[9].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278274 f
+  primitives/lane[9].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021836   0.300110 f
+  primitives/lane[9].unit/mult_500/CARRYB[2][0] (net)                                1     0.000000   0.300110 f
+  primitives/lane[9].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.329649 f
+  primitives/lane[9].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021890   0.351539 f
+  primitives/lane[9].unit/mult_500/CARRYB[3][0] (net)                                1     0.000000   0.351539 f
+  primitives/lane[9].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.381078 f
+  primitives/lane[9].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.402966 f
+  primitives/lane[9].unit/mult_500/CARRYB[4][0] (net)                                1     0.000000   0.402966 f
+  primitives/lane[9].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.432505 f
+  primitives/lane[9].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.454393 f
+  primitives/lane[9].unit/mult_500/CARRYB[5][0] (net)                                1     0.000000   0.454393 f
+  primitives/lane[9].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.483932 f
+  primitives/lane[9].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   0.505068 f
+  primitives/lane[9].unit/mult_500/CARRYB[6][0] (net)                                1     0.000000   0.505068 f
+  primitives/lane[9].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.528030 f
+  primitives/lane[9].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   0.556933 f
+  primitives/lane[9].unit/mult_500/CARRYB[7][0] (net)                                1     0.000000   0.556933 f
+  primitives/lane[9].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.586473 f
+  primitives/lane[9].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   0.609978 f
+  primitives/lane[9].unit/mult_500/CARRYB[8][0] (net)                                1     0.000000   0.609978 f
+  primitives/lane[9].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.639518 f
+  primitives/lane[9].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.661405 f
+  primitives/lane[9].unit/mult_500/CARRYB[9][0] (net)                                1     0.000000   0.661405 f
+  primitives/lane[9].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.690944 f
+  primitives/lane[9].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   0.712830 f
+  primitives/lane[9].unit/mult_500/CARRYB[10][0] (net)                               1     0.000000   0.712830 f
+  primitives/lane[9].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.742369 f
+  primitives/lane[9].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.764257 f
+  primitives/lane[9].unit/mult_500/CARRYB[11][0] (net)                               1     0.000000   0.764257 f
+  primitives/lane[9].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.793796 f
+  primitives/lane[9].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.815684 f
+  primitives/lane[9].unit/mult_500/CARRYB[12][0] (net)                               1     0.000000   0.815684 f
+  primitives/lane[9].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.845223 f
+  primitives/lane[9].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.867111 f
+  primitives/lane[9].unit/mult_500/CARRYB[13][0] (net)                               1     0.000000   0.867111 f
+  primitives/lane[9].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.896650 f
+  primitives/lane[9].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.918538 f
+  primitives/lane[9].unit/mult_500/CARRYB[14][0] (net)                               1     0.000000   0.918538 f
+  primitives/lane[9].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.948077 f
+  primitives/lane[9].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.969965 f
+  primitives/lane[9].unit/mult_500/CARRYB[15][0] (net)                               1     0.000000   0.969965 f
+  primitives/lane[9].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.999504 f
+  primitives/lane[9].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.021392 f
+  primitives/lane[9].unit/mult_500/CARRYB[16][0] (net)                               1     0.000000   1.021392 f
+  primitives/lane[9].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.050931 f
+  primitives/lane[9].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.072818 f
+  primitives/lane[9].unit/mult_500/CARRYB[17][0] (net)                               1     0.000000   1.072818 f
+  primitives/lane[9].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.102358 f
+  primitives/lane[9].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.124245 f
+  primitives/lane[9].unit/mult_500/CARRYB[18][0] (net)                               1     0.000000   1.124245 f
+  primitives/lane[9].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.153785 f
+  primitives/lane[9].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.175672 f
+  primitives/lane[9].unit/mult_500/CARRYB[19][0] (net)                               1     0.000000   1.175672 f
+  primitives/lane[9].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.205212 f
+  primitives/lane[9].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.227099 f
+  primitives/lane[9].unit/mult_500/CARRYB[20][0] (net)                               1     0.000000   1.227099 f
+  primitives/lane[9].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.256638 f
+  primitives/lane[9].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.278526 f
+  primitives/lane[9].unit/mult_500/CARRYB[21][0] (net)                               1     0.000000   1.278526 f
+  primitives/lane[9].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.308065 f
+  primitives/lane[9].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.329953 f
+  primitives/lane[9].unit/mult_500/CARRYB[22][0] (net)                               1     0.000000   1.329953 f
+  primitives/lane[9].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.359492 f
+  primitives/lane[9].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.380628 f
+  primitives/lane[9].unit/mult_500/CARRYB[23][0] (net)                               1     0.000000   1.380628 f
+  primitives/lane[9].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.403590 f
+  primitives/lane[9].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028903   1.432494 f
+  primitives/lane[9].unit/mult_500/CARRYB[24][0] (net)                               1     0.000000   1.432494 f
+  primitives/lane[9].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.462033 f
+  primitives/lane[9].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                        0.023506   1.485539 f
+  primitives/lane[9].unit/mult_500/CARRYB[25][0] (net)                               1     0.000000   1.485539 f
+  primitives/lane[9].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.515078 f
+  primitives/lane[9].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.536966 f
+  primitives/lane[9].unit/mult_500/CARRYB[26][0] (net)                               1     0.000000   1.536966 f
+  primitives/lane[9].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.566505 f
+  primitives/lane[9].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   1.588391 f
+  primitives/lane[9].unit/mult_500/CARRYB[27][0] (net)                               1     0.000000   1.588391 f
+  primitives/lane[9].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.617930 f
+  primitives/lane[9].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.639818 f
+  primitives/lane[9].unit/mult_500/CARRYB[28][0] (net)                               1     0.000000   1.639818 f
+  primitives/lane[9].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.669357 f
+  primitives/lane[9].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.690493 f
+  primitives/lane[9].unit/mult_500/CARRYB[29][0] (net)                               1     0.000000   1.690493 f
+  primitives/lane[9].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.713455 f
+  primitives/lane[9].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.024275   1.737731 f
+  primitives/lane[9].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.737731 f
+  primitives/lane[9].unit/mult_500/U60/A2 (SAEDRVT14_EN3_1)                                0.010303   1.748034 f
+  primitives/lane[9].unit/mult_500/U60/X (SAEDRVT14_EN3_1)                                 0.025197   1.773231 f
+  primitives/lane[9].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.773231 f
+  primitives/lane[9].unit/mult_500/PRODUCT[31] (ArithmeticLane_7_DW02_mult_0_DW02_mult_6)  0.000000   1.773231 f
+  primitives/lane[9].unit/multiply[31] (net)                                               0.000000   1.773231 f
+  primitives/lane[9].unit/U182/A (SAEDRVT14_INV_1)                                         0.008455   1.781686 f
+  primitives/lane[9].unit/U182/X (SAEDRVT14_INV_1)                                         0.004279   1.785966 r
+  primitives/lane[9].unit/n324 (net)                                                 2     0.000000   1.785966 r
+  primitives/lane[9].unit/U815/A2 (SAEDRVT14_OAI21_0P5)                                    0.011468   1.797434 r
+  primitives/lane[9].unit/U815/X (SAEDRVT14_OAI21_0P5)                                     0.007131   1.804565 f
+  primitives/lane[9].unit/n1531 (net)                                                1     0.000000   1.804565 f
+  primitives/lane[9].unit/U814/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.811581 f
+  primitives/lane[9].unit/U814/X (SAEDRVT14_AO221_0P5)                                     0.016738   1.828319 f
+  primitives/lane[9].unit/n1533 (net)                                                1     0.000000   1.828319 f
+  primitives/lane[9].unit/U536/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.838361 f
+  primitives/lane[9].unit/U536/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.845386 r
+  primitives/lane[9].unit/n1535 (net)                                                1     0.000000   1.845386 r
+  primitives/lane[9].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.850758 r
+  primitives/lane[9].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.856005 f
+  primitives/lane[9].unit/n1536 (net)                                                1     0.000000   1.856005 f
+  primitives/lane[9].unit/U535/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.863022 f
+  primitives/lane[9].unit/U535/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.877720 f
+  primitives/lane[9].unit/n1360 (net)                                                1     0.000000   1.877720 f
+  primitives/lane[9].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                        0.005686   1.883406 f
+  data arrival time                                                                                   1.883406
+
+  clock core (rise edge)                                                                   2.000000   2.000000
+  clock network delay (ideal)                                                              0.000000   2.000000
+  primitives/lane[9].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                       0.000000   2.000000 r
+  library setup time                                                                       -0.012264  1.987736
+  data required time                                                                                  1.987736
+  ---------------------------------------------------------------------------------------------------------------
+  data required time                                                                                  1.987736
+  data arrival time                                                                                   -1.883406
+  ---------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                         0.104329
+
+
+  Startpoint: primitives/lane[6].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[6].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_10  8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_10_DW02_mult_0_DW02_mult_9
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[6].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                             0.000000 # 0.000000 r
+  primitives/lane[6].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                             0.027101   0.027101 r
+  primitives/lane[6].unit/n1987 (net)                                                 8     0.000000   0.027101 r
+  primitives/lane[6].unit/U743/A3 (SAEDRVT14_OR3_1)                                         0.013358   0.040459 r
+  primitives/lane[6].unit/U743/X (SAEDRVT14_OR3_1)                                          0.018450   0.058909 r
+  primitives/lane[6].unit/n1539 (net)                                                 4     0.000000   0.058909 r
+  primitives/lane[6].unit/U795/A1 (SAEDRVT14_NR3_1)                                         0.009679   0.068589 r
+  primitives/lane[6].unit/U795/X (SAEDRVT14_NR3_1)                                          0.014951   0.083540 f
+  primitives/lane[6].unit/n217 (net)                                                  5     0.000000   0.083540 f
+  primitives/lane[6].unit/U164/A (SAEDRVT14_BUF_S_1)                                        0.013910   0.097450 f
+  primitives/lane[6].unit/U164/X (SAEDRVT14_BUF_S_1)                                        0.008491   0.105941 f
+  primitives/lane[6].unit/n282 (net)                                                  3     0.000000   0.105941 f
+  primitives/lane[6].unit/U117/A (SAEDRVT14_INV_1)                                          0.010462   0.116403 f
+  primitives/lane[6].unit/U117/X (SAEDRVT14_INV_1)                                          0.010417   0.126819 r
+  primitives/lane[6].unit/n277 (net)                                                 14     0.000000   0.126819 r
+  primitives/lane[6].unit/U792/B1 (SAEDRVT14_OAI22_0P5)                                     0.012021   0.138841 r
+  primitives/lane[6].unit/U792/X (SAEDRVT14_OAI22_0P5)                                      0.012232   0.151072 f
+  primitives/lane[6].unit/N44 (net)                                                   1     0.000000   0.151072 f
+  primitives/lane[6].unit/mult_500/B[0] (ArithmeticLane_10_DW02_mult_0_DW02_mult_9)         0.000000   0.151072 f
+  primitives/lane[6].unit/mult_500/B[0] (net)                                               0.000000   0.151072 f
+  primitives/lane[6].unit/mult_500/U200/A (SAEDRVT14_INV_S_1)                               0.008400   0.159473 f
+  primitives/lane[6].unit/mult_500/U200/X (SAEDRVT14_INV_S_1)                               0.007988   0.167461 r
+  primitives/lane[6].unit/mult_500/n180 (net)                                         3     0.000000   0.167461 r
+  primitives/lane[6].unit/mult_500/U152/A (SAEDRVT14_BUF_S_1)                               0.012183   0.179644 r
+  primitives/lane[6].unit/mult_500/U152/X (SAEDRVT14_BUF_S_1)                               0.015354   0.194997 r
+  primitives/lane[6].unit/mult_500/n127 (net)                                        15     0.000000   0.194997 r
+  primitives/lane[6].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                                0.014741   0.209738 r
+  primitives/lane[6].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                 0.010906   0.220644 f
+  primitives/lane[6].unit/mult_500/ab[1][0] (net)                                     2     0.000000   0.220644 f
+  primitives/lane[6].unit/mult_500/U80/A (SAEDRVT14_INV_1)                                  0.009660   0.230304 f
+  primitives/lane[6].unit/mult_500/U80/X (SAEDRVT14_INV_1)                                  0.004715   0.235019 r
+  primitives/lane[6].unit/mult_500/n57 (net)                                          1     0.000000   0.235019 r
+  primitives/lane[6].unit/mult_500/U96/A1 (SAEDRVT14_NR2_MM_1)                              0.007436   0.242455 r
+  primitives/lane[6].unit/mult_500/U96/X (SAEDRVT14_NR2_MM_1)                               0.006208   0.248662 f
+  primitives/lane[6].unit/mult_500/CARRYB[1][0] (net)                                 1     0.000000   0.248662 f
+  primitives/lane[6].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.278202 f
+  primitives/lane[6].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021836   0.300038 f
+  primitives/lane[6].unit/mult_500/CARRYB[2][0] (net)                                 1     0.000000   0.300038 f
+  primitives/lane[6].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.329577 f
+  primitives/lane[6].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021890   0.351467 f
+  primitives/lane[6].unit/mult_500/CARRYB[3][0] (net)                                 1     0.000000   0.351467 f
+  primitives/lane[6].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.381006 f
+  primitives/lane[6].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.402894 f
+  primitives/lane[6].unit/mult_500/CARRYB[4][0] (net)                                 1     0.000000   0.402894 f
+  primitives/lane[6].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.432433 f
+  primitives/lane[6].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.454320 f
+  primitives/lane[6].unit/mult_500/CARRYB[5][0] (net)                                 1     0.000000   0.454320 f
+  primitives/lane[6].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.483860 f
+  primitives/lane[6].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   0.504996 f
+  primitives/lane[6].unit/mult_500/CARRYB[6][0] (net)                                 1     0.000000   0.504996 f
+  primitives/lane[6].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   0.527958 f
+  primitives/lane[6].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   0.556861 f
+  primitives/lane[6].unit/mult_500/CARRYB[7][0] (net)                                 1     0.000000   0.556861 f
+  primitives/lane[6].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.586400 f
+  primitives/lane[6].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   0.609906 f
+  primitives/lane[6].unit/mult_500/CARRYB[8][0] (net)                                 1     0.000000   0.609906 f
+  primitives/lane[6].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.639445 f
+  primitives/lane[6].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.661333 f
+  primitives/lane[6].unit/mult_500/CARRYB[9][0] (net)                                 1     0.000000   0.661333 f
+  primitives/lane[6].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.690872 f
+  primitives/lane[6].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021886   0.712758 f
+  primitives/lane[6].unit/mult_500/CARRYB[10][0] (net)                                1     0.000000   0.712758 f
+  primitives/lane[6].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.742297 f
+  primitives/lane[6].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.764185 f
+  primitives/lane[6].unit/mult_500/CARRYB[11][0] (net)                                1     0.000000   0.764185 f
+  primitives/lane[6].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.793724 f
+  primitives/lane[6].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.815612 f
+  primitives/lane[6].unit/mult_500/CARRYB[12][0] (net)                                1     0.000000   0.815612 f
+  primitives/lane[6].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.845151 f
+  primitives/lane[6].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.867039 f
+  primitives/lane[6].unit/mult_500/CARRYB[13][0] (net)                                1     0.000000   0.867039 f
+  primitives/lane[6].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.896578 f
+  primitives/lane[6].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.918466 f
+  primitives/lane[6].unit/mult_500/CARRYB[14][0] (net)                                1     0.000000   0.918466 f
+  primitives/lane[6].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.948005 f
+  primitives/lane[6].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.969892 f
+  primitives/lane[6].unit/mult_500/CARRYB[15][0] (net)                                1     0.000000   0.969892 f
+  primitives/lane[6].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.999432 f
+  primitives/lane[6].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.021319 f
+  primitives/lane[6].unit/mult_500/CARRYB[16][0] (net)                                1     0.000000   1.021319 f
+  primitives/lane[6].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.050859 f
+  primitives/lane[6].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.072746 f
+  primitives/lane[6].unit/mult_500/CARRYB[17][0] (net)                                1     0.000000   1.072746 f
+  primitives/lane[6].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.102286 f
+  primitives/lane[6].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.124173 f
+  primitives/lane[6].unit/mult_500/CARRYB[18][0] (net)                                1     0.000000   1.124173 f
+  primitives/lane[6].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.153712 f
+  primitives/lane[6].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.175600 f
+  primitives/lane[6].unit/mult_500/CARRYB[19][0] (net)                                1     0.000000   1.175600 f
+  primitives/lane[6].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.205139 f
+  primitives/lane[6].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.227027 f
+  primitives/lane[6].unit/mult_500/CARRYB[20][0] (net)                                1     0.000000   1.227027 f
+  primitives/lane[6].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.256566 f
+  primitives/lane[6].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.278454 f
+  primitives/lane[6].unit/mult_500/CARRYB[21][0] (net)                                1     0.000000   1.278454 f
+  primitives/lane[6].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.307993 f
+  primitives/lane[6].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.329881 f
+  primitives/lane[6].unit/mult_500/CARRYB[22][0] (net)                                1     0.000000   1.329881 f
+  primitives/lane[6].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.359420 f
+  primitives/lane[6].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   1.380556 f
+  primitives/lane[6].unit/mult_500/CARRYB[23][0] (net)                                1     0.000000   1.380556 f
+  primitives/lane[6].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   1.403518 f
+  primitives/lane[6].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   1.432421 f
+  primitives/lane[6].unit/mult_500/CARRYB[24][0] (net)                                1     0.000000   1.432421 f
+  primitives/lane[6].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.461961 f
+  primitives/lane[6].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   1.485467 f
+  primitives/lane[6].unit/mult_500/CARRYB[25][0] (net)                                1     0.000000   1.485467 f
+  primitives/lane[6].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.515006 f
+  primitives/lane[6].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.536894 f
+  primitives/lane[6].unit/mult_500/CARRYB[26][0] (net)                                1     0.000000   1.536894 f
+  primitives/lane[6].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.566433 f
+  primitives/lane[6].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021886   1.588319 f
+  primitives/lane[6].unit/mult_500/CARRYB[27][0] (net)                                1     0.000000   1.588319 f
+  primitives/lane[6].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.617858 f
+  primitives/lane[6].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   1.639746 f
+  primitives/lane[6].unit/mult_500/CARRYB[28][0] (net)                                1     0.000000   1.639746 f
+  primitives/lane[6].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   1.669285 f
+  primitives/lane[6].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   1.690421 f
+  primitives/lane[6].unit/mult_500/CARRYB[29][0] (net)                                1     0.000000   1.690421 f
+  primitives/lane[6].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   1.713383 f
+  primitives/lane[6].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.024275   1.737658 f
+  primitives/lane[6].unit/mult_500/CARRYB[30][0] (net)                                1     0.000000   1.737658 f
+  primitives/lane[6].unit/mult_500/U60/A2 (SAEDRVT14_EN3_1)                                 0.010303   1.747961 f
+  primitives/lane[6].unit/mult_500/U60/X (SAEDRVT14_EN3_1)                                  0.025197   1.773159 f
+  primitives/lane[6].unit/mult_500/PRODUCT[31] (net)                                  1     0.000000   1.773159 f
+  primitives/lane[6].unit/mult_500/PRODUCT[31] (ArithmeticLane_10_DW02_mult_0_DW02_mult_9)  0.000000   1.773159 f
+  primitives/lane[6].unit/multiply[31] (net)                                                0.000000   1.773159 f
+  primitives/lane[6].unit/U165/A (SAEDRVT14_INV_1)                                          0.008455   1.781614 f
+  primitives/lane[6].unit/U165/X (SAEDRVT14_INV_1)                                          0.004279   1.785893 r
+  primitives/lane[6].unit/n323 (net)                                                  2     0.000000   1.785893 r
+  primitives/lane[6].unit/U794/A2 (SAEDRVT14_OAI21_0P5)                                     0.011468   1.797361 r
+  primitives/lane[6].unit/U794/X (SAEDRVT14_OAI21_0P5)                                      0.007131   1.804492 f
+  primitives/lane[6].unit/n1532 (net)                                                 1     0.000000   1.804492 f
+  primitives/lane[6].unit/U793/C (SAEDRVT14_AO221_0P5)                                      0.007017   1.811509 f
+  primitives/lane[6].unit/U793/X (SAEDRVT14_AO221_0P5)                                      0.016738   1.828247 f
+  primitives/lane[6].unit/n1534 (net)                                                 1     0.000000   1.828247 f
+  primitives/lane[6].unit/U523/A2 (SAEDRVT14_OAI21_0P75)                                    0.010042   1.838289 f
+  primitives/lane[6].unit/U523/X (SAEDRVT14_OAI21_0P75)                                     0.007024   1.845313 r
+  primitives/lane[6].unit/n1536 (net)                                                 1     0.000000   1.845313 r
+  primitives/lane[6].unit/U985/B (SAEDRVT14_AO21B_0P5)                                      0.005372   1.850686 r
+  primitives/lane[6].unit/U985/X (SAEDRVT14_AO21B_0P5)                                      0.005247   1.855933 f
+  primitives/lane[6].unit/n1537 (net)                                                 1     0.000000   1.855933 f
+  primitives/lane[6].unit/U522/C (SAEDRVT14_AO221_0P5)                                      0.007017   1.862950 f
+  primitives/lane[6].unit/U522/X (SAEDRVT14_AO221_0P5)                                      0.014698   1.877648 f
+  primitives/lane[6].unit/n1360 (net)                                                 1     0.000000   1.877648 f
+  primitives/lane[6].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                         0.005686   1.883334 f
+  data arrival time                                                                                    1.883334
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[6].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                        0.000000   2.000000 r
+  library setup time                                                                        -0.012264  1.987736
+  data required time                                                                                   1.987736
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.987736
+  data arrival time                                                                                    -1.883334
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.104402
+
+
+  Startpoint: primitives/lane[10].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[10].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_6   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_6_DW02_mult_0_DW02_mult_5
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[10].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                            0.000000 # 0.000000 r
+  primitives/lane[10].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                            0.027101   0.027101 r
+  primitives/lane[10].unit/n1977 (net)                                                8     0.000000   0.027101 r
+  primitives/lane[10].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.040459 r
+  primitives/lane[10].unit/U743/X (SAEDRVT14_OR3_1)                                         0.018450   0.058909 r
+  primitives/lane[10].unit/n1529 (net)                                                4     0.000000   0.058909 r
+  primitives/lane[10].unit/U691/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.068589 r
+  primitives/lane[10].unit/U691/X (SAEDRVT14_NR3_1)                                         0.014951   0.083540 f
+  primitives/lane[10].unit/n222 (net)                                                 5     0.000000   0.083540 f
+  primitives/lane[10].unit/U155/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.097450 f
+  primitives/lane[10].unit/U155/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.105940 f
+  primitives/lane[10].unit/n278 (net)                                                 3     0.000000   0.105940 f
+  primitives/lane[10].unit/U107/A (SAEDRVT14_INV_1)                                         0.010462   0.116402 f
+  primitives/lane[10].unit/U107/X (SAEDRVT14_INV_1)                                         0.010417   0.126819 r
+  primitives/lane[10].unit/n273 (net)                                                14     0.000000   0.126819 r
+  primitives/lane[10].unit/U688/B1 (SAEDRVT14_OAI22_0P5)                                    0.012022   0.138841 r
+  primitives/lane[10].unit/U688/X (SAEDRVT14_OAI22_0P5)                                     0.012232   0.151072 f
+  primitives/lane[10].unit/N44 (net)                                                  1     0.000000   0.151072 f
+  primitives/lane[10].unit/mult_500/B[0] (ArithmeticLane_6_DW02_mult_0_DW02_mult_5)         0.000000   0.151072 f
+  primitives/lane[10].unit/mult_500/B[0] (net)                                              0.000000   0.151072 f
+  primitives/lane[10].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                              0.008400   0.159472 f
+  primitives/lane[10].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                              0.007988   0.167461 r
+  primitives/lane[10].unit/mult_500/n178 (net)                                        3     0.000000   0.167461 r
+  primitives/lane[10].unit/mult_500/U148/A (SAEDRVT14_BUF_S_1)                              0.012183   0.179643 r
+  primitives/lane[10].unit/mult_500/U148/X (SAEDRVT14_BUF_S_1)                              0.015354   0.194997 r
+  primitives/lane[10].unit/mult_500/n125 (net)                                       15     0.000000   0.194997 r
+  primitives/lane[10].unit/mult_500/U597/A1 (SAEDRVT14_NR2_1)                               0.014741   0.209738 r
+  primitives/lane[10].unit/mult_500/U597/X (SAEDRVT14_NR2_1)                                0.010906   0.220644 f
+  primitives/lane[10].unit/mult_500/ab[1][0] (net)                                    2     0.000000   0.220644 f
+  primitives/lane[10].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                 0.009660   0.230304 f
+  primitives/lane[10].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                 0.004715   0.235019 r
+  primitives/lane[10].unit/mult_500/n55 (net)                                         1     0.000000   0.235019 r
+  primitives/lane[10].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                             0.007436   0.242455 r
+  primitives/lane[10].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                              0.006208   0.248662 f
+  primitives/lane[10].unit/mult_500/CARRYB[1][0] (net)                                1     0.000000   0.248662 f
+  primitives/lane[10].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278201 f
+  primitives/lane[10].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021836   0.300038 f
+  primitives/lane[10].unit/mult_500/CARRYB[2][0] (net)                                1     0.000000   0.300038 f
+  primitives/lane[10].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.329577 f
+  primitives/lane[10].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021890   0.351467 f
+  primitives/lane[10].unit/mult_500/CARRYB[3][0] (net)                                1     0.000000   0.351467 f
+  primitives/lane[10].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.381006 f
+  primitives/lane[10].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.402893 f
+  primitives/lane[10].unit/mult_500/CARRYB[4][0] (net)                                1     0.000000   0.402893 f
+  primitives/lane[10].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.432433 f
+  primitives/lane[10].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.454320 f
+  primitives/lane[10].unit/mult_500/CARRYB[5][0] (net)                                1     0.000000   0.454320 f
+  primitives/lane[10].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.483860 f
+  primitives/lane[10].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   0.504996 f
+  primitives/lane[10].unit/mult_500/CARRYB[6][0] (net)                                1     0.000000   0.504996 f
+  primitives/lane[10].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.527958 f
+  primitives/lane[10].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   0.556861 f
+  primitives/lane[10].unit/mult_500/CARRYB[7][0] (net)                                1     0.000000   0.556861 f
+  primitives/lane[10].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.586400 f
+  primitives/lane[10].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   0.609906 f
+  primitives/lane[10].unit/mult_500/CARRYB[8][0] (net)                                1     0.000000   0.609906 f
+  primitives/lane[10].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.639445 f
+  primitives/lane[10].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.661333 f
+  primitives/lane[10].unit/mult_500/CARRYB[9][0] (net)                                1     0.000000   0.661333 f
+  primitives/lane[10].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.690872 f
+  primitives/lane[10].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   0.712758 f
+  primitives/lane[10].unit/mult_500/CARRYB[10][0] (net)                               1     0.000000   0.712758 f
+  primitives/lane[10].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.742297 f
+  primitives/lane[10].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.764185 f
+  primitives/lane[10].unit/mult_500/CARRYB[11][0] (net)                               1     0.000000   0.764185 f
+  primitives/lane[10].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.793724 f
+  primitives/lane[10].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.815612 f
+  primitives/lane[10].unit/mult_500/CARRYB[12][0] (net)                               1     0.000000   0.815612 f
+  primitives/lane[10].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.845151 f
+  primitives/lane[10].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.867038 f
+  primitives/lane[10].unit/mult_500/CARRYB[13][0] (net)                               1     0.000000   0.867038 f
+  primitives/lane[10].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.896578 f
+  primitives/lane[10].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.918465 f
+  primitives/lane[10].unit/mult_500/CARRYB[14][0] (net)                               1     0.000000   0.918465 f
+  primitives/lane[10].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.948005 f
+  primitives/lane[10].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.969892 f
+  primitives/lane[10].unit/mult_500/CARRYB[15][0] (net)                               1     0.000000   0.969892 f
+  primitives/lane[10].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.999432 f
+  primitives/lane[10].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.021319 f
+  primitives/lane[10].unit/mult_500/CARRYB[16][0] (net)                               1     0.000000   1.021319 f
+  primitives/lane[10].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.050858 f
+  primitives/lane[10].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.072746 f
+  primitives/lane[10].unit/mult_500/CARRYB[17][0] (net)                               1     0.000000   1.072746 f
+  primitives/lane[10].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.102285 f
+  primitives/lane[10].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.124173 f
+  primitives/lane[10].unit/mult_500/CARRYB[18][0] (net)                               1     0.000000   1.124173 f
+  primitives/lane[10].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.153712 f
+  primitives/lane[10].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.175600 f
+  primitives/lane[10].unit/mult_500/CARRYB[19][0] (net)                               1     0.000000   1.175600 f
+  primitives/lane[10].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.205139 f
+  primitives/lane[10].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.227027 f
+  primitives/lane[10].unit/mult_500/CARRYB[20][0] (net)                               1     0.000000   1.227027 f
+  primitives/lane[10].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.256566 f
+  primitives/lane[10].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.278454 f
+  primitives/lane[10].unit/mult_500/CARRYB[21][0] (net)                               1     0.000000   1.278454 f
+  primitives/lane[10].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.307993 f
+  primitives/lane[10].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.329880 f
+  primitives/lane[10].unit/mult_500/CARRYB[22][0] (net)                               1     0.000000   1.329880 f
+  primitives/lane[10].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.359420 f
+  primitives/lane[10].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.380556 f
+  primitives/lane[10].unit/mult_500/CARRYB[23][0] (net)                               1     0.000000   1.380556 f
+  primitives/lane[10].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.403518 f
+  primitives/lane[10].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028903   1.432421 f
+  primitives/lane[10].unit/mult_500/CARRYB[24][0] (net)                               1     0.000000   1.432421 f
+  primitives/lane[10].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.461961 f
+  primitives/lane[10].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                        0.023506   1.485467 f
+  primitives/lane[10].unit/mult_500/CARRYB[25][0] (net)                               1     0.000000   1.485467 f
+  primitives/lane[10].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.515006 f
+  primitives/lane[10].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.536893 f
+  primitives/lane[10].unit/mult_500/CARRYB[26][0] (net)                               1     0.000000   1.536893 f
+  primitives/lane[10].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.566433 f
+  primitives/lane[10].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   1.588319 f
+  primitives/lane[10].unit/mult_500/CARRYB[27][0] (net)                               1     0.000000   1.588319 f
+  primitives/lane[10].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.617858 f
+  primitives/lane[10].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.639745 f
+  primitives/lane[10].unit/mult_500/CARRYB[28][0] (net)                               1     0.000000   1.639745 f
+  primitives/lane[10].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.669285 f
+  primitives/lane[10].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.690421 f
+  primitives/lane[10].unit/mult_500/CARRYB[29][0] (net)                               1     0.000000   1.690421 f
+  primitives/lane[10].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.713383 f
+  primitives/lane[10].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.024275   1.737658 f
+  primitives/lane[10].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.737658 f
+  primitives/lane[10].unit/mult_500/U58/A2 (SAEDRVT14_EN3_1)                                0.010303   1.747961 f
+  primitives/lane[10].unit/mult_500/U58/X (SAEDRVT14_EN3_1)                                 0.025197   1.773159 f
+  primitives/lane[10].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.773159 f
+  primitives/lane[10].unit/mult_500/PRODUCT[31] (ArithmeticLane_6_DW02_mult_0_DW02_mult_5)  0.000000   1.773159 f
+  primitives/lane[10].unit/multiply[31] (net)                                               0.000000   1.773159 f
+  primitives/lane[10].unit/U156/A (SAEDRVT14_INV_1)                                         0.008455   1.781614 f
+  primitives/lane[10].unit/U156/X (SAEDRVT14_INV_1)                                         0.004279   1.785893 r
+  primitives/lane[10].unit/n319 (net)                                                 2     0.000000   1.785893 r
+  primitives/lane[10].unit/U690/A2 (SAEDRVT14_OAI21_0P5)                                    0.011468   1.797361 r
+  primitives/lane[10].unit/U690/X (SAEDRVT14_OAI21_0P5)                                     0.007131   1.804492 f
+  primitives/lane[10].unit/n1522 (net)                                                1     0.000000   1.804492 f
+  primitives/lane[10].unit/U689/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.811509 f
+  primitives/lane[10].unit/U689/X (SAEDRVT14_AO221_0P5)                                     0.016738   1.828246 f
+  primitives/lane[10].unit/n1524 (net)                                                1     0.000000   1.828246 f
+  primitives/lane[10].unit/U611/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.838289 f
+  primitives/lane[10].unit/U611/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.845313 r
+  primitives/lane[10].unit/n1526 (net)                                                1     0.000000   1.845313 r
+  primitives/lane[10].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.850686 r
+  primitives/lane[10].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.855933 f
+  primitives/lane[10].unit/n1527 (net)                                                1     0.000000   1.855933 f
+  primitives/lane[10].unit/U610/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.862950 f
+  primitives/lane[10].unit/U610/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.877648 f
+  primitives/lane[10].unit/n1350 (net)                                                1     0.000000   1.877648 f
+  primitives/lane[10].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                        0.005686   1.883334 f
+  data arrival time                                                                                    1.883334
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[10].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                       0.000000   2.000000 r
+  library setup time                                                                        -0.012264  1.987736
+  data required time                                                                                   1.987736
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.987736
+  data arrival time                                                                                    -1.883334
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.104402
+
+
+  Startpoint: primitives/lane[1].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[1].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_15  8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_15_DW02_mult_0_DW02_mult_14
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                              Fanout      Incr       Path
+  -----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                     0.000000   0.000000
+  clock network delay (ideal)                                                                0.000000   0.000000
+  primitives/lane[1].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                              0.000000 # 0.000000 r
+  primitives/lane[1].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                              0.027101   0.027101 r
+  primitives/lane[1].unit/n1984 (net)                                                  8     0.000000   0.027101 r
+  primitives/lane[1].unit/U743/A3 (SAEDRVT14_OR3_1)                                          0.013358   0.040459 r
+  primitives/lane[1].unit/U743/X (SAEDRVT14_OR3_1)                                           0.018450   0.058909 r
+  primitives/lane[1].unit/n1536 (net)                                                  4     0.000000   0.058909 r
+  primitives/lane[1].unit/U805/A1 (SAEDRVT14_NR3_1)                                          0.009679   0.068589 r
+  primitives/lane[1].unit/U805/X (SAEDRVT14_NR3_1)                                           0.014951   0.083540 f
+  primitives/lane[1].unit/n219 (net)                                                   5     0.000000   0.083540 f
+  primitives/lane[1].unit/U169/A (SAEDRVT14_BUF_S_1)                                         0.013910   0.097450 f
+  primitives/lane[1].unit/U169/X (SAEDRVT14_BUF_S_1)                                         0.008491   0.105941 f
+  primitives/lane[1].unit/n279 (net)                                                   3     0.000000   0.105941 f
+  primitives/lane[1].unit/U122/A (SAEDRVT14_INV_1)                                           0.010462   0.116403 f
+  primitives/lane[1].unit/U122/X (SAEDRVT14_INV_1)                                           0.010417   0.126820 r
+  primitives/lane[1].unit/n274 (net)                                                  14     0.000000   0.126820 r
+  primitives/lane[1].unit/U802/B1 (SAEDRVT14_OAI22_0P5)                                      0.012022   0.138841 r
+  primitives/lane[1].unit/U802/X (SAEDRVT14_OAI22_0P5)                                       0.012232   0.151073 f
+  primitives/lane[1].unit/N44 (net)                                                    1     0.000000   0.151073 f
+  primitives/lane[1].unit/mult_500/B[0] (ArithmeticLane_15_DW02_mult_0_DW02_mult_14)         0.000000   0.151073 f
+  primitives/lane[1].unit/mult_500/B[0] (net)                                                0.000000   0.151073 f
+  primitives/lane[1].unit/mult_500/U196/A (SAEDRVT14_INV_S_1)                                0.008400   0.159473 f
+  primitives/lane[1].unit/mult_500/U196/X (SAEDRVT14_INV_S_1)                                0.007846   0.167319 r
+  primitives/lane[1].unit/mult_500/n176 (net)                                          3     0.000000   0.167319 r
+  primitives/lane[1].unit/mult_500/U148/A (SAEDRVT14_BUF_S_1)                                0.012183   0.179502 r
+  primitives/lane[1].unit/mult_500/U148/X (SAEDRVT14_BUF_S_1)                                0.015326   0.194828 r
+  primitives/lane[1].unit/mult_500/n123 (net)                                         15     0.000000   0.194828 r
+  primitives/lane[1].unit/mult_500/U597/A1 (SAEDRVT14_NR2_1)                                 0.014741   0.209569 r
+  primitives/lane[1].unit/mult_500/U597/X (SAEDRVT14_NR2_1)                                  0.010906   0.220475 f
+  primitives/lane[1].unit/mult_500/ab[1][0] (net)                                      2     0.000000   0.220475 f
+  primitives/lane[1].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                   0.009660   0.230135 f
+  primitives/lane[1].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                   0.004715   0.234850 r
+  primitives/lane[1].unit/mult_500/n53 (net)                                           1     0.000000   0.234850 r
+  primitives/lane[1].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                               0.007436   0.242286 r
+  primitives/lane[1].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                                0.006208   0.248493 f
+  primitives/lane[1].unit/mult_500/CARRYB[1][0] (net)                                  1     0.000000   0.248493 f
+  primitives/lane[1].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.278033 f
+  primitives/lane[1].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021836   0.299869 f
+  primitives/lane[1].unit/mult_500/CARRYB[2][0] (net)                                  1     0.000000   0.299869 f
+  primitives/lane[1].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.329408 f
+  primitives/lane[1].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021890   0.351298 f
+  primitives/lane[1].unit/mult_500/CARRYB[3][0] (net)                                  1     0.000000   0.351298 f
+  primitives/lane[1].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.380837 f
+  primitives/lane[1].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.402725 f
+  primitives/lane[1].unit/mult_500/CARRYB[4][0] (net)                                  1     0.000000   0.402725 f
+  primitives/lane[1].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.432264 f
+  primitives/lane[1].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.454152 f
+  primitives/lane[1].unit/mult_500/CARRYB[5][0] (net)                                  1     0.000000   0.454152 f
+  primitives/lane[1].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.483691 f
+  primitives/lane[1].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021136   0.504827 f
+  primitives/lane[1].unit/mult_500/CARRYB[6][0] (net)                                  1     0.000000   0.504827 f
+  primitives/lane[1].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                          0.022962   0.527789 f
+  primitives/lane[1].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                         0.028903   0.556692 f
+  primitives/lane[1].unit/mult_500/CARRYB[7][0] (net)                                  1     0.000000   0.556692 f
+  primitives/lane[1].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.586231 f
+  primitives/lane[1].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                           0.023506   0.609737 f
+  primitives/lane[1].unit/mult_500/CARRYB[8][0] (net)                                  1     0.000000   0.609737 f
+  primitives/lane[1].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.639276 f
+  primitives/lane[1].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.661164 f
+  primitives/lane[1].unit/mult_500/CARRYB[9][0] (net)                                  1     0.000000   0.661164 f
+  primitives/lane[1].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.690703 f
+  primitives/lane[1].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   0.712589 f
+  primitives/lane[1].unit/mult_500/CARRYB[10][0] (net)                                 1     0.000000   0.712589 f
+  primitives/lane[1].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.742128 f
+  primitives/lane[1].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.764016 f
+  primitives/lane[1].unit/mult_500/CARRYB[11][0] (net)                                 1     0.000000   0.764016 f
+  primitives/lane[1].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.793555 f
+  primitives/lane[1].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.815443 f
+  primitives/lane[1].unit/mult_500/CARRYB[12][0] (net)                                 1     0.000000   0.815443 f
+  primitives/lane[1].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.844982 f
+  primitives/lane[1].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.866870 f
+  primitives/lane[1].unit/mult_500/CARRYB[13][0] (net)                                 1     0.000000   0.866870 f
+  primitives/lane[1].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.896409 f
+  primitives/lane[1].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.918297 f
+  primitives/lane[1].unit/mult_500/CARRYB[14][0] (net)                                 1     0.000000   0.918297 f
+  primitives/lane[1].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.947836 f
+  primitives/lane[1].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.969723 f
+  primitives/lane[1].unit/mult_500/CARRYB[15][0] (net)                                 1     0.000000   0.969723 f
+  primitives/lane[1].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.999263 f
+  primitives/lane[1].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.021150 f
+  primitives/lane[1].unit/mult_500/CARRYB[16][0] (net)                                 1     0.000000   1.021150 f
+  primitives/lane[1].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.050690 f
+  primitives/lane[1].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.072577 f
+  primitives/lane[1].unit/mult_500/CARRYB[17][0] (net)                                 1     0.000000   1.072577 f
+  primitives/lane[1].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.102117 f
+  primitives/lane[1].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.124004 f
+  primitives/lane[1].unit/mult_500/CARRYB[18][0] (net)                                 1     0.000000   1.124004 f
+  primitives/lane[1].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.153543 f
+  primitives/lane[1].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.175431 f
+  primitives/lane[1].unit/mult_500/CARRYB[19][0] (net)                                 1     0.000000   1.175431 f
+  primitives/lane[1].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.204970 f
+  primitives/lane[1].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.226858 f
+  primitives/lane[1].unit/mult_500/CARRYB[20][0] (net)                                 1     0.000000   1.226858 f
+  primitives/lane[1].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.256397 f
+  primitives/lane[1].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.278285 f
+  primitives/lane[1].unit/mult_500/CARRYB[21][0] (net)                                 1     0.000000   1.278285 f
+  primitives/lane[1].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.307824 f
+  primitives/lane[1].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.329712 f
+  primitives/lane[1].unit/mult_500/CARRYB[22][0] (net)                                 1     0.000000   1.329712 f
+  primitives/lane[1].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.359251 f
+  primitives/lane[1].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.380387 f
+  primitives/lane[1].unit/mult_500/CARRYB[23][0] (net)                                 1     0.000000   1.380387 f
+  primitives/lane[1].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.403349 f
+  primitives/lane[1].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   1.432252 f
+  primitives/lane[1].unit/mult_500/CARRYB[24][0] (net)                                 1     0.000000   1.432252 f
+  primitives/lane[1].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.461792 f
+  primitives/lane[1].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   1.485298 f
+  primitives/lane[1].unit/mult_500/CARRYB[25][0] (net)                                 1     0.000000   1.485298 f
+  primitives/lane[1].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.514837 f
+  primitives/lane[1].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.536725 f
+  primitives/lane[1].unit/mult_500/CARRYB[26][0] (net)                                 1     0.000000   1.536725 f
+  primitives/lane[1].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.566264 f
+  primitives/lane[1].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   1.588150 f
+  primitives/lane[1].unit/mult_500/CARRYB[27][0] (net)                                 1     0.000000   1.588150 f
+  primitives/lane[1].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.617689 f
+  primitives/lane[1].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.639577 f
+  primitives/lane[1].unit/mult_500/CARRYB[28][0] (net)                                 1     0.000000   1.639577 f
+  primitives/lane[1].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.669116 f
+  primitives/lane[1].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.690252 f
+  primitives/lane[1].unit/mult_500/CARRYB[29][0] (net)                                 1     0.000000   1.690252 f
+  primitives/lane[1].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.713214 f
+  primitives/lane[1].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.024275   1.737489 f
+  primitives/lane[1].unit/mult_500/CARRYB[30][0] (net)                                 1     0.000000   1.737489 f
+  primitives/lane[1].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                  0.010303   1.747792 f
+  primitives/lane[1].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                   0.025197   1.772990 f
+  primitives/lane[1].unit/mult_500/PRODUCT[31] (net)                                   1     0.000000   1.772990 f
+  primitives/lane[1].unit/mult_500/PRODUCT[31] (ArithmeticLane_15_DW02_mult_0_DW02_mult_14)  0.000000   1.772990 f
+  primitives/lane[1].unit/multiply[31] (net)                                                 0.000000   1.772990 f
+  primitives/lane[1].unit/U170/A (SAEDRVT14_INV_1)                                           0.008455   1.781445 f
+  primitives/lane[1].unit/U170/X (SAEDRVT14_INV_1)                                           0.004279   1.785724 r
+  primitives/lane[1].unit/n320 (net)                                                   2     0.000000   1.785724 r
+  primitives/lane[1].unit/U804/A2 (SAEDRVT14_OAI21_0P5)                                      0.011468   1.797192 r
+  primitives/lane[1].unit/U804/X (SAEDRVT14_OAI21_0P5)                                       0.007131   1.804323 f
+  primitives/lane[1].unit/n1529 (net)                                                  1     0.000000   1.804323 f
+  primitives/lane[1].unit/U803/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.811340 f
+  primitives/lane[1].unit/U803/X (SAEDRVT14_AO221_0P5)                                       0.016738   1.828078 f
+  primitives/lane[1].unit/n1531 (net)                                                  1     0.000000   1.828078 f
+  primitives/lane[1].unit/U636/A2 (SAEDRVT14_OAI21_0P75)                                     0.010042   1.838120 f
+  primitives/lane[1].unit/U636/X (SAEDRVT14_OAI21_0P75)                                      0.007024   1.845144 r
+  primitives/lane[1].unit/n1533 (net)                                                  1     0.000000   1.845144 r
+  primitives/lane[1].unit/U985/B (SAEDRVT14_AO21B_0P5)                                       0.005372   1.850517 r
+  primitives/lane[1].unit/U985/X (SAEDRVT14_AO21B_0P5)                                       0.005247   1.855764 f
+  primitives/lane[1].unit/n1534 (net)                                                  1     0.000000   1.855764 f
+  primitives/lane[1].unit/U635/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.862781 f
+  primitives/lane[1].unit/U635/X (SAEDRVT14_AO221_0P5)                                       0.014698   1.877479 f
+  primitives/lane[1].unit/n1357 (net)                                                  1     0.000000   1.877479 f
+  primitives/lane[1].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                          0.005686   1.883165 f
+  data arrival time                                                                                     1.883165
+
+  clock core (rise edge)                                                                     2.000000   2.000000
+  clock network delay (ideal)                                                                0.000000   2.000000
+  primitives/lane[1].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                         0.000000   2.000000 r
+  library setup time                                                                         -0.012264  1.987736
+  data required time                                                                                    1.987736
+  -----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                    1.987736
+  data arrival time                                                                                     -1.883165
+  -----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                           0.104571
+
+
+  Startpoint: primitives/lane[2].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[2].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_14  8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_14_DW02_mult_0_DW02_mult_13
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                              Fanout      Incr       Path
+  -----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                     0.000000   0.000000
+  clock network delay (ideal)                                                                0.000000   0.000000
+  primitives/lane[2].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                              0.000000 # 0.000000 r
+  primitives/lane[2].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                              0.027101   0.027101 r
+  primitives/lane[2].unit/n1983 (net)                                                  8     0.000000   0.027101 r
+  primitives/lane[2].unit/U743/A3 (SAEDRVT14_OR3_1)                                          0.013358   0.040459 r
+  primitives/lane[2].unit/U743/X (SAEDRVT14_OR3_1)                                           0.018450   0.058909 r
+  primitives/lane[2].unit/n1535 (net)                                                  4     0.000000   0.058909 r
+  primitives/lane[2].unit/U805/A1 (SAEDRVT14_NR3_1)                                          0.009679   0.068589 r
+  primitives/lane[2].unit/U805/X (SAEDRVT14_NR3_1)                                           0.014951   0.083540 f
+  primitives/lane[2].unit/n219 (net)                                                   5     0.000000   0.083540 f
+  primitives/lane[2].unit/U170/A (SAEDRVT14_BUF_S_1)                                         0.013910   0.097450 f
+  primitives/lane[2].unit/U170/X (SAEDRVT14_BUF_S_1)                                         0.008491   0.105941 f
+  primitives/lane[2].unit/n278 (net)                                                   3     0.000000   0.105941 f
+  primitives/lane[2].unit/U123/A (SAEDRVT14_INV_1)                                           0.010462   0.116403 f
+  primitives/lane[2].unit/U123/X (SAEDRVT14_INV_1)                                           0.010417   0.126820 r
+  primitives/lane[2].unit/n273 (net)                                                  14     0.000000   0.126820 r
+  primitives/lane[2].unit/U802/B1 (SAEDRVT14_OAI22_0P5)                                      0.012022   0.138841 r
+  primitives/lane[2].unit/U802/X (SAEDRVT14_OAI22_0P5)                                       0.012232   0.151073 f
+  primitives/lane[2].unit/N44 (net)                                                    1     0.000000   0.151073 f
+  primitives/lane[2].unit/mult_500/B[0] (ArithmeticLane_14_DW02_mult_0_DW02_mult_13)         0.000000   0.151073 f
+  primitives/lane[2].unit/mult_500/B[0] (net)                                                0.000000   0.151073 f
+  primitives/lane[2].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                                0.008400   0.159473 f
+  primitives/lane[2].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                                0.007846   0.167319 r
+  primitives/lane[2].unit/mult_500/n177 (net)                                          3     0.000000   0.167319 r
+  primitives/lane[2].unit/mult_500/U149/A (SAEDRVT14_BUF_S_1)                                0.012183   0.179502 r
+  primitives/lane[2].unit/mult_500/U149/X (SAEDRVT14_BUF_S_1)                                0.015326   0.194828 r
+  primitives/lane[2].unit/mult_500/n124 (net)                                         15     0.000000   0.194828 r
+  primitives/lane[2].unit/mult_500/U598/A1 (SAEDRVT14_NR2_1)                                 0.014741   0.209569 r
+  primitives/lane[2].unit/mult_500/U598/X (SAEDRVT14_NR2_1)                                  0.010906   0.220475 f
+  primitives/lane[2].unit/mult_500/ab[1][0] (net)                                      2     0.000000   0.220475 f
+  primitives/lane[2].unit/mult_500/U77/A (SAEDRVT14_INV_1)                                   0.009660   0.230135 f
+  primitives/lane[2].unit/mult_500/U77/X (SAEDRVT14_INV_1)                                   0.004715   0.234850 r
+  primitives/lane[2].unit/mult_500/n54 (net)                                           1     0.000000   0.234850 r
+  primitives/lane[2].unit/mult_500/U93/A1 (SAEDRVT14_NR2_MM_1)                               0.007436   0.242286 r
+  primitives/lane[2].unit/mult_500/U93/X (SAEDRVT14_NR2_MM_1)                                0.006208   0.248493 f
+  primitives/lane[2].unit/mult_500/CARRYB[1][0] (net)                                  1     0.000000   0.248493 f
+  primitives/lane[2].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.278033 f
+  primitives/lane[2].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021836   0.299869 f
+  primitives/lane[2].unit/mult_500/CARRYB[2][0] (net)                                  1     0.000000   0.299869 f
+  primitives/lane[2].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.329408 f
+  primitives/lane[2].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021890   0.351298 f
+  primitives/lane[2].unit/mult_500/CARRYB[3][0] (net)                                  1     0.000000   0.351298 f
+  primitives/lane[2].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.380837 f
+  primitives/lane[2].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.402725 f
+  primitives/lane[2].unit/mult_500/CARRYB[4][0] (net)                                  1     0.000000   0.402725 f
+  primitives/lane[2].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.432264 f
+  primitives/lane[2].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.454152 f
+  primitives/lane[2].unit/mult_500/CARRYB[5][0] (net)                                  1     0.000000   0.454152 f
+  primitives/lane[2].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.483691 f
+  primitives/lane[2].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021136   0.504827 f
+  primitives/lane[2].unit/mult_500/CARRYB[6][0] (net)                                  1     0.000000   0.504827 f
+  primitives/lane[2].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                          0.022962   0.527789 f
+  primitives/lane[2].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                         0.028903   0.556692 f
+  primitives/lane[2].unit/mult_500/CARRYB[7][0] (net)                                  1     0.000000   0.556692 f
+  primitives/lane[2].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.586231 f
+  primitives/lane[2].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                           0.023506   0.609737 f
+  primitives/lane[2].unit/mult_500/CARRYB[8][0] (net)                                  1     0.000000   0.609737 f
+  primitives/lane[2].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.639276 f
+  primitives/lane[2].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.661164 f
+  primitives/lane[2].unit/mult_500/CARRYB[9][0] (net)                                  1     0.000000   0.661164 f
+  primitives/lane[2].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.690703 f
+  primitives/lane[2].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   0.712589 f
+  primitives/lane[2].unit/mult_500/CARRYB[10][0] (net)                                 1     0.000000   0.712589 f
+  primitives/lane[2].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.742128 f
+  primitives/lane[2].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.764016 f
+  primitives/lane[2].unit/mult_500/CARRYB[11][0] (net)                                 1     0.000000   0.764016 f
+  primitives/lane[2].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.793555 f
+  primitives/lane[2].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.815443 f
+  primitives/lane[2].unit/mult_500/CARRYB[12][0] (net)                                 1     0.000000   0.815443 f
+  primitives/lane[2].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.844982 f
+  primitives/lane[2].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.866870 f
+  primitives/lane[2].unit/mult_500/CARRYB[13][0] (net)                                 1     0.000000   0.866870 f
+  primitives/lane[2].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.896409 f
+  primitives/lane[2].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.918297 f
+  primitives/lane[2].unit/mult_500/CARRYB[14][0] (net)                                 1     0.000000   0.918297 f
+  primitives/lane[2].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.947836 f
+  primitives/lane[2].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.969723 f
+  primitives/lane[2].unit/mult_500/CARRYB[15][0] (net)                                 1     0.000000   0.969723 f
+  primitives/lane[2].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.999263 f
+  primitives/lane[2].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.021150 f
+  primitives/lane[2].unit/mult_500/CARRYB[16][0] (net)                                 1     0.000000   1.021150 f
+  primitives/lane[2].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.050690 f
+  primitives/lane[2].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.072577 f
+  primitives/lane[2].unit/mult_500/CARRYB[17][0] (net)                                 1     0.000000   1.072577 f
+  primitives/lane[2].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.102117 f
+  primitives/lane[2].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.124004 f
+  primitives/lane[2].unit/mult_500/CARRYB[18][0] (net)                                 1     0.000000   1.124004 f
+  primitives/lane[2].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.153543 f
+  primitives/lane[2].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.175431 f
+  primitives/lane[2].unit/mult_500/CARRYB[19][0] (net)                                 1     0.000000   1.175431 f
+  primitives/lane[2].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.204970 f
+  primitives/lane[2].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.226858 f
+  primitives/lane[2].unit/mult_500/CARRYB[20][0] (net)                                 1     0.000000   1.226858 f
+  primitives/lane[2].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.256397 f
+  primitives/lane[2].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.278285 f
+  primitives/lane[2].unit/mult_500/CARRYB[21][0] (net)                                 1     0.000000   1.278285 f
+  primitives/lane[2].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.307824 f
+  primitives/lane[2].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.329712 f
+  primitives/lane[2].unit/mult_500/CARRYB[22][0] (net)                                 1     0.000000   1.329712 f
+  primitives/lane[2].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.359251 f
+  primitives/lane[2].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.380387 f
+  primitives/lane[2].unit/mult_500/CARRYB[23][0] (net)                                 1     0.000000   1.380387 f
+  primitives/lane[2].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.403349 f
+  primitives/lane[2].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   1.432252 f
+  primitives/lane[2].unit/mult_500/CARRYB[24][0] (net)                                 1     0.000000   1.432252 f
+  primitives/lane[2].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.461792 f
+  primitives/lane[2].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   1.485298 f
+  primitives/lane[2].unit/mult_500/CARRYB[25][0] (net)                                 1     0.000000   1.485298 f
+  primitives/lane[2].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.514837 f
+  primitives/lane[2].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.536725 f
+  primitives/lane[2].unit/mult_500/CARRYB[26][0] (net)                                 1     0.000000   1.536725 f
+  primitives/lane[2].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.566264 f
+  primitives/lane[2].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   1.588150 f
+  primitives/lane[2].unit/mult_500/CARRYB[27][0] (net)                                 1     0.000000   1.588150 f
+  primitives/lane[2].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.617689 f
+  primitives/lane[2].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.639577 f
+  primitives/lane[2].unit/mult_500/CARRYB[28][0] (net)                                 1     0.000000   1.639577 f
+  primitives/lane[2].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.669116 f
+  primitives/lane[2].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.690252 f
+  primitives/lane[2].unit/mult_500/CARRYB[29][0] (net)                                 1     0.000000   1.690252 f
+  primitives/lane[2].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.713214 f
+  primitives/lane[2].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.024275   1.737489 f
+  primitives/lane[2].unit/mult_500/CARRYB[30][0] (net)                                 1     0.000000   1.737489 f
+  primitives/lane[2].unit/mult_500/U57/A2 (SAEDRVT14_EN3_1)                                  0.010303   1.747792 f
+  primitives/lane[2].unit/mult_500/U57/X (SAEDRVT14_EN3_1)                                   0.025197   1.772990 f
+  primitives/lane[2].unit/mult_500/PRODUCT[31] (net)                                   1     0.000000   1.772990 f
+  primitives/lane[2].unit/mult_500/PRODUCT[31] (ArithmeticLane_14_DW02_mult_0_DW02_mult_13)  0.000000   1.772990 f
+  primitives/lane[2].unit/multiply[31] (net)                                                 0.000000   1.772990 f
+  primitives/lane[2].unit/U171/A (SAEDRVT14_INV_1)                                           0.008455   1.781445 f
+  primitives/lane[2].unit/U171/X (SAEDRVT14_INV_1)                                           0.004279   1.785724 r
+  primitives/lane[2].unit/n319 (net)                                                   2     0.000000   1.785724 r
+  primitives/lane[2].unit/U804/A2 (SAEDRVT14_OAI21_0P5)                                      0.011468   1.797192 r
+  primitives/lane[2].unit/U804/X (SAEDRVT14_OAI21_0P5)                                       0.007131   1.804323 f
+  primitives/lane[2].unit/n1528 (net)                                                  1     0.000000   1.804323 f
+  primitives/lane[2].unit/U803/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.811340 f
+  primitives/lane[2].unit/U803/X (SAEDRVT14_AO221_0P5)                                       0.016738   1.828078 f
+  primitives/lane[2].unit/n1530 (net)                                                  1     0.000000   1.828078 f
+  primitives/lane[2].unit/U597/A2 (SAEDRVT14_OAI21_0P75)                                     0.010042   1.838120 f
+  primitives/lane[2].unit/U597/X (SAEDRVT14_OAI21_0P75)                                      0.007024   1.845144 r
+  primitives/lane[2].unit/n1532 (net)                                                  1     0.000000   1.845144 r
+  primitives/lane[2].unit/U985/B (SAEDRVT14_AO21B_0P5)                                       0.005372   1.850517 r
+  primitives/lane[2].unit/U985/X (SAEDRVT14_AO21B_0P5)                                       0.005247   1.855764 f
+  primitives/lane[2].unit/n1533 (net)                                                  1     0.000000   1.855764 f
+  primitives/lane[2].unit/U596/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.862781 f
+  primitives/lane[2].unit/U596/X (SAEDRVT14_AO221_0P5)                                       0.014698   1.877479 f
+  primitives/lane[2].unit/n1356 (net)                                                  1     0.000000   1.877479 f
+  primitives/lane[2].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                          0.005686   1.883165 f
+  data arrival time                                                                                     1.883165
+
+  clock core (rise edge)                                                                     2.000000   2.000000
+  clock network delay (ideal)                                                                0.000000   2.000000
+  primitives/lane[2].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                         0.000000   2.000000 r
+  library setup time                                                                         -0.012264  1.987736
+  data required time                                                                                    1.987736
+  -----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                    1.987736
+  data arrival time                                                                                     -1.883165
+  -----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                           0.104571
+
+
+  Startpoint: primitives/lane[3].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[3].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_13  8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_13_DW02_mult_0_DW02_mult_12
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                              Fanout      Incr       Path
+  -----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                     0.000000   0.000000
+  clock network delay (ideal)                                                                0.000000   0.000000
+  primitives/lane[3].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                              0.000000 # 0.000000 r
+  primitives/lane[3].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                              0.027101   0.027101 r
+  primitives/lane[3].unit/n1979 (net)                                                  8     0.000000   0.027101 r
+  primitives/lane[3].unit/U743/A3 (SAEDRVT14_OR3_1)                                          0.013358   0.040459 r
+  primitives/lane[3].unit/U743/X (SAEDRVT14_OR3_1)                                           0.018450   0.058909 r
+  primitives/lane[3].unit/n1531 (net)                                                  4     0.000000   0.058909 r
+  primitives/lane[3].unit/U802/A1 (SAEDRVT14_NR3_1)                                          0.009679   0.068589 r
+  primitives/lane[3].unit/U802/X (SAEDRVT14_NR3_1)                                           0.014951   0.083540 f
+  primitives/lane[3].unit/n220 (net)                                                   5     0.000000   0.083540 f
+  primitives/lane[3].unit/U167/A (SAEDRVT14_BUF_S_1)                                         0.013910   0.097450 f
+  primitives/lane[3].unit/U167/X (SAEDRVT14_BUF_S_1)                                         0.008491   0.105941 f
+  primitives/lane[3].unit/n276 (net)                                                   3     0.000000   0.105941 f
+  primitives/lane[3].unit/U120/A (SAEDRVT14_INV_1)                                           0.010462   0.116403 f
+  primitives/lane[3].unit/U120/X (SAEDRVT14_INV_1)                                           0.010417   0.126820 r
+  primitives/lane[3].unit/n271 (net)                                                  14     0.000000   0.126820 r
+  primitives/lane[3].unit/U799/B1 (SAEDRVT14_OAI22_0P5)                                      0.012022   0.138841 r
+  primitives/lane[3].unit/U799/X (SAEDRVT14_OAI22_0P5)                                       0.012232   0.151073 f
+  primitives/lane[3].unit/N44 (net)                                                    1     0.000000   0.151073 f
+  primitives/lane[3].unit/mult_500/B[0] (ArithmeticLane_13_DW02_mult_0_DW02_mult_12)         0.000000   0.151073 f
+  primitives/lane[3].unit/mult_500/B[0] (net)                                                0.000000   0.151073 f
+  primitives/lane[3].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                                0.008400   0.159473 f
+  primitives/lane[3].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                                0.007846   0.167319 r
+  primitives/lane[3].unit/mult_500/n177 (net)                                          3     0.000000   0.167319 r
+  primitives/lane[3].unit/mult_500/U148/A (SAEDRVT14_BUF_S_1)                                0.012183   0.179502 r
+  primitives/lane[3].unit/mult_500/U148/X (SAEDRVT14_BUF_S_1)                                0.015326   0.194828 r
+  primitives/lane[3].unit/mult_500/n124 (net)                                         15     0.000000   0.194828 r
+  primitives/lane[3].unit/mult_500/U598/A1 (SAEDRVT14_NR2_1)                                 0.014741   0.209569 r
+  primitives/lane[3].unit/mult_500/U598/X (SAEDRVT14_NR2_1)                                  0.010906   0.220475 f
+  primitives/lane[3].unit/mult_500/ab[1][0] (net)                                      2     0.000000   0.220475 f
+  primitives/lane[3].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                   0.009660   0.230135 f
+  primitives/lane[3].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                   0.004715   0.234850 r
+  primitives/lane[3].unit/mult_500/n54 (net)                                           1     0.000000   0.234850 r
+  primitives/lane[3].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                               0.007436   0.242286 r
+  primitives/lane[3].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                                0.006208   0.248493 f
+  primitives/lane[3].unit/mult_500/CARRYB[1][0] (net)                                  1     0.000000   0.248493 f
+  primitives/lane[3].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.278033 f
+  primitives/lane[3].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021836   0.299869 f
+  primitives/lane[3].unit/mult_500/CARRYB[2][0] (net)                                  1     0.000000   0.299869 f
+  primitives/lane[3].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.329408 f
+  primitives/lane[3].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021890   0.351298 f
+  primitives/lane[3].unit/mult_500/CARRYB[3][0] (net)                                  1     0.000000   0.351298 f
+  primitives/lane[3].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.380837 f
+  primitives/lane[3].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.402725 f
+  primitives/lane[3].unit/mult_500/CARRYB[4][0] (net)                                  1     0.000000   0.402725 f
+  primitives/lane[3].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.432264 f
+  primitives/lane[3].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.454152 f
+  primitives/lane[3].unit/mult_500/CARRYB[5][0] (net)                                  1     0.000000   0.454152 f
+  primitives/lane[3].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.483691 f
+  primitives/lane[3].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021136   0.504827 f
+  primitives/lane[3].unit/mult_500/CARRYB[6][0] (net)                                  1     0.000000   0.504827 f
+  primitives/lane[3].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                          0.022962   0.527789 f
+  primitives/lane[3].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                         0.028903   0.556692 f
+  primitives/lane[3].unit/mult_500/CARRYB[7][0] (net)                                  1     0.000000   0.556692 f
+  primitives/lane[3].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.586231 f
+  primitives/lane[3].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                           0.023506   0.609737 f
+  primitives/lane[3].unit/mult_500/CARRYB[8][0] (net)                                  1     0.000000   0.609737 f
+  primitives/lane[3].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                            0.029539   0.639276 f
+  primitives/lane[3].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                           0.021888   0.661164 f
+  primitives/lane[3].unit/mult_500/CARRYB[9][0] (net)                                  1     0.000000   0.661164 f
+  primitives/lane[3].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.690703 f
+  primitives/lane[3].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   0.712589 f
+  primitives/lane[3].unit/mult_500/CARRYB[10][0] (net)                                 1     0.000000   0.712589 f
+  primitives/lane[3].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.742128 f
+  primitives/lane[3].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.764016 f
+  primitives/lane[3].unit/mult_500/CARRYB[11][0] (net)                                 1     0.000000   0.764016 f
+  primitives/lane[3].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.793555 f
+  primitives/lane[3].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.815443 f
+  primitives/lane[3].unit/mult_500/CARRYB[12][0] (net)                                 1     0.000000   0.815443 f
+  primitives/lane[3].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.844982 f
+  primitives/lane[3].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.866870 f
+  primitives/lane[3].unit/mult_500/CARRYB[13][0] (net)                                 1     0.000000   0.866870 f
+  primitives/lane[3].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.896409 f
+  primitives/lane[3].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.918297 f
+  primitives/lane[3].unit/mult_500/CARRYB[14][0] (net)                                 1     0.000000   0.918297 f
+  primitives/lane[3].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.947836 f
+  primitives/lane[3].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   0.969723 f
+  primitives/lane[3].unit/mult_500/CARRYB[15][0] (net)                                 1     0.000000   0.969723 f
+  primitives/lane[3].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   0.999263 f
+  primitives/lane[3].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.021150 f
+  primitives/lane[3].unit/mult_500/CARRYB[16][0] (net)                                 1     0.000000   1.021150 f
+  primitives/lane[3].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.050690 f
+  primitives/lane[3].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.072577 f
+  primitives/lane[3].unit/mult_500/CARRYB[17][0] (net)                                 1     0.000000   1.072577 f
+  primitives/lane[3].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.102117 f
+  primitives/lane[3].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.124004 f
+  primitives/lane[3].unit/mult_500/CARRYB[18][0] (net)                                 1     0.000000   1.124004 f
+  primitives/lane[3].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.153543 f
+  primitives/lane[3].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.175431 f
+  primitives/lane[3].unit/mult_500/CARRYB[19][0] (net)                                 1     0.000000   1.175431 f
+  primitives/lane[3].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.204970 f
+  primitives/lane[3].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.226858 f
+  primitives/lane[3].unit/mult_500/CARRYB[20][0] (net)                                 1     0.000000   1.226858 f
+  primitives/lane[3].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.256397 f
+  primitives/lane[3].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.278285 f
+  primitives/lane[3].unit/mult_500/CARRYB[21][0] (net)                                 1     0.000000   1.278285 f
+  primitives/lane[3].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.307824 f
+  primitives/lane[3].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.329712 f
+  primitives/lane[3].unit/mult_500/CARRYB[22][0] (net)                                 1     0.000000   1.329712 f
+  primitives/lane[3].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.359251 f
+  primitives/lane[3].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.380387 f
+  primitives/lane[3].unit/mult_500/CARRYB[23][0] (net)                                 1     0.000000   1.380387 f
+  primitives/lane[3].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.403349 f
+  primitives/lane[3].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.028903   1.432252 f
+  primitives/lane[3].unit/mult_500/CARRYB[24][0] (net)                                 1     0.000000   1.432252 f
+  primitives/lane[3].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.461792 f
+  primitives/lane[3].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                          0.023506   1.485298 f
+  primitives/lane[3].unit/mult_500/CARRYB[25][0] (net)                                 1     0.000000   1.485298 f
+  primitives/lane[3].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.514837 f
+  primitives/lane[3].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.536725 f
+  primitives/lane[3].unit/mult_500/CARRYB[26][0] (net)                                 1     0.000000   1.536725 f
+  primitives/lane[3].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.566264 f
+  primitives/lane[3].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021886   1.588150 f
+  primitives/lane[3].unit/mult_500/CARRYB[27][0] (net)                                 1     0.000000   1.588150 f
+  primitives/lane[3].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.617689 f
+  primitives/lane[3].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021888   1.639577 f
+  primitives/lane[3].unit/mult_500/CARRYB[28][0] (net)                                 1     0.000000   1.639577 f
+  primitives/lane[3].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                           0.029539   1.669116 f
+  primitives/lane[3].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                          0.021136   1.690252 f
+  primitives/lane[3].unit/mult_500/CARRYB[29][0] (net)                                 1     0.000000   1.690252 f
+  primitives/lane[3].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                         0.022962   1.713214 f
+  primitives/lane[3].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                        0.024275   1.737489 f
+  primitives/lane[3].unit/mult_500/CARRYB[30][0] (net)                                 1     0.000000   1.737489 f
+  primitives/lane[3].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                  0.010303   1.747792 f
+  primitives/lane[3].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                   0.025197   1.772990 f
+  primitives/lane[3].unit/mult_500/PRODUCT[31] (net)                                   1     0.000000   1.772990 f
+  primitives/lane[3].unit/mult_500/PRODUCT[31] (ArithmeticLane_13_DW02_mult_0_DW02_mult_12)  0.000000   1.772990 f
+  primitives/lane[3].unit/multiply[31] (net)                                                 0.000000   1.772990 f
+  primitives/lane[3].unit/U168/A (SAEDRVT14_INV_1)                                           0.008455   1.781445 f
+  primitives/lane[3].unit/U168/X (SAEDRVT14_INV_1)                                           0.004279   1.785724 r
+  primitives/lane[3].unit/n317 (net)                                                   2     0.000000   1.785724 r
+  primitives/lane[3].unit/U801/A2 (SAEDRVT14_OAI21_0P5)                                      0.011468   1.797192 r
+  primitives/lane[3].unit/U801/X (SAEDRVT14_OAI21_0P5)                                       0.007131   1.804323 f
+  primitives/lane[3].unit/n1524 (net)                                                  1     0.000000   1.804323 f
+  primitives/lane[3].unit/U800/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.811340 f
+  primitives/lane[3].unit/U800/X (SAEDRVT14_AO221_0P5)                                       0.016738   1.828078 f
+  primitives/lane[3].unit/n1526 (net)                                                  1     0.000000   1.828078 f
+  primitives/lane[3].unit/U532/A2 (SAEDRVT14_OAI21_0P75)                                     0.010042   1.838120 f
+  primitives/lane[3].unit/U532/X (SAEDRVT14_OAI21_0P75)                                      0.007024   1.845144 r
+  primitives/lane[3].unit/n1528 (net)                                                  1     0.000000   1.845144 r
+  primitives/lane[3].unit/U985/B (SAEDRVT14_AO21B_0P5)                                       0.005372   1.850517 r
+  primitives/lane[3].unit/U985/X (SAEDRVT14_AO21B_0P5)                                       0.005247   1.855764 f
+  primitives/lane[3].unit/n1529 (net)                                                  1     0.000000   1.855764 f
+  primitives/lane[3].unit/U531/C (SAEDRVT14_AO221_0P5)                                       0.007017   1.862781 f
+  primitives/lane[3].unit/U531/X (SAEDRVT14_AO221_0P5)                                       0.014698   1.877479 f
+  primitives/lane[3].unit/n1353 (net)                                                  1     0.000000   1.877479 f
+  primitives/lane[3].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                          0.005686   1.883165 f
+  data arrival time                                                                                     1.883165
+
+  clock core (rise edge)                                                                     2.000000   2.000000
+  clock network delay (ideal)                                                                0.000000   2.000000
+  primitives/lane[3].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                         0.000000   2.000000 r
+  library setup time                                                                         -0.012264  1.987736
+  data required time                                                                                    1.987736
+  -----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                    1.987736
+  data arrival time                                                                                     -1.883165
+  -----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                           0.104571
+
+
+  Startpoint: primitives/lane[12].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[12].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_4   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_4_DW02_mult_0_DW02_mult_3
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[12].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                            0.000000 # 0.000000 r
+  primitives/lane[12].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                            0.027101   0.027101 r
+  primitives/lane[12].unit/n1983 (net)                                                8     0.000000   0.027101 r
+  primitives/lane[12].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.040459 r
+  primitives/lane[12].unit/U743/X (SAEDRVT14_OR3_1)                                         0.018450   0.058909 r
+  primitives/lane[12].unit/n1535 (net)                                                4     0.000000   0.058909 r
+  primitives/lane[12].unit/U805/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.068589 r
+  primitives/lane[12].unit/U805/X (SAEDRVT14_NR3_1)                                         0.014951   0.083540 f
+  primitives/lane[12].unit/n219 (net)                                                 5     0.000000   0.083540 f
+  primitives/lane[12].unit/U170/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.097450 f
+  primitives/lane[12].unit/U170/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.105941 f
+  primitives/lane[12].unit/n278 (net)                                                 3     0.000000   0.105941 f
+  primitives/lane[12].unit/U123/A (SAEDRVT14_INV_1)                                         0.010462   0.116403 f
+  primitives/lane[12].unit/U123/X (SAEDRVT14_INV_1)                                         0.010417   0.126820 r
+  primitives/lane[12].unit/n273 (net)                                                14     0.000000   0.126820 r
+  primitives/lane[12].unit/U802/B1 (SAEDRVT14_OAI22_0P5)                                    0.012022   0.138841 r
+  primitives/lane[12].unit/U802/X (SAEDRVT14_OAI22_0P5)                                     0.012232   0.151073 f
+  primitives/lane[12].unit/N44 (net)                                                  1     0.000000   0.151073 f
+  primitives/lane[12].unit/mult_500/B[0] (ArithmeticLane_4_DW02_mult_0_DW02_mult_3)         0.000000   0.151073 f
+  primitives/lane[12].unit/mult_500/B[0] (net)                                              0.000000   0.151073 f
+  primitives/lane[12].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                              0.008400   0.159473 f
+  primitives/lane[12].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                              0.007846   0.167319 r
+  primitives/lane[12].unit/mult_500/n177 (net)                                        3     0.000000   0.167319 r
+  primitives/lane[12].unit/mult_500/U149/A (SAEDRVT14_BUF_S_1)                              0.012183   0.179502 r
+  primitives/lane[12].unit/mult_500/U149/X (SAEDRVT14_BUF_S_1)                              0.015326   0.194828 r
+  primitives/lane[12].unit/mult_500/n124 (net)                                       15     0.000000   0.194828 r
+  primitives/lane[12].unit/mult_500/U598/A1 (SAEDRVT14_NR2_1)                               0.014741   0.209569 r
+  primitives/lane[12].unit/mult_500/U598/X (SAEDRVT14_NR2_1)                                0.010906   0.220475 f
+  primitives/lane[12].unit/mult_500/ab[1][0] (net)                                    2     0.000000   0.220475 f
+  primitives/lane[12].unit/mult_500/U77/A (SAEDRVT14_INV_1)                                 0.009660   0.230135 f
+  primitives/lane[12].unit/mult_500/U77/X (SAEDRVT14_INV_1)                                 0.004715   0.234850 r
+  primitives/lane[12].unit/mult_500/n54 (net)                                         1     0.000000   0.234850 r
+  primitives/lane[12].unit/mult_500/U93/A1 (SAEDRVT14_NR2_MM_1)                             0.007436   0.242286 r
+  primitives/lane[12].unit/mult_500/U93/X (SAEDRVT14_NR2_MM_1)                              0.006208   0.248493 f
+  primitives/lane[12].unit/mult_500/CARRYB[1][0] (net)                                1     0.000000   0.248493 f
+  primitives/lane[12].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278033 f
+  primitives/lane[12].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021836   0.299869 f
+  primitives/lane[12].unit/mult_500/CARRYB[2][0] (net)                                1     0.000000   0.299869 f
+  primitives/lane[12].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.329408 f
+  primitives/lane[12].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021890   0.351298 f
+  primitives/lane[12].unit/mult_500/CARRYB[3][0] (net)                                1     0.000000   0.351298 f
+  primitives/lane[12].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.380837 f
+  primitives/lane[12].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.402725 f
+  primitives/lane[12].unit/mult_500/CARRYB[4][0] (net)                                1     0.000000   0.402725 f
+  primitives/lane[12].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.432264 f
+  primitives/lane[12].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.454152 f
+  primitives/lane[12].unit/mult_500/CARRYB[5][0] (net)                                1     0.000000   0.454152 f
+  primitives/lane[12].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.483691 f
+  primitives/lane[12].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   0.504827 f
+  primitives/lane[12].unit/mult_500/CARRYB[6][0] (net)                                1     0.000000   0.504827 f
+  primitives/lane[12].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.527789 f
+  primitives/lane[12].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   0.556692 f
+  primitives/lane[12].unit/mult_500/CARRYB[7][0] (net)                                1     0.000000   0.556692 f
+  primitives/lane[12].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.586231 f
+  primitives/lane[12].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   0.609737 f
+  primitives/lane[12].unit/mult_500/CARRYB[8][0] (net)                                1     0.000000   0.609737 f
+  primitives/lane[12].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.639276 f
+  primitives/lane[12].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.661164 f
+  primitives/lane[12].unit/mult_500/CARRYB[9][0] (net)                                1     0.000000   0.661164 f
+  primitives/lane[12].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.690703 f
+  primitives/lane[12].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   0.712589 f
+  primitives/lane[12].unit/mult_500/CARRYB[10][0] (net)                               1     0.000000   0.712589 f
+  primitives/lane[12].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.742128 f
+  primitives/lane[12].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.764016 f
+  primitives/lane[12].unit/mult_500/CARRYB[11][0] (net)                               1     0.000000   0.764016 f
+  primitives/lane[12].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.793555 f
+  primitives/lane[12].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.815443 f
+  primitives/lane[12].unit/mult_500/CARRYB[12][0] (net)                               1     0.000000   0.815443 f
+  primitives/lane[12].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.844982 f
+  primitives/lane[12].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.866870 f
+  primitives/lane[12].unit/mult_500/CARRYB[13][0] (net)                               1     0.000000   0.866870 f
+  primitives/lane[12].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.896409 f
+  primitives/lane[12].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.918297 f
+  primitives/lane[12].unit/mult_500/CARRYB[14][0] (net)                               1     0.000000   0.918297 f
+  primitives/lane[12].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.947836 f
+  primitives/lane[12].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.969723 f
+  primitives/lane[12].unit/mult_500/CARRYB[15][0] (net)                               1     0.000000   0.969723 f
+  primitives/lane[12].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.999263 f
+  primitives/lane[12].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.021150 f
+  primitives/lane[12].unit/mult_500/CARRYB[16][0] (net)                               1     0.000000   1.021150 f
+  primitives/lane[12].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.050690 f
+  primitives/lane[12].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.072577 f
+  primitives/lane[12].unit/mult_500/CARRYB[17][0] (net)                               1     0.000000   1.072577 f
+  primitives/lane[12].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.102117 f
+  primitives/lane[12].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.124004 f
+  primitives/lane[12].unit/mult_500/CARRYB[18][0] (net)                               1     0.000000   1.124004 f
+  primitives/lane[12].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.153543 f
+  primitives/lane[12].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.175431 f
+  primitives/lane[12].unit/mult_500/CARRYB[19][0] (net)                               1     0.000000   1.175431 f
+  primitives/lane[12].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.204970 f
+  primitives/lane[12].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.226858 f
+  primitives/lane[12].unit/mult_500/CARRYB[20][0] (net)                               1     0.000000   1.226858 f
+  primitives/lane[12].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.256397 f
+  primitives/lane[12].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.278285 f
+  primitives/lane[12].unit/mult_500/CARRYB[21][0] (net)                               1     0.000000   1.278285 f
+  primitives/lane[12].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.307824 f
+  primitives/lane[12].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.329712 f
+  primitives/lane[12].unit/mult_500/CARRYB[22][0] (net)                               1     0.000000   1.329712 f
+  primitives/lane[12].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.359251 f
+  primitives/lane[12].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.380387 f
+  primitives/lane[12].unit/mult_500/CARRYB[23][0] (net)                               1     0.000000   1.380387 f
+  primitives/lane[12].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.403349 f
+  primitives/lane[12].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028903   1.432252 f
+  primitives/lane[12].unit/mult_500/CARRYB[24][0] (net)                               1     0.000000   1.432252 f
+  primitives/lane[12].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.461792 f
+  primitives/lane[12].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                        0.023506   1.485298 f
+  primitives/lane[12].unit/mult_500/CARRYB[25][0] (net)                               1     0.000000   1.485298 f
+  primitives/lane[12].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.514837 f
+  primitives/lane[12].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.536725 f
+  primitives/lane[12].unit/mult_500/CARRYB[26][0] (net)                               1     0.000000   1.536725 f
+  primitives/lane[12].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.566264 f
+  primitives/lane[12].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   1.588150 f
+  primitives/lane[12].unit/mult_500/CARRYB[27][0] (net)                               1     0.000000   1.588150 f
+  primitives/lane[12].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.617689 f
+  primitives/lane[12].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.639577 f
+  primitives/lane[12].unit/mult_500/CARRYB[28][0] (net)                               1     0.000000   1.639577 f
+  primitives/lane[12].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.669116 f
+  primitives/lane[12].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.690252 f
+  primitives/lane[12].unit/mult_500/CARRYB[29][0] (net)                               1     0.000000   1.690252 f
+  primitives/lane[12].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.713214 f
+  primitives/lane[12].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.024275   1.737489 f
+  primitives/lane[12].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.737489 f
+  primitives/lane[12].unit/mult_500/U57/A2 (SAEDRVT14_EN3_1)                                0.010303   1.747792 f
+  primitives/lane[12].unit/mult_500/U57/X (SAEDRVT14_EN3_1)                                 0.025197   1.772990 f
+  primitives/lane[12].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.772990 f
+  primitives/lane[12].unit/mult_500/PRODUCT[31] (ArithmeticLane_4_DW02_mult_0_DW02_mult_3)  0.000000   1.772990 f
+  primitives/lane[12].unit/multiply[31] (net)                                               0.000000   1.772990 f
+  primitives/lane[12].unit/U171/A (SAEDRVT14_INV_1)                                         0.008455   1.781445 f
+  primitives/lane[12].unit/U171/X (SAEDRVT14_INV_1)                                         0.004279   1.785724 r
+  primitives/lane[12].unit/n319 (net)                                                 2     0.000000   1.785724 r
+  primitives/lane[12].unit/U804/A2 (SAEDRVT14_OAI21_0P5)                                    0.011468   1.797192 r
+  primitives/lane[12].unit/U804/X (SAEDRVT14_OAI21_0P5)                                     0.007131   1.804323 f
+  primitives/lane[12].unit/n1528 (net)                                                1     0.000000   1.804323 f
+  primitives/lane[12].unit/U803/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.811340 f
+  primitives/lane[12].unit/U803/X (SAEDRVT14_AO221_0P5)                                     0.016738   1.828078 f
+  primitives/lane[12].unit/n1530 (net)                                                1     0.000000   1.828078 f
+  primitives/lane[12].unit/U523/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.838120 f
+  primitives/lane[12].unit/U523/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.845144 r
+  primitives/lane[12].unit/n1532 (net)                                                1     0.000000   1.845144 r
+  primitives/lane[12].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.850517 r
+  primitives/lane[12].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.855764 f
+  primitives/lane[12].unit/n1533 (net)                                                1     0.000000   1.855764 f
+  primitives/lane[12].unit/U522/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.862781 f
+  primitives/lane[12].unit/U522/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.877479 f
+  primitives/lane[12].unit/n1356 (net)                                                1     0.000000   1.877479 f
+  primitives/lane[12].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                        0.005686   1.883165 f
+  data arrival time                                                                                    1.883165
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[12].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                       0.000000   2.000000 r
+  library setup time                                                                        -0.012264  1.987736
+  data required time                                                                                   1.987736
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.987736
+  data arrival time                                                                                    -1.883165
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.104571
+
+
+  Startpoint: primitives/lane[7].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[7].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_9   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_9_DW02_mult_0_DW02_mult_8
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                            Fanout      Incr       Path
+  ---------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                   0.000000   0.000000
+  clock network delay (ideal)                                                              0.000000   0.000000
+  primitives/lane[7].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_1)                              0.000000 # 0.000000 r
+  primitives/lane[7].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_1)                              0.021587   0.021587 r
+  primitives/lane[7].unit/n1986 (net)                                                8     0.000000   0.021587 r
+  primitives/lane[7].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.034945 r
+  primitives/lane[7].unit/U743/X (SAEDRVT14_OR3_1)                                         0.015205   0.050150 r
+  primitives/lane[7].unit/n1538 (net)                                                4     0.000000   0.050150 r
+  primitives/lane[7].unit/U815/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.059829 r
+  primitives/lane[7].unit/U815/X (SAEDRVT14_NR3_1)                                         0.014915   0.074744 f
+  primitives/lane[7].unit/n231 (net)                                                 5     0.000000   0.074744 f
+  primitives/lane[7].unit/U183/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.088653 f
+  primitives/lane[7].unit/U183/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.097145 f
+  primitives/lane[7].unit/n281 (net)                                                 3     0.000000   0.097145 f
+  primitives/lane[7].unit/U135/A (SAEDRVT14_INV_1)                                         0.010462   0.107606 f
+  primitives/lane[7].unit/U135/X (SAEDRVT14_INV_1)                                         0.006582   0.114188 r
+  primitives/lane[7].unit/n280 (net)                                                 7     0.000000   0.114188 r
+  primitives/lane[7].unit/U820/B1 (SAEDRVT14_OAI22_0P5)                                    0.007844   0.122032 r
+  primitives/lane[7].unit/U820/X (SAEDRVT14_OAI22_0P5)                                     0.010231   0.132263 f
+  primitives/lane[7].unit/N49 (net)                                                  1     0.000000   0.132263 f
+  primitives/lane[7].unit/mult_500/B[5] (ArithmeticLane_9_DW02_mult_0_DW02_mult_8)         0.000000   0.132263 f
+  primitives/lane[7].unit/mult_500/B[5] (net)                                              0.000000   0.132263 f
+  primitives/lane[7].unit/mult_500/U7/A (SAEDRVT14_INV_S_1)                                0.008400   0.140664 f
+  primitives/lane[7].unit/mult_500/U7/X (SAEDRVT14_INV_S_1)                                0.015150   0.155814 r
+  primitives/lane[7].unit/mult_500/n169 (net)                                       15     0.000000   0.155814 r
+  primitives/lane[7].unit/mult_500/U8/A (SAEDRVT14_BUF_ECO_1)                              0.021492   0.177306 r
+  primitives/lane[7].unit/mult_500/U8/X (SAEDRVT14_BUF_ECO_1)                              0.016402   0.193707 r
+  primitives/lane[7].unit/mult_500/n111 (net)                                       13     0.000000   0.193707 r
+  primitives/lane[7].unit/mult_500/U775/A1 (SAEDRVT14_NR2_1)                               0.013108   0.206816 r
+  primitives/lane[7].unit/mult_500/U775/X (SAEDRVT14_NR2_1)                                0.010869   0.217685 f
+  primitives/lane[7].unit/mult_500/ab[0][5] (net)                                    2     0.000000   0.217685 f
+  primitives/lane[7].unit/mult_500/U79/A (SAEDRVT14_INV_1)                                 0.009660   0.227345 f
+  primitives/lane[7].unit/mult_500/U79/X (SAEDRVT14_INV_1)                                 0.005132   0.232477 r
+  primitives/lane[7].unit/mult_500/n59 (net)                                         1     0.000000   0.232477 r
+  primitives/lane[7].unit/mult_500/U93/A2 (SAEDRVT14_NR2_MM_1)                             0.009271   0.241747 r
+  primitives/lane[7].unit/mult_500/U93/X (SAEDRVT14_NR2_MM_1)                              0.007178   0.248926 f
+  primitives/lane[7].unit/mult_500/CARRYB[1][4] (net)                                1     0.000000   0.248926 f
+  primitives/lane[7].unit/mult_500/S2_2_4/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278465 f
+  primitives/lane[7].unit/mult_500/S2_2_4/S (SAEDRVT14_ADDF_V1_1)                          0.031447   0.309912 r
+  primitives/lane[7].unit/mult_500/SUMB[2][4] (net)                                  1     0.000000   0.309912 r
+  primitives/lane[7].unit/mult_500/S2_3_3/CI (SAEDRVT14_ADDF_V1_0P5)                       0.011755   0.321667 r
+  primitives/lane[7].unit/mult_500/S2_3_3/S (SAEDRVT14_ADDF_V1_0P5)                        0.037583   0.359250 f
+  primitives/lane[7].unit/mult_500/SUMB[3][3] (net)                                  1     0.000000   0.359250 f
+  primitives/lane[7].unit/mult_500/S2_4_2/CI (SAEDRVT14_ADDF_V1_0P5)                       0.011755   0.371004 f
+  primitives/lane[7].unit/mult_500/S2_4_2/CO (SAEDRVT14_ADDF_V1_0P5)                       0.025318   0.396322 f
+  primitives/lane[7].unit/mult_500/CARRYB[4][2] (net)                                1     0.000000   0.396322 f
+  primitives/lane[7].unit/mult_500/S2_5_2/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.419284 f
+  primitives/lane[7].unit/mult_500/S2_5_2/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028750   0.448034 f
+  primitives/lane[7].unit/mult_500/CARRYB[5][2] (net)                                1     0.000000   0.448034 f
+  primitives/lane[7].unit/mult_500/S2_6_2/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.470996 f
+  primitives/lane[7].unit/mult_500/S2_6_2/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028750   0.499747 f
+  primitives/lane[7].unit/mult_500/CARRYB[6][2] (net)                                1     0.000000   0.499747 f
+  primitives/lane[7].unit/mult_500/S2_7_2/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.522709 f
+  primitives/lane[7].unit/mult_500/S2_7_2/CO (SAEDRVT14_ADDF_V1_0P5)                       0.030291   0.552999 f
+  primitives/lane[7].unit/mult_500/CARRYB[7][2] (net)                                1     0.000000   0.552999 f
+  primitives/lane[7].unit/mult_500/S2_8_2/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.582539 f
+  primitives/lane[7].unit/mult_500/S2_8_2/CO (SAEDRVT14_ADDF_V1_1)                         0.022754   0.605293 f
+  primitives/lane[7].unit/mult_500/CARRYB[8][2] (net)                                1     0.000000   0.605293 f
+  primitives/lane[7].unit/mult_500/S2_9_2/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.628255 f
+  primitives/lane[7].unit/mult_500/S2_9_2/CO (SAEDRVT14_ADDF_V1_0P5)                       0.027362   0.655617 f
+  primitives/lane[7].unit/mult_500/CARRYB[9][2] (net)                                1     0.000000   0.655617 f
+  primitives/lane[7].unit/mult_500/S2_10_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.678579 f
+  primitives/lane[7].unit/mult_500/S2_10_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.707329 f
+  primitives/lane[7].unit/mult_500/CARRYB[10][2] (net)                               1     0.000000   0.707329 f
+  primitives/lane[7].unit/mult_500/S2_11_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.730291 f
+  primitives/lane[7].unit/mult_500/S2_11_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.759041 f
+  primitives/lane[7].unit/mult_500/CARRYB[11][2] (net)                               1     0.000000   0.759041 f
+  primitives/lane[7].unit/mult_500/S2_12_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.782003 f
+  primitives/lane[7].unit/mult_500/S2_12_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.810753 f
+  primitives/lane[7].unit/mult_500/CARRYB[12][2] (net)                               1     0.000000   0.810753 f
+  primitives/lane[7].unit/mult_500/S2_13_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.833715 f
+  primitives/lane[7].unit/mult_500/S2_13_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.862465 f
+  primitives/lane[7].unit/mult_500/CARRYB[13][2] (net)                               1     0.000000   0.862465 f
+  primitives/lane[7].unit/mult_500/S2_14_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.885427 f
+  primitives/lane[7].unit/mult_500/S2_14_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.914177 f
+  primitives/lane[7].unit/mult_500/CARRYB[14][2] (net)                               1     0.000000   0.914177 f
+  primitives/lane[7].unit/mult_500/S2_15_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.937140 f
+  primitives/lane[7].unit/mult_500/S2_15_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   0.965890 f
+  primitives/lane[7].unit/mult_500/CARRYB[15][2] (net)                               1     0.000000   0.965890 f
+  primitives/lane[7].unit/mult_500/S2_16_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   0.988852 f
+  primitives/lane[7].unit/mult_500/S2_16_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.017602 f
+  primitives/lane[7].unit/mult_500/CARRYB[16][2] (net)                               1     0.000000   1.017602 f
+  primitives/lane[7].unit/mult_500/S2_17_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.040564 f
+  primitives/lane[7].unit/mult_500/S2_17_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.069314 f
+  primitives/lane[7].unit/mult_500/CARRYB[17][2] (net)                               1     0.000000   1.069314 f
+  primitives/lane[7].unit/mult_500/S2_18_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.092276 f
+  primitives/lane[7].unit/mult_500/S2_18_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.121026 f
+  primitives/lane[7].unit/mult_500/CARRYB[18][2] (net)                               1     0.000000   1.121026 f
+  primitives/lane[7].unit/mult_500/S2_19_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.143988 f
+  primitives/lane[7].unit/mult_500/S2_19_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.172738 f
+  primitives/lane[7].unit/mult_500/CARRYB[19][2] (net)                               1     0.000000   1.172738 f
+  primitives/lane[7].unit/mult_500/S2_20_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.195700 f
+  primitives/lane[7].unit/mult_500/S2_20_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.224450 f
+  primitives/lane[7].unit/mult_500/CARRYB[20][2] (net)                               1     0.000000   1.224450 f
+  primitives/lane[7].unit/mult_500/S2_21_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.247413 f
+  primitives/lane[7].unit/mult_500/S2_21_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.276163 f
+  primitives/lane[7].unit/mult_500/CARRYB[21][2] (net)                               1     0.000000   1.276163 f
+  primitives/lane[7].unit/mult_500/S2_22_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.299125 f
+  primitives/lane[7].unit/mult_500/S2_22_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.327875 f
+  primitives/lane[7].unit/mult_500/CARRYB[22][2] (net)                               1     0.000000   1.327875 f
+  primitives/lane[7].unit/mult_500/S2_23_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.350837 f
+  primitives/lane[7].unit/mult_500/S2_23_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.379587 f
+  primitives/lane[7].unit/mult_500/CARRYB[23][2] (net)                               1     0.000000   1.379587 f
+  primitives/lane[7].unit/mult_500/S2_24_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.402549 f
+  primitives/lane[7].unit/mult_500/S2_24_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.431299 f
+  primitives/lane[7].unit/mult_500/CARRYB[24][2] (net)                               1     0.000000   1.431299 f
+  primitives/lane[7].unit/mult_500/S2_25_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.454261 f
+  primitives/lane[7].unit/mult_500/S2_25_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.483011 f
+  primitives/lane[7].unit/mult_500/CARRYB[25][2] (net)                               1     0.000000   1.483011 f
+  primitives/lane[7].unit/mult_500/S2_26_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.505973 f
+  primitives/lane[7].unit/mult_500/S2_26_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.534723 f
+  primitives/lane[7].unit/mult_500/CARRYB[26][2] (net)                               1     0.000000   1.534723 f
+  primitives/lane[7].unit/mult_500/S2_27_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.557685 f
+  primitives/lane[7].unit/mult_500/S2_27_2/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028750   1.586436 f
+  primitives/lane[7].unit/mult_500/CARRYB[27][2] (net)                               1     0.000000   1.586436 f
+  primitives/lane[7].unit/mult_500/S2_28_2/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.609398 f
+  primitives/lane[7].unit/mult_500/S2_28_2/S (SAEDRVT14_ADDF_V1_0P5)                       0.038083   1.647481 r
+  primitives/lane[7].unit/mult_500/SUMB[28][2] (net)                                 1     0.000000   1.647481 r
+  primitives/lane[7].unit/mult_500/S2_29_1/CI (SAEDRVT14_ADDF_V1_1)                        0.015675   1.663155 r
+  primitives/lane[7].unit/mult_500/S2_29_1/S (SAEDRVT14_ADDF_V1_1)                         0.034772   1.697927 f
+  primitives/lane[7].unit/mult_500/SUMB[29][1] (net)                                 1     0.000000   1.697927 f
+  primitives/lane[7].unit/mult_500/S1_30_0/CI (SAEDRVT14_ADDF_V1_0P5)                      0.011755   1.709682 f
+  primitives/lane[7].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.021502   1.731184 f
+  primitives/lane[7].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.731184 f
+  primitives/lane[7].unit/mult_500/U52/A2 (SAEDRVT14_EN3_1)                                0.010303   1.741487 f
+  primitives/lane[7].unit/mult_500/U52/X (SAEDRVT14_EN3_1)                                 0.025197   1.766684 f
+  primitives/lane[7].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.766684 f
+  primitives/lane[7].unit/mult_500/PRODUCT[31] (ArithmeticLane_9_DW02_mult_0_DW02_mult_8)  0.000000   1.766684 f
+  primitives/lane[7].unit/multiply[31] (net)                                               0.000000   1.766684 f
+  primitives/lane[7].unit/U181/A (SAEDRVT14_INV_1)                                         0.008455   1.775139 f
+  primitives/lane[7].unit/U181/X (SAEDRVT14_INV_1)                                         0.004279   1.779419 r
+  primitives/lane[7].unit/n324 (net)                                                 2     0.000000   1.779419 r
+  primitives/lane[7].unit/U814/A2 (SAEDRVT14_OAI21_0P5)                                    0.011468   1.790887 r
+  primitives/lane[7].unit/U814/X (SAEDRVT14_OAI21_0P5)                                     0.007131   1.798018 f
+  primitives/lane[7].unit/n1531 (net)                                                1     0.000000   1.798018 f
+  primitives/lane[7].unit/U813/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.805034 f
+  primitives/lane[7].unit/U813/X (SAEDRVT14_AO221_0P5)                                     0.016738   1.821772 f
+  primitives/lane[7].unit/n1533 (net)                                                1     0.000000   1.821772 f
+  primitives/lane[7].unit/U658/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.831814 f
+  primitives/lane[7].unit/U658/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.838839 r
+  primitives/lane[7].unit/n1535 (net)                                                1     0.000000   1.838839 r
+  primitives/lane[7].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.844211 r
+  primitives/lane[7].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.849458 f
+  primitives/lane[7].unit/n1536 (net)                                                1     0.000000   1.849458 f
+  primitives/lane[7].unit/U657/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.856475 f
+  primitives/lane[7].unit/U657/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.871174 f
+  primitives/lane[7].unit/n1360 (net)                                                1     0.000000   1.871174 f
+  primitives/lane[7].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_1)                        0.005686   1.876859 f
+  data arrival time                                                                                   1.876859
+
+  clock core (rise edge)                                                                   2.000000   2.000000
+  clock network delay (ideal)                                                              0.000000   2.000000
+  primitives/lane[7].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_1)                       0.000000   2.000000 r
+  library setup time                                                                       -0.012264  1.987736
+  data required time                                                                                  1.987736
+  ---------------------------------------------------------------------------------------------------------------
+  data required time                                                                                  1.987736
+  data arrival time                                                                                   -1.876859
+  ---------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                         0.110876
+
+
+  Startpoint: primitives/lane[13].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[13].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_3   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_3_DW02_mult_0_DW02_mult_2
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[13].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                            0.000000 # 0.000000 r
+  primitives/lane[13].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                            0.027101   0.027101 r
+  primitives/lane[13].unit/n1980 (net)                                                8     0.000000   0.027101 r
+  primitives/lane[13].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.040459 r
+  primitives/lane[13].unit/U743/X (SAEDRVT14_OR3_1)                                         0.018450   0.058909 r
+  primitives/lane[13].unit/n1532 (net)                                                4     0.000000   0.058909 r
+  primitives/lane[13].unit/U642/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.068589 r
+  primitives/lane[13].unit/U642/X (SAEDRVT14_NR3_1)                                         0.014951   0.083540 f
+  primitives/lane[13].unit/n219 (net)                                                 5     0.000000   0.083540 f
+  primitives/lane[13].unit/U165/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.097450 f
+  primitives/lane[13].unit/U165/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.105941 f
+  primitives/lane[13].unit/n275 (net)                                                 3     0.000000   0.105941 f
+  primitives/lane[13].unit/U109/A (SAEDRVT14_INV_1)                                         0.010462   0.116403 f
+  primitives/lane[13].unit/U109/X (SAEDRVT14_INV_1)                                         0.010331   0.126734 r
+  primitives/lane[13].unit/n270 (net)                                                14     0.000000   0.126734 r
+  primitives/lane[13].unit/U639/B1 (SAEDRVT14_OAI22_0P5)                                    0.012021   0.138755 r
+  primitives/lane[13].unit/U639/X (SAEDRVT14_OAI22_0P5)                                     0.012186   0.150941 f
+  primitives/lane[13].unit/N44 (net)                                                  1     0.000000   0.150941 f
+  primitives/lane[13].unit/mult_500/B[0] (ArithmeticLane_3_DW02_mult_0_DW02_mult_2)         0.000000   0.150941 f
+  primitives/lane[13].unit/mult_500/B[0] (net)                                              0.000000   0.150941 f
+  primitives/lane[13].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                              0.008400   0.159342 f
+  primitives/lane[13].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                              0.007988   0.167330 r
+  primitives/lane[13].unit/mult_500/n180 (net)                                        3     0.000000   0.167330 r
+  primitives/lane[13].unit/mult_500/U148/A (SAEDRVT14_BUF_S_1)                              0.012183   0.179513 r
+  primitives/lane[13].unit/mult_500/U148/X (SAEDRVT14_BUF_S_1)                              0.015354   0.194866 r
+  primitives/lane[13].unit/mult_500/n127 (net)                                       15     0.000000   0.194866 r
+  primitives/lane[13].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                               0.014741   0.209607 r
+  primitives/lane[13].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                0.010906   0.220513 f
+  primitives/lane[13].unit/mult_500/ab[1][0] (net)                                    2     0.000000   0.220513 f
+  primitives/lane[13].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                 0.009660   0.230173 f
+  primitives/lane[13].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                 0.004716   0.234889 r
+  primitives/lane[13].unit/mult_500/n57 (net)                                         1     0.000000   0.234889 r
+  primitives/lane[13].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                             0.007436   0.242324 r
+  primitives/lane[13].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                              0.006208   0.248532 f
+  primitives/lane[13].unit/mult_500/CARRYB[1][0] (net)                                1     0.000000   0.248532 f
+  primitives/lane[13].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278071 f
+  primitives/lane[13].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021836   0.299907 f
+  primitives/lane[13].unit/mult_500/CARRYB[2][0] (net)                                1     0.000000   0.299907 f
+  primitives/lane[13].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.329447 f
+  primitives/lane[13].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021890   0.351336 f
+  primitives/lane[13].unit/mult_500/CARRYB[3][0] (net)                                1     0.000000   0.351336 f
+  primitives/lane[13].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.380876 f
+  primitives/lane[13].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.402763 f
+  primitives/lane[13].unit/mult_500/CARRYB[4][0] (net)                                1     0.000000   0.402763 f
+  primitives/lane[13].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.432302 f
+  primitives/lane[13].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.454190 f
+  primitives/lane[13].unit/mult_500/CARRYB[5][0] (net)                                1     0.000000   0.454190 f
+  primitives/lane[13].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.483729 f
+  primitives/lane[13].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   0.504865 f
+  primitives/lane[13].unit/mult_500/CARRYB[6][0] (net)                                1     0.000000   0.504865 f
+  primitives/lane[13].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.527827 f
+  primitives/lane[13].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   0.556731 f
+  primitives/lane[13].unit/mult_500/CARRYB[7][0] (net)                                1     0.000000   0.556731 f
+  primitives/lane[13].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.586270 f
+  primitives/lane[13].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   0.609776 f
+  primitives/lane[13].unit/mult_500/CARRYB[8][0] (net)                                1     0.000000   0.609776 f
+  primitives/lane[13].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.639315 f
+  primitives/lane[13].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.661203 f
+  primitives/lane[13].unit/mult_500/CARRYB[9][0] (net)                                1     0.000000   0.661203 f
+  primitives/lane[13].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.690742 f
+  primitives/lane[13].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   0.712628 f
+  primitives/lane[13].unit/mult_500/CARRYB[10][0] (net)                               1     0.000000   0.712628 f
+  primitives/lane[13].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.742167 f
+  primitives/lane[13].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.764054 f
+  primitives/lane[13].unit/mult_500/CARRYB[11][0] (net)                               1     0.000000   0.764054 f
+  primitives/lane[13].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.793594 f
+  primitives/lane[13].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.815481 f
+  primitives/lane[13].unit/mult_500/CARRYB[12][0] (net)                               1     0.000000   0.815481 f
+  primitives/lane[13].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.845021 f
+  primitives/lane[13].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.866908 f
+  primitives/lane[13].unit/mult_500/CARRYB[13][0] (net)                               1     0.000000   0.866908 f
+  primitives/lane[13].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.896448 f
+  primitives/lane[13].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.918335 f
+  primitives/lane[13].unit/mult_500/CARRYB[14][0] (net)                               1     0.000000   0.918335 f
+  primitives/lane[13].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.947874 f
+  primitives/lane[13].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.969762 f
+  primitives/lane[13].unit/mult_500/CARRYB[15][0] (net)                               1     0.000000   0.969762 f
+  primitives/lane[13].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.999301 f
+  primitives/lane[13].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.021189 f
+  primitives/lane[13].unit/mult_500/CARRYB[16][0] (net)                               1     0.000000   1.021189 f
+  primitives/lane[13].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.050728 f
+  primitives/lane[13].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.072616 f
+  primitives/lane[13].unit/mult_500/CARRYB[17][0] (net)                               1     0.000000   1.072616 f
+  primitives/lane[13].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.102155 f
+  primitives/lane[13].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.124043 f
+  primitives/lane[13].unit/mult_500/CARRYB[18][0] (net)                               1     0.000000   1.124043 f
+  primitives/lane[13].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.153582 f
+  primitives/lane[13].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.175470 f
+  primitives/lane[13].unit/mult_500/CARRYB[19][0] (net)                               1     0.000000   1.175470 f
+  primitives/lane[13].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.205009 f
+  primitives/lane[13].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.226896 f
+  primitives/lane[13].unit/mult_500/CARRYB[20][0] (net)                               1     0.000000   1.226896 f
+  primitives/lane[13].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.256436 f
+  primitives/lane[13].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.278323 f
+  primitives/lane[13].unit/mult_500/CARRYB[21][0] (net)                               1     0.000000   1.278323 f
+  primitives/lane[13].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.307863 f
+  primitives/lane[13].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.329750 f
+  primitives/lane[13].unit/mult_500/CARRYB[22][0] (net)                               1     0.000000   1.329750 f
+  primitives/lane[13].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.359290 f
+  primitives/lane[13].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.380426 f
+  primitives/lane[13].unit/mult_500/CARRYB[23][0] (net)                               1     0.000000   1.380426 f
+  primitives/lane[13].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.403388 f
+  primitives/lane[13].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028903   1.432291 f
+  primitives/lane[13].unit/mult_500/CARRYB[24][0] (net)                               1     0.000000   1.432291 f
+  primitives/lane[13].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.461830 f
+  primitives/lane[13].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                        0.023506   1.485336 f
+  primitives/lane[13].unit/mult_500/CARRYB[25][0] (net)                               1     0.000000   1.485336 f
+  primitives/lane[13].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.514876 f
+  primitives/lane[13].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.536763 f
+  primitives/lane[13].unit/mult_500/CARRYB[26][0] (net)                               1     0.000000   1.536763 f
+  primitives/lane[13].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.566303 f
+  primitives/lane[13].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   1.588188 f
+  primitives/lane[13].unit/mult_500/CARRYB[27][0] (net)                               1     0.000000   1.588188 f
+  primitives/lane[13].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.617728 f
+  primitives/lane[13].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.639615 f
+  primitives/lane[13].unit/mult_500/CARRYB[28][0] (net)                               1     0.000000   1.639615 f
+  primitives/lane[13].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.669155 f
+  primitives/lane[13].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.690291 f
+  primitives/lane[13].unit/mult_500/CARRYB[29][0] (net)                               1     0.000000   1.690291 f
+  primitives/lane[13].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.713253 f
+  primitives/lane[13].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.024275   1.737528 f
+  primitives/lane[13].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.737528 f
+  primitives/lane[13].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                0.010303   1.747831 f
+  primitives/lane[13].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                 0.025197   1.773028 f
+  primitives/lane[13].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.773028 f
+  primitives/lane[13].unit/mult_500/PRODUCT[31] (ArithmeticLane_3_DW02_mult_0_DW02_mult_2)  0.000000   1.773028 f
+  primitives/lane[13].unit/multiply[31] (net)                                               0.000000   1.773028 f
+  primitives/lane[13].unit/U166/A (SAEDRVT14_INV_1)                                         0.008455   1.781483 f
+  primitives/lane[13].unit/U166/X (SAEDRVT14_INV_1)                                         0.004252   1.785735 r
+  primitives/lane[13].unit/n316 (net)                                                 2     0.000000   1.785735 r
+  primitives/lane[13].unit/U641/A2 (SAEDRVT14_OAI21_0P75)                                   0.011471   1.797206 r
+  primitives/lane[13].unit/U641/X (SAEDRVT14_OAI21_0P75)                                    0.007143   1.804350 f
+  primitives/lane[13].unit/n1525 (net)                                                1     0.000000   1.804350 f
+  primitives/lane[13].unit/U640/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.811366 f
+  primitives/lane[13].unit/U640/X (SAEDRVT14_AO221_0P5)                                     0.016747   1.828114 f
+  primitives/lane[13].unit/n1527 (net)                                                1     0.000000   1.828114 f
+  primitives/lane[13].unit/U644/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.838156 f
+  primitives/lane[13].unit/U644/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.845180 r
+  primitives/lane[13].unit/n1529 (net)                                                1     0.000000   1.845180 r
+  primitives/lane[13].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.850553 r
+  primitives/lane[13].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.855800 f
+  primitives/lane[13].unit/n1530 (net)                                                1     0.000000   1.855800 f
+  primitives/lane[13].unit/U643/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.862817 f
+  primitives/lane[13].unit/U643/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.877515 f
+  primitives/lane[13].unit/n1353 (net)                                                1     0.000000   1.877515 f
+  primitives/lane[13].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)                      0.005686   1.883201 f
+  data arrival time                                                                                    1.883201
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[13].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5)                     0.000000   2.000000 r
+  library setup time                                                                        -0.005493  1.994507
+  data required time                                                                                   1.994507
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.994507
+  data arrival time                                                                                    -1.883201
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.111306
+
+
+  Startpoint: primitives/lane[14].unit/op_reg[4]
+              (rising edge-triggered flip-flop clocked by core)
+  Endpoint: primitives/lane[14].unit/out_data_reg[31]
+            (rising edge-triggered flip-flop clocked by core)
+  Path Group: core
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ExpandedAsic       35000                 saed14rvt_tt0p8v25c
+  ArithmeticLane_2   8000                  saed14rvt_tt0p8v25c
+  ArithmeticLane_2_DW02_mult_0_DW02_mult_1
+                     8000                  saed14rvt_tt0p8v25c
+
+  Point                                                                             Fanout      Incr       Path
+  ----------------------------------------------------------------------------------------------------------------
+  clock core (rise edge)                                                                    0.000000   0.000000
+  clock network delay (ideal)                                                               0.000000   0.000000
+  primitives/lane[14].unit/op_reg[4]/CK (SAEDRVT14_FDP_V2LP_0P5)                            0.000000 # 0.000000 r
+  primitives/lane[14].unit/op_reg[4]/QN (SAEDRVT14_FDP_V2LP_0P5)                            0.027101   0.027101 r
+  primitives/lane[14].unit/n1980 (net)                                                8     0.000000   0.027101 r
+  primitives/lane[14].unit/U743/A3 (SAEDRVT14_OR3_1)                                        0.013358   0.040459 r
+  primitives/lane[14].unit/U743/X (SAEDRVT14_OR3_1)                                         0.018450   0.058909 r
+  primitives/lane[14].unit/n1532 (net)                                                4     0.000000   0.058909 r
+  primitives/lane[14].unit/U643/A1 (SAEDRVT14_NR3_1)                                        0.009679   0.068589 r
+  primitives/lane[14].unit/U643/X (SAEDRVT14_NR3_1)                                         0.014951   0.083540 f
+  primitives/lane[14].unit/n219 (net)                                                 5     0.000000   0.083540 f
+  primitives/lane[14].unit/U165/A (SAEDRVT14_BUF_S_1)                                       0.013910   0.097450 f
+  primitives/lane[14].unit/U165/X (SAEDRVT14_BUF_S_1)                                       0.008491   0.105941 f
+  primitives/lane[14].unit/n275 (net)                                                 3     0.000000   0.105941 f
+  primitives/lane[14].unit/U110/A (SAEDRVT14_INV_1)                                         0.010462   0.116403 f
+  primitives/lane[14].unit/U110/X (SAEDRVT14_INV_1)                                         0.010331   0.126734 r
+  primitives/lane[14].unit/n270 (net)                                                14     0.000000   0.126734 r
+  primitives/lane[14].unit/U640/B1 (SAEDRVT14_OAI22_0P5)                                    0.012021   0.138755 r
+  primitives/lane[14].unit/U640/X (SAEDRVT14_OAI22_0P5)                                     0.012186   0.150941 f
+  primitives/lane[14].unit/N44 (net)                                                  1     0.000000   0.150941 f
+  primitives/lane[14].unit/mult_500/B[0] (ArithmeticLane_2_DW02_mult_0_DW02_mult_1)         0.000000   0.150941 f
+  primitives/lane[14].unit/mult_500/B[0] (net)                                              0.000000   0.150941 f
+  primitives/lane[14].unit/mult_500/U197/A (SAEDRVT14_INV_S_1)                              0.008400   0.159342 f
+  primitives/lane[14].unit/mult_500/U197/X (SAEDRVT14_INV_S_1)                              0.007988   0.167330 r
+  primitives/lane[14].unit/mult_500/n180 (net)                                        3     0.000000   0.167330 r
+  primitives/lane[14].unit/mult_500/U148/A (SAEDRVT14_BUF_S_1)                              0.012183   0.179513 r
+  primitives/lane[14].unit/mult_500/U148/X (SAEDRVT14_BUF_S_1)                              0.015354   0.194866 r
+  primitives/lane[14].unit/mult_500/n127 (net)                                       15     0.000000   0.194866 r
+  primitives/lane[14].unit/mult_500/U599/A1 (SAEDRVT14_NR2_1)                               0.014741   0.209607 r
+  primitives/lane[14].unit/mult_500/U599/X (SAEDRVT14_NR2_1)                                0.010906   0.220513 f
+  primitives/lane[14].unit/mult_500/ab[1][0] (net)                                    2     0.000000   0.220513 f
+  primitives/lane[14].unit/mult_500/U76/A (SAEDRVT14_INV_1)                                 0.009660   0.230173 f
+  primitives/lane[14].unit/mult_500/U76/X (SAEDRVT14_INV_1)                                 0.004716   0.234889 r
+  primitives/lane[14].unit/mult_500/n57 (net)                                         1     0.000000   0.234889 r
+  primitives/lane[14].unit/mult_500/U92/A1 (SAEDRVT14_NR2_MM_1)                             0.007436   0.242324 r
+  primitives/lane[14].unit/mult_500/U92/X (SAEDRVT14_NR2_MM_1)                              0.006208   0.248532 f
+  primitives/lane[14].unit/mult_500/CARRYB[1][0] (net)                                1     0.000000   0.248532 f
+  primitives/lane[14].unit/mult_500/S1_2_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.278071 f
+  primitives/lane[14].unit/mult_500/S1_2_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021836   0.299907 f
+  primitives/lane[14].unit/mult_500/CARRYB[2][0] (net)                                1     0.000000   0.299907 f
+  primitives/lane[14].unit/mult_500/S1_3_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.329447 f
+  primitives/lane[14].unit/mult_500/S1_3_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021890   0.351336 f
+  primitives/lane[14].unit/mult_500/CARRYB[3][0] (net)                                1     0.000000   0.351336 f
+  primitives/lane[14].unit/mult_500/S1_4_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.380876 f
+  primitives/lane[14].unit/mult_500/S1_4_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.402763 f
+  primitives/lane[14].unit/mult_500/CARRYB[4][0] (net)                                1     0.000000   0.402763 f
+  primitives/lane[14].unit/mult_500/S1_5_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.432302 f
+  primitives/lane[14].unit/mult_500/S1_5_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.454190 f
+  primitives/lane[14].unit/mult_500/CARRYB[5][0] (net)                                1     0.000000   0.454190 f
+  primitives/lane[14].unit/mult_500/S1_6_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.483729 f
+  primitives/lane[14].unit/mult_500/S1_6_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021136   0.504865 f
+  primitives/lane[14].unit/mult_500/CARRYB[6][0] (net)                                1     0.000000   0.504865 f
+  primitives/lane[14].unit/mult_500/S1_7_0/B (SAEDRVT14_ADDF_V1_0P5)                        0.022962   0.527827 f
+  primitives/lane[14].unit/mult_500/S1_7_0/CO (SAEDRVT14_ADDF_V1_0P5)                       0.028903   0.556731 f
+  primitives/lane[14].unit/mult_500/CARRYB[7][0] (net)                                1     0.000000   0.556731 f
+  primitives/lane[14].unit/mult_500/S1_8_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.586270 f
+  primitives/lane[14].unit/mult_500/S1_8_0/CO (SAEDRVT14_ADDF_V1_1)                         0.023506   0.609776 f
+  primitives/lane[14].unit/mult_500/CARRYB[8][0] (net)                                1     0.000000   0.609776 f
+  primitives/lane[14].unit/mult_500/S1_9_0/B (SAEDRVT14_ADDF_V1_1)                          0.029539   0.639315 f
+  primitives/lane[14].unit/mult_500/S1_9_0/CO (SAEDRVT14_ADDF_V1_1)                         0.021888   0.661203 f
+  primitives/lane[14].unit/mult_500/CARRYB[9][0] (net)                                1     0.000000   0.661203 f
+  primitives/lane[14].unit/mult_500/S1_10_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.690742 f
+  primitives/lane[14].unit/mult_500/S1_10_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   0.712628 f
+  primitives/lane[14].unit/mult_500/CARRYB[10][0] (net)                               1     0.000000   0.712628 f
+  primitives/lane[14].unit/mult_500/S1_11_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.742167 f
+  primitives/lane[14].unit/mult_500/S1_11_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.764054 f
+  primitives/lane[14].unit/mult_500/CARRYB[11][0] (net)                               1     0.000000   0.764054 f
+  primitives/lane[14].unit/mult_500/S1_12_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.793594 f
+  primitives/lane[14].unit/mult_500/S1_12_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.815481 f
+  primitives/lane[14].unit/mult_500/CARRYB[12][0] (net)                               1     0.000000   0.815481 f
+  primitives/lane[14].unit/mult_500/S1_13_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.845021 f
+  primitives/lane[14].unit/mult_500/S1_13_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.866908 f
+  primitives/lane[14].unit/mult_500/CARRYB[13][0] (net)                               1     0.000000   0.866908 f
+  primitives/lane[14].unit/mult_500/S1_14_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.896448 f
+  primitives/lane[14].unit/mult_500/S1_14_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.918335 f
+  primitives/lane[14].unit/mult_500/CARRYB[14][0] (net)                               1     0.000000   0.918335 f
+  primitives/lane[14].unit/mult_500/S1_15_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.947874 f
+  primitives/lane[14].unit/mult_500/S1_15_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   0.969762 f
+  primitives/lane[14].unit/mult_500/CARRYB[15][0] (net)                               1     0.000000   0.969762 f
+  primitives/lane[14].unit/mult_500/S1_16_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   0.999301 f
+  primitives/lane[14].unit/mult_500/S1_16_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.021189 f
+  primitives/lane[14].unit/mult_500/CARRYB[16][0] (net)                               1     0.000000   1.021189 f
+  primitives/lane[14].unit/mult_500/S1_17_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.050728 f
+  primitives/lane[14].unit/mult_500/S1_17_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.072616 f
+  primitives/lane[14].unit/mult_500/CARRYB[17][0] (net)                               1     0.000000   1.072616 f
+  primitives/lane[14].unit/mult_500/S1_18_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.102155 f
+  primitives/lane[14].unit/mult_500/S1_18_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.124043 f
+  primitives/lane[14].unit/mult_500/CARRYB[18][0] (net)                               1     0.000000   1.124043 f
+  primitives/lane[14].unit/mult_500/S1_19_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.153582 f
+  primitives/lane[14].unit/mult_500/S1_19_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.175470 f
+  primitives/lane[14].unit/mult_500/CARRYB[19][0] (net)                               1     0.000000   1.175470 f
+  primitives/lane[14].unit/mult_500/S1_20_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.205009 f
+  primitives/lane[14].unit/mult_500/S1_20_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.226896 f
+  primitives/lane[14].unit/mult_500/CARRYB[20][0] (net)                               1     0.000000   1.226896 f
+  primitives/lane[14].unit/mult_500/S1_21_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.256436 f
+  primitives/lane[14].unit/mult_500/S1_21_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.278323 f
+  primitives/lane[14].unit/mult_500/CARRYB[21][0] (net)                               1     0.000000   1.278323 f
+  primitives/lane[14].unit/mult_500/S1_22_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.307863 f
+  primitives/lane[14].unit/mult_500/S1_22_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.329750 f
+  primitives/lane[14].unit/mult_500/CARRYB[22][0] (net)                               1     0.000000   1.329750 f
+  primitives/lane[14].unit/mult_500/S1_23_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.359290 f
+  primitives/lane[14].unit/mult_500/S1_23_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.380426 f
+  primitives/lane[14].unit/mult_500/CARRYB[23][0] (net)                               1     0.000000   1.380426 f
+  primitives/lane[14].unit/mult_500/S1_24_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.403388 f
+  primitives/lane[14].unit/mult_500/S1_24_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.028903   1.432291 f
+  primitives/lane[14].unit/mult_500/CARRYB[24][0] (net)                               1     0.000000   1.432291 f
+  primitives/lane[14].unit/mult_500/S1_25_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.461830 f
+  primitives/lane[14].unit/mult_500/S1_25_0/CO (SAEDRVT14_ADDF_V1_1)                        0.023506   1.485336 f
+  primitives/lane[14].unit/mult_500/CARRYB[25][0] (net)                               1     0.000000   1.485336 f
+  primitives/lane[14].unit/mult_500/S1_26_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.514876 f
+  primitives/lane[14].unit/mult_500/S1_26_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.536763 f
+  primitives/lane[14].unit/mult_500/CARRYB[26][0] (net)                               1     0.000000   1.536763 f
+  primitives/lane[14].unit/mult_500/S1_27_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.566303 f
+  primitives/lane[14].unit/mult_500/S1_27_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021886   1.588188 f
+  primitives/lane[14].unit/mult_500/CARRYB[27][0] (net)                               1     0.000000   1.588188 f
+  primitives/lane[14].unit/mult_500/S1_28_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.617728 f
+  primitives/lane[14].unit/mult_500/S1_28_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021888   1.639615 f
+  primitives/lane[14].unit/mult_500/CARRYB[28][0] (net)                               1     0.000000   1.639615 f
+  primitives/lane[14].unit/mult_500/S1_29_0/B (SAEDRVT14_ADDF_V1_1)                         0.029539   1.669155 f
+  primitives/lane[14].unit/mult_500/S1_29_0/CO (SAEDRVT14_ADDF_V1_1)                        0.021136   1.690291 f
+  primitives/lane[14].unit/mult_500/CARRYB[29][0] (net)                               1     0.000000   1.690291 f
+  primitives/lane[14].unit/mult_500/S1_30_0/B (SAEDRVT14_ADDF_V1_0P5)                       0.022962   1.713253 f
+  primitives/lane[14].unit/mult_500/S1_30_0/CO (SAEDRVT14_ADDF_V1_0P5)                      0.024275   1.737528 f
+  primitives/lane[14].unit/mult_500/CARRYB[30][0] (net)                               1     0.000000   1.737528 f
+  primitives/lane[14].unit/mult_500/U56/A2 (SAEDRVT14_EN3_1)                                0.010303   1.747831 f
+  primitives/lane[14].unit/mult_500/U56/X (SAEDRVT14_EN3_1)                                 0.025197   1.773028 f
+  primitives/lane[14].unit/mult_500/PRODUCT[31] (net)                                 1     0.000000   1.773028 f
+  primitives/lane[14].unit/mult_500/PRODUCT[31] (ArithmeticLane_2_DW02_mult_0_DW02_mult_1)  0.000000   1.773028 f
+  primitives/lane[14].unit/multiply[31] (net)                                               0.000000   1.773028 f
+  primitives/lane[14].unit/U166/A (SAEDRVT14_INV_1)                                         0.008455   1.781483 f
+  primitives/lane[14].unit/U166/X (SAEDRVT14_INV_1)                                         0.004252   1.785735 r
+  primitives/lane[14].unit/n316 (net)                                                 2     0.000000   1.785735 r
+  primitives/lane[14].unit/U642/A2 (SAEDRVT14_OAI21_0P75)                                   0.011471   1.797206 r
+  primitives/lane[14].unit/U642/X (SAEDRVT14_OAI21_0P75)                                    0.007143   1.804350 f
+  primitives/lane[14].unit/n1525 (net)                                                1     0.000000   1.804350 f
+  primitives/lane[14].unit/U641/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.811366 f
+  primitives/lane[14].unit/U641/X (SAEDRVT14_AO221_0P5)                                     0.016747   1.828114 f
+  primitives/lane[14].unit/n1527 (net)                                                1     0.000000   1.828114 f
+  primitives/lane[14].unit/U645/A2 (SAEDRVT14_OAI21_0P75)                                   0.010042   1.838156 f
+  primitives/lane[14].unit/U645/X (SAEDRVT14_OAI21_0P75)                                    0.007024   1.845180 r
+  primitives/lane[14].unit/n1529 (net)                                                1     0.000000   1.845180 r
+  primitives/lane[14].unit/U985/B (SAEDRVT14_AO21B_0P5)                                     0.005372   1.850553 r
+  primitives/lane[14].unit/U985/X (SAEDRVT14_AO21B_0P5)                                     0.005247   1.855800 f
+  primitives/lane[14].unit/n1530 (net)                                                1     0.000000   1.855800 f
+  primitives/lane[14].unit/U644/C (SAEDRVT14_AO221_0P5)                                     0.007017   1.862817 f
+  primitives/lane[14].unit/U644/X (SAEDRVT14_AO221_0P5)                                     0.014698   1.877515 f
+  primitives/lane[14].unit/n1353 (net)                                                1     0.000000   1.877515 f
+  primitives/lane[14].unit/out_data_reg[31]/D (SAEDRVT14_FDP_V2LP_0P5)                      0.005686   1.883201 f
+  data arrival time                                                                                    1.883201
+
+  clock core (rise edge)                                                                    2.000000   2.000000
+  clock network delay (ideal)                                                               0.000000   2.000000
+  primitives/lane[14].unit/out_data_reg[31]/CK (SAEDRVT14_FDP_V2LP_0P5)                     0.000000   2.000000 r
+  library setup time                                                                        -0.005493  1.994507
+  data required time                                                                                   1.994507
+  ----------------------------------------------------------------------------------------------------------------
+  data required time                                                                                   1.994507
+  data arrival time                                                                                    -1.883201
+  ----------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                          0.111306
+
+
+1

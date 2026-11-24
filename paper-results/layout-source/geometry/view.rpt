@@ -1,0 +1,20 @@
+library /dev/shm/cgra-stages-20261118/global/stage.ndm
+block stage.ndm:ChipTop.design
+boundary {0.0000 0.0000} {0.0000 2493.2000} {2493.3760 2493.2000} {2493.3760 0.0000}
+viewport {-0.0740 -0.0730} {2493.3760 2493.2000}
+requested_pixels 4800 4800
+shapes 32525958
+vias 49996799
+visible_error_data 0
+diagnostic_overlays hidden
+signal_shapes 29804230
+signal_detail_shapes 358
+showRoute 1
+showRouted 1
+showRoutedSignal 1
+showRoutedDetailed 1
+showRoutedGRoute 0
+calibration_0 #010203 199.402 199.38884
+calibration_1 #040506 2293.9 199.38884
+calibration_2 #070809 199.402 2293.73816
+calibration_3 #0a0b0c 2293.9 2293.73816

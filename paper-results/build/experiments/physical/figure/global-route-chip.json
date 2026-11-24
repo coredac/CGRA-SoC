@@ -1,0 +1,5591 @@
+{
+  "stage": "Global routing \u00b7 selected interface paths",
+  "backend": {
+    "library": "/dev/shm/cgra-stages-20261118/global/stage.ndm",
+    "block": "stage.ndm:ChipTop.design",
+    "boundary": "{0.0000 0.0000} {0.0000 2493.2000} {2493.3760 2493.2000} {2493.3760 0.0000}",
+    "viewport": "{-0.0740 -0.0730} {2493.3760 2493.2000}",
+    "requested_pixels": "4800 4800",
+    "shapes": "32525958",
+    "vias": "49996799",
+    "visible_error_data": "0",
+    "diagnostic_overlays": "hidden",
+    "signal_shapes": "29804230",
+    "signal_detail_shapes": "358",
+    "showRoute": "1",
+    "showRouted": "1",
+    "showRoutedSignal": "1",
+    "showRoutedDetailed": "1",
+    "showRoutedGRoute": "0",
+    "calibration_0": "#010203 199.402 199.38884",
+    "calibration_1": "#040506 2293.9 199.38884",
+    "calibration_2": "#070809 199.402 2293.73816",
+    "calibration_3": "#0a0b0c 2293.9 2293.73816",
+    "showNetUnrouted": "0",
+    "showNetEstimated": "0"
+  },
+  "native_sha256": "29fe00801537797f6506c534b33f16cf3a36a5af37ba683c4157d83c60e11d41",
+  "calibration_sha256": "5184f0b4582cca6a1937ceea95ec20a654490191788c958c5b9bacb5f4aae117",
+  "region_manifest": "/dev/shm/cgra-clock-area-20261117/plan.json",
+  "region_sha256": "3cdd9d138e49c33400e1adc644141acaae05d03018dcd244f3f476c1e2390675",
+  "die_bounds_um": [
+    0.0,
+    0.0,
+    2493.376,
+    2493.2
+  ],
+  "regions": [
+    {
+      "name": "Rocket CPU",
+      "bounds": [
+        10.6,
+        10.6,
+        1040,
+        1280
+      ],
+      "id": "cpu"
+    },
+    {
+      "name": "Gemmini",
+      "bounds": [
+        10.6,
+        1300,
+        1340,
+        2482.6
+      ],
+      "id": "gemmini"
+    },
+    {
+      "name": "CGRA",
+      "bounds": [
+        1360,
+        1000,
+        2482.6,
+        2482.6
+      ],
+      "id": "cgra"
+    },
+    {
+      "name": "Pool",
+      "bounds": [
+        1060,
+        780,
+        1860,
+        980
+      ],
+      "id": "pool"
+    },
+    {
+      "name": "Host SPM",
+      "bounds": [
+        1880,
+        10.6,
+        2482.6,
+        980
+      ],
+      "id": "host"
+    },
+    {
+      "name": "SoC / interconnect",
+      "bounds": [
+        1060,
+        10.6,
+        1860,
+        760
+      ],
+      "id": "soc"
+    }
+  ],
+  "calibration": {
+    "points_um": [
+      [
+        199.402,
+        199.38884
+      ],
+      [
+        2293.9,
+        199.38884
+      ],
+      [
+        199.402,
+        2293.73816
+      ],
+      [
+        2293.9,
+        2293.73816
+      ]
+    ],
+    "pixels": [
+      [
+        391.5,
+        4406.5
+      ],
+      [
+        4407.5,
+        4406.5
+      ],
+      [
+        391.5,
+        391.5
+      ],
+      [
+        4407.5,
+        391.5
+      ]
+    ],
+    "maximum_residual_pixels": 1.8189894035458565e-12,
+    "axis_transforms": [
+      [
+        1.917404552307999,
+        9.165697460678937
+      ],
+      [
+        -1.9170631955513526,
+        4788.741006767678
+      ]
+    ]
+  },
+  "palette": {
+    "source": "build/experiments/physical/backend/postroute/view/display.tcl",
+    "source_sha256": "89facf0138f76db17e967b1667ed1862ade845bb65596e4ccf88c443e8fff1a1",
+    "packets": {
+      "background": "#000000",
+      "grid": "#8c8ca6",
+      "grid1": "#ffffff",
+      "axis": "#ffffff",
+      "instance": "#ff0000",
+      "instanceLbl": "#d9cc00",
+      "prBoundary": "#9900e6",
+      "prBoundaryBnd": "#b3fffd",
+      "prBoundaryLbl": "#9900e6",
+      "align": "#ffe6bf",
+      "alignAssist": "#ffe6bf",
+      "hardFence": "#ff0000",
+      "softFence": "#ffff00",
+      "text": "#ffffff",
+      "text1": "#ffffff",
+      "text2": "#ffffff",
+      "border": "#ffe6bf",
+      "device": "#00ff00",
+      "device2": "#00ff00",
+      "device1": "#00ff00",
+      "wire": "#39bfff",
+      "wireLbl": "#39bfff",
+      "wireFlt": "#ff0000",
+      "highlightUnplaced": "#ff00ff",
+      "deviceAnt": "#ffff00",
+      "deviceLbl": "#00ff00",
+      "pinLbl": "#ff0000",
+      "pin": "#ff0000",
+      "pinAnt": "#ff0000",
+      "annotate": "#ff8000",
+      "annotate1": "#ffbff2",
+      "annotate2": "#00ff00",
+      "annotate3": "#b3fffd",
+      "annotate4": "#ffff00",
+      "annotate5": "#ffffff",
+      "annotate6": "#c6d2e8",
+      "annotate7": "#ff0000",
+      "annotate8": "#ffe6bf",
+      "annotate9": "#00ff00",
+      "edgeLayer": "#c7c7c7",
+      "edgeLayerPin": "#ffff00",
+      "snap": "#ffff00",
+      "stretch": "#ffff00",
+      "y0": "#ffff00",
+      "y1": "#ff0000",
+      "y2": "#00ff00",
+      "y3": "#ff00ff",
+      "y4": "#b3fffd",
+      "y5": "#9900e6",
+      "y6": "#ff8000",
+      "y7": "#d9cc00",
+      "y8": "#0000ff",
+      "y9": "#c6d2e8",
+      "y0Flt": "#ffff00",
+      "y1Flt": "#ff0000",
+      "y2Flt": "#00ff00",
+      "y3Flt": "#ff00ff",
+      "y4Flt": "#b3fffd",
+      "y5Flt": "#9900e6",
+      "y6Flt": "#ff8000",
+      "y7Flt": "#d9cc00",
+      "y8Flt": "#0000ff",
+      "y9Flt": "#c6d2e8",
+      "hilite": "#ffffff",
+      "hilite1": "#ff00ff",
+      "hilite2": "#ffe6bf",
+      "hilite3": "#b3fffd",
+      "hilite4": "#ff8000",
+      "hilite5": "#00ff00",
+      "hilite6": "#ff8000",
+      "hilite7": "#ffffcc",
+      "hilite8": "#ff00ff",
+      "hilite9": "#ffbff2",
+      "select": "#ffe6bf",
+      "drive": "#0000ff",
+      "hiz": "#ff8000",
+      "resist": "#b3fffd",
+      "spike": "#9900e6",
+      "supply": "#00ff00",
+      "unknown": "#ffff00",
+      "unset": "#268c6b",
+      "designFlow": "#0000ff",
+      "designFlow1": "#9900e6",
+      "designFlow2": "#ff00ff",
+      "designFlow3": "#b3fffd",
+      "designFlow4": "#268c6b",
+      "designFlow5": "#00ff00",
+      "designFlow6": "#ff8000",
+      "designFlow7": "#ffff00",
+      "designFlow8": "#bf4026",
+      "designFlow9": "#ff0000",
+      "changedLayerTl0": "#ff0000",
+      "changedLayerTl1": "#ffff00",
+      "markerAno": "#0000ff",
+      "markerInf": "#00ff00",
+      "markerAck": "#ffff00",
+      "markerWarn": "#ffff00",
+      "markerSer": "#ff8000",
+      "markerErr": "#ffffff",
+      "markerScr": "#ff0000",
+      "markerCrt": "#ff0000",
+      "markerFat": "#ff0000",
+      "Row": "#b3fffd",
+      "RowBnd": "#b3fffd",
+      "RowLbl": "#b3fffd",
+      "Group": "#00ff00",
+      "GroupLbl": "#00ff00",
+      "GroupBnd": "#00ff00",
+      "Cannotoccupy": "#ff0000",
+      "CannotoccupyBnd": "#ff0000",
+      "Canplace": "#b3fffd",
+      "Unrouted": "#c7c7c7",
+      "UnroutedTrk": "#ffff00",
+      "Unrouted1": "#bf4026",
+      "Unrouted2": "#ff0000",
+      "Unrouted3": "#ffbff2",
+      "Unrouted4": "#ff8000",
+      "Unrouted5": "#00ff00",
+      "Unrouted6": "#0000ff",
+      "Unrouted7": "#9900e6",
+      "Unrouted8": "#d9cc00",
+      "Unrouted9": "#c6d2e8",
+      "stroke_white": "#ffffff",
+      "select1_yellow": "#ffff00",
+      "select2_red": "#ff0000",
+      "select3_blue": "#0000ff",
+      "select4_purple": "#9900e6",
+      "highlight1_yellow": "#ffff00",
+      "highlight2_red": "#ff0000",
+      "highlight3_green": "#00ff00",
+      "highlight4_blue": "#0000ff",
+      "highlight5_purple": "#9900e6",
+      "highlight6_cyan": "#b3fffd",
+      "highlight7_white": "#ffffff",
+      "highlight8_gold": "#d9cc00",
+      "highlight9_maroon": "#e61f0d",
+      "highlight10_gray": "#ccccd9",
+      "highlight1_yellow_dim": "#7f7f00",
+      "highlight2_red_dim": "#7f0000",
+      "highlight3_green_dim": "#006633",
+      "highlight4_blue_dim": "#00004f",
+      "highlight5_purple_dim": "#4c0073",
+      "highlight6_cyan_dim": "#007f7f",
+      "highlight7_white_dim": "#7f7f7f",
+      "highlight8_gold_dim": "#b40000",
+      "highlight9_maroon_dim": "#730f06",
+      "highlight10_gray_dim": "#66666c",
+      "ruler_white": "#ffffff",
+      "active_TrueColorBright": "#a6b0ba",
+      "runtime_TrueColorGhost": "#a0c8f0",
+      "cursor_white": "#ffffff",
+      "major_grid": "#ffffff",
+      "minor_grid": "#8c8ca6",
+      "yellow_white": "#ffff00",
+      "transparent_white": "#ffff00",
+      "pinUnc": "#ff0000",
+      "wireUnrt": "#39bfff",
+      "LE_hole": "#ffff00",
+      "pinConn": "#ff0000",
+      "ruler0": "#ffff00",
+      "ruler1": "#ff0000",
+      "ruler2": "#00ff00",
+      "ruler3": "#ff00ff",
+      "ruler4": "#b3fffd",
+      "ruler5": "#9900e6",
+      "ruler6": "#ff8000",
+      "ruler7": "#d9cc00",
+      "ruler8": "#0000ff",
+      "ruler9": "#c6d2e8",
+      "invisibleLabel": "#9900e6",
+      "BJTMY": "#ffffbe",
+      "CO": "#ffffff",
+      "DIFF": "#b4af00",
+      "AXPOLY": "#b4afff",
+      "SLVTIMP": "#fac864",
+      "FGATE": "#b40000",
+      "B_VIA0": "#b400be",
+      "DIFF_18": "#ffff00",
+      "DIOD": "#00ffff",
+      "DM1EXCL": "#00aa00",
+      "DM2EXCL": "#ff00be",
+      "DM3EXCL": "#21fff8",
+      "DM4EXCL": "#b4afff",
+      "DM5EXCL": "#b4af00",
+      "DM6EXCL": "#ff0602",
+      "DM7EXCL": "#ff8000",
+      "DM8EXCL": "#b45000",
+      "DM9EXCL": "#5a50ff",
+      "DNW": "#b45000",
+      "ESD_25": "#00aa00",
+      "HOTNWL": "#00aa00",
+      "HVTIMP": "#ff8000",
+      "IP": "#ffffff",
+      "LOGO": "#ff8000",
+      "LVTIMP": "#21fff8",
+      "FIN": "#e6efa7",
+      "DIFF_15": "#e5d875",
+      "POCUT": "#0fa826",
+      "CPO": "#e57d0d",
+      "TSLCO": "#7dc8e8",
+      "TSLCB": "#94db87",
+      "CTM1": "#f0b9f7",
+      "ESD": "#ff0000",
+      "FINCUT": "#9b8f8f",
+      "VIA0": "#00ff00",
+      "DIFFCUT": "#9900e6",
+      "M1": "#0000ff",
+      "M1_3": "#0000ff",
+      "M1DMY": "#ffffff",
+      "M1PIN": "#0000ff",
+      "M2": "#d3009e",
+      "M2_3": "#d3009e",
+      "M2DMY": "#ffffff",
+      "M2PIN": "#d3009e",
+      "M3": "#00ff00",
+      "M3_3": "#00ff00",
+      "M3DMY": "#ffffff",
+      "M3PIN": "#00ff00",
+      "M4": "#c6d2e8",
+      "M4DMY": "#ffffff",
+      "M4PIN": "#c6d2e8",
+      "M5": "#00b2b2",
+      "M5DMY": "#ffffff",
+      "M5PIN": "#00b2b2",
+      "M6": "#ff8f4a",
+      "M6DMY": "#ffffff",
+      "M6PIN": "#ff8f4a",
+      "M7": "#bf4026",
+      "M7DMY": "#ffffff",
+      "M7PIN": "#bf4026",
+      "M8": "#b4afff",
+      "M8DMY": "#ffffff",
+      "M8PIN": "#b4afff",
+      "M9": "#ffa4f3",
+      "M9DMY": "#ffffff",
+      "M9PIN": "#ffa4f3",
+      "MRPIN": "#ffa4f3",
+      "DIFFEXCL": "#ffa4f3",
+      "POEXCL": "#fac864",
+      "NIMP": "#00ff00",
+      "NWELL": "#c6d2e8",
+      "PAD": "#ff8000",
+      "PIMP": "#d80004",
+      "PO": "#ff0000",
+      "RM1": "#5aaf64",
+      "RM2": "#b4ffff",
+      "RM3": "#21fff8",
+      "RM4": "#b4afff",
+      "RM5": "#b4af00",
+      "RM6": "#ff0602",
+      "RM7": "#ff8000",
+      "RM8": "#b45000",
+      "RM9": "#5a50ff",
+      "MRDL": "#5a50ff",
+      "RNW": "#00aa00",
+      "RMARK": "#ff50be",
+      "SBLK": "#ffffbe",
+      "VIA1": "#b3fffd",
+      "VIA2": "#ffff00",
+      "VIA3": "#5aafff",
+      "VIA4": "#ff8000",
+      "VIA5": "#b4af00",
+      "VIA6": "#ff0602",
+      "VIA7": "#0000ff",
+      "VIA8": "#00aa00",
+      "VIARDL": "#c84b37",
+      "PrBoundary": "#ffff00",
+      "INDMARK": "#00aa00",
+      "CBMMARK": "#ffff00",
+      "VARMARK": "#ff8000",
+      "CTMMARK": "#c6d2e8",
+      "METDMY": "#c6d2e8",
+      "PWELL": "#c6d2e8",
+      "INDPINM": "#ff8000",
+      "DIFF_25": "#8fb8ff"
+    },
+    "note": "Original fill RGB values only; native FC geometry rendering and patterns are retained."
+  },
+  "rendering": "Verified global-route centerlines and polygons of the named interface nets over the calibrated native FC layout. Highlight widths aid visibility; path coordinates are read from saved global_route shapes.",
+  "limitations": [
+    "Region outlines describe backend constraints, not separate hard macros or fences for every later physical cell.",
+    "Timing and DRC closure require independent reports; the picture does not establish signoff readiness."
+  ],
+  "calibration_reference_sha256": "29fe00801537797f6506c534b33f16cf3a36a5af37ba683c4157d83c60e11d41",
+  "native_source_image": "/dev/shm/cgra-stages-20261118/figures/global/native.png",
+  "display_settings": {
+    "showRoute": "1",
+    "showRouted": "1",
+    "showRoutedSignal": "1",
+    "showRoutedDetailed": "1",
+    "showRoutedGRoute": "0",
+    "showNetUnrouted": "0",
+    "showNetEstimated": "0"
+  },
+  "stage_evidence": {
+    "global_routes_on_vs_off_changed_pixels": 0,
+    "ndm_glink_capture_sha256": "29fe00801537797f6506c534b33f16cf3a36a5af37ba683c4157d83c60e11d41",
+    "final_router_stage": "phase2",
+    "final_router_total_max_overflow_grcs": [
+      25698727,
+      73,
+      5920107
+    ],
+    "saved_map_total_max_overflow_grcs": [
+      27115376,
+      73,
+      5920107
+    ],
+    "saved_vs_final_log_exact_match": false,
+    "selected_native_control": {
+      "paths_on": 24527,
+      "paths_off": 24527,
+      "archived_file": "selected.png"
+    },
+    "selected_global_route_nets": {
+      "CGRA-1": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/auto_link_config_in_ack_ridx",
+        "net": "system/n_endpoint_1_auto_config_out_ack_ridx",
+        "global_shape_count": 11,
+        "endpoint_span_um": 242.3785,
+        "endpoint_groups": [
+          "CGRA",
+          "SoC"
+        ],
+        "route_length_um": 242.444,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/endpoint_1/configAck_sink/ridx_gray_reg/Q",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1569.143,
+              759.7
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/linkConfigNodeIn_ack_source/ridx_ridx_gray/output_chain/sync_2_reg/D",
+            "group": "CGRA",
+            "pin_bbox_center_um": [
+              1567.3645,
+              1000.3
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                759.502
+              ],
+              [
+                1568.65,
+                806.799
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1569.126,
+                759.502
+              ],
+              [
+                1568.65,
+                759.502
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                864.401
+              ],
+              [
+                1568.65,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                864.399
+              ],
+              [
+                1568.65,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                806.801
+              ],
+              [
+                1568.65,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                979.599
+              ],
+              [
+                1568.65,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                922.001
+              ],
+              [
+                1568.65,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                1000.283
+              ],
+              [
+                1568.65,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.463,
+                1000.283
+              ],
+              [
+                1568.65,
+                1000.283
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                921.999
+              ],
+              [
+                1568.65,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1568.65,
+                806.799
+              ],
+              [
+                1568.65,
+                806.801
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 242.379,
+          "global_route": 242.444,
+          "detail_route": 0.0
+        }
+      },
+      "CGRA-2": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/auto_link_config_in_ack_widx",
+        "net": "system/n_tile_prci_domain_auto_element_reset_domain_rockettile_cgra_link_config_in_ack_widx",
+        "global_shape_count": 10,
+        "endpoint_span_um": 241.8605,
+        "endpoint_groups": [
+          "CGRA",
+          "SoC"
+        ],
+        "route_length_um": 241.761,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/linkConfigNodeIn_ack_source/widx_gray_reg/Q",
+            "group": "CGRA",
+            "pin_bbox_center_um": [
+              1567.071,
+              1000.3
+            ]
+          },
+          {
+            "name": "system/endpoint_1/configAck_sink/widx_widx_gray/output_chain/sync_2_reg/D",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1565.8105,
+              759.7
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                759.683
+              ],
+              [
+                1567.054,
+                806.799
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1565.712,
+                759.683
+              ],
+              [
+                1567.054,
+                759.683
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                864.401
+              ],
+              [
+                1567.054,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                864.399
+              ],
+              [
+                1567.054,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                806.801
+              ],
+              [
+                1567.054,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                1000.102
+              ],
+              [
+                1567.054,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                979.599
+              ],
+              [
+                1567.054,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                922.001
+              ],
+              [
+                1567.054,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                921.999
+              ],
+              [
+                1567.054,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1567.054,
+                806.799
+              ],
+              [
+                1567.054,
+                806.801
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 241.861,
+          "global_route": 241.761,
+          "detail_route": 0.0
+        }
+      },
+      "CGRA-3": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/auto_link_config_in_config_mem_0_packetCount[0]",
+        "net": "system/n_endpoint_1_auto_config_out_config_mem_0_packetCount[0]",
+        "global_shape_count": 10,
+        "endpoint_span_um": 247.591,
+        "endpoint_groups": [
+          "CGRA",
+          "SoC"
+        ],
+        "route_length_um": 247.377,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/endpoint_1/configNodeOut_config_source/mem_0_packetCount_reg_0_/Q",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1549.533,
+              755.38
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/cgra/adapter_io_configIn_sink/io_deq_bits_deq_bits_reg/U45/A1",
+            "group": "CGRA",
+            "pin_bbox_center_um": [
+              1547.461,
+              1000.899
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                755.363
+              ],
+              [
+                1549.421,
+                755.363
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                806.799
+              ],
+              [
+                1547.444,
+                755.363
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                864.401
+              ],
+              [
+                1547.444,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                864.399
+              ],
+              [
+                1547.444,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                806.801
+              ],
+              [
+                1547.444,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                979.601
+              ],
+              [
+                1547.444,
+                1000.763
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                979.599
+              ],
+              [
+                1547.444,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                922.001
+              ],
+              [
+                1547.444,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                921.999
+              ],
+              [
+                1547.444,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1547.444,
+                806.799
+              ],
+              [
+                1547.444,
+                806.801
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 247.591,
+          "global_route": 247.377,
+          "detail_route": 0.0
+        }
+      },
+      "Gemmini-1": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/auto_accelerator_spad_spad_writer_out_a_valid",
+        "net": "system/n_tile_prci_domain_auto_element_reset_domain_rockettile_applyOrElse_accelerator_spad_spad_writer_out_a_valid",
+        "global_shape_count": 66,
+        "endpoint_span_um": 1193.644,
+        "endpoint_groups": [
+          "Gemmini",
+          "SoC"
+        ],
+        "route_length_um": 1545.203,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/accelerator/spad/spad_writer/U3683/X",
+            "group": "Gemmini",
+            "pin_bbox_center_um": [
+              623.053,
+              1369.879
+            ]
+          },
+          {
+            "name": "system/endpoint/buffer/nodeOut_a_q/U9/A1",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1075.119,
+              628.301
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                691.599
+              ],
+              [
+                489.55,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                633.999
+              ],
+              [
+                489.55,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                603.85
+              ],
+              [
+                518.799,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                633.999
+              ],
+              [
+                489.55,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.401,
+                603.85
+              ],
+              [
+                633.999,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.399,
+                603.85
+              ],
+              [
+                576.401,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.801,
+                603.85
+              ],
+              [
+                576.399,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                691.601,
+                603.85
+              ],
+              [
+                749.199,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                691.599,
+                603.85
+              ],
+              [
+                691.601,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                634.001,
+                603.85
+              ],
+              [
+                691.599,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                806.801,
+                603.85
+              ],
+              [
+                864.399,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                603.85
+              ],
+              [
+                806.801,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                749.201,
+                603.85
+              ],
+              [
+                806.799,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                922.001,
+                603.85
+              ],
+              [
+                979.599,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                603.85
+              ],
+              [
+                922.001,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                921.55,
+                603.85
+              ],
+              [
+                921.999,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                864.401,
+                603.85
+              ],
+              [
+                921.55,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1039.45,
+                602.05
+              ],
+              [
+                1037.201,
+                602.05
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1039.45,
+                585.85
+              ],
+              [
+                1039.45,
+                602.05
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1072.75,
+                585.85
+              ],
+              [
+                1039.45,
+                585.85
+              ]
+            ]
+          },
+          {
+            "layer": "M9",
+            "shape_type": "line",
+            "points": [
+              [
+                1072.75,
+                627.25
+              ],
+              [
+                1072.75,
+                585.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1072.75,
+                628.165
+              ],
+              [
+                1072.75,
+                627.25
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1075.102,
+                628.165
+              ],
+              [
+                1072.75,
+                628.165
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                602.05
+              ],
+              [
+                1037.201,
+                602.05
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1012.45,
+                603.85
+              ],
+              [
+                979.601,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1012.45,
+                602.05
+              ],
+              [
+                1012.45,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1022.35,
+                602.05
+              ],
+              [
+                1012.45,
+                602.05
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                602.05
+              ],
+              [
+                1022.35,
+                602.05
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                749.201
+              ],
+              [
+                489.55,
+                806.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                749.199
+              ],
+              [
+                489.55,
+                749.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                691.601
+              ],
+              [
+                489.55,
+                749.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                864.401
+              ],
+              [
+                489.55,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                864.399
+              ],
+              [
+                489.55,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                806.801
+              ],
+              [
+                489.55,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                979.601
+              ],
+              [
+                489.55,
+                1037.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                979.599
+              ],
+              [
+                489.55,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                922.001
+              ],
+              [
+                489.55,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1094.801
+              ],
+              [
+                489.55,
+                1152.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1094.799
+              ],
+              [
+                489.55,
+                1094.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1037.201
+              ],
+              [
+                489.55,
+                1094.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1210.001
+              ],
+              [
+                489.55,
+                1267.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1209.999
+              ],
+              [
+                489.55,
+                1210.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1152.401
+              ],
+              [
+                489.55,
+                1209.999
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                510.25,
+                1368.85
+              ],
+              [
+                518.799,
+                1368.85
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                510.25,
+                1367.05
+              ],
+              [
+                510.25,
+                1368.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1367.05
+              ],
+              [
+                510.25,
+                1367.05
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1325.201
+              ],
+              [
+                489.55,
+                1367.05
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1325.199
+              ],
+              [
+                489.55,
+                1325.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1267.601
+              ],
+              [
+                489.55,
+                1325.199
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                623.034,
+                1369.702
+              ],
+              [
+                576.401,
+                1369.702
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                576.399,
+                1369.702
+              ],
+              [
+                576.401,
+                1369.702
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                566.95,
+                1369.702
+              ],
+              [
+                576.399,
+                1369.702
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                566.95,
+                1368.85
+              ],
+              [
+                566.95,
+                1369.702
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                518.801,
+                1368.85
+              ],
+              [
+                566.95,
+                1368.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                979.599,
+                603.85
+              ],
+              [
+                979.601,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                864.399,
+                603.85
+              ],
+              [
+                864.401,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                749.199,
+                603.85
+              ],
+              [
+                749.201,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                633.999,
+                603.85
+              ],
+              [
+                634.001,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                518.799,
+                1368.85
+              ],
+              [
+                518.801,
+                1368.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.799,
+                603.85
+              ],
+              [
+                518.801,
+                603.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1267.599
+              ],
+              [
+                489.55,
+                1267.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1152.399
+              ],
+              [
+                489.55,
+                1152.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                1037.199
+              ],
+              [
+                489.55,
+                1037.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                921.999
+              ],
+              [
+                489.55,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                806.799
+              ],
+              [
+                489.55,
+                806.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                489.55,
+                691.599
+              ],
+              [
+                489.55,
+                691.601
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 1193.644,
+          "global_route": 1545.203,
+          "detail_route": 0.0
+        }
+      },
+      "Gemmini-2": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/auto_accelerator_spad_spad_writer_out_a_ready",
+        "net": "system/n_endpoint_auto_buffer_in_a_ready",
+        "global_shape_count": 76,
+        "endpoint_span_um": 1213.601,
+        "endpoint_groups": [
+          "Gemmini",
+          "SoC"
+        ],
+        "route_length_um": 1671.773,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/endpoint/buffer/nodeOut_a_q/U7/X",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1073.232,
+              623.5
+            ]
+          },
+          {
+            "name": "system/endpoint/buffer/nodeOut_a_q/U9/A2",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1075.267,
+              628.2245
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/accelerator/spad/spad_writer/U3760/A1",
+            "group": "Gemmini",
+            "pin_bbox_center_um": [
+              622.831,
+              1386.7
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                518.801
+              ],
+              [
+                503.05,
+                576.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                518.799
+              ],
+              [
+                503.05,
+                518.801
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                517.45
+              ],
+              [
+                518.799,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                518.799
+              ],
+              [
+                503.05,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.401,
+                517.45
+              ],
+              [
+                633.999,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.399,
+                517.45
+              ],
+              [
+                576.401,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.801,
+                517.45
+              ],
+              [
+                576.399,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                691.601,
+                517.45
+              ],
+              [
+                749.199,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                691.599,
+                517.45
+              ],
+              [
+                691.601,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                634.001,
+                517.45
+              ],
+              [
+                691.599,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                806.801,
+                517.45
+              ],
+              [
+                864.399,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                517.45
+              ],
+              [
+                806.801,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                749.201,
+                517.45
+              ],
+              [
+                806.799,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                922.001,
+                517.45
+              ],
+              [
+                979.599,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                517.45
+              ],
+              [
+                922.001,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                864.401,
+                517.45
+              ],
+              [
+                921.999,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                518.801
+              ],
+              [
+                1070.05,
+                576.399
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                518.799
+              ],
+              [
+                1070.05,
+                518.801
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                517.45
+              ],
+              [
+                1070.05,
+                518.799
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1065.55,
+                517.45
+              ],
+              [
+                1070.05,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.201,
+                517.45
+              ],
+              [
+                1065.55,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                517.45
+              ],
+              [
+                1037.201,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                979.601,
+                517.45
+              ],
+              [
+                1037.199,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                691.599
+              ],
+              [
+                503.05,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                633.999
+              ],
+              [
+                503.05,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                576.401
+              ],
+              [
+                503.05,
+                633.999
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1074.55,
+                628.123
+              ],
+              [
+                1075.25,
+                628.123
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1074.55,
+                623.612
+              ],
+              [
+                1074.55,
+                628.123
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1073.178,
+                623.612
+              ],
+              [
+                1074.55,
+                623.612
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                623.612
+              ],
+              [
+                1073.178,
+                623.612
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                576.401
+              ],
+              [
+                1070.05,
+                623.612
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                749.201
+              ],
+              [
+                503.05,
+                806.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                749.199
+              ],
+              [
+                503.05,
+                749.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                691.601
+              ],
+              [
+                503.05,
+                749.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                921.999
+              ],
+              [
+                503.05,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                864.399
+              ],
+              [
+                503.05,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                806.801
+              ],
+              [
+                503.05,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                979.601
+              ],
+              [
+                503.05,
+                1037.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                979.599
+              ],
+              [
+                503.05,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                922.001
+              ],
+              [
+                503.05,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1094.801
+              ],
+              [
+                503.05,
+                1152.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1094.799
+              ],
+              [
+                503.05,
+                1094.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1037.201
+              ],
+              [
+                503.05,
+                1094.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1210.001
+              ],
+              [
+                503.05,
+                1267.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1209.999
+              ],
+              [
+                503.05,
+                1210.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1152.401
+              ],
+              [
+                503.05,
+                1209.999
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1338.25
+              ],
+              [
+                518.799,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1325.201
+              ],
+              [
+                503.95,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1325.199
+              ],
+              [
+                503.95,
+                1325.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1279.75
+              ],
+              [
+                503.05,
+                1267.601
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1279.75
+              ],
+              [
+                503.05,
+                1279.75
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1299.55
+              ],
+              [
+                503.95,
+                1279.75
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.95,
+                1325.199
+              ],
+              [
+                503.95,
+                1299.55
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                617.35,
+                1367.05
+              ],
+              [
+                617.35,
+                1382.799
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                589.45,
+                1367.05
+              ],
+              [
+                617.35,
+                1367.05
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                589.45,
+                1338.25
+              ],
+              [
+                589.45,
+                1367.05
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.401,
+                1338.25
+              ],
+              [
+                589.45,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                576.399,
+                1338.25
+              ],
+              [
+                576.401,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.801,
+                1338.25
+              ],
+              [
+                576.399,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                617.35,
+                1386.586
+              ],
+              [
+                622.814,
+                1386.586
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                617.35,
+                1382.801
+              ],
+              [
+                617.35,
+                1386.586
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.05,
+                576.399
+              ],
+              [
+                1070.05,
+                576.401
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                979.599,
+                517.45
+              ],
+              [
+                979.601,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                864.399,
+                517.45
+              ],
+              [
+                864.401,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                749.199,
+                517.45
+              ],
+              [
+                749.201,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                633.999,
+                517.45
+              ],
+              [
+                634.001,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                617.35,
+                1382.799
+              ],
+              [
+                617.35,
+                1382.801
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.799,
+                1338.25
+              ],
+              [
+                518.801,
+                1338.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                518.799,
+                517.45
+              ],
+              [
+                518.801,
+                517.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1267.599
+              ],
+              [
+                503.05,
+                1267.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1152.399
+              ],
+              [
+                503.05,
+                1152.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                1037.199
+              ],
+              [
+                503.05,
+                1037.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                921.999
+              ],
+              [
+                503.05,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                806.799
+              ],
+              [
+                503.05,
+                806.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                691.599
+              ],
+              [
+                503.05,
+                691.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                503.05,
+                576.399
+              ],
+              [
+                503.05,
+                576.401
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 1215.636,
+          "global_route": 1671.773,
+          "detail_route": 0.0
+        }
+      },
+      "Gemmini-3": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/auto_accelerator_spad_spad_writer_out_a_bits_address[0]",
+        "net": "system/n_tile_prci_domain_auto_element_reset_domain_rockettile_applyOrElse_accelerator_spad_spad_writer_out_a_bits_address[0]",
+        "global_shape_count": 58,
+        "endpoint_span_um": 1048.565,
+        "endpoint_groups": [
+          "Gemmini",
+          "SoC"
+        ],
+        "route_length_um": 1123.78,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/accelerator/spad/spad_writer/U4095/X",
+            "group": "Gemmini",
+            "pin_bbox_center_um": [
+              676.443,
+              1300.2765
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/accelerator/spad/spad_writer/nodeOut_a_bits_address_buf_reg_0_/D",
+            "group": "Gemmini",
+            "pin_bbox_center_um": [
+              676.259,
+              1300.9
+            ]
+          },
+          {
+            "name": "system/endpoint/buffer/nodeOut_a_q/ram_ext/U280/A",
+            "group": "SoC",
+            "pin_bbox_center_um": [
+              1070.235,
+              646.311
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                691.601,
+                612.85
+              ],
+              [
+                749.199,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                691.599,
+                612.85
+              ],
+              [
+                691.601,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                634.001
+              ],
+              [
+                673.15,
+                691.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                633.999
+              ],
+              [
+                673.15,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                612.85
+              ],
+              [
+                691.599,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                633.999
+              ],
+              [
+                673.15,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                823.45,
+                614.65
+              ],
+              [
+                864.399,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                823.45,
+                612.85
+              ],
+              [
+                823.45,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.801,
+                612.85
+              ],
+              [
+                823.45,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                612.85
+              ],
+              [
+                806.801,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                612.85
+              ],
+              [
+                749.201,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                938.65,
+                615.55
+              ],
+              [
+                979.599,
+                615.55
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                938.65,
+                614.65
+              ],
+              [
+                938.65,
+                615.55
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                922.001,
+                614.65
+              ],
+              [
+                938.65,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                614.65
+              ],
+              [
+                922.001,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                614.65
+              ],
+              [
+                864.401,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.218,
+                641.65
+              ],
+              [
+                1037.201,
+                641.65
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1070.218,
+                646.181
+              ],
+              [
+                1070.218,
+                641.65
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                641.65
+              ],
+              [
+                1037.201,
+                641.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1000.75,
+                641.65
+              ],
+              [
+                1000.75,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1000.75,
+                642.55
+              ],
+              [
+                1000.75,
+                641.65
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                1000.75,
+                641.65
+              ],
+              [
+                1000.75,
+                642.55
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                641.65
+              ],
+              [
+                1000.75,
+                641.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1000.75,
+                633.999
+              ],
+              [
+                1000.75,
+                634.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1000.75,
+                620.95
+              ],
+              [
+                1000.75,
+                633.999
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                995.35,
+                620.95
+              ],
+              [
+                1000.75,
+                620.95
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                995.35,
+                615.55
+              ],
+              [
+                995.35,
+                620.95
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                985.45,
+                615.55
+              ],
+              [
+                995.35,
+                615.55
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.601,
+                615.55
+              ],
+              [
+                985.45,
+                615.55
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                749.201
+              ],
+              [
+                673.15,
+                806.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                749.199
+              ],
+              [
+                673.15,
+                749.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                691.601
+              ],
+              [
+                673.15,
+                749.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                864.401
+              ],
+              [
+                673.15,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                864.399
+              ],
+              [
+                673.15,
+                864.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                806.801
+              ],
+              [
+                673.15,
+                864.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                979.601
+              ],
+              [
+                673.15,
+                1037.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                979.599
+              ],
+              [
+                673.15,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                922.001
+              ],
+              [
+                673.15,
+                979.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1094.801
+              ],
+              [
+                673.15,
+                1152.399
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1094.799
+              ],
+              [
+                673.15,
+                1094.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1037.201
+              ],
+              [
+                673.15,
+                1094.799
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1210.001
+              ],
+              [
+                673.15,
+                1267.599
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1209.999
+              ],
+              [
+                673.15,
+                1210.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1152.401
+              ],
+              [
+                673.15,
+                1209.999
+              ]
+            ]
+          },
+          {
+            "layer": "M1",
+            "shape_type": "line",
+            "points": [
+              [
+                676.464,
+                1300.765
+              ],
+              [
+                676.464,
+                1300.413
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                676.276,
+                1300.765
+              ],
+              [
+                676.464,
+                1300.765
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1281.55
+              ],
+              [
+                673.15,
+                1267.601
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                676.276,
+                1281.55
+              ],
+              [
+                673.15,
+                1281.55
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                676.276,
+                1300.765
+              ],
+              [
+                676.276,
+                1281.55
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.599,
+                615.55
+              ],
+              [
+                979.601,
+                615.55
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                864.399,
+                614.65
+              ],
+              [
+                864.401,
+                614.65
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                749.199,
+                612.85
+              ],
+              [
+                749.201,
+                612.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1267.599
+              ],
+              [
+                673.15,
+                1267.601
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1152.399
+              ],
+              [
+                673.15,
+                1152.401
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                1037.199
+              ],
+              [
+                673.15,
+                1037.201
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                921.999
+              ],
+              [
+                673.15,
+                922.001
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                806.799
+              ],
+              [
+                673.15,
+                806.801
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                673.15,
+                691.599
+              ],
+              [
+                673.15,
+                691.601
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 1048.565,
+          "global_route": 1123.78,
+          "detail_route": 0.0
+        }
+      },
+      "Pool-1": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/io_cmd_valid",
+        "net": "system/tile_prci_domain/element_reset_domain_rockettile/n_cmdRouter_io_out_2_valid",
+        "global_shape_count": 39,
+        "endpoint_span_um": 520.527,
+        "endpoint_groups": [
+          "Pool",
+          "Rocket"
+        ],
+        "route_length_um": 521.558,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/cmdRouter/U7/X",
+            "group": "Rocket",
+            "pin_bbox_center_um": [
+              796.249,
+              1087.3
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/U222/A1",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1139.647,
+              957.101
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/U220/A",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1162.587,
+              933.111
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1155.55,
+                947.65
+              ],
+              [
+                1152.401,
+                947.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1155.55,
+                938.65
+              ],
+              [
+                1155.55,
+                947.65
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1160.05,
+                938.65
+              ],
+              [
+                1155.55,
+                938.65
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1160.05,
+                932.981
+              ],
+              [
+                1160.05,
+                938.65
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1162.57,
+                932.981
+              ],
+              [
+                1160.05,
+                932.981
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1152.399,
+                947.65
+              ],
+              [
+                1152.401,
+                947.65
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1149.25,
+                947.65
+              ],
+              [
+                1152.399,
+                947.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1149.25,
+                953.05
+              ],
+              [
+                1149.25,
+                947.65
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1145.65,
+                953.05
+              ],
+              [
+                1149.25,
+                953.05
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1145.65,
+                956.65
+              ],
+              [
+                1145.65,
+                953.05
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1145.65,
+                956.988
+              ],
+              [
+                1145.65,
+                956.65
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1140.7,
+                956.988
+              ],
+              [
+                1145.65,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1140.25,
+                956.988
+              ],
+              [
+                1140.7,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.63,
+                956.988
+              ],
+              [
+                1140.25,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                979.601
+              ],
+              [
+                1139.35,
+                1037.199
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                979.599
+              ],
+              [
+                1139.35,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1140.702,
+                956.988
+              ],
+              [
+                1140.7,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                956.988
+              ],
+              [
+                1140.702,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                979.599
+              ],
+              [
+                1139.35,
+                956.988
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.801,
+                1080.85
+              ],
+              [
+                864.399,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                1080.85
+              ],
+              [
+                806.801,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                799.15,
+                1080.85
+              ],
+              [
+                806.799,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                799.15,
+                1083.55
+              ],
+              [
+                799.15,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                796.196,
+                1083.55
+              ],
+              [
+                799.15,
+                1083.55
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                796.196,
+                1087.091
+              ],
+              [
+                796.196,
+                1083.55
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                922.001,
+                1080.85
+              ],
+              [
+                979.599,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                1080.85
+              ],
+              [
+                922.001,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                864.401,
+                1080.85
+              ],
+              [
+                921.999,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1088.05,
+                1080.85
+              ],
+              [
+                1037.201,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1088.05,
+                1077.25
+              ],
+              [
+                1088.05,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1094.799,
+                1077.25
+              ],
+              [
+                1088.05,
+                1077.25
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                1080.85
+              ],
+              [
+                1037.201,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.601,
+                1080.85
+              ],
+              [
+                1037.199,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                1077.25
+              ],
+              [
+                1139.35,
+                1037.201
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1094.801,
+                1077.25
+              ],
+              [
+                1139.35,
+                1077.25
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1139.35,
+                1037.199
+              ],
+              [
+                1139.35,
+                1037.201
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1094.799,
+                1077.25
+              ],
+              [
+                1094.801,
+                1077.25
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.599,
+                1080.85
+              ],
+              [
+                979.601,
+                1080.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                864.399,
+                1080.85
+              ],
+              [
+                864.401,
+                1080.85
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 520.527,
+          "global_route": 521.558,
+          "detail_route": 0.0
+        }
+      },
+      "Pool-2": {
+        "port": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/io_resp_valid",
+        "net": "system/tile_prci_domain/element_reset_domain_rockettile/n_applyOrElse_1_io_resp_valid",
+        "global_shape_count": 69,
+        "endpoint_span_um": 658.9195,
+        "endpoint_groups": [
+          "Pool",
+          "Rocket"
+        ],
+        "route_length_um": 839.294,
+        "detail_route_shapes": 0,
+        "endpoints": [
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/responseValid_reg/Q",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1063.501,
+              977.02
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/U310/A2",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1060.911,
+              977.4505
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/U309/A2",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1060.541,
+              976.888
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse_1/U237/A2",
+            "group": "Pool",
+            "pin_bbox_center_um": [
+              1270.8035,
+              864.7
+            ]
+          },
+          {
+            "name": "system/tile_prci_domain/element_reset_domain_rockettile/respArb_io_in_2_q/U11/A1",
+            "group": "Rocket",
+            "pin_bbox_center_um": [
+              783.485,
+              1036.301
+            ]
+          }
+        ],
+        "shape_rows": [
+          {
+            "layer": "M9",
+            "shape_type": "line",
+            "points": [
+              [
+                1306.75,
+                919.75
+              ],
+              [
+                1306.75,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1292.35,
+                919.75
+              ],
+              [
+                1306.75,
+                919.75
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1292.35,
+                916.15
+              ],
+              [
+                1292.35,
+                919.75
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1285.15,
+                916.15
+              ],
+              [
+                1292.35,
+                916.15
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1285.15,
+                913.45
+              ],
+              [
+                1285.15,
+                916.15
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1279.75,
+                913.45
+              ],
+              [
+                1285.15,
+                913.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1279.75,
+                882.85
+              ],
+              [
+                1279.75,
+                913.45
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1279.75,
+                881.05
+              ],
+              [
+                1279.75,
+                882.85
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1269.85,
+                881.05
+              ],
+              [
+                1279.75,
+                881.05
+              ]
+            ]
+          },
+          {
+            "layer": "M5",
+            "shape_type": "line",
+            "points": [
+              [
+                1269.85,
+                864.683
+              ],
+              [
+                1269.85,
+                881.05
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1270.704,
+                864.683
+              ],
+              [
+                1269.85,
+                864.683
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1269.85,
+                881.05
+              ],
+              [
+                1267.601,
+                881.05
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1267.599,
+                881.05
+              ],
+              [
+                1267.601,
+                881.05
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                839.65,
+                976.977
+              ],
+              [
+                864.399,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.801,
+                976.977
+              ],
+              [
+                839.65,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                806.799,
+                976.977
+              ],
+              [
+                806.801,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                777.55,
+                1034.95
+              ],
+              [
+                777.55,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                782.05,
+                1034.95
+              ],
+              [
+                777.55,
+                1034.95
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                782.95,
+                1034.95
+              ],
+              [
+                782.05,
+                1034.95
+              ]
+            ]
+          },
+          {
+            "layer": "M3",
+            "shape_type": "line",
+            "points": [
+              [
+                782.95,
+                1036.165
+              ],
+              [
+                782.95,
+                1034.95
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                783.468,
+                1036.165
+              ],
+              [
+                782.95,
+                1036.165
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                777.55,
+                979.599
+              ],
+              [
+                777.55,
+                979.601
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                777.55,
+                976.977
+              ],
+              [
+                806.799,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                777.55,
+                979.599
+              ],
+              [
+                777.55,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                922.001,
+                976.977
+              ],
+              [
+                979.599,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                921.999,
+                976.977
+              ],
+              [
+                922.001,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                864.401,
+                976.977
+              ],
+              [
+                921.999,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1063.389,
+                976.977
+              ],
+              [
+                1061.05,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1063.389,
+                977.003
+              ],
+              [
+                1063.389,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1061.05,
+                976.977
+              ],
+              [
+                1060.894,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M1",
+            "shape_type": "line",
+            "points": [
+              [
+                1060.894,
+                976.977
+              ],
+              [
+                1060.894,
+                977.338
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1060.558,
+                976.977
+              ],
+              [
+                1060.894,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1060.894,
+                976.977
+              ],
+              [
+                1056.1,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1063.389,
+                976.977
+              ],
+              [
+                1063.389,
+                977.003
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1050.7,
+                976.977
+              ],
+              [
+                1063.389,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1050.698,
+                976.977
+              ],
+              [
+                1050.7,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M2",
+            "shape_type": "line",
+            "points": [
+              [
+                1060.558,
+                976.977
+              ],
+              [
+                1050.698,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1056.1,
+                976.977
+              ],
+              [
+                1042.15,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M4",
+            "shape_type": "line",
+            "points": [
+              [
+                1042.15,
+                976.977
+              ],
+              [
+                1050.7,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1042.15,
+                976.977
+              ],
+              [
+                1037.201,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1037.199,
+                976.977
+              ],
+              [
+                1037.201,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1007.95,
+                976.977
+              ],
+              [
+                1037.199,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1020.55,
+                952.15
+              ],
+              [
+                1094.799,
+                952.15
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1020.55,
+                955.75
+              ],
+              [
+                1020.55,
+                952.15
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1010.65,
+                955.75
+              ],
+              [
+                1020.55,
+                955.75
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1010.65,
+                956.65
+              ],
+              [
+                1010.65,
+                955.75
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1008.85,
+                956.65
+              ],
+              [
+                1010.65,
+                956.65
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1008.85,
+                966.55
+              ],
+              [
+                1008.85,
+                956.65
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1007.95,
+                966.55
+              ],
+              [
+                1008.85,
+                966.55
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1007.95,
+                976.977
+              ],
+              [
+                1007.95,
+                966.55
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                985.45,
+                976.977
+              ],
+              [
+                1007.95,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.601,
+                976.977
+              ],
+              [
+                985.45,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1152.401,
+                951.25
+              ],
+              [
+                1209.999,
+                951.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1152.399,
+                951.25
+              ],
+              [
+                1152.401,
+                951.25
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1152.399,
+                952.15
+              ],
+              [
+                1152.399,
+                951.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1094.801,
+                952.15
+              ],
+              [
+                1152.399,
+                952.15
+              ]
+            ]
+          },
+          {
+            "layer": "M9",
+            "shape_type": "line",
+            "points": [
+              [
+                1306.75,
+                922.45
+              ],
+              [
+                1306.75,
+                921.999
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1307.65,
+                922.45
+              ],
+              [
+                1306.75,
+                922.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1307.65,
+                927.85
+              ],
+              [
+                1307.65,
+                922.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1309.45,
+                927.85
+              ],
+              [
+                1307.65,
+                927.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1309.45,
+                936.85
+              ],
+              [
+                1309.45,
+                927.85
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1307.65,
+                936.85
+              ],
+              [
+                1309.45,
+                936.85
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1307.65,
+                949.45
+              ],
+              [
+                1307.65,
+                936.85
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                1300.45,
+                949.45
+              ],
+              [
+                1307.65,
+                949.45
+              ]
+            ]
+          },
+          {
+            "layer": "M7",
+            "shape_type": "line",
+            "points": [
+              [
+                1300.45,
+                951.25
+              ],
+              [
+                1300.45,
+                949.45
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1209.999,
+                951.25
+              ],
+              [
+                1300.45,
+                951.25
+              ]
+            ]
+          },
+          {
+            "layer": "M8",
+            "shape_type": "line",
+            "points": [
+              [
+                1094.799,
+                952.15
+              ],
+              [
+                1094.801,
+                952.15
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                979.599,
+                976.977
+              ],
+              [
+                979.601,
+                976.977
+              ]
+            ]
+          },
+          {
+            "layer": "M6",
+            "shape_type": "line",
+            "points": [
+              [
+                864.399,
+                976.977
+              ],
+              [
+                864.401,
+                976.977
+              ]
+            ]
+          }
+        ],
+        "report_wirelength_um": {
+          "virtual": 659.422,
+          "global_route": 839.294,
+          "detail_route": 0.0
+        }
+      }
+    },
+    "selector": "Up to one verified net per interface mask, up to three per CGRA, Gemmini and Pool port group. Leaf pins span at least two region owners and 120 \u00b5m Manhattan distance. Highlights use explicit saved global_route point lists, or native FC routing with positive routed length verified using GRoute visibility controls.",
+    "pre_routing_summary": "****************************************\nReport : congestion\nDesign : ChipTop\nVersion: T-2022.03-SP5\nDate   : Wed Nov 18 17:07:33 2026\n****************************************\n\nLayer     |    overflow     |              # GRCs has\nName      |  total  |  max  | overflow (%)      | max overflow\n---------------------------------------------------------------\nBoth Dirs |    3142 |     9 |    1650  ( 0.01%) |       1\nH routing |    2954 |     9 |    1470  ( 0.02%) |       1\nV routing |     188 |     2 |     180  ( 0.00%) |       8\n\n1\n",
+    "saved_summary": "****************************************\nReport : congestion\nDesign : ChipTop\nVersion: T-2022.03-SP5\nDate   : Wed Nov 18 20:04:43 2026\n****************************************\n\nLayer     |    overflow     |              # GRCs has\nName      |  total  |  max  | overflow (%)      | max overflow\n---------------------------------------------------------------\nBoth Dirs | 27115376 |   73 | 5920107  (38.58%) |       1\nH routing | 19312626 |   73 | 3088272  (40.25%) |       1\nV routing | 7802750 |    62 | 2831835  (36.91%) |       1\n\n1\n",
+    "displayed_layout": "native.png",
+    "displayed_layout_sha256": "29fe00801537797f6506c534b33f16cf3a36a5af37ba683c4157d83c60e11d41",
+    "detail": {
+      "region": "CGRA",
+      "rect_um": [
+        1964.0,
+        1694.0,
+        1996.0,
+        1706.0
+      ],
+      "shape_use": "global_route",
+      "signal_shapes_intersecting_window": 1092,
+      "visible_vs_hidden_changed_pixels": 383394,
+      "sha256": "84532c3198485fe4669bde9984cd7a18f6d73fdc076b75ad03b6ed4ae4ef0e54"
+    },
+    "checkpoint_design_sha256": "8084bc985ac49859ccfcbae042f98b9f0641b7bf6ecfd88ed0686aac61d14017",
+    "stage_log_sha256": "fcb9d3973b0405b16bc3a3619dd6126e48a2c8e7541208f36e3bad2b5f5b762e"
+  },
+  "stage_exit": 0,
+  "tool": "Synopsys Fusion Compiler",
+  "tool_version": "T-2022.03-SP5",
+  "native_pixels": [
+    4800,
+    4800
+  ],
+  "signoff": false,
+  "artifacts": {
+    "png": "e4ce6f14b25a52130ea801942f0caa05c7455b57f2634dc45b80edea9b5de203",
+    "pdf": "e67f93905ce32ab0382fdd79ee1c0999616f666ca884438698ef5af95dd2b21b"
+  }
+}

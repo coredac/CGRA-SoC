@@ -1,0 +1,206 @@
+{
+  "source": "/home/jjqin/CGRA-SoC/build/experiments/p1/summary27/figures/review-v7/metrics.csv",
+  "source_sha256": "3a859921f2802dadb94fd9bd4cf8d45a4db8e84c2cf37355c53d9b68af0bb256",
+  "speedup_baseline": "Per-task on the same CGRA count, separately for each workload.",
+  "ae_baseline": "Per-task on one CGRA, separately for each workload.",
+  "legend": "1/2/3 denote per-task/per-segment/per-graph; parentheses contain the CGRA count. Solid bars show Speedup and hatched bars show AE.",
+  "endpoint": "All 54 bars use speedup_low or ae_low, the conservative minimum endpoint. Original source intervals remain unchanged. Removing plot footnotes does not change the measurement/model status.",
+  "annotations": "Separate Speedup and AE maxima of conservative bar heights for each workload and CGRA count. Numeric labels display only that selected endpoint; thin leader lines associate labels with bars.",
+  "area_method": "../review-v7/method.json",
+  "notes": [
+    "AE is an exploratory equal-clock estimate, not jointly validated PPA.",
+    "Area uses component accounting and discrete SRAM macro counts. Non-singleton latencies are modeled refill scenarios; singleton latencies retain archived values.",
+    "GCN per-segment AE uses a hypothetical shared-template area subtotal and assumes unchanged old latency; new band-origin logic area and delay are unpriced. This point is conditional, not measured PPA."
+  ],
+  "records": [
+    {
+      "workload": "ResNet",
+      "cgras": 1,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.0
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 1,
+      "policy": "per-segment",
+      "speedup": 1.0152210328185172,
+      "ae": 0.8640582109488204
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 1,
+      "policy": "per-graph",
+      "speedup": 2.343110866840082,
+      "ae": 1.9245814250097282
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 2,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.127202876829825
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 2,
+      "policy": "per-segment",
+      "speedup": 1.1040486979332869,
+      "ae": 0.7948146075608757
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 2,
+      "policy": "per-graph",
+      "speedup": 2.898380583174935,
+      "ae": 2.0490413864113135
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 4,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 0.8559109639019511
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 4,
+      "policy": "per-segment",
+      "speedup": 3.6229809049706514,
+      "ae": 1.154310918854877
+    },
+    {
+      "workload": "ResNet",
+      "cgras": 4,
+      "policy": "per-graph",
+      "speedup": 3.87896553918605,
+      "ae": 1.232956445219724
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 1,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.0
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 1,
+      "policy": "per-segment",
+      "speedup": 1.104662629825254,
+      "ae": 0.9275099766451138
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 1,
+      "policy": "per-graph",
+      "speedup": 1.1235147086838526,
+      "ae": 0.89027415421778
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 2,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.5700731341762195
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 2,
+      "policy": "per-segment",
+      "speedup": 1.431219540169853,
+      "ae": 1.6369171522020647
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 2,
+      "policy": "per-graph",
+      "speedup": 1.5023626262518885,
+      "ae": 1.589853816652509
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 4,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.240005823684971
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 4,
+      "policy": "per-segment",
+      "speedup": 2.4796371610720627,
+      "ae": 1.9377180146354465
+    },
+    {
+      "workload": "GPT-2",
+      "cgras": 4,
+      "policy": "per-graph",
+      "speedup": 2.861446098295681,
+      "ae": 2.0514720295707436
+    },
+    {
+      "workload": "GCN",
+      "cgras": 1,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 1.0
+    },
+    {
+      "workload": "GCN",
+      "cgras": 1,
+      "policy": "per-segment",
+      "speedup": 1.5119105855592996,
+      "ae": 1.2962850840617446
+    },
+    {
+      "workload": "GCN",
+      "cgras": 1,
+      "policy": "per-graph",
+      "speedup": 1.5132483167765618,
+      "ae": 1.2833079947149542
+    },
+    {
+      "workload": "GCN",
+      "cgras": 2,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 0.8978939971975608
+    },
+    {
+      "workload": "GCN",
+      "cgras": 2,
+      "policy": "per-segment",
+      "speedup": 1.6778561587917133,
+      "ae": 1.3196398411499395
+    },
+    {
+      "workload": "GCN",
+      "cgras": 2,
+      "policy": "per-graph",
+      "speedup": 1.8362808229935605,
+      "ae": 1.4290512917469258
+    },
+    {
+      "workload": "GCN",
+      "cgras": 4,
+      "policy": "per-task",
+      "speedup": 1.0,
+      "ae": 0.7833837812288762
+    },
+    {
+      "workload": "GCN",
+      "cgras": 4,
+      "policy": "per-segment",
+      "speedup": 1.6705141792722484,
+      "ae": 1.1169898041320592
+    },
+    {
+      "workload": "GCN",
+      "cgras": 4,
+      "policy": "per-graph",
+      "speedup": 2.255609231489753,
+      "ae": 1.485333580768004
+    }
+  ]
+}

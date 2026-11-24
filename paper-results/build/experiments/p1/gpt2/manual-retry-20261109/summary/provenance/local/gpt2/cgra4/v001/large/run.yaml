@@ -1,0 +1,157 @@
+status: partial_rows_and_wide_interrupted_by_user
+stop_observed_utc: '2026-11-05 12:47'
+stop_evidence: Previous execution handles unavailable after interruption; rows Manual and wide final exits unconfirmed. Preserve partial logs; do not restart. Wide Auto was never started.
+started_utc: '2026-11-04 22:27'
+active_sessions: {}
+interrupted_sessions: {rows_manual: 83145, wide_manual: 12819, wide_hybrid: 71395}
+wide_hybrid_started_utc: '2026-11-05 06:21'
+wide_hybrid_command: bash build/experiments/p1/gpt2/cgra4/v001/large/run.sh wide hybrid
+wide_hybrid_log: wide-hybrid.log
+completed_sessions: {rows_auto: 38321, rows_hybrid: 14405}
+wide_manual_started_utc: '2026-11-05 04:49'
+wide_manual_command: bash build/experiments/p1/gpt2/cgra4/v001/large/run.sh wide manual
+wide_manual_log: wide-manual.log
+wide_scheduling: Manual started after rows Hybrid exited0. Hybrid started after two-CGRA rows Manual exited0. Both reuse this frozen simulator and verified wide ELF with isolated output/TMPDIR/binary. Wide Auto remains unstarted. Active worker count remains27; about30GiB available memory before Hybrid launch.
+small_gate: ../run.yaml
+small_gate_exit_code: 0
+small_gate_scope: Six N16/H128/heads2/FF512 inferences checked2048 outputs each, zero mismatches/status errors, PASS and exit0. Both inputs checked in every mode.
+runner: run.sh
+command: bash build/experiments/p1/gpt2/cgra4/v001/large/run.sh rows MODE
+driver_logs: [rows-manual.log, rows-hybrid.log, rows-auto.log]
+output_directories: [rows/output-manual, rows/output-hybrid, rows/output-auto]
+simulator: ../simulator
+simulator_sha256: 4e0328056ebd0eb5af5b3933bdcab0bc46caf5b36f85579cba45d51a826a6257
+rows_elf: ../checks/rows.riscv
+rows_elf_sha256: 3e6817848f98ac241a96cc497918a11a41405106b2e6c06be0451ad28f5505f4
+wide_elf: ../checks/wide.riscv
+wide_elf_sha256: 0cc06ef36f36e245b80b34bedab080c9c0bfcddf1d3515afce6a74be671b5a0e
+rtl: ../rtl/soc-sim.tar.gz
+rtl_sha256: ac5a1ea20784474492c207b78f35a4aeba9fa1456ea9ea769f278cae9a1c198b
+shape: {length: 64, hidden: 128, heads: 2, ff: 512}
+pending_shape: {length: 16, hidden: 768, heads: 12, ff: 3072}
+arguments: MODE_NUMBER 1 1
+samples: One configuration-cold and one warm inference per mode, on different inputs.
+numerical_check: Disabled for larger cases as requested; completion/status and process exits remain required.
+harness_cycle_limit: 200000000
+random_seed: 1
+loadmem: 1
+simulator_threads: 4
+stack_kib: 32768
+isolation: Frozen simulator and matching precompiled ELF; separate binaries/output/TMPDIR per mode and pipefail through tee. No regeneration or recompilation against shared ResNet headers.
+concurrency: Three modes add12 workers to six original single-thread runs and three four-thread two-CGRA rows runs, total30 workers on32 reported CPUs. About25GiB available memory before launch. No additional runs until resources become available; host wall time is not the performance metric.
+results: pending
+partial_results:
+  observed_utc: '2026-11-05 06:36'
+  shape: rows
+  records:
+    - mode: Manual
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 13186943
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 12177, setup: 458856, capture: 2, execute: 12715908, total: 13186943}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [0, 0]
+      cached_profiles: 0
+      reports: 0
+      auto_launches: 0
+      dma_bytes: {input: 8192, output: 8192, affine: 8192}
+      driver_log: rows-manual.log
+      uart_log: rows/output-manual/rows-manual.log
+    - mode: Hybrid
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 5534000
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [59, 128, 31]
+      breakdown_cycles: {staging: 12177, setup: 458856, capture: 494365, execute: 4568602, total: 5534000}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 128]
+      cached_profiles: 31
+      reports: 778
+      auto_launches: 15
+      dma_bytes: {input: 8192, output: 8192, affine: 8192}
+      driver_log: rows-hybrid.log
+      uart_log: rows/output-hybrid/rows-hybrid.log
+    - mode: Hybrid
+      phase: warm
+      repeat: 1
+      input: 1
+      cycles: 4561151
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 12242, setup: 30, capture: 1, execute: 4548878, total: 4561151}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 128]
+      cached_profiles: 31
+      reports: 778
+      auto_launches: 15
+      dma_bytes: {input: 8192, output: 8192, affine: 0}
+      driver_log: rows-hybrid.log
+      uart_log: rows/output-hybrid/rows-hybrid.log
+    - mode: Auto
+      phase: cold
+      repeat: 0
+      input: 0
+      cycles: 5414871
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [59, 128, 31]
+      breakdown_cycles: {staging: 12145, setup: 466233, capture: 495194, execute: 4441299, total: 5414871}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 128]
+      cached_profiles: 31
+      reports: 562
+      auto_launches: 1
+      dma_bytes: {input: 8192, output: 8192, affine: 8192}
+      driver_log: rows-auto.log
+      uart_log: rows/output-auto/rows-auto.log
+    - mode: Auto
+      phase: warm
+      repeat: 1
+      input: 1
+      cycles: 4434498
+      checked: 0
+      mismatches: 0
+      status: 0
+      captures: [0, 0, 0]
+      breakdown_cycles: {staging: 11619, setup: 5, capture: 1, execute: 4422873, total: 4434498}
+      disjoint_phase_sum_verified: true
+      cached_jobs: [59, 128]
+      cached_profiles: 31
+      reports: 562
+      auto_launches: 1
+      dma_bytes: {input: 8192, output: 8192, affine: 0}
+      driver_log: rows-auto.log
+      uart_log: rows/output-auto/rows-auto.log
+  auto_result:
+    status: completed
+    completed_utc: '2026-11-05 04:39'
+    session: 38321
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-auto.log
+    driver_log_sha256: 228040dc3f2a780b74d22789f3ae7ad7e0a3d76b94724697d68e34ea5365fc02
+    uart_log: rows/output-auto/rows-auto.log
+    uart_log_sha256: de41bc06675757c78b8f0e23508aeb2b818b1666c8a09ad7e4d96df17b74ad43
+  hybrid_result:
+    status: completed
+    completed_utc: '2026-11-05 04:49'
+    session: 14405
+    process_exit_code: 0
+    exit_evidence: Exit0 and completion time confirmed by the owning root; driver and UART logs contain PASS and Verilog finish.
+    driver_log: rows-hybrid.log
+    driver_log_sha256: d32c790c7775bde709c5ba757d323335f82568c953afb17c96b20abae05920c7
+    uart_log: rows/output-hybrid/rows-hybrid.log
+    uart_log_sha256: d5a10141340eaff57c3dc62a3af0c9951d77030c7e149d507f3d0b7ebdc0e8b7
+  interpretation: Rows Auto and Hybrid completed cold and warm timing/status checks with PASS and exit0; their full records are preserved above. Manual remains incomplete. This is partial timing evidence with checked0, not numerical validation or a completed rows setting, and no wide completion is claimed.

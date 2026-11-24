@@ -1,0 +1,20 @@
+{
+  "top": "ExpandedSad",
+  "source_sha256": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5",
+  "sources": {
+    "ExpandedSad.sv": "60cff9e00338e9c5a224837d583200de42235b254d22bebd492d111117f13f78",
+    "Primitives.sv": "78e298fd65e34aad125e47be4e51c848fe8c57bf40b2b388039212c21090df31",
+    "all.v": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5"
+  },
+  "primitive_source": "build/experiments/asic/hybrid/capability-trial/rtl/Primitives.sv",
+  "primitive_unchanged": true,
+  "clock_target_ns": 2,
+  "native_scope": "One optional dedicated SAD sequencer and16-lane PrimitiveBank; no adapters, DMA or externalSPM; zero bulk local/config storage arrays",
+  "modifications": "Local experiment only; active ASIC and VectorCGRA unchanged",
+  "proof_inputs": {
+    "ControlProof.sv": "b7bb90246c385ff61f6215d569dde42707766bae6cb7d3b2cae3919bbcfb2f20",
+    "BankModel.sv": "65c52dc61cd19f0bd048e962c4ff4a4b981bfe94bbaec7d9fc848a3857a9512f",
+    "proof.ys": "7815fbf37b95d8bb08296588493e5fb60cd77d1f586da4fa9a2ba06704c1859a",
+    "check_math.py": "5186e70322580af0084fb77addd9c3c113d4710d98ff3e91ba8720ecc3eccb6b"
+  }
+}

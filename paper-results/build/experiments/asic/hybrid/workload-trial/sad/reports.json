@@ -1,0 +1,27 @@
+{
+  "job": {
+    "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+    "remote": "/tmp/cgra-sad-area-i6gRUHww",
+    "source_sha256": "6bbc84a818df949556ea017082e889a60832d0fbb3a5f85fa4e597e72d46afe5",
+    "constraints_sha256": "2a86e9269d3ca3cc39a5198a09e36c2685a691d3cb93c65d7675d683004314c5",
+    "base_constraints_sha256": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "flow_difference": "Only top-level design name changes from ExpandedAsic to ExpandedSad."
+  },
+  "files": {
+    "area.rpt": "e73a09ea5e84fbe2b131c95eef56b7a2e18aa1727c43f5f2b496960f1d0ea448",
+    "units.rpt": "5d897bd06167d597aecd23bfdef1fdc73c7b71980029945c9c1f58e15f78f19c",
+    "setup.rpt": "6154332439cb6c4b2749eff7c18cd0c0c8b659f7eea1d1649b24ef9733227f5f",
+    "constraints.rpt": "d7dc3ab0d14b319de2a8d923a27471e6008ee9cc458805783b5f6fd84f65869f",
+    "qor.rpt": "3f55dc8a42a93e7c40c987b3c0b6632e2e276efa60acf8a7bbd1603d68ebf7ac",
+    "check.rpt": "78e6d7a7f61289ecd8bc96ee67e045d2436d0f75f13016532c631fd9dc833317",
+    "timing_check.rpt": "94bf7675a38cf2f7e109edbc8dc51e1112bf6d2b3427362c2e14197d434eaf38",
+    "design.rpt": "dbad93992ac5a9c6301720a97ac6969823164774fcf79a9227ab0de30220a29d",
+    "leaves.tsv": "561609ecdc14e4f0884db6d3129d99375a63f73c25f32acd147f0f4fc74026ed",
+    "SUCCESS": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1",
+    "exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "started": "13c3e2c023da382451f155ad21d038f2d1f4634ad87816e42c31600fdd691066",
+    "finished": "ed919c4a0933147e3c2385a20b6d43cae289e7689e279d60aa22d7a55a35d1e2",
+    "dc.log": "6cfd347ac61001902c46c2fd2adb08abb4ab776dd544ebb95f45c08218542b07",
+    "inputs.sha256": "0d9bc11bde330b366e01554439ed70b718c42105ccb1b4c9a7fd6bd7103512ad"
+  }
+}

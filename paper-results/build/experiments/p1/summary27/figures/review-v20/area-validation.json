@@ -1,0 +1,247 @@
+{
+  "passed": true,
+  "checks": {
+    "nine bars": true,
+    "ResNet and GCN unchanged": true,
+    "Manual only CGRA SRAM absolute area changes": true,
+    "Manual CGRA SRAM quarter": true,
+    "Hybrid only CGRA SRAM absolute area changes": true,
+    "Hybrid CGRA SRAM quarter": true,
+    "Auto only CGRA SRAM absolute area changes": true,
+    "Auto CGRA SRAM quarter": true,
+    "categories partition original breakdown": true,
+    "resnet Manual conserved area": true,
+    "resnet Hybrid conserved area": true,
+    "resnet Auto conserved area": true,
+    "gpt2-rows Manual conserved area": true,
+    "gpt2-rows Hybrid conserved area": true,
+    "gpt2-rows Auto conserved area": true,
+    "gcn Manual conserved area": true,
+    "gcn Hybrid conserved area": true,
+    "gcn Auto conserved area": true,
+    "no LaTeX overflow or error": true,
+    "same PDF page dimensions": true
+  },
+  "gpt_changes": [
+    {
+      "policy": "Manual",
+      "old_total": 10755881.348364,
+      "new_total": 8732372.535944,
+      "old_bar_height": 0.7924009782308027,
+      "new_bar_height": 0.7560314226631526,
+      "components": {
+        "gem_compute": {
+          "old_area": 2292048.739095,
+          "new_area": 2292048.739095,
+          "old_height": 0.16885846953748782,
+          "new_height": 0.19844101495882294,
+          "old_share_percent": 21.309725022614042,
+          "new_share_percent": 26.24772053254163
+        },
+        "gem_spm": {
+          "old_area": 4322767.937534,
+          "new_area": 4322767.937534,
+          "old_height": 0.3184644225261651,
+          "new_height": 0.37425663875472687,
+          "old_share_percent": 40.18980683708923,
+          "new_share_percent": 49.5027888439335
+        },
+        "gem_adapter": {
+          "old_area": 12671.493565,
+          "new_area": 12671.493565,
+          "old_height": 0.0009335268372106551,
+          "new_height": 0.0010970726761576825,
+          "old_share_percent": 0.11780990468928305,
+          "new_share_percent": 0.14510940197342562
+        },
+        "cgra_compute": {
+          "old_area": 1314829.4068840002,
+          "new_area": 1314829.4068840002,
+          "old_height": 0.09686534041024723,
+          "new_height": 0.1138353114178493,
+          "old_share_percent": 12.224283294869085,
+          "new_share_percent": 15.056955042537732
+        },
+        "cgra_spm": {
+          "old_area": 2698011.749892,
+          "new_area": 674502.937472,
+          "old_height": 0.19876633821530604,
+          "new_height": 0.05839712097810824,
+          "old_share_percent": 25.084060176085668,
+          "new_share_percent": 7.724165851784561
+        },
+        "cgra_adapter": {
+          "old_area": 17086.052333,
+          "new_area": 17086.052333,
+          "old_height": 0.001258753619928246,
+          "new_height": 0.0014792763822024262,
+          "old_share_percent": 0.15885311281905165,
+          "new_share_percent": 0.19566334650372239
+        },
+        "autolink": {
+          "old_area": 0.0,
+          "new_area": 0.0,
+          "old_height": 0.0,
+          "new_height": 0.0,
+          "old_share_percent": 0.0,
+          "new_share_percent": 0.0
+        },
+        "others": {
+          "old_area": 98465.96906100001,
+          "new_area": 98465.96906100003,
+          "old_height": 0.007254127084457669,
+          "new_height": 0.00852498749528512,
+          "old_share_percent": 0.9154616518336451,
+          "new_share_percent": 1.1275969807254165
+        }
+      }
+    },
+    {
+      "policy": "Hybrid",
+      "old_total": 12810234.364647001,
+      "new_total": 10786725.552227,
+      "old_bar_height": 0.943748067977349,
+      "new_bar_height": 0.9338932153385923,
+      "components": {
+        "gem_compute": {
+          "old_area": 2292048.739095,
+          "new_area": 2292048.739095,
+          "old_height": 0.16885846953748782,
+          "new_height": 0.19844101495882294,
+          "old_share_percent": 17.892324791656222,
+          "new_share_percent": 21.24879072891392
+        },
+        "gem_spm": {
+          "old_area": 4322767.937534,
+          "new_area": 4322767.937534,
+          "old_height": 0.3184644225261651,
+          "new_height": 0.37425663875472687,
+          "old_share_percent": 33.74464365354426,
+          "new_share_percent": 40.07488571581885
+        },
+        "gem_adapter": {
+          "old_area": 560444.2283330001,
+          "new_area": 560444.2283330001,
+          "old_height": 0.04128871827341466,
+          "new_height": 0.04852214510155983,
+          "old_share_percent": 4.374972481999892,
+          "new_share_percent": 5.195684507030887
+        },
+        "cgra_compute": {
+          "old_area": 1314829.4068840002,
+          "new_area": 1314829.4068840002,
+          "old_height": 0.09686534041024723,
+          "new_height": 0.1138353114178493,
+          "old_share_percent": 10.263898141571836,
+          "new_share_percent": 12.189328452994188
+        },
+        "cgra_spm": {
+          "old_area": 2698011.749892,
+          "new_area": 674502.937472,
+          "old_height": 0.19876633821530604,
+          "new_height": 0.05839712097810824,
+          "old_share_percent": 21.061376966980625,
+          "new_share_percent": 6.2530833310461285
+        },
+        "cgra_adapter": {
+          "old_area": 1090826.9068,
+          "new_area": 1090826.9068,
+          "old_height": 0.0803627596877753,
+          "new_height": 0.09444162108666808,
+          "old_share_percent": 8.51527673693782,
+          "new_share_percent": 10.112678787630696
+        },
+        "autolink": {
+          "old_area": 432839.427048,
+          "new_area": 432839.427048,
+          "old_height": 0.03188789224249521,
+          "new_height": 0.03747437554557187,
+          "old_share_percent": 3.378856426253426,
+          "new_share_percent": 4.012704550164782
+        },
+        "others": {
+          "old_area": 98465.96906100001,
+          "new_area": 98465.96906100003,
+          "old_height": 0.007254127084457669,
+          "new_height": 0.00852498749528512,
+          "old_share_percent": 0.7686508010559208,
+          "new_share_percent": 0.9128439264005469
+        }
+      }
+    },
+    {
+      "policy": "Auto",
+      "old_total": 13573786.055109,
+      "new_total": 11550277.242689,
+      "old_bar_height": 1.0,
+      "new_bar_height": 1.0,
+      "components": {
+        "gem_compute": {
+          "old_area": 2292048.739095,
+          "new_area": 2292048.739095,
+          "old_height": 0.16885846953748782,
+          "new_height": 0.19844101495882294,
+          "old_share_percent": 16.885846953748782,
+          "new_share_percent": 19.844101495882292
+        },
+        "gem_spm": {
+          "old_area": 4322767.937534,
+          "new_area": 4322767.937534,
+          "old_height": 0.3184644225261651,
+          "new_height": 0.37425663875472687,
+          "old_share_percent": 31.84644225261651,
+          "new_share_percent": 37.42566387547269
+        },
+        "gem_adapter": {
+          "old_area": 984021.2390909999,
+          "new_area": 984021.239091,
+          "old_height": 0.07249423521896656,
+          "new_height": 0.08519459909188394,
+          "old_share_percent": 7.249423521896656,
+          "new_share_percent": 8.519459909188393
+        },
+        "cgra_compute": {
+          "old_area": 1314829.4068840002,
+          "new_area": 1314829.4068840002,
+          "old_height": 0.09686534041024723,
+          "new_height": 0.1138353114178493,
+          "old_share_percent": 9.686534041024723,
+          "new_share_percent": 11.38353114178493
+        },
+        "cgra_spm": {
+          "old_area": 2698011.749892,
+          "new_area": 674502.937472,
+          "old_height": 0.19876633821530604,
+          "new_height": 0.05839712097810824,
+          "old_share_percent": 19.876633821530604,
+          "new_share_percent": 5.839712097810824
+        },
+        "cgra_adapter": {
+          "old_area": 1430801.586504,
+          "new_area": 1430801.586504,
+          "old_height": 0.10540917476487442,
+          "new_height": 0.1238759517577517,
+          "old_share_percent": 10.540917476487442,
+          "new_share_percent": 12.387595175775171
+        },
+        "autolink": {
+          "old_area": 432839.427048,
+          "new_area": 432839.427048,
+          "old_height": 0.03188789224249521,
+          "new_height": 0.03747437554557187,
+          "old_share_percent": 3.188789224249521,
+          "new_share_percent": 3.747437554557187
+        },
+        "others": {
+          "old_area": 98465.96906100001,
+          "new_area": 98465.96906100003,
+          "old_height": 0.007254127084457669,
+          "new_height": 0.00852498749528512,
+          "old_share_percent": 0.7254127084457669,
+          "new_share_percent": 0.852498749528512
+        }
+      }
+    }
+  ],
+  "visual_check": "Passed: inspected rendered PDF at 180 dpi; legend, labels, stacked boundaries and bars are visible without overlap or clipping. Accepted v17 colors, dimensions and ordering retained."
+}

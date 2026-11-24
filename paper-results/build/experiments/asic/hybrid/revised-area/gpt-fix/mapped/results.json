@@ -1,0 +1,157 @@
+{
+  "complete": true,
+  "evidence_audit": {
+    "source_hash_matches": true,
+    "timing_check_has_no_warnings": true,
+    "constraint_hash_matches": true,
+    "leaf_area_reconciles": true,
+    "leaf_area_tolerance": 0.0217356737307,
+    "storage_arrays_match_expected_count": true,
+    "expected_storage_arrays": 24,
+    "matched_storage_arrays": 24,
+    "passed": true
+  },
+  "storage_array_cell_counts": {
+    "gpt.vector_unit.kernel/source_store/banks[0].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[1].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[2].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[3].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[4].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[5].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[6].memory/words": 4096,
+    "gpt.vector_unit.kernel/source_store/banks[7].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[0].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[1].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[2].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[3].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[4].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[5].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[6].memory/words": 4096,
+    "gpt.vector_unit.kernel/other_store/banks[7].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[0].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[1].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[2].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[3].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[4].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[5].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[6].memory/words": 4096,
+    "gpt.vector_unit.kernel/result_store/banks[7].memory/words": 4096
+  },
+  "total_cell_area": 217356.737307,
+  "local_array_storage_area": 91658.6496,
+  "area_excluding_local_array_storage": 125698.087707,
+  "leaf_area_sum": 217356.7368,
+  "report_minus_leaf_area": 0.000507,
+  "group_area": {
+    "primitive_bank": 33758.3412,
+    "local_array_storage": 91658.6496,
+    "native_datapath_control_and_access": 91930.1112,
+    "top_arbitration_and_control": 9.6348
+  },
+  "group_cell_counts": {
+    "primitive_bank": 78294,
+    "local_array_storage": 98304,
+    "native_datapath_control_and_access": 306088,
+    "top_arbitration_and_control": 46
+  },
+  "storage_cell_references": {
+    "SAEDRVT14_FDP_V2_1": 64948,
+    "SAEDRVT14_FDP_V2LP_1": 13311,
+    "SAEDRVT14_FDP_V2LP_0P5": 20045
+  },
+  "bank_module_access_area_included": 88972.0056,
+  "bank_module_access_hierarchy_available": true,
+  "sequential_cell_count": 104291,
+  "sequential_cell_area": 97241.1504,
+  "design_warning_codes": {
+    "LINT-2": 31,
+    "LINT-8": 31,
+    "LINT-28": 3137,
+    "LINT-33": 95
+  },
+  "storage_rule": {
+    "prefix": "gpt.vector_unit.kernel/",
+    "relative_path_pattern": "(?:source|other|result)_store/banks\\[\\d+\\]\\.memory/words_reg\\[",
+    "sequential": true
+  },
+  "worst_setup_slack_ns": 0.002648,
+  "total_negative_setup_slack_ns_report_precision": 0.0,
+  "violating_setup_paths": 0,
+  "no_violated_constraints": true,
+  "reported_setup_paths": [
+    {
+      "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+      "endpoint": "gpt.vector_unit.kernel/value_reg[31]",
+      "status": "MET",
+      "slack_ns": 0.002648
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/bias_low_reg[16]",
+      "endpoint": "gpt.vector_unit.kernel/biased_reg[31]",
+      "status": "MET",
+      "slack_ns": 0.00709
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/magnitude_reg[0]",
+      "endpoint": "gpt.vector_unit.kernel/product_reg[31]",
+      "status": "MET",
+      "slack_ns": 0.013326
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+      "endpoint": "gpt.vector_unit.kernel/value_reg[30]",
+      "status": "MET",
+      "slack_ns": 0.043283
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/magnitude_reg[0]",
+      "endpoint": "gpt.vector_unit.kernel/product_reg[30]",
+      "status": "MET",
+      "slack_ns": 0.069213
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+      "endpoint": "gpt.vector_unit.kernel/value_reg[29]",
+      "status": "MET",
+      "slack_ns": 0.070506
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+      "endpoint": "gpt.vector_unit.kernel/value_reg[28]",
+      "status": "MET",
+      "slack_ns": 0.08759
+    },
+    {
+      "startpoint": "gpt.vector_unit.kernel/bias_low_reg[16]",
+      "endpoint": "gpt.vector_unit.kernel/biased_reg[30]",
+      "status": "MET",
+      "slack_ns": 0.090254
+    },
+    {
+      "startpoint": "primitives/lane[0].unit/op_reg[4]",
+      "endpoint": "primitives/lane[0].unit/out_data_reg[31]",
+      "status": "MET",
+      "slack_ns": 0.111306
+    },
+    {
+      "startpoint": "primitives/lane[1].unit/op_reg[4]",
+      "endpoint": "primitives/lane[1].unit/out_data_reg[31]",
+      "status": "MET",
+      "slack_ns": 0.111306
+    }
+  ],
+  "listed_setup_paths_cover_all_violations": true,
+  "total_negative_slack_ns_from_listed_paths": 0,
+  "worst_startpoint": "gpt.vector_unit.kernel/value_reg[1]",
+  "worst_endpoint": "gpt.vector_unit.kernel/value_reg[31]",
+  "started_utc": "2026-11-15T15:11:55Z",
+  "finished_utc": "2026-11-15T15:47:42Z",
+  "source_sha256": "2fe24df02f22b1d3b61e881e6368d706b626bb07c0d07f43b5705f53ef7dbdd0",
+  "original_source_sha": "a44d44854006d788ab4ba82226693d308d1a581f536b8b2b1ed0ee3edc6929aa",
+  "new_source_sha": "2fe24df02f22b1d3b61e881e6368d706b626bb07c0d07f43b5705f53ef7dbdd0",
+  "fixed_from": "/home/jjqin/CGRA-SoC/build/experiments/asic/hybrid/revised-area/asic/gpt_vector",
+  "scope": "Whole expanded family5 core with isolated native SQUARE/BIAS timing repair; original six-family report retained separately.",
+  "native_latency_change": "SQUARE +2 cycles; BIAS +1 cycle for paths using those states.",
+  "performance_rerun": false,
+  "simulation_run": false
+}

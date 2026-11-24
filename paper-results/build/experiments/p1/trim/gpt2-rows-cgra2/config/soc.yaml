@@ -1,0 +1,89 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 4096
+  data_mem_size_per_bank: 512
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 131072
+  cgra_spm_window:
+    base_address: 0x60020000
+    size_bytes: 16384
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 32
+      command_capacity: 32
+      patch_capacity: 8
+    cgra0:
+      type: cgra
+      patch_support: false
+      packed_words: 4096
+      packet_capacity: 178
+    cgra1:
+      type: cgra
+      patch_support: false
+      packed_words: 4096
+      packet_capacity: 178
+  run_capacity: 32
+  capacity:
+    stages: 4
+    dependencies: 7
+    results: 4
+    jobs:
+      gemmini0: 64
+      cgra0: 32
+      cgra1: 32
+  buffer_slots:
+    gemmini0: 2
+    cgra0: 1
+    cgra1: 1
+  stages:
+    - name: scores
+      endpoint: gemmini0
+      output: {buffer: publication}
+    - name: softmax0
+      endpoint: cgra0
+      jobs: 3
+    - name: softmax1
+      endpoint: cgra1
+      jobs: 3
+    - name: values
+      endpoint: gemmini0
+  buffers:
+    publication: {address: 0x60006000, size_bytes: 4096}
+  dependencies:
+    - source: input_ready
+      destination: scores
+    - source: scores
+      destination: softmax0
+      buffer: publication
+      size_bytes: 2048
+    - source: scores
+      destination: softmax1
+      buffer: publication
+      source_offset: 2048
+      size_bytes: 2048
+    - source: softmax0
+      destination: values
+      size_bytes: 512
+      format: int8
+    - source: softmax1
+      destination: values
+      destination_offset: 512
+      size_bytes: 512
+      format: int8

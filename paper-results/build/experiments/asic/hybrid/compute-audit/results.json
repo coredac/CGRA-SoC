@@ -1,0 +1,1996 @@
+{
+  "cgra": {
+    "categories": {
+      "configuration_sram": {
+        "cells": 288,
+        "area": 2225288.8126080073
+      },
+      "retained_compute_control": {
+        "cells": 1738395,
+        "area": 1264551.8268077308
+      },
+      "adapter_configuration_bits": {
+        "cells": 2240,
+        "area": 2585.8559999998665
+      },
+      "data_sram": {
+        "cells": 512,
+        "area": 2698011.7498879666
+      },
+      "constant_storage_bits": {
+        "cells": 32480,
+        "area": 37494.6899999868
+      },
+      "pe_configuration_bits": {
+        "cells": 85248,
+        "area": 98410.29119995731
+      }
+    },
+    "core_categories": {
+      "retained_compute_control": {
+        "cells": 1637460,
+        "area": 1178924.4288072367
+      },
+      "data_sram": {
+        "cells": 512,
+        "area": 2698011.7498879666
+      },
+      "constant_storage_bits": {
+        "cells": 32480,
+        "area": 37494.6899999868
+      },
+      "pe_configuration_bits": {
+        "cells": 85248,
+        "area": 98410.29119995731
+      }
+    },
+    "retained_breakdown": {
+      "endpoint_adapters_dma_and_shell": {
+        "cells": 100935,
+        "area": 85627.39800003254
+      },
+      "bypass_queue": {
+        "cells": 982,
+        "area": 905.5380000000063
+      },
+      "controller": {
+        "cells": 22722,
+        "area": 17673.375599995543
+      },
+      "ctrl_ring": {
+        "cells": 340465,
+        "area": 303709.6308005228
+      },
+      "data_mem": {
+        "cells": 72471,
+        "area": 69080.31720003443
+      },
+      "const_mem": {
+        "cells": 110809,
+        "area": 71800.03920007138
+      },
+      "ctrl_mem": {
+        "cells": 360951,
+        "area": 264385.3944002918
+      },
+      "element": {
+        "cells": 326618,
+        "area": 194912.53679997154
+      },
+      "fu_crossbar": {
+        "cells": 50676,
+        "area": 32434.64399999845
+      },
+      "register_cluster": {
+        "cells": 105386,
+        "area": 70099.87440002064
+      },
+      "routing_crossbar": {
+        "cells": 217129,
+        "area": 134361.0156000871
+      },
+      "tile_channels": {
+        "cells": 19520,
+        "area": 14174.033999998072
+      },
+      "tile_local_control": {
+        "cells": 9724,
+        "area": 5385.320399999921
+      },
+      "core_local_control": {
+        "cells": 7,
+        "area": 2.7084
+      }
+    },
+    "control_ring": {
+      "remaining_ring_logic_and_state": {
+        "cells": 286609,
+        "area": 241540.0404002984
+      },
+      "packet_buffer_bits": {
+        "cells": 53856,
+        "area": 62169.590399974855
+      }
+    },
+    "duplicate_paths": 0,
+    "total_area": 6326343.226503649,
+    "report_area": 6326343.224,
+    "area_residual": 0.0025036484003067017
+  },
+  "asic": {
+    "categories": {
+      "data_sram": {
+        "cells": 256,
+        "area": 1349005.8749439947
+      },
+      "retained_compute_control": {
+        "cells": 710914,
+        "area": 402725.4491990615
+      },
+      "local_data_bits": {
+        "cells": 190176,
+        "area": 197656.012799419
+      },
+      "adapter_configuration_bits": {
+        "cells": 5440,
+        "area": 6279.9360000003935
+      }
+    },
+    "core_categories": {
+      "data_sram": {
+        "cells": 256,
+        "area": 1349005.8749439947
+      },
+      "retained_compute_control": {
+        "cells": 685239,
+        "area": 385209.5159991678
+      },
+      "local_data_bits": {
+        "cells": 190176,
+        "area": 197656.012799419
+      }
+    },
+    "retained_breakdown": {
+      "memory": {
+        "cells": 82838,
+        "area": 52112.901600017314
+      },
+      "gcn": {
+        "cells": 236842,
+        "area": 128104.96679997868
+      },
+      "vector_unit": {
+        "cells": 573,
+        "area": 416.87159999999653
+      },
+      "norm": {
+        "cells": 44598,
+        "area": 31718.338799992256
+      },
+      "softmax": {
+        "cells": 4243,
+        "area": 2593.359600000031
+      },
+      "gpt_vector": {
+        "cells": 314721,
+        "area": 169213.23960037253
+      },
+      "core_local_control": {
+        "cells": 1424,
+        "area": 1049.8379999999909
+      },
+      "endpoint_adapters_dma_and_shell": {
+        "cells": 25675,
+        "area": 17515.93319999719
+      }
+    },
+    "control_ring": {},
+    "duplicate_paths": 0,
+    "total_area": 1955667.2729424755,
+    "report_area": 1955667.2736,
+    "area_residual": -0.0006575244478881359
+  },
+  "fu_breakdown": {
+    "add": {
+      "count": 16,
+      "area": 8330.3724,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__0": {
+          "area": 520.6344,
+          "local_area": 315.46200000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__0": {
+          "area": 519.7908,
+          "local_area": 313.06440000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__0": {
+          "area": 522.144,
+          "local_area": 315.4176,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__0": {
+          "area": 511.1772,
+          "local_area": 304.4508,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__0": {
+          "area": 518.7252,
+          "local_area": 312.2208,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__0": {
+          "area": 523.2984,
+          "local_area": 316.572,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__0": {
+          "area": 521.7,
+          "local_area": 314.97360000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__0": {
+          "area": 522.0108,
+          "local_area": 315.2844,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__0": {
+          "area": 519.0804,
+          "local_area": 312.35400000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__0": {
+          "area": 521.8332,
+          "local_area": 315.1068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__0": {
+          "area": 522.2328,
+          "local_area": 315.55080000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__0": {
+          "area": 523.3428,
+          "local_area": 316.6164,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__0": {
+          "area": 520.59,
+          "local_area": 313.8636,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__0": {
+          "area": 523.4316,
+          "local_area": 316.70520000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__0": {
+          "area": 517.3044,
+          "local_area": 310.57800000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__0": {
+          "area": 523.0764,
+          "local_area": 316.35,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_4eb67297935dfc5409cf43ff4d6d85fb8b29312bbfe5e99d3aa30ae1e458d2e4_7"
+        }
+      }
+    },
+    "mul": {
+      "count": 16,
+      "area": 30289.3248,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__1": {
+          "area": 1894.7256,
+          "local_area": 276.2568,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__1": {
+          "area": 1897.1232,
+          "local_area": 273.7704,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__1": {
+          "area": 1890.5964,
+          "local_area": 272.172,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__1": {
+          "area": 1893.7932,
+          "local_area": 272.74920000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__1": {
+          "area": 1899.5208,
+          "local_area": 276.9228,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__1": {
+          "area": 1879.2744,
+          "local_area": 269.8188,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__1": {
+          "area": 1892.0172,
+          "local_area": 276.7452,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__1": {
+          "area": 1884.6024,
+          "local_area": 272.8824,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__1": {
+          "area": 1897.5672,
+          "local_area": 277.76640000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__1": {
+          "area": 1900.4976,
+          "local_area": 274.65840000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__1": {
+          "area": 1901.3412,
+          "local_area": 274.392,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__1": {
+          "area": 1888.9092,
+          "local_area": 271.728,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__1": {
+          "area": 1879.1412,
+          "local_area": 265.20120000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__1": {
+          "area": 1889.2644,
+          "local_area": 273.1488,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__1": {
+          "area": 1903.65,
+          "local_area": 276.612,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__1": {
+          "area": 1897.3008,
+          "local_area": 274.2588,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_ca3c0121bc8888200c087b01c9f16323e8e0d2e78404081c6ce5a60fbaada2ca_7"
+        }
+      }
+    },
+    "div": {
+      "count": 16,
+      "area": 11829.047999999999,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__2": {
+          "area": 744.0108,
+          "local_area": 686.8679999999999,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__2": {
+          "area": 744.4548,
+          "local_area": 687.312,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__2": {
+          "area": 737.2176,
+          "local_area": 680.0748,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__2": {
+          "area": 742.4568,
+          "local_area": 685.314,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__2": {
+          "area": 738.0168,
+          "local_area": 680.874,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__2": {
+          "area": 721.8552,
+          "local_area": 664.7124,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__2": {
+          "area": 741.7464,
+          "local_area": 684.6036,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__2": {
+          "area": 742.0128,
+          "local_area": 684.87,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__2": {
+          "area": 740.9472,
+          "local_area": 683.8044,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__2": {
+          "area": 740.592,
+          "local_area": 683.4492,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__2": {
+          "area": 732.378,
+          "local_area": 675.2352,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__2": {
+          "area": 745.6536,
+          "local_area": 688.5108,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__2": {
+          "area": 744.8988,
+          "local_area": 687.756,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__2": {
+          "area": 741.036,
+          "local_area": 683.8932,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__2": {
+          "area": 737.2176,
+          "local_area": 680.0748,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__2": {
+          "area": 734.5536,
+          "local_area": 677.4108,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5c011966a2a93794fb08786fd84e3578258ea1f89640dafceb3e317335f76091_7"
+        }
+      }
+    },
+    "logic": {
+      "count": 16,
+      "area": 5058.6696,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__3": {
+          "area": 317.8596,
+          "local_area": 307.5588,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__3": {
+          "area": 316.9272,
+          "local_area": 306.62640000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__3": {
+          "area": 320.5236,
+          "local_area": 310.2228,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__3": {
+          "area": 314.13,
+          "local_area": 303.8292,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__3": {
+          "area": 317.1048,
+          "local_area": 306.80400000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__3": {
+          "area": 319.2804,
+          "local_area": 308.9796,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__3": {
+          "area": 313.8636,
+          "local_area": 303.56280000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__3": {
+          "area": 315.3732,
+          "local_area": 305.0724,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__3": {
+          "area": 314.0856,
+          "local_area": 303.7848,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__3": {
+          "area": 315.0624,
+          "local_area": 304.76160000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__3": {
+          "area": 318.5256,
+          "local_area": 308.2248,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__3": {
+          "area": 315.3732,
+          "local_area": 305.0724,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__3": {
+          "area": 318.3036,
+          "local_area": 308.00280000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__3": {
+          "area": 314.3964,
+          "local_area": 304.09560000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__3": {
+          "area": 314.3964,
+          "local_area": 304.09560000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__3": {
+          "area": 313.464,
+          "local_area": 303.1632,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_834010a095817683b78f7b8fee0168468ce709d2ea13f390d981e314f9b8468a_7"
+        }
+      }
+    },
+    "shift": {
+      "count": 16,
+      "area": 9110.1252,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__4": {
+          "area": 569.9628,
+          "local_area": 265.73400000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__4": {
+          "area": 569.9628,
+          "local_area": 264.4464,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__4": {
+          "area": 569.5632,
+          "local_area": 264.0468,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__4": {
+          "area": 563.3472,
+          "local_area": 257.8308,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__4": {
+          "area": 570.1404,
+          "local_area": 264.624,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__4": {
+          "area": 570.1404,
+          "local_area": 264.624,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__4": {
+          "area": 569.5632,
+          "local_area": 264.0468,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__4": {
+          "area": 569.7408,
+          "local_area": 265.068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__4": {
+          "area": 570.3624,
+          "local_area": 264.846,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__4": {
+          "area": 567.5652,
+          "local_area": 262.0488,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__4": {
+          "area": 570.5844,
+          "local_area": 265.068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__4": {
+          "area": 570.5844,
+          "local_area": 265.068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__4": {
+          "area": 570.3624,
+          "local_area": 264.846,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__4": {
+          "area": 570.5844,
+          "local_area": 265.068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__4": {
+          "area": 567.21,
+          "local_area": 261.6936,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__4": {
+          "area": 570.4512,
+          "local_area": 264.9348,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_484d44eef0f0fe83d5802ed4f82a25e8d366625c44a6b9a7745eeafe39fab40f_7"
+        }
+      }
+    },
+    "cmp": {
+      "count": 16,
+      "area": 6305.1107999999995,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__5": {
+          "area": 396.8916,
+          "local_area": 264.18,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__5": {
+          "area": 393.4284,
+          "local_area": 260.8944,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__5": {
+          "area": 393.1176,
+          "local_area": 260.406,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__5": {
+          "area": 393.2952,
+          "local_area": 260.76120000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__5": {
+          "area": 396.9804,
+          "local_area": 264.2688,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__5": {
+          "area": 396.27,
+          "local_area": 263.5584,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__5": {
+          "area": 392.5848,
+          "local_area": 259.8732,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__5": {
+          "area": 395.604,
+          "local_area": 262.8924,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__5": {
+          "area": 396.8472,
+          "local_area": 264.3576,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__5": {
+          "area": 396.1368,
+          "local_area": 263.4252,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__5": {
+          "area": 396.8916,
+          "local_area": 264.402,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__5": {
+          "area": 388.9884,
+          "local_area": 256.2768,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__5": {
+          "area": 389.1216,
+          "local_area": 256.41,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__5": {
+          "area": 390.9864,
+          "local_area": 258.2748,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__5": {
+          "area": 395.4264,
+          "local_area": 262.7148,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__5": {
+          "area": 392.5404,
+          "local_area": 259.8288,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_44be55f15b1fbb7f7e121e1c3abe26dbbcce5ad6423ab377667aa29fe398ef18_7"
+        }
+      }
+    },
+    "sel": {
+      "count": 16,
+      "area": 5654.118,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__6": {
+          "area": 355.5996,
+          "local_area": 345.2988,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__6": {
+          "area": 355.5552,
+          "local_area": 345.25440000000003,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__6": {
+          "area": 354.4452,
+          "local_area": 344.1444,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__6": {
+          "area": 353.2464,
+          "local_area": 342.9456,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__6": {
+          "area": 349.65,
+          "local_area": 339.3492,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__6": {
+          "area": 345.21,
+          "local_area": 334.9092,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__6": {
+          "area": 355.422,
+          "local_area": 345.12120000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__6": {
+          "area": 352.314,
+          "local_area": 342.01320000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__6": {
+          "area": 352.758,
+          "local_area": 342.4572,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__6": {
+          "area": 355.5996,
+          "local_area": 345.2988,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__6": {
+          "area": 350.0496,
+          "local_area": 339.7488,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__6": {
+          "area": 355.6884,
+          "local_area": 345.3876,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__6": {
+          "area": 353.4684,
+          "local_area": 343.1676,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__6": {
+          "area": 355.422,
+          "local_area": 345.12120000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__6": {
+          "area": 355.0668,
+          "local_area": 344.766,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__6": {
+          "area": 354.6228,
+          "local_area": 344.322,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29dd6eabae2175a7d6fce09c040146f29dde3551470649617401252380858442_7"
+        }
+      }
+    },
+    "grant": {
+      "count": 16,
+      "area": 10922.5332,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__7": {
+          "area": 684.6036,
+          "local_area": 674.3028,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__7": {
+          "area": 677.3664,
+          "local_area": 667.0656,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__7": {
+          "area": 685.3584,
+          "local_area": 675.0576,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__7": {
+          "area": 685.5804,
+          "local_area": 675.2796,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__7": {
+          "area": 684.87,
+          "local_area": 674.5692,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__7": {
+          "area": 680.5188,
+          "local_area": 670.218,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__7": {
+          "area": 682.2948,
+          "local_area": 671.994,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__7": {
+          "area": 683.2716,
+          "local_area": 672.9708,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__7": {
+          "area": 683.8044,
+          "local_area": 673.5036,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__7": {
+          "area": 678.654,
+          "local_area": 668.3532,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__7": {
+          "area": 681.6732,
+          "local_area": 671.3724,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__7": {
+          "area": 680.0304,
+          "local_area": 669.7296,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__7": {
+          "area": 683.4492,
+          "local_area": 673.1484,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__7": {
+          "area": 687.09,
+          "local_area": 676.7892,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__7": {
+          "area": 678.876,
+          "local_area": 668.5752,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__7": {
+          "area": 685.092,
+          "local_area": 674.7912,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d9d60596998244481f358628e2ed17eae78c07f066c805ec9f821bddb262b892_7"
+        }
+      }
+    },
+    "phi": {
+      "count": 16,
+      "area": 8600.0136,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__8": {
+          "area": 541.6356,
+          "local_area": 531.3348,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__8": {
+          "area": 536.0412,
+          "local_area": 525.7404,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__8": {
+          "area": 537.8172,
+          "local_area": 527.5164,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__8": {
+          "area": 532.8444,
+          "local_area": 522.5436,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__8": {
+          "area": 540.2148,
+          "local_area": 529.914,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__8": {
+          "area": 540.8364,
+          "local_area": 530.5355999999999,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__8": {
+          "area": 535.3308,
+          "local_area": 525.03,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__8": {
+          "area": 534.6204,
+          "local_area": 524.3196,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__8": {
+          "area": 539.016,
+          "local_area": 528.7152,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__8": {
+          "area": 536.3964,
+          "local_area": 526.0956,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__8": {
+          "area": 541.1472,
+          "local_area": 530.8464,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__8": {
+          "area": 540.3036,
+          "local_area": 530.0028,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__8": {
+          "area": 536.6184,
+          "local_area": 526.3176,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__8": {
+          "area": 537.7284,
+          "local_area": 527.4276,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__8": {
+          "area": 533.4216,
+          "local_area": 523.1208,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__8": {
+          "area": 536.0412,
+          "local_area": 525.7404,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_d119d9f2a37a185b8df4d2b0d5a1cb8d96973fdb8c6eb6561fb33421d4066b99_7"
+        }
+      }
+    },
+    "mem": {
+      "count": 16,
+      "area": 7205.01,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__9": {
+          "area": 433.8768,
+          "local_area": 404.79479999999995,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__9": {
+          "area": 432.456,
+          "local_area": 403.7292,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__9": {
+          "area": 460.2948,
+          "local_area": 431.3904,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__9": {
+          "area": 462.0264,
+          "local_area": 433.12199999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__9": {
+          "area": 437.562,
+          "local_area": 408.3468,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__9": {
+          "area": 463.8024,
+          "local_area": 434.89799999999997,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__9": {
+          "area": 463.8912,
+          "local_area": 434.98679999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__9": {
+          "area": 460.2948,
+          "local_area": 431.3904,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__9": {
+          "area": 441.0696,
+          "local_area": 411.76559999999995,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__9": {
+          "area": 433.0332,
+          "local_area": 404.5728,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__9": {
+          "area": 431.9676,
+          "local_area": 403.1076,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__9": {
+          "area": 464.2464,
+          "local_area": 435.342,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__9": {
+          "area": 460.65,
+          "local_area": 431.74559999999997,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__9": {
+          "area": 460.1172,
+          "local_area": 431.21279999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__9": {
+          "area": 436.5852,
+          "local_area": 407.99159999999995,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__9": {
+          "area": 463.1364,
+          "local_area": 434.23199999999997,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_29103012e304af07694acf6bd5b6563705d69d60be1b7e291f2f7c69b25de742_7"
+        }
+      }
+    },
+    "return": {
+      "count": 16,
+      "area": 7541.5176,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__10": {
+          "area": 475.6128,
+          "local_area": 465.312,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__10": {
+          "area": 474.2364,
+          "local_area": 463.9356,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__10": {
+          "area": 473.3484,
+          "local_area": 463.0476,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__10": {
+          "area": 471.0396,
+          "local_area": 460.7388,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__10": {
+          "area": 470.7288,
+          "local_area": 460.428,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__10": {
+          "area": 471.75,
+          "local_area": 461.4492,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__10": {
+          "area": 470.2404,
+          "local_area": 459.9396,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__10": {
+          "area": 471.528,
+          "local_area": 461.22720000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__10": {
+          "area": 474.3696,
+          "local_area": 464.0688,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__10": {
+          "area": 473.97,
+          "local_area": 463.6692,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__10": {
+          "area": 462.3816,
+          "local_area": 452.0808,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__10": {
+          "area": 472.194,
+          "local_area": 461.89320000000004,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__10": {
+          "area": 466.1112,
+          "local_area": 455.8104,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__10": {
+          "area": 471.8832,
+          "local_area": 461.5824,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__10": {
+          "area": 474.9912,
+          "local_area": 464.6904,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__10": {
+          "area": 467.1324,
+          "local_area": 456.8316,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_647128cb75af63644bc619f7c85a5e5fa50fb4acd123c3d002ca3d76a65d7fdd_7"
+        }
+      }
+    },
+    "gep": {
+      "count": 16,
+      "area": 37099.8836,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__11": {
+          "area": 2324.3399,
+          "local_area": 465.09,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__11": {
+          "area": 2323.7627,
+          "local_area": 467.2656,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__11": {
+          "area": 2307.9563,
+          "local_area": 454.52279999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__11": {
+          "area": 2319.5447,
+          "local_area": 462.3372,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__11": {
+          "area": 2325.7607,
+          "local_area": 465.312,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__11": {
+          "area": 2308.4003,
+          "local_area": 459.762,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__11": {
+          "area": 2323.4519,
+          "local_area": 467.13239999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__11": {
+          "area": 2316.9695,
+          "local_area": 465.534,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__11": {
+          "area": 2323.0967,
+          "local_area": 464.9124,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__11": {
+          "area": 2319.6779,
+          "local_area": 462.1596,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__11": {
+          "area": 2323.4963,
+          "local_area": 462.9588,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__11": {
+          "area": 2314.2611,
+          "local_area": 460.0728,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__11": {
+          "area": 2308.8443,
+          "local_area": 459.53999999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__11": {
+          "area": 2314.5719,
+          "local_area": 463.35839999999996,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__11": {
+          "area": 2328.5579,
+          "local_area": 466.9992,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__11": {
+          "area": 2317.1915,
+          "local_area": 464.1132,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_dcfb40d9c8528b0d5ebdf3d589918c714ee302e166fbdf149d7412224ee7ad35_7"
+        }
+      }
+    },
+    "nah": {
+      "count": 16,
+      "area": 941.8128,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/element/fu__12": {
+          "area": 58.9188,
+          "local_area": 58.9188,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/element/fu__12": {
+          "area": 58.7856,
+          "local_area": 58.7856,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/element/fu__12": {
+          "area": 58.7856,
+          "local_area": 58.7856,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/element/fu__12": {
+          "area": 58.7856,
+          "local_area": 58.7856,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/element/fu__12": {
+          "area": 58.9188,
+          "local_area": 58.9188,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/element/fu__12": {
+          "area": 58.7856,
+          "local_area": 58.7856,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/element/fu__12": {
+          "area": 58.8744,
+          "local_area": 58.8744,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/element/fu__12": {
+          "area": 58.9188,
+          "local_area": 58.9188,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/element/fu__12": {
+          "area": 58.9188,
+          "local_area": 58.9188,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5b4ec638007c90fb6ec8a6614f3ef19f785b56981534f561948f8b73f754729e_7"
+        }
+      }
+    }
+  },
+  "cgra_config_hierarchy": {
+    "ctrl_mem": {
+      "count": 16,
+      "area": 362795.6824,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/ctrl_mem": {
+          "area": 22662.4258,
+          "local_area": 4864.908,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/ctrl_mem": {
+          "area": 22678.4986,
+          "local_area": 4872.7224,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/ctrl_mem": {
+          "area": 22687.5118,
+          "local_area": 4864.0644,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/ctrl_mem": {
+          "area": 22704.7834,
+          "local_area": 4874.8536,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/ctrl_mem": {
+          "area": 22625.0854,
+          "local_area": 4828.0116,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/ctrl_mem": {
+          "area": 22643.689,
+          "local_area": 4820.9964,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/ctrl_mem": {
+          "area": 22699.4998,
+          "local_area": 4869.792,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/ctrl_mem": {
+          "area": 22684.5814,
+          "local_area": 4866.018,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/ctrl_mem": {
+          "area": 22663.3582,
+          "local_area": 4856.6939999999995,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/ctrl_mem": {
+          "area": 22682.9386,
+          "local_area": 4874.898,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/ctrl_mem": {
+          "area": 22642.6678,
+          "local_area": 4839.9108,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/ctrl_mem": {
+          "area": 22684.8034,
+          "local_area": 4859.358,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/ctrl_mem": {
+          "area": 22695.5482,
+          "local_area": 4868.593199999999,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/ctrl_mem": {
+          "area": 22701.0538,
+          "local_area": 4876.7628,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/ctrl_mem": {
+          "area": 22646.6194,
+          "local_area": 4874.7648,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/ctrl_mem": {
+          "area": 22692.6178,
+          "local_area": 4873.7880000000005,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_5442816e40d70a3e7569e0abdf12e746d7670ba509253c2f4491eefb5ac340e8_7"
+        }
+      }
+    },
+    "ctrl_mem/reg_file": {
+      "count": 16,
+      "area": 251806.118,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/ctrl_mem/reg_file": {
+          "area": 15723.4163,
+          "local_area": 15723.4163,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_0"
+        },
+        "cgra/cgra_inst/cgra/tile__1/ctrl_mem/reg_file": {
+          "area": 15730.2539,
+          "local_area": 15730.2539,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_15"
+        },
+        "cgra/cgra_inst/cgra/tile__10/ctrl_mem/reg_file": {
+          "area": 15746.9483,
+          "local_area": 15746.9483,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_6"
+        },
+        "cgra/cgra_inst/cgra/tile__11/ctrl_mem/reg_file": {
+          "area": 15752.7647,
+          "local_area": 15752.7647,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_5"
+        },
+        "cgra/cgra_inst/cgra/tile__12/ctrl_mem/reg_file": {
+          "area": 15721.6403,
+          "local_area": 15721.640300000001,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_4"
+        },
+        "cgra/cgra_inst/cgra/tile__13/ctrl_mem/reg_file": {
+          "area": 15747.3035,
+          "local_area": 15747.3035,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_3"
+        },
+        "cgra/cgra_inst/cgra/tile__14/ctrl_mem/reg_file": {
+          "area": 15754.5851,
+          "local_area": 15754.5851,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_2"
+        },
+        "cgra/cgra_inst/cgra/tile__15/ctrl_mem/reg_file": {
+          "area": 15747.1703,
+          "local_area": 15747.1703,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_1"
+        },
+        "cgra/cgra_inst/cgra/tile__2/ctrl_mem/reg_file": {
+          "area": 15731.2751,
+          "local_area": 15731.2751,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_14"
+        },
+        "cgra/cgra_inst/cgra/tile__3/ctrl_mem/reg_file": {
+          "area": 15731.6747,
+          "local_area": 15731.6747,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_13"
+        },
+        "cgra/cgra_inst/cgra/tile__4/ctrl_mem/reg_file": {
+          "area": 15728.0339,
+          "local_area": 15728.0339,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_12"
+        },
+        "cgra/cgra_inst/cgra/tile__5/ctrl_mem/reg_file": {
+          "area": 15749.4347,
+          "local_area": 15749.4347,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_11"
+        },
+        "cgra/cgra_inst/cgra/tile__6/ctrl_mem/reg_file": {
+          "area": 15751.3439,
+          "local_area": 15751.3439,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_10"
+        },
+        "cgra/cgra_inst/cgra/tile__7/ctrl_mem/reg_file": {
+          "area": 15747.3923,
+          "local_area": 15747.392300000001,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_9"
+        },
+        "cgra/cgra_inst/cgra/tile__8/ctrl_mem/reg_file": {
+          "area": 15694.6895,
+          "local_area": 15694.6895,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_8"
+        },
+        "cgra/cgra_inst/cgra/tile__9/ctrl_mem/reg_file": {
+          "area": 15748.1915,
+          "local_area": 15748.1915,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_1ff05fe182f553e055808fb08d3004590dbc501525f012620477c8f97776954e_7"
+        }
+      }
+    },
+    "const_mem": {
+      "count": 16,
+      "area": 109294.7292,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/const_mem": {
+          "area": 6833.2932,
+          "local_area": 70.9068,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_1"
+        },
+        "cgra/cgra_inst/cgra/tile__1/const_mem": {
+          "area": 6876.228,
+          "local_area": 71.1288,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_0"
+        },
+        "cgra/cgra_inst/cgra/tile__10/const_mem": {
+          "area": 6727.2216,
+          "local_area": 66.378,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_7"
+        },
+        "cgra/cgra_inst/cgra/tile__11/const_mem": {
+          "area": 6864.8616,
+          "local_area": 71.8836,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_6"
+        },
+        "cgra/cgra_inst/cgra/tile__12/const_mem": {
+          "area": 6785.4744,
+          "local_area": 70.818,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_5"
+        },
+        "cgra/cgra_inst/cgra/tile__13/const_mem": {
+          "area": 6869.7012,
+          "local_area": 71.4396,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_4"
+        },
+        "cgra/cgra_inst/cgra/tile__14/const_mem": {
+          "area": 6757.458,
+          "local_area": 71.262,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_3"
+        },
+        "cgra/cgra_inst/cgra/tile__15/const_mem": {
+          "area": 6863.796,
+          "local_area": 71.04,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_2"
+        },
+        "cgra/cgra_inst/cgra/tile__2/const_mem": {
+          "area": 6874.3188,
+          "local_area": 71.04,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_15"
+        },
+        "cgra/cgra_inst/cgra/tile__3/const_mem": {
+          "area": 6879.8244,
+          "local_area": 74.4144,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_14"
+        },
+        "cgra/cgra_inst/cgra/tile__4/const_mem": {
+          "area": 6870.4116,
+          "local_area": 70.9956,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_13"
+        },
+        "cgra/cgra_inst/cgra/tile__5/const_mem": {
+          "area": 6750.798,
+          "local_area": 71.262,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_12"
+        },
+        "cgra/cgra_inst/cgra/tile__6/const_mem": {
+          "area": 6868.6356,
+          "local_area": 71.262,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_11"
+        },
+        "cgra/cgra_inst/cgra/tile__7/const_mem": {
+          "area": 6772.11,
+          "local_area": 71.262,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_10"
+        },
+        "cgra/cgra_inst/cgra/tile__8/const_mem": {
+          "area": 6866.7264,
+          "local_area": 71.04,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_9"
+        },
+        "cgra/cgra_inst/cgra/tile__9/const_mem": {
+          "area": 6833.8704,
+          "local_area": 71.04,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_e7c9ac0fcb7c77880df5fd6ad06aa89e5339c59fe667b24ec79769ee06e7123a_8"
+        }
+      }
+    },
+    "const_mem/reg_file": {
+      "count": 16,
+      "area": 108157.5564,
+      "instances": {
+        "cgra/cgra_inst/cgra/tile__0/const_mem/reg_file": {
+          "area": 6762.3864,
+          "local_area": 6762.386399999999,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_1"
+        },
+        "cgra/cgra_inst/cgra/tile__1/const_mem/reg_file": {
+          "area": 6805.0992,
+          "local_area": 6805.0992,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_0"
+        },
+        "cgra/cgra_inst/cgra/tile__10/const_mem/reg_file": {
+          "area": 6660.8436,
+          "local_area": 6660.8436,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_7"
+        },
+        "cgra/cgra_inst/cgra/tile__11/const_mem/reg_file": {
+          "area": 6792.978,
+          "local_area": 6792.978,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_6"
+        },
+        "cgra/cgra_inst/cgra/tile__12/const_mem/reg_file": {
+          "area": 6714.6564,
+          "local_area": 6714.6564,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_5"
+        },
+        "cgra/cgra_inst/cgra/tile__13/const_mem/reg_file": {
+          "area": 6798.2616,
+          "local_area": 6798.2616,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_4"
+        },
+        "cgra/cgra_inst/cgra/tile__14/const_mem/reg_file": {
+          "area": 6686.196,
+          "local_area": 6686.196,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_3"
+        },
+        "cgra/cgra_inst/cgra/tile__15/const_mem/reg_file": {
+          "area": 6792.756,
+          "local_area": 6792.755999999999,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_2"
+        },
+        "cgra/cgra_inst/cgra/tile__2/const_mem/reg_file": {
+          "area": 6803.2788,
+          "local_area": 6803.2788,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_15"
+        },
+        "cgra/cgra_inst/cgra/tile__3/const_mem/reg_file": {
+          "area": 6805.41,
+          "local_area": 6805.41,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_14"
+        },
+        "cgra/cgra_inst/cgra/tile__4/const_mem/reg_file": {
+          "area": 6799.416,
+          "local_area": 6799.416,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_13"
+        },
+        "cgra/cgra_inst/cgra/tile__5/const_mem/reg_file": {
+          "area": 6679.536,
+          "local_area": 6679.536,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_12"
+        },
+        "cgra/cgra_inst/cgra/tile__6/const_mem/reg_file": {
+          "area": 6797.3736,
+          "local_area": 6797.3736,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_11"
+        },
+        "cgra/cgra_inst/cgra/tile__7/const_mem/reg_file": {
+          "area": 6700.848,
+          "local_area": 6700.848,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_10"
+        },
+        "cgra/cgra_inst/cgra/tile__8/const_mem/reg_file": {
+          "area": 6795.6864,
+          "local_area": 6795.6864,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_9"
+        },
+        "cgra/cgra_inst/cgra/tile__9/const_mem/reg_file": {
+          "area": 6762.8304,
+          "local_area": 6762.8304,
+          "local_sram_area": 0.0,
+          "design": "I51fae320f6b08e38_39f64c9a98bdcef401def8bb1f9b4b13cc3e15f249ff80c73bfc936bc8db2b8c_8"
+        }
+      }
+    }
+  },
+  "scope": "Original complete CGRA and general five-unit ASIC checkpoints; not the split Add/ReLU baseline or newly pipelined Softmax.",
+  "units": "SAED14 library area units; not place-and-route area.",
+  "definition": "Compute plus control excluding identified bulk storage cells. Remove SRAM macros and named configuration/data array flops only. Retain array decode/read/write mux logic, operand register files, FIFO/queue registers, FSMs, pipeline registers, prologue counters, interconnect, validity state, and adapters/DMA unless reporting the separate core subtotal.",
+  "limitations": [
+    "This accounting boundary is not a synthesized memory-free accelerator. Access logic remains and depends on the original storage sizes.",
+    "Control includes mutable prologue counters and configuration-cache validity metadata. Bulk configuration payload arrays are separated.",
+    "Installed compute resources differ: reusable 16-PE CGRA versus the five dedicated ASIC units, excluding their common Gemmini.",
+    "Both original mapped endpoints fail 2 ns. These areas do not qualify matched-frequency PPA.",
+    "Complete endpoint and core subtotals have distinct boundaries; neither should be silently substituted for the other.",
+    "Separating array access logic from shared arithmetic/control would require a different boundary and additional structural evidence; these results retain that logic on both sides."
+  ],
+  "classification_regex": {
+    "cgra": [
+      [
+        "pe_configuration_bits",
+        "cgra/cgra_inst/cgra/tile__\\d+/ctrl_mem/reg_file/regs_reg\\[.*"
+      ],
+      [
+        "constant_storage_bits",
+        "cgra/cgra_inst/cgra/tile__\\d+/const_mem/reg_file/regs_reg\\[.*"
+      ],
+      [
+        "adapter_configuration_bits",
+        "linkAdapter/(?:elements|jobPacketCount|jobExpectedCompletions|jobRearmCount|jobSetupCount|jobNext)_\\d+_reg(?:\\[.*)?"
+      ]
+    ],
+    "asic": [
+      [
+        "local_data_bits",
+        "AsicCore/gcn/(?:features|weights|columns|rowptr)_reg\\[.*"
+      ],
+      [
+        "local_data_bits",
+        "AsicCore/norm/(?:source|gain|offset|result)_reg\\[.*"
+      ],
+      [
+        "local_data_bits",
+        "AsicCore/softmax/(?:source|exponent|result)_reg\\[.*"
+      ],
+      [
+        "local_data_bits",
+        "AsicCore/gpt_vector/(?:source|other|result)_store/banks\\[\\d+\\]\\.memory/words_reg\\[.*"
+      ],
+      [
+        "adapter_configuration_bits",
+        "adapter/(?:descriptors_\\d+_\\w+|nextJobs_\\d+)_reg(?:\\[.*)?"
+      ]
+    ]
+  },
+  "checks": {
+    "cgra_area_reconciles": true,
+    "cgra_unique_paths": true,
+    "asic_area_reconciles": true,
+    "asic_unique_paths": true
+  },
+  "passed": true,
+  "sha256": {
+    "build/experiments/asic/cgra-cost-complete/reports/checkpoint/endpoint/recovered/area.rpt": "fd89be6bd2744a2fdb3c61f29ab0c5b75eee487f5b9aea1ed2db3d1c3a28d873",
+    "build/experiments/asic/cost-complete/checkpoints/asic-sram-20261113-v1/sta2/area.rpt": "a0ddbf8bddfd7695f75071a9c5d10253b1a3b166976e5184c03c3d7f86ec1bbf",
+    "build/experiments/asic/hybrid/compute-audit/asic.tsv": "e969448e8489dfc8cbd5c271169ce85f0515d38f4f61d4442a11edce30127b9e",
+    "build/experiments/asic/hybrid/compute-audit/cgra.tsv": "09aa36fee4d18da69dd599b37ac9c73d1d7ac99d479caf0201b3bb529c11ca22",
+    "build/experiments/asic/hybrid/compute-audit/inventory.tcl": "5e799d788d50d01fcc81db785e56acad7f9f44ece26668c3a1d65e56d2d0785c",
+    "build/experiments/asic/cost-complete/checkpoints/asic-sram-20261113-v1/AsicAccelerator/out/mapped.ddc": "22d6a3bf7e9b5d54e3e7c4c5815ce341fbb3778ebb91d28749e10ee874dd7f98",
+    "build/experiments/asic/cgra-cost-complete/reports/checkpoint/endpoint/recovered/mapped.ddc": "5887d7255a819d1655797732c638edbed84034def816d64376e14f53e8a199e0"
+  }
+}

@@ -1,0 +1,123 @@
+Information: Timer using 6 threads
+Warning: Technology layer 'M1' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'M2' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'MRDL' setting 'pitch' is not valid (NEX-001)
+Information: Corner tt: no PVT mismatches. (PVT-032)
+****************************************
+Report : power
+        -force
+        -significant_digits 5
+Design : ChipTop
+Version: T-2022.03-SP5
+Date   : Wed Nov 18 22:40:58 2026
+****************************************
+Information: Activity propagation will be performed for scenario functional_tt.
+Warning: Mapping to scan cell 'SAEDRVT14_FSB2BDPRBQ_PV2_1' in library is not possible because cell has 'dont_use' attribute. (SQM-1067)
+Warning: Mapping to scan cell 'SAEDRVT14_FSB2BDPRBQ_PV2_2' in library is not possible because cell has 'dont_use' attribute. (SQM-1067)
+Warning: Mapping to scan cell 'SAEDRVT14_FSB2BDPRBQ_PV2_4' in library is not possible because cell has 'dont_use' attribute. (SQM-1067)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FSDPQM4_V2LPY2_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FSDPQM4_V2Y2_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FSDPSYNRBQM4_V2LPY2_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FSDPSYNRBQM4_V2Y2_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_SRRDPQ4_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_SRRDPQ4_2' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FDNRBSBQ_V2_0P5' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FDNRBSBQ_V2_1' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FDNRBSBQ_V2_2' and will be excluded from sequential mapping. (SQM-1061)
+Warning: Cannot infer functionality of libcell 'saed14rvt_frame_timing_ccs/SAEDRVT14_FDNRBSBQ_V2_4' and will be excluded from sequential mapping. (SQM-1061)
+Information: Doing activity propagation for mode 'functional' and corner 'tt' with effort level 'medium'. (POW-024)
+Information: Timer-derived activity data is cached on scenario functional_tt (POW-052)
+Infomation: Fast mode activity propagation power.rtl_activity_annotation setup is ignored. Always use accurate mode.
+Information: Turn on parallel simulation of generator nets.
+Information: Running switching activity propagation with 6 threads!
+
+ **** Information : No. of simulation cycles = 7 ****
+Information: The stitching and editing of coupling caps is turned OFF for design 'stage.ndm:ChipTop.design'. (TIM-125)
+Information: Design ChipTop has 4377421 nets, 4361245 global routed, 16174 detail routed. (NEX-024)
+Warning: Technology layer 'M1' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'M2' setting 'pitch' is not valid (NEX-001)
+Warning: Technology layer 'MRDL' setting 'pitch' is not valid (NEX-001)
+Information: build GR coup map successfully (NEX-012)
+Information: The RC mode used is GR for design 'ChipTop'. (NEX-022)
+Warning: Net 'system/tile_prci_domain/element_reset_domain_rockettile/applyOrElse/accelerator/net8781305' is exceeding threshold (over 1000 pins) and will be skipped. (NEX-020)
+Warning: Net 'system/tile_prci_domain/element_reset_domain_rockettile/cgra/cgra/cgra_inst/cgra/net8781317' is exceeding threshold (over 1000 pins) and will be skipped. (NEX-020)
+Information: Update timing completed net estimation for all the timing graph nets (TIM-111)
+Information: Net estimation statistics: timing graph nets = 4377419, routed nets = 4377417, across physical hierarchy nets = 0, parasitics cached nets = 4377417, delay annotated nets = 0, parasitics annotated nets = 0, multi-voltage nets = 0. (TIM-112)
+************************************************************
+Timer Settings:
+Delay Calculation Style:                   auto
+Signal Integrity Analysis:                 disabled
+Timing Window Analysis:                    disabled
+Advanced Waveform Propagation:             disabled
+Variation Type:                            fixed_derate
+Clock Reconvergence Pessimism Removal:     disabled
+Advanced Receiver Model:                   disabled
+ML Acceleration:                           off
+************************************************************
+Information: Power analysis being done for the active scenario 'functional_tt', where its leakage_power/dynamic_power flags have been overridden. (POW-074)
+Mode: functional
+Corner: tt
+Scenario: functional_tt
+Voltage: 0.80000
+Temperature: 25.00000
+
+Voltage Unit         : 1V
+Capacitance Unit     : 1fF
+Time Unit            : 1ns
+Temperature Unit     : 1C
+Dynamic Power Unit   : 1pW
+Leakage Power Unit   : 1pW
+
+Switched supply net power scaling:
+scaling for leakage power
+
+Supply nets:
+VDD (power) probability 1.00000 (default)
+VSS (ground) probability 1.00000 (default)
+Warning: Power table extrapolation (extrapolation mode) for port CK on cell clock_en_reg for parameter Tinp. Lowest table value = inf, highest table value = inf, value = 0.013409 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_16/U2 for parameter Tinp. Lowest table value = 0.003000, highest table value = 0.133000, value = 0.655975 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_16/U2 for parameter Cout. Lowest table value = 0.000150, highest table value = 0.041000, value = 0.050254 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_17/U2 for parameter Tinp. Lowest table value = 0.003000, highest table value = 0.133000, value = 0.795670 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_17/U2 for parameter Cout. Lowest table value = 0.000150, highest table value = 0.041000, value = 0.057003 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_18/U2 for parameter Tinp. Lowest table value = 0.003000, highest table value = 0.133000, value = 1.153507 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_18/U2 for parameter Cout. Lowest table value = 0.000150, highest table value = 0.041000, value = 0.060936 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_19/U2 for parameter Tinp. Lowest table value = 0.003000, highest table value = 0.133000, value = 0.844269 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_19/U2 for parameter Cout. Lowest table value = 0.000150, highest table value = 0.041000, value = 0.053724 (POW-046)
+Warning: Power table extrapolation (extrapolation mode) for port X on cell iocell_serial_tl_0_in_bits_phit_20/U2 for parameter Tinp. Lowest table value = 0.003000, highest table value = 0.133000, value = 1.300621 (POW-046)
+Note - message 'POW-046' limit (10) exceeded. Remainder will be suppressed.
+Warning: Rise-Fall toggles on pin system/sbus/system_bus_xbar/U9813/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/system_bus_xbar/U9827/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_bus_named_coh/widget/U504/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U857/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U861/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U864/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U868/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U596/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U597/X are impossible given input states; converted to zero toggles. (POW-069)
+Warning: Rise-Fall toggles on pin system/sbus/coupler_to_gemminiextspm0/fixer/U598/X are impossible given input states; converted to zero toggles. (POW-069)
+Note - message 'POW-069' limit (10) exceeded. Remainder will be suppressed.
+
+  Cell Internal Power    = 3.79381e+11 pW ( 71.3%)
+  Net Switching Power    = 1.52440e+11 pW ( 28.7%)
+Total Dynamic Power      = 5.31820e+11 pW (100.0%)
+
+Cell Leakage Power       = 8.42753e+08 pW
+
+
+  Attributes
+  ----------
+      u  -  User defined power group
+      i  -  Includes clock pin internal power
+
+Power Group         Internal Power        Switching Power          Leakage Power            Total Power    (   %  )    Attrs
+-----------------------------------------------------------------------------------------------------------------------------
+io_pad                 0.00000e+00            0.00000e+00            0.00000e+00            0.00000e+00    (  0.0%)         
+memory                -4.41747e+09            2.12325e+09            1.68657e+07           -2.27735e+09    ( -0.4%)         
+black_box              0.00000e+00            0.00000e+00            0.00000e+00            0.00000e+00    (  0.0%)         
+clock_network          3.83297e+11            1.41314e+11            1.32766e+07            5.24624e+11    ( 98.5%)        i
+register               5.78609e+07            1.44689e+08            3.68923e+08            5.71473e+08    (  0.1%)         
+sequential             0.00000e+00            0.00000e+00            0.00000e+00            0.00000e+00    (  0.0%)         
+combinational          4.43413e+08            8.85797e+09            4.43688e+08            9.74507e+09    (  1.8%)         
+-----------------------------------------------------------------------------------------------------------------------------
+Total                  3.79381e+11 pW         1.52440e+11 pW         8.42753e+08 pW         5.32663e+11 pW
+1

@@ -1,0 +1,45 @@
+{
+  "host": "jjqin25@hpc6.cse.cuhk.edu.hk",
+  "remote": "/tmp/cgra-revised-asic-mUP83dNj",
+  "queues": [
+    [
+      "add",
+      "gcn",
+      "norm"
+    ],
+    [
+      "relu",
+      "gpt_vector",
+      "softmax"
+    ]
+  ],
+  "cores_per_job": 1,
+  "max_concurrent_jobs": 2,
+  "clock_ns": 2,
+  "source_hashes": {
+    "all.v": "dc0c0fc9e388c0ed544c3bac03522486f39551ca685829b8f9fe0d0c08ec2f44",
+    "rtl/ExpandedAsic.sv": "22a26d883e84afc9ad96f39db822e2c5ea35da0337b15efab8f91848eef89977",
+    "rtl/Primitives.sv": "78e298fd65e34aad125e47be4e51c848fe8c57bf40b2b388039212c21090df31",
+    "native/Gcn.sv": "6da4a41224bd6b3779a298478c1bd6e1babc5e19296bc1f87a39d45b953cedd9",
+    "native/GptNorm.sv": "a28ffbd8baa0bf2ca0125f11c75aa838af0d104c42a1969c661ff2a48362d0fc",
+    "native/GptSoftmax.sv": "affbfaeff15c5949f2e1cefc7aa5c63d0bbb79cc706a2987fa3b7ddff54a2d45",
+    "native/GptVector.sv": "7d4cc26cae59650099967262b993858e27f431ebcfaff98b6aeac84bf7180a0b"
+  },
+  "specialized_verilog_hashes": {
+    "add": "dc0c0fc9e388c0ed544c3bac03522486f39551ca685829b8f9fe0d0c08ec2f44",
+    "relu": "1dfb92933d0cd75db0a14801d8a2542cbf2ee6abd2d54c4c9e075bcde7335f1e",
+    "gcn": "dc83f31f5a4c0c248f045cb67dac46465765a104f8d5238bf7ed67d93e4e230b",
+    "norm": "97ef696ad7ca91f8de27026975c14e90f39e4a9ddf07d9335b89fe7dc3794ebd",
+    "softmax": "1df9e2c99087b6588cd79a00b45fe2a8060ff848b8b62d065e3db7fd8f1c2944",
+    "gpt_vector": "a44d44854006d788ab4ba82226693d308d1a581f536b8b2b1ed0ee3edc6929aa"
+  },
+  "specialization": "Only ExpandedAsic FAMILY parameter default changed; all implementation text unchanged.",
+  "synth_tcl_hashes": {
+    "add": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "relu": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "gcn": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "norm": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "softmax": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e",
+    "gpt_vector": "227a4f1cae0cf9c1b6487f97bf6d6caf141c20b4be670c4839ad816f41f2302e"
+  }
+}

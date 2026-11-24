@@ -1,0 +1,61 @@
+{
+  "policy": "Subtract actual mapped sequential storage-cell area only, after validating leaf names and cell type. Logical bit counts are upper bounds, not cell-area estimates. Do not subtract access/control logic or entire modules.",
+  "static_arrays": [
+    {
+      "category": "instruction_config",
+      "rtl_path": "tile__N/ctrl_mem/reg_file/regs",
+      "words_per_pe": 48,
+      "bits_per_word": 111,
+      "logical_bits_per_pe": 5328,
+      "logical_bits_16_pe": 85248,
+      "reason": "Configuration write port only; retain decode, read mux, write enable and address logic."
+    },
+    {
+      "category": "constant_data",
+      "rtl_path": "tile__N/const_mem/reg_file/regs",
+      "words_per_pe": 58,
+      "bits_per_word": 35,
+      "logical_bits_per_pe": 2030,
+      "logical_bits_16_pe": 32480,
+      "reason": "Program constant storage; retain rd_cur, wr_cur, consume_pending and all access logic."
+    },
+    {
+      "category": "fu_crossbar_prologue_config",
+      "rtl_path": "tile__N/ctrl_mem/prologue_count_reg_fu_crossbar",
+      "words_per_pe": 96,
+      "bits_per_word": 3,
+      "logical_bits_per_pe": 288,
+      "logical_bits_16_pe": 4608,
+      "reason": "Written only by reset and CMD_CONFIG_PROLOGUE_FU_CROSSBAR."
+    },
+    {
+      "category": "routing_prologue_config",
+      "rtl_path": "tile__N/ctrl_mem/prologue_count_reg_routing_crossbar",
+      "words_per_pe": 384,
+      "bits_per_word": 3,
+      "logical_bits_per_pe": 1152,
+      "logical_bits_16_pe": 18432,
+      "reason": "Written only by reset and CMD_CONFIG_PROLOGUE_ROUTING_CROSSBAR."
+    }
+  ],
+  "logical_bits_per_pe": 8798,
+  "logical_bits_16_pe": 140768,
+  "keep_runtime_state": [
+    "tile__N/ctrl_mem/prologue_count_reg_fu (48 x 3 = 144 bits/PE; decremented on send_ctrl handshake)",
+    "tile__N/register_cluster/* (operand register files)",
+    "ctrl_ring/* (mailboxes, valid and arbitration state)",
+    "tile__N/ctrl_mem/recv_from_element_queue/*",
+    "tile__N/ctrl_mem/recv_pkt_from_controller_queue/*",
+    "tile__N/ctrl_mem/reg_file__raddr, times, sent_complete, start_iterate_ctrl",
+    "tile__N/const_mem/rd_cur, wr_cur, consume_pending",
+    "All FU/channel pipeline and runtime state; all scalar control/configuration registers outside the specified storage arrays"
+  ],
+  "expected_leaf_name_forms": [
+    "tile__N/ctrl_mem/reg_file/regs_reg[...]",
+    "tile__N/const_mem/reg_file/regs_reg[...]",
+    "tile__N/ctrl_mem/prologue_count_reg_fu_crossbar_reg[...]",
+    "tile__N/ctrl_mem/prologue_count_reg_routing_crossbar_reg[...]"
+  ],
+  "leaf_name_caution": "Expected forms must be checked against actual DC report. Match exact hierarchy plus array stem and sequential cells; do not use broad reg_file/prologue/storage substring matching.",
+  "source_sha256": "23d7860bbfd70e65595ffec06a914af19215e72afb7709f5ba3337e1e1feb500"
+}

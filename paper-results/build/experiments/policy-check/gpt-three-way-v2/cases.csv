@@ -1,0 +1,10 @@
+composition,policy,cycles,area_library_units,relative_area,speedup,AE,status
+1 GEMM + 1 CGRA,per-task,18270931.0,8732372.535943998,1.0,1.0,1.0,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 1 CGRA,per-segment,16539829.0,10786725.552227,1.2352571432135906,1.104662629825254,0.8942774675655081,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 1 CGRA,per-graph,16262298.0,11550277.242689,1.3226963457120051,1.1235147086838526,0.8494124235892302,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 4 CGRA,per-task,12689077.0,12489726.336847,1.4302786883446699,1.4398944068193456,1.0067229684347772,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 4 CGRA,per-segment,5117312.0,19818656.336694002,2.269561480012092,3.5704156791690638,1.57317425000976,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 4 CGRA,per-graph,4434498.0,21602132.066268,2.4737987273618693,4.1201802323509895,1.665527670775734,review-v20 conservative endpoint with compact-layout area projection and unchanged archived/model cycles
+1 GEMM + 3 ASIC cores,per-task,18659218.717374664,8438435.515585791,0.9663393861005918,0.9791905693772105,1.0132988300606025,cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint
+1 GEMM + 3 ASIC cores,per-segment,16672502.025432657,9419047.677401792,1.0786355756847659,1.095872171563036,1.0159799994241128,cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint
+1 GEMM + 3 ASIC cores,per-graph,16591492.705360487,9842624.688159794,1.1271420965660592,1.1012228570667972,0.9770044614798549,cross-size cross-revision proxy estimate; three auxiliary cores with one shared upstream endpoint

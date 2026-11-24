@@ -1,0 +1,30 @@
+{
+  "top": "ExpandedAsic",
+  "family": 5,
+  "input_directory": "build/experiments/asic/hybrid/capability-trial",
+  "input_sha256": {
+    "rtl/ExpandedAsic.sv": "22a26d883e84afc9ad96f39db822e2c5ea35da0337b15efab8f91848eef89977",
+    "rtl/Primitives.sv": "78e298fd65e34aad125e47be4e51c848fe8c57bf40b2b388039212c21090df31",
+    "native/Gcn.sv": "6da4a41224bd6b3779a298478c1bd6e1babc5e19296bc1f87a39d45b953cedd9",
+    "native/GptNorm.sv": "a28ffbd8baa0bf2ca0125f11c75aa838af0d104c42a1969c661ff2a48362d0fc",
+    "native/GptSoftmax.sv": "affbfaeff15c5949f2e1cefc7aa5c63d0bbb79cc706a2987fa3b7ddff54a2d45",
+    "native/GptVector.sv": "7d4cc26cae59650099967262b993858e27f431ebcfaff98b6aeac84bf7180a0b"
+  },
+  "all_sv_sha256": "9bcb4345257f1471acbd4d69effb6d4faeb78b56fdda90673799f2213bcfa73f",
+  "native_sv_sha256": "97c9e2fd7829f608f18e365f4c042860804efc05f0bb99090f6e4f3fc6b59b96",
+  "only_documented_native_edits": true,
+  "unchanged": "All remaining native FSM actions, busy/done/start semantics, three arrays and primitive-bank logic are byte-identical to frozen input. Other modules change only ExpandedAsic FAMILY default to five.",
+  "latency_change": "Native operation zero adds three cycles per element: SQUARE adds two and BIAS adds one. Other operation paths unchanged. Busy stays asserted across inserted states; done remains emitted only by final STORE.",
+  "pipeline_bits_added": 97,
+  "pipeline_registers": {
+    "square_low": 32,
+    "square_cross_a": 16,
+    "square_cross_b": 16,
+    "square_upper": 16,
+    "bias_low": 17
+  },
+  "arithmetic": "Keep low 32 bits of square multiplication and bias sum for every 32-bit input, including signed overflow. No delta range restriction.",
+  "timing_expectation": "Replace one 32x32 truncated square multiply by registered 16x16 partial products and two successive 16-bit add stages. Split bias carry at bit16. Closure requires remapping at unchanged constraints.",
+  "simulation_run": false,
+  "performance_run": false
+}

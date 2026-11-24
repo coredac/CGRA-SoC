@@ -1,0 +1,142 @@
+\documentclass[border=3pt]{standalone}
+\usepackage{pgfplots}
+\usepackage{mathptmx}
+\pgfplotsset{compat=1.18}
+
+\definecolor{gem_compute}{HTML}{7698BB}
+\definecolor{gem_spm}{HTML}{A5BED2}
+\definecolor{gem_adapter}{HTML}{D2BF93}
+\definecolor{cgra_compute}{HTML}{80AAA1}
+\definecolor{cgra_spm}{HTML}{B1C7AC}
+\definecolor{cgra_adapter}{HTML}{D3A48A}
+\definecolor{autolink}{HTML}{BA858A}
+\definecolor{others}{HTML}{9E99AA}
+\begin{document}
+\begin{minipage}{8.3cm}
+\centering
+\begin{tikzpicture}
+\begin{axis}[name=area,
+width=7cm,height=3.2cm,scale only axis,
+ybar stacked,bar shift=0pt,bar width=14pt,
+xmin=.5,xmax=3.5,ymin=0,ymax=1,
+ytick={0,.25,.5,.75,1},scaled y ticks=false,
+ylabel={Normalized area},
+font=\fontsize{8}{9}\selectfont,tick align=outside,
+xtick pos=left,ytick pos=left,axis line style={black!70},tick style={black!70},
+ylabel style={at={(axis description cs:-.12,.5)},anchor=south,inner sep=0pt},
+xticklabel style={align=center},
+ymajorgrids=true,major grid style={gray!25,line width=.2pt},axis on top=false,clip=false,
+legend columns=4,legend cell align=left,
+legend style={at={(.428571,1.06)},anchor=south,draw=black,fill=white,line width=.4pt,
+font=\fontsize{8}{9}\selectfont,inner xsep=2pt,inner ysep=2pt,
+nodes={inner sep=1pt},/tikz/every even column/.append style={column sep=1pt}},
+legend image code/.code={\draw[#1] (0cm,-.06cm) rectangle (.16cm,.06cm);},
+xtick={0.72,1,1.28,1.72,2,2.2800000000000002,2.7199999999999998,3,3.2800000000000002},xticklabels={1,2,3,1,2,3,1,2,3}]
+\addplot[fill=gem_compute,draw=none,forget plot] coordinates {(0.72,0.250942191) (1,0.250942191) (1.28,0.250942191) (1.72,0.198441015) (2,0.198441015) (2.2800000000000002,0.198441015) (2.7199999999999998,0.259034982) (3,0.259034982) (3.2800000000000002,0.259034982)};
+\addplot[fill=gem_spm,draw=none,forget plot] coordinates {(0.72,0.320808064) (1,0.320808064) (1.28,0.320808064) (1.72,0.374256639) (2,0.374256639) (2.2800000000000002,0.374256639) (2.7199999999999998,0.331435508) (3,0.331435508) (3.2800000000000002,0.331435508)};
+\addplot[fill=cgra_compute,draw=none,forget plot] coordinates {(0.72,0.087650731) (1,0.087650731) (1.28,0.087650731) (1.72,0.113835311) (2,0.113835311) (2.2800000000000002,0.113835311) (2.7199999999999998,0.090270363) (3,0.090270363) (3.2800000000000002,0.090270363)};
+\addplot[fill=cgra_spm,draw=none,forget plot] coordinates {(0.72,0.147993880) (1,0.147993880) (1.28,0.147993880) (1.72,0.058397121) (2,0.058397121) (2.2800000000000002,0.058397121) (2.7199999999999998,0.152896489) (3,0.152896489) (3.2800000000000002,0.152896489)};
+\addplot[fill=gem_adapter,draw=none,forget plot] coordinates {(0.72,0.001390235) (1,0.012364549) (1.28,0.019993526) (1.72,0.001097073) (2,0.048522145) (2.2800000000000002,0.085194599) (2.7199999999999998,0.001436168) (3,0.001436168) (3.2800000000000002,0.006505101)};
+\addplot[fill=cgra_adapter,draw=none,forget plot] coordinates {(0.72,0.001802409) (1,0.013195767) (1.28,0.038625691) (1.72,0.001479276) (2,0.094441621) (2.2800000000000002,0.123875952) (2.7199999999999998,0.001826308) (3,0.132666664) (3.2800000000000002,0.132666664)};
+\addplot[fill=autolink,draw=none,forget plot] coordinates {(0.72,0.000000000) (1,0.121328580) (1.28,0.123194698) (1.72,0.000000000) (2,0.037474376) (2.2800000000000002,0.037474376) (2.7199999999999998,0.000000000) (3,0.010224977) (3.2800000000000002,0.016042191)};
+\addplot[fill=others,draw=none,forget plot] coordinates {(0.72,0.010791219) (1,0.010791219) (1.28,0.010791219) (1.72,0.008524987) (2,0.008524987) (2.2800000000000002,0.008524987) (2.7199999999999998,0.011148701) (3,0.011148701) (3.2800000000000002,0.011148701)};
+\addlegendimage{fill=gem_compute,draw=black,line width=.35pt}
+\addlegendentry{GEMM compute}
+\addlegendimage{fill=gem_spm,draw=black,line width=.35pt}
+\addlegendentry{GEMM SPM}
+\addlegendimage{fill=cgra_compute,draw=black,line width=.35pt}
+\addlegendentry{CGRA compute}
+\addlegendimage{fill=cgra_spm,draw=black,line width=.35pt}
+\addlegendentry{CGRA SPM}
+\addlegendimage{fill=gem_adapter,draw=black,line width=.35pt}
+\addlegendentry{GEMM adapter}
+\addlegendimage{fill=cgra_adapter,draw=black,line width=.35pt}
+\addlegendentry{CGRA adapter}
+\addlegendimage{fill=autolink,draw=black,line width=.35pt}
+\addlegendentry{AutoLink}
+\addlegendimage{fill=others,draw=black,line width=.35pt}
+\addlegendentry{Others}
+\end{axis}
+\begin{axis}[at={(area.south west)},anchor=south west,width=7cm,height=3.2cm,scale only axis,xmin=.5,xmax=3.5,ymin=0,ymax=1,hide axis,clip=false,font=\fontsize{8}{9}\selectfont]
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:0.72,0.250942191) -- ([xshift=7pt]axis cs:0.72,0.250942191);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:0.72,0.571750255) -- ([xshift=7pt]axis cs:0.72,0.571750255);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:0.72,0.659400986) -- ([xshift=7pt]axis cs:0.72,0.659400986);
+\draw[black!75,line width=0.0506pt] ([xshift=-7pt]axis cs:0.72,0.807394865) -- ([xshift=7pt]axis cs:0.72,0.807394865);
+\draw[black!75,line width=0.0506pt] ([xshift=-7pt]axis cs:0.72,0.808785100) -- ([xshift=7pt]axis cs:0.72,0.808785100);
+\draw[black!75,line width=0.0656pt] ([xshift=-7pt]axis cs:0.72,0.810587509) -- ([xshift=7pt]axis cs:0.72,0.810587509);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:0.72,0) rectangle ([xshift=7pt]axis cs:0.72,0.821378729);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.250942191) -- ([xshift=7pt]axis cs:1,0.250942191);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.571750255) -- ([xshift=7pt]axis cs:1,0.571750255);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.659400986) -- ([xshift=7pt]axis cs:1,0.659400986);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.807394865) -- ([xshift=7pt]axis cs:1,0.807394865);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.819759414) -- ([xshift=7pt]axis cs:1,0.819759414);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.832955181) -- ([xshift=7pt]axis cs:1,0.832955181);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1,0.954283761) -- ([xshift=7pt]axis cs:1,0.954283761);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:1,0) rectangle ([xshift=7pt]axis cs:1,0.965074981);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.250942191) -- ([xshift=7pt]axis cs:1.28,0.250942191);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.571750255) -- ([xshift=7pt]axis cs:1.28,0.571750255);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.659400986) -- ([xshift=7pt]axis cs:1.28,0.659400986);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.807394865) -- ([xshift=7pt]axis cs:1.28,0.807394865);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.827388391) -- ([xshift=7pt]axis cs:1.28,0.827388391);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.866014083) -- ([xshift=7pt]axis cs:1.28,0.866014083);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.28,0.989208781) -- ([xshift=7pt]axis cs:1.28,0.989208781);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:1.28,0) rectangle ([xshift=7pt]axis cs:1.28,1.000000000);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.72,0.198441015) -- ([xshift=7pt]axis cs:1.72,0.198441015);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.72,0.572697654) -- ([xshift=7pt]axis cs:1.72,0.572697654);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:1.72,0.686532965) -- ([xshift=7pt]axis cs:1.72,0.686532965);
+\draw[black!75,line width=0.0400pt] ([xshift=-7pt]axis cs:1.72,0.744930086) -- ([xshift=7pt]axis cs:1.72,0.744930086);
+\draw[black!75,line width=0.0400pt] ([xshift=-7pt]axis cs:1.72,0.746027159) -- ([xshift=7pt]axis cs:1.72,0.746027159);
+\draw[black!75,line width=0.0539pt] ([xshift=-7pt]axis cs:1.72,0.747506435) -- ([xshift=7pt]axis cs:1.72,0.747506435);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:1.72,0) rectangle ([xshift=7pt]axis cs:1.72,0.756031423);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.198441015) -- ([xshift=7pt]axis cs:2,0.198441015);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.572697654) -- ([xshift=7pt]axis cs:2,0.572697654);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.686532965) -- ([xshift=7pt]axis cs:2,0.686532965);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.744930086) -- ([xshift=7pt]axis cs:2,0.744930086);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.793452231) -- ([xshift=7pt]axis cs:2,0.793452231);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.887893852) -- ([xshift=7pt]axis cs:2,0.887893852);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2,0.925368228) -- ([xshift=7pt]axis cs:2,0.925368228);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:2,0) rectangle ([xshift=7pt]axis cs:2,0.933893215);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.198441015) -- ([xshift=7pt]axis cs:2.2800000000000002,0.198441015);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.572697654) -- ([xshift=7pt]axis cs:2.2800000000000002,0.572697654);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.686532965) -- ([xshift=7pt]axis cs:2.2800000000000002,0.686532965);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.744930086) -- ([xshift=7pt]axis cs:2.2800000000000002,0.744930086);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.830124685) -- ([xshift=7pt]axis cs:2.2800000000000002,0.830124685);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.954000637) -- ([xshift=7pt]axis cs:2.2800000000000002,0.954000637);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.2800000000000002,0.991475013) -- ([xshift=7pt]axis cs:2.2800000000000002,0.991475013);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:2.2800000000000002,0) rectangle ([xshift=7pt]axis cs:2.2800000000000002,1.000000000);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.259034982) -- ([xshift=7pt]axis cs:2.7199999999999998,0.259034982);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.590470490) -- ([xshift=7pt]axis cs:2.7199999999999998,0.590470490);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.680740853) -- ([xshift=7pt]axis cs:2.7199999999999998,0.680740853);
+\draw[black!75,line width=0.0523pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.833637342) -- ([xshift=7pt]axis cs:2.7199999999999998,0.833637342);
+\draw[black!75,line width=0.0523pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.835073510) -- ([xshift=7pt]axis cs:2.7199999999999998,0.835073510);
+\draw[black!75,line width=0.0665pt] ([xshift=-7pt]axis cs:2.7199999999999998,0.836899818) -- ([xshift=7pt]axis cs:2.7199999999999998,0.836899818);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:2.7199999999999998,0) rectangle ([xshift=7pt]axis cs:2.7199999999999998,0.848048520);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3,0.259034982) -- ([xshift=7pt]axis cs:3,0.259034982);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3,0.590470490) -- ([xshift=7pt]axis cs:3,0.590470490);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3,0.680740853) -- ([xshift=7pt]axis cs:3,0.680740853);
+\draw[black!75,line width=0.0523pt] ([xshift=-7pt]axis cs:3,0.833637342) -- ([xshift=7pt]axis cs:3,0.833637342);
+\draw[black!75,line width=0.0523pt] ([xshift=-7pt]axis cs:3,0.835073510) -- ([xshift=7pt]axis cs:3,0.835073510);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3,0.967740174) -- ([xshift=7pt]axis cs:3,0.967740174);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3,0.977965151) -- ([xshift=7pt]axis cs:3,0.977965151);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:3,0) rectangle ([xshift=7pt]axis cs:3,0.989113853);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.259034982) -- ([xshift=7pt]axis cs:3.2800000000000002,0.259034982);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.590470490) -- ([xshift=7pt]axis cs:3.2800000000000002,0.590470490);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.680740853) -- ([xshift=7pt]axis cs:3.2800000000000002,0.680740853);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.833637342) -- ([xshift=7pt]axis cs:3.2800000000000002,0.833637342);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.840142443) -- ([xshift=7pt]axis cs:3.2800000000000002,0.840142443);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.972809107) -- ([xshift=7pt]axis cs:3.2800000000000002,0.972809107);
+\draw[black!75,line width=0.1500pt] ([xshift=-7pt]axis cs:3.2800000000000002,0.988851299) -- ([xshift=7pt]axis cs:3.2800000000000002,0.988851299);
+\draw[black,line width=.35pt] ([xshift=-7pt]axis cs:3.2800000000000002,0) rectangle ([xshift=7pt]axis cs:3.2800000000000002,1.000000000);
+\node[anchor=north,inner sep=0pt,yshift=-18pt] at (axis cs:1,0) {ResNet};
+\node[anchor=north,inner sep=0pt,yshift=-18pt] at (axis cs:2,0) {GPT-2};
+\node[anchor=north,inner sep=0pt,yshift=-18pt] at (axis cs:3,0) {GCN};
+\end{axis}
+\coordinate (plot-bottom) at (current bounding box.south);
+\coordinate (plot-top) at (current bounding box.north);
+\coordinate (plot-left) at ([xshift=-1.15cm]area.south west);
+\coordinate (plot-right) at ([xshift=.15cm]area.north east);
+\pgfresetboundingbox
+\path[use as bounding box] (plot-left |- plot-bottom) rectangle (plot-right |- plot-top);
+\end{tikzpicture}
+\end{minipage}
+\end{document}

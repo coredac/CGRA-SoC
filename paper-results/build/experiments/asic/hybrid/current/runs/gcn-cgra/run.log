@@ -1,0 +1,13 @@
+[UART] UART0 is here (stdin/stdout).
+== Loading device model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+GCN COMPARE scope=full-small-GCN nodes=16 inner=64 columns=128 reference-intermediates=0 common-Rocket=1 common-Gemmini=1 common-AutoLink=1 CGRA-row-jobs=16 ASIC-operator-jobs=2
+GCN COMPARE backend=CGRA mode=chain phase=cold input=0 sample=0 total_cycles=179722 staging_cycles=36654 setup_cycles=83704 projection_cycles=3166 spm_copy_cycles=5214 nonmatrix_cycles=45939 output_cycles=5045 cpu_submissions=1 cached_jobs=16 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE backend=CGRA mode=chain phase=warm input=1 sample=1 total_cycles=95221 staging_cycles=36869 setup_cycles=28 projection_cycles=2366 spm_copy_cycles=5167 nonmatrix_cycles=45531 output_cycles=5260 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE backend=CGRA mode=chain phase=warm input=0 sample=2 total_cycles=93315 staging_cycles=34962 setup_cycles=28 projection_cycles=2373 spm_copy_cycles=5167 nonmatrix_cycles=45552 output_cycles=5233 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE backend=CGRA mode=chain phase=warm input=1 sample=3 total_cycles=93057 staging_cycles=34688 setup_cycles=15 projection_cycles=2335 spm_copy_cycles=5167 nonmatrix_cycles=45529 output_cycles=5323 cpu_submissions=1 cached_jobs=0 projected_spm_bytes=8192 output_dma_bytes=8192 checked=2048 mismatches=0 status=0
+GCN COMPARE: PASS
+- /home/jjqin/CGRA-SoC/build/experiments/asic/cost-complete/revision/rtl/gen-collateral/TestDriver.v:158: Verilog $finish

@@ -1,0 +1,17 @@
+[UART] UART0 is here (stdin/stdout).
+== Loading device model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/jjqin/CGRA-SoC/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+GPT COMPARE scope=full-block N=2 hidden=128 heads=2 ff=512 reference-intermediates=0 transport=DRAM-materialized not-optimized-SPM=1 submission=AutoLink-both-backends chain-scope=local-kernel-chain-not-full-graphAuto samples=4 inputs=0,1,0,1 CGRA-cache=full-static-per-phase cycle-boundary=configuration-packing-DMA-all-kernels-final-output
+GPT COMPARE backend=ASIC mode=chain phase=cold sample=0 input=0 total_cycles=276690 setup_cycles=10440 pipeline_cycles=266250 configured_jobs=20 autolink_submissions=18 gemmini_gemms=10 backend_input_dma_bytes=18560 backend_output_dma_bytes=14464 checked=256 mismatches=0 status=0
+GPT COMPARE ASIC hardware mode=chain phase=cold sample=0 input=0 active_cycles=168751 core_starts=51 read_bytes=18560 write_bytes=14464 native_cpu_starts=0 config_commands=120
+GPT COMPARE backend=ASIC mode=chain phase=warm sample=1 input=1 total_cycles=239998 setup_cycles=30 pipeline_cycles=239968 configured_jobs=0 autolink_submissions=18 gemmini_gemms=10 backend_input_dma_bytes=18560 backend_output_dma_bytes=14464 checked=256 mismatches=0 status=0
+GPT COMPARE ASIC hardware mode=chain phase=warm sample=1 input=1 active_cycles=169005 core_starts=51 read_bytes=18560 write_bytes=14464 native_cpu_starts=0 config_commands=0
+GPT COMPARE backend=ASIC mode=chain phase=warm sample=2 input=0 total_cycles=234944 setup_cycles=34 pipeline_cycles=234910 configured_jobs=0 autolink_submissions=18 gemmini_gemms=10 backend_input_dma_bytes=18560 backend_output_dma_bytes=14464 checked=256 mismatches=0 status=0
+GPT COMPARE ASIC hardware mode=chain phase=warm sample=2 input=0 active_cycles=168632 core_starts=51 read_bytes=18560 write_bytes=14464 native_cpu_starts=0 config_commands=0
+GPT COMPARE backend=ASIC mode=chain phase=warm sample=3 input=1 total_cycles=234139 setup_cycles=19 pipeline_cycles=234120 configured_jobs=0 autolink_submissions=18 gemmini_gemms=10 backend_input_dma_bytes=18560 backend_output_dma_bytes=14464 checked=256 mismatches=0 status=0
+GPT COMPARE ASIC hardware mode=chain phase=warm sample=3 input=1 active_cycles=168525 core_starts=51 read_bytes=18560 write_bytes=14464 native_cpu_starts=0 config_commands=0
+GPT COMPARE: PASS
+- /home/jjqin/CGRA-SoC/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.MultiAccelRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

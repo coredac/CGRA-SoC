@@ -1,0 +1,773 @@
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:414:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.input_units___05F4.queue.dpath.rf'
+  414 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.022
+                      ... Use "/* verilator lint_off WIDTHEXPAND */" and lint_on around source to disable this message.
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:427:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.input_units___05F4.queue.dpath.rf'
+  427 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12161:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.tile_in_channel___05F3.queues___05F0.dpath.rf'
+12161 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12174:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.tile_in_channel___05F3.queues___05F0.dpath.rf'
+12174 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:1532:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.controller.send_to_tile_load_response_queue.queues___05F0.dpath.rf'
+ 1532 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:1545:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.controller.send_to_tile_load_response_queue.queues___05F0.dpath.rf'
+ 1545 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9605:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F3.reg_file'
+ 9605 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9618:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F3.reg_file'
+ 9618 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:1353:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.controller.send_to_cpu_pkt_queue.dpath.rf'
+ 1353 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:1366:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.controller.send_to_cpu_pkt_queue.dpath.rf'
+ 1366 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:877:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.switch_units___05F0.encoder'
+  877 |     for ( int unsigned i = 1'd0; i < 3'd5; i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:772:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.switch_units___05F0.arbiter'
+  772 |     for ( int unsigned i = 1'd0; i < 3'( __const__nreqs_at_comb_grants ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:787:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.switch_units___05F0.arbiter'
+  787 |     for ( int unsigned i = 1'd0; i < 4'( __const__nreqsX2_at_comb_grants_int ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:808:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.switch_units___05F0.arbiter'
+  808 |     for ( int unsigned i = 1'd0; i < 4'( __const__nreqsX2_at_comb_kills ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:14064:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem.reg_file'
+14064 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:14077:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem.reg_file'
+14077 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10901:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F3'
+10901 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_masks ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10973:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F3'
+10973 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_status ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10547:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F2'
+10547 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_masks ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10619:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F2'
+10619 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_status ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10193:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F1'
+10193 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_masks ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10265:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F1'
+10265 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_status ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9839:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F0'
+ 9839 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_masks ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9911:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.register_cluster.reg_bank___05F0'
+ 9911 |     for ( int unsigned r = 1'd0; r < 4'( __const__num_registers_at_update_token_status ); r += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7933:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F9'
+ 7933 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7935:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F9'
+ 7935 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8041:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F9'
+ 8041 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7496:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F8'
+ 7496 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7498:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F8'
+ 7498 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7576:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F8'
+ 7576 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7658:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F8'
+ 7658 |       for ( int unsigned i = 1'd0; i < 3'd2 ** 3'd6; i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7658:45: Operator POW expects 32 bits on the LHS, but LHS's CONST '3'h2' generates 3 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F8'
+ 7658 |       for ( int unsigned i = 1'd0; i < 3'd2 ** 3'd6; i += 1'd1 )
+      |                                             ^~
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7143:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F7'
+ 7143 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7145:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F7'
+ 7145 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7202:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F7'
+ 7202 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:7294:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F7'
+ 7294 |     for ( int unsigned k = 1'd0; k < 7'( __const__num_slots_at_record_grt_once ); k += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6858:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F6'
+ 6858 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6862:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F6'
+ 6862 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6896:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F6'
+ 6896 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6530:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F5'
+ 6530 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_read_reg ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6532:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F5'
+ 6532 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_read_reg ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6635:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F5'
+ 6635 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_read_reg ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6179:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F4'
+ 6179 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6181:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F4'
+ 6181 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:6227:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F4'
+ 6227 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5875:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F3'
+ 5875 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5877:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F3'
+ 5877 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5943:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F3'
+ 5943 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5467:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F2'
+ 5467 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_ports ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5469:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F2'
+ 5469 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_ports ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHTRUNC: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5527:64: Bit extraction of var[31:0] requires 5 bit index, not 6 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F2'
+ 5527 |     trial = ( remainder << 1'd1 ) | { { 32 { 1'b0 } }, quotient[5'd31:6'( __const__width_at_restoring_step ) - 6'd1] };
+      |                                                                ^
+%Warning-WIDTHTRUNC: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5530:65: Bit extraction of var[31:0] requires 5 bit index, not 6 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F2'
+ 5530 |       trial = ( remainder << 2'd2 ) | { { 31 { 1'b0 } }, divisor[6'd31:( 5'( __const__digits_at_restoring_step ) * 5'd2 ) - 6'd2] };
+      |                                                                 ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5180:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F1'
+ 5180 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5182:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F1'
+ 5182 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:5219:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F1'
+ 5219 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4949:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F12'
+ 4949 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4951:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F12'
+ 4951 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4962:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F12'
+ 4962 |       for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4677:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F11'
+ 4677 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4679:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F11'
+ 4679 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4742:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F11'
+ 4742 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4310:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F10'
+ 4310 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4312:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F10'
+ 4312 |     for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4451:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F10'
+ 4451 |       for ( int unsigned i = 1'd0; i < 7'( __const__ctrl_mem_size_at_update_already_done ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4455:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F10'
+ 4455 |       for ( int unsigned i = 1'd0; i < 7'( __const__ctrl_mem_size_at_update_already_done ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4463:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F10'
+ 4463 |       for ( int unsigned i = 1'd0; i < 7'( __const__ctrl_mem_size_at_update_already_done ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4009:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F0'
+ 4009 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_comb_logic ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4011:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F0'
+ 4011 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_outports_at_comb_logic ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4083:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element.fu___05F0'
+ 4083 |         for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:2821:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.const_mem.reg_file'
+ 2821 |     for ( int unsigned i = 1'd0; i < 1'( __const__rd_ports_at_up_rf_read ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:2834:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.const_mem.reg_file'
+ 2834 |     for ( int unsigned i = 1'd0; i < 1'( __const__wr_ports_at_up_rf_write ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:993:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.switch_units___05F0'
+  993 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_inports_at_up_get_en ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:681:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                  : ... note: In instance 'CgraCompute.controller.crossbar.route_units___05F4'
+  681 |     for ( int unsigned i = 1'd0; i < 1'( __const__num_outports_at_up_ru_routing ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11379:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11379 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_in_dir_vector ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11383:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11383 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_in_dir_vector ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11407:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11407 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_prologue_allowing_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11433:29: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11433 |     for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter_next ); addr += 1'd1 )
+      |                             ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11434:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11434 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_prologue_counter_next ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11436:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11436 |         for ( int unsigned j = 1'd0; j < 4'( __const__num_outports_at_update_prologue_counter_next ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11455:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11455 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_prologue_or_valid_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11483:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11483 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_rdy_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11514:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11514 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_recv_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11516:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11516 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_recv_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11550:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11550 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_accepted_next ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11580:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11580 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11582:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11582 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11647:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11647 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_signal ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11649:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11649 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11657:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11657 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11661:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11661 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_signal ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11663:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11663 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11698:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11698 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_valid_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11723:31: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11723 |       for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter ); addr += 1'd1 )
+      |                               ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11724:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11724 |         for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_prologue_counter ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11729:31: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11729 |       for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter ); addr += 1'd1 )
+      |                               ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11730:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.routing_crossbar'
+11730 |         for ( int unsigned i = 1'd0; i < 4'( __const__num_inports_at_update_prologue_counter ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11223:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster'
+11223 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_reg_banks_at_update_msgs_signals ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11230:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster'
+11230 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_reg_banks_at_update_msgs_signals ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11232:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15.register_cluster'
+11232 |       for ( int unsigned j = 1'd0; j < 3'( __const__num_reg_banks_at_update_msgs_signals ); j += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9123:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9123 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_in_dir_vector ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9127:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9127 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_in_dir_vector ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9151:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9151 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_prologue_allowing_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9177:29: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9177 |     for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter_next ); addr += 1'd1 )
+      |                             ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9178:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9178 |       for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_prologue_counter_next ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9180:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9180 |         for ( int unsigned j = 1'd0; j < 4'( __const__num_outports_at_update_prologue_counter_next ); j += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9199:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9199 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_prologue_or_valid_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9227:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9227 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_rdy_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9258:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9258 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_recv_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9260:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9260 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_recv_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9294:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9294 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_accepted_next ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9324:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9324 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9326:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9326 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_send_required_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9391:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9391 |     for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_signal ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9393:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9393 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9401:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9401 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9405:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9405 |       for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_signal ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9407:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9407 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_signal ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9442:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9442 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_outports_at_update_valid_vector ); i += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9467:31: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9467 |       for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter ); addr += 1'd1 )
+      |                               ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9468:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9468 |         for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_prologue_counter ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9473:31: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9473 |       for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_counter ); addr += 1'd1 )
+      |                               ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9474:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.fu_crossbar'
+ 9474 |         for ( int unsigned i = 1'd0; i < 2'( __const__num_inports_at_update_prologue_counter ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8778:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8778 |     for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8782:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8782 |     for ( int unsigned i = 1'd0; i < 4'd13; i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8792:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8792 |       for ( int unsigned j = 1'd0; j < 2'( __const__num_outports_at_comb_logic ); j += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8802:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8802 |     for ( int unsigned j = 1'd0; j < 3'( __const__num_inports_at_comb_logic ); j += 1'd1 )
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8804:29: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8804 |     for ( int unsigned port = 1'd0; port < 3'( __const__num_inports_at_comb_logic ); port += 1'd1 ) begin
+      |                             ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8805:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8805 |       for ( int unsigned i = 1'd0; i < 4'd13; i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8835:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8835 |     for ( int unsigned i = 1'd0; i < 4'd13; i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8843:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.element'
+ 8843 |     for ( int unsigned i = 1'd0; i < 4'd13; i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3404:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3404 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_fu_inports_at_update_msg ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3411:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3411 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_routing_outports_at_update_msg ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3421:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3421 |       for ( int unsigned i = 1'd0; i < 3'( __const__num_fu_inports_at_update_msg ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3428:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3428 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_routing_outports_at_update_msg ); i += 1'd1 ) begin
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3459:29: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3459 |     for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_outport ); addr += 1'd1 ) begin
+      |                             ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3460:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3460 |       for ( int unsigned i = 1'd0; i < 4'( __const__num_routing_xbar_inports_at_update_prologue_outport ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3462:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3462 |       for ( int unsigned i = 1'd0; i < 2'( __const__num_fu_outports_at_update_prologue_outport ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3490:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3490 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_fu_inports_at_update_send_ctrl_msg ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3497:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3497 |     for ( int unsigned i = 1'd0; i < 4'( __const__num_routing_outports_at_update_send_ctrl_msg ); i += 1'd1 ) begin
+      |                          ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3682:31: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3682 |       for ( int unsigned addr = 1'd0; addr < 6'( __const__ctrl_mem_size_at_update_prologue_reg ); addr += 1'd1 ) begin
+      |                               ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3683:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3683 |         for ( int unsigned i = 1'd0; i < 4'( __const__num_routing_xbar_inports_at_update_prologue_reg ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3685:30: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3685 |         for ( int unsigned i = 1'd0; i < 2'( __const__num_fu_outports_at_update_prologue_reg ); i += 1'd1 )
+      |                              ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3744:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3744 |       for ( int unsigned i = 1'd0; i < 6'( __const__ctrl_mem_size_at_update_raddr_and_fu_prologue ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3750:28: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                   : ... note: In instance 'CgraCompute.tile___05F15.ctrl_mem'
+ 3750 |       for ( int unsigned i = 1'd0; i < 6'( __const__ctrl_mem_size_at_update_raddr_and_fu_prologue ); i += 1'd1 )
+      |                            ^
+%Warning-WIDTHEXPAND: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13074:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'CgraCompute.tile___05F15'
+13074 |     for ( int unsigned i = 1'd0; i < 3'( __const__num_tile_inports_at_isolate_inputs ); i += 1'd1 ) begin
+      |                          ^
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8215:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.element.fu__send_out__rdy'
+                                                                                                 : ... note: In instance 'CgraCompute.tile__0'
+ 8215 |   logic [0:0] fu__send_out__rdy [0:12][0:1];
+      |               ^~~~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8215:15:      Example path: CgraCompute.tile__0.element.fu__send_out__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8252:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3867:21:      Example path: CgraCompute.tile__0.element.__Vcellinp__fu__0__send_out__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4005:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3861:22:      Example path: CgraCompute.tile__0.element.__Vcellout__fu__0__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8246:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8209:15:      Example path: CgraCompute.tile__0.element.fu__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8777:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12603:15:      Example path: CgraCompute.tile__0.element__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13949:52:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12744:15:      Example path: CgraCompute.tile__0.register_cluster__send_data_to_fu__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12741:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_routing_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13941:46:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12799:15:      Example path: CgraCompute.tile__0.routing_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11481:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11361:15:      Example path: CgraCompute.tile__0.routing_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12796:15:      Example path: CgraCompute.tile__0.routing_crossbar__recv_opt__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13125:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12542:15:      Example path: CgraCompute.tile__0.ctrl_mem__send_ctrl__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13087:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12731:15:      Example path: CgraCompute.tile__0.register_cluster__inport_ctrl_proceed
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9903:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9655:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.read_towards_fu
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11104:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8210:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.element.fu__recv_in__val'
+                                                                                                 : ... note: In instance 'CgraCompute.tile__0'
+ 8210 |   logic [0:0] fu__recv_in__val [0:12][0:3];
+      |               ^~~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8210:15:      Example path: CgraCompute.tile__0.element.fu__recv_in__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8247:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3862:21:      Example path: CgraCompute.tile__0.element.__Vcellinp__fu__0__recv_in__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4005:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3861:22:      Example path: CgraCompute.tile__0.element.__Vcellout__fu__0__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8246:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8209:15:      Example path: CgraCompute.tile__0.element.fu__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8777:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12603:15:      Example path: CgraCompute.tile__0.element__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13949:52:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12744:15:      Example path: CgraCompute.tile__0.register_cluster__send_data_to_fu__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12741:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_routing_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13941:46:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12799:15:      Example path: CgraCompute.tile__0.routing_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11481:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11361:15:      Example path: CgraCompute.tile__0.routing_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12796:15:      Example path: CgraCompute.tile__0.routing_crossbar__recv_opt__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13125:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12542:15:      Example path: CgraCompute.tile__0.ctrl_mem__send_ctrl__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13087:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12731:15:      Example path: CgraCompute.tile__0.register_cluster__inport_ctrl_proceed
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9903:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9655:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.read_towards_fu
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11104:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11083:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__outport_wr_rdy'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+11083 |   logic [0:0] reg_bank__outport_wr_rdy [0:3];
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11083:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__outport_wr_rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12738:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_fu_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13944:41:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12695:15:      Example path: CgraCompute.tile__0.fu_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9225:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9105:15:      Example path: CgraCompute.tile__0.fu_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9390:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12689:15:      Example path: CgraCompute.tile__0.fu_crossbar__recv_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13902:36:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12612:15:      Example path: CgraCompute.tile__0.element__send_out__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8777:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8215:15:      Example path: CgraCompute.tile__0.element.fu__send_out__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8252:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3867:21:      Example path: CgraCompute.tile__0.element.__Vcellinp__fu__0__send_out__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:4005:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:3861:22:      Example path: CgraCompute.tile__0.element.__Vcellout__fu__0__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8246:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8209:15:      Example path: CgraCompute.tile__0.element.fu__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:8777:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12603:15:      Example path: CgraCompute.tile__0.element__recv_in__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13949:52:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12744:15:      Example path: CgraCompute.tile__0.register_cluster__send_data_to_fu__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12741:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_routing_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13941:46:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12799:15:      Example path: CgraCompute.tile__0.routing_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11481:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11361:15:      Example path: CgraCompute.tile__0.routing_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12796:15:      Example path: CgraCompute.tile__0.routing_crossbar__recv_opt__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13125:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12542:15:      Example path: CgraCompute.tile__0.ctrl_mem__send_ctrl__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13087:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12731:15:      Example path: CgraCompute.tile__0.register_cluster__inport_ctrl_proceed
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9903:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9655:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.read_towards_fu
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11104:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+11087 |   logic [0:0] reg_bank__send_data_to_fu__val [0:3];
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12741:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_routing_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13941:46:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12799:15:      Example path: CgraCompute.tile__0.routing_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11481:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11361:15:      Example path: CgraCompute.tile__0.routing_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12796:15:      Example path: CgraCompute.tile__0.routing_crossbar__recv_opt__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13125:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12542:15:      Example path: CgraCompute.tile__0.ctrl_mem__send_ctrl__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13087:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12731:15:      Example path: CgraCompute.tile__0.register_cluster__inport_ctrl_proceed
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9903:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9655:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.read_towards_fu
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11104:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9677:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__0.reg_file__raddr'
+                                                                                                 : ... note: In instance 'CgraCompute.tile__0'
+ 9677 |   logic [2:0] reg_file__raddr [0:0];
+      |               ^~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9677:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.reg_file__raddr
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9604:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9678:65:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.reg_file__rdata
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9757:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9677:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.reg_file__raddr
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10031:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__1.reg_file__raddr'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+10031 |   logic [2:0] reg_file__raddr [0:0];
+      |               ^~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10031:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__1.reg_file__raddr
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9604:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10032:65:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__1.reg_file__rdata
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10111:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10031:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__1.reg_file__raddr
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10385:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__2.reg_file__raddr'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+10385 |   logic [2:0] reg_file__raddr [0:0];
+      |               ^~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10385:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__2.reg_file__raddr
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9604:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10386:65:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__2.reg_file__rdata
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10465:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10385:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__2.reg_file__raddr
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10739:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.register_cluster.reg_bank__3.reg_file__raddr'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+10739 |   logic [2:0] reg_file__raddr [0:0];
+      |               ^~~~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10739:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__3.reg_file__raddr
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9604:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10740:65:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__3.reg_file__rdata
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10819:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:10739:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__3.reg_file__raddr
+%Warning-UNOPTFLAT: build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11355:15: Signal unoptimizable: Circular combinational logic: 'CgraCompute.tile__0.routing_crossbar.recv_data_val'
+                                                                                                  : ... note: In instance 'CgraCompute.tile__0'
+11355 |   logic [0:0] recv_data_val [0:7];
+      |               ^~~~~~~~~~~~~
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11355:15:      Example path: CgraCompute.tile__0.routing_crossbar.recv_data_val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11696:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11357:15:      Example path: CgraCompute.tile__0.routing_crossbar.recv_valid_excluding_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11453:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11358:15:      Example path: CgraCompute.tile__0.routing_crossbar.recv_valid_or_during_prologue_allowing_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12796:15:      Example path: CgraCompute.tile__0.routing_crossbar__recv_opt__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13125:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12542:15:      Example path: CgraCompute.tile__0.ctrl_mem__send_ctrl__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13087:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12731:15:      Example path: CgraCompute.tile__0.register_cluster__inport_ctrl_proceed
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9903:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:9655:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__0.read_towards_fu
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11104:6:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11087:15:      Example path: CgraCompute.tile__0.register_cluster.reg_bank__send_data_to_fu__val
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11222:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12741:15:      Example path: CgraCompute.tile__0.register_cluster__recv_data_from_routing_crossbar__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:13941:46:      Example path: ASSIGNW
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:12799:15:      Example path: CgraCompute.tile__0.routing_crossbar__send_data__rdy
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11481:3:      Example path: ALWAYS
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11361:15:      Example path: CgraCompute.tile__0.routing_crossbar.send_rdy_or_during_prologue_vector
+                    build/experiments/asic/hybrid/revised-area/cgra/source/CgraCompute.sv:11646:3:      Example path: ALWAYS

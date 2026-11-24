@@ -1,0 +1,96 @@
+ 
+****************************************
+Report : design
+Design : ExpandedAsic
+Version: T-2022.03-SP5-6
+Date   : Sun Nov 15 23:11:12 2026
+****************************************
+
+Design allows ideal nets on clock nets.
+
+Library(s) Used:
+
+    saed14rvt_tt0p8v25c (File: /opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db)
+
+Local Link Library:
+
+    {/opt2/synopsys/14mm/stdcell_rvt/db_nldm/saed14rvt_tt0p8v25c.db}
+
+Flip-Flop Types:
+
+    No flip-flop types specified.
+
+Latch Types:
+
+    No latch types specified.
+
+Operating Conditions:
+
+
+    Operating Condition Name : tt0p8v25c
+    Library : saed14rvt_tt0p8v25c
+    Process :   1.00
+    Temperature :  25.00
+    Voltage :   0.80
+
+Wire Loading Model:
+
+    Selected automatically from the total cell area.
+
+Name           :   35000
+Location       :   saed14rvt_tt0p8v25c
+Resistance     :   0.001187
+Capacitance    :   0.00027
+Area           :   0.01
+Slope          :   140.36
+Fanout   Length   Points Average Cap Std Deviation
+--------------------------------------------------------------
+     1    16.92
+     2    39.03
+     3    64.09
+     4    92.51
+     5   124.73
+     6   161.17
+     7   202.25
+     8   248.42
+     9   300.09
+    10   357.68
+    11   421.63
+    12   492.37
+    13   570.31
+    14   655.89
+    15   749.54
+    16   851.67
+    17   962.72
+    18  1083.11
+    19  1213.28
+    20  1353.64
+
+
+
+Wire Loading Model Mode: enclosed.
+
+Timing Ranges:
+
+    No timing ranges specified.
+
+Pin Input Delays:
+
+    None specified.
+
+Pin Output Delays:
+
+    None specified.
+
+Disabled Timing Arcs:
+
+    No arcs disabled.
+
+Required Licenses:
+
+    None Required
+
+Design Parameters:
+
+    None specified.
+1

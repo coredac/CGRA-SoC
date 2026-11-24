@@ -1,0 +1,66 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 16384
+  data_mem_size_per_bank: 2048
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 0x60000000
+    size_bytes: 65536
+  cgra_spm_window:
+    base_address: 0x60020000
+    size_bytes: 65536
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 32
+      command_capacity: 12
+      patch_capacity: 2
+    cgra0:
+      type: cgra
+      packet_capacity: 46
+    cgra1:
+      type: cgra
+      packet_capacity: 46
+  run_capacity: 2
+  capacity:
+    stages: 3
+    dependencies: 3
+    results: 3
+    jobs:
+      gemmini0: 1
+      cgra0: 64
+      cgra1: 64
+  buffer_slots:
+    gemmini0: 1
+    cgra0: 1
+    cgra1: 1
+  stages:
+    - name: projection
+      endpoint: gemmini0
+    - name: aggregation0
+      endpoint: cgra0
+    - name: aggregation1
+      endpoint: cgra1
+  dependencies:
+    - source: input_ready
+      destination: projection
+    - source: projection
+      destination: aggregation0
+      size_bytes: 16384
+    - source: projection
+      destination: aggregation1
+      size_bytes: 16384

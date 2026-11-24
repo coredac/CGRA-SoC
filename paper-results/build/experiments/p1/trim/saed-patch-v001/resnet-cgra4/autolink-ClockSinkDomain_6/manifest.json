@@ -1,0 +1,206 @@
+{
+  "status": "ready_for_synthesis",
+  "entry": "resnet-cgra4",
+  "component": "autolink",
+  "top": "ClockSinkDomain_6",
+  "soc_instances": 1,
+  "archive_sha256": "25890058bd7a0823703262ad76825d91f513c69d239bf5c502f69d31526f754c",
+  "source_modules": 26,
+  "sram_required": false,
+  "expected_macro_instances": 0,
+  "macro_counts": {},
+  "macro_lib": null,
+  "mapped_memories": [],
+  "logic_memories": [],
+  "logic_memory_inventory_scope": "Emitted RAM modules only; inline register arrays such as GemminiPatch.entries remain logic and are included in mapped cell area, not in this RAM-module inventory.",
+  "submit_allowed": true,
+  "sram_area_per_component": 0,
+  "semantics": "Native FIRRTL SyncReadMem has one-cycle enabled reads and byte masks where present; read-under-write and disabled read output are unspecified. CGRA fullword RAM uses delayed physical writes plus forwarding to preserve one-cycle read-first behavior and output hold. SAED CE positive edge and active-low controls; depth-bank selectors hold without read enable. No storage reset or generated clock.",
+  "validation": "static_generation_only",
+  "small_gate": "not_rerun",
+  "files": [
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiLinkConfigAck.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncQueueSink_GemminiLinkConfigAck.sv",
+      "original_sha256": "631ffb810a71c558e6038815614f130024bf1466af21b95db3211c5e912ab62f",
+      "staged_sha256": "631ffb810a71c558e6038815614f130024bf1466af21b95db3211c5e912ab62f",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSink_GemminiPublicationControl.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncQueueSink_GemminiPublicationControl.sv",
+      "original_sha256": "46650553548dc003201a0572744f10411041d7d50d31dad6eeca02d90b192cdb",
+      "staged_sha256": "46650553548dc003201a0572744f10411041d7d50d31dad6eeca02d90b192cdb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiLinkConfig.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncQueueSource_GemminiLinkConfig.sv",
+      "original_sha256": "df80dd54f724a02ec2c9989dab81aef475d6b04d00eacb40c6e7964ff7840c69",
+      "staged_sha256": "df80dd54f724a02ec2c9989dab81aef475d6b04d00eacb40c6e7964ff7840c69",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiPatchEntry.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncQueueSource_GemminiPatchEntry.sv",
+      "original_sha256": "8e861ba1dd85a697aa7fec9a31e30e8a8e7b0e74828ae94e669c33f9d691b038",
+      "staged_sha256": "8e861ba1dd85a697aa7fec9a31e30e8a8e7b0e74828ae94e669c33f9d691b038",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncQueueSource_GemminiPublicationReply.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncQueueSource_GemminiPublicationReply.sv",
+      "original_sha256": "fde684f98d1841ad7703e9b18e2355530a3a50f5c8f781cf9ef3bb376882f60a",
+      "staged_sha256": "fde684f98d1841ad7703e9b18e2355530a3a50f5c8f781cf9ef3bb376882f60a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+      "original_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "staged_sha256": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+      "original_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "staged_sha256": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncResetSynchronizerShiftReg_w1_d3_i0_1.sv",
+      "original_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "staged_sha256": "0fe356f3b64ab9c5d7608732a9bb8f680aca7e55cb57d5a848da4cb65aeef896",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/AsyncValidSync.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/AsyncValidSync.sv",
+      "original_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "staged_sha256": "a9ba052283c948122034fdff16ed31f7363b9551e6432dfc25c54738afeb49ac",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w1.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/ClockCrossingReg_w1.sv",
+      "original_sha256": "ed3a993424d378f9a41ad854a89663cc6ac1ecd92d411e0c722cd6e996e40780",
+      "staged_sha256": "ed3a993424d378f9a41ad854a89663cc6ac1ecd92d411e0c722cd6e996e40780",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockCrossingReg_w13.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/ClockCrossingReg_w13.sv",
+      "original_sha256": "689f3ea91fd59f7c42deedcf6dd67b1476fd071177d40ed13b466e2b5c82a59a",
+      "staged_sha256": "689f3ea91fd59f7c42deedcf6dd67b1476fd071177d40ed13b466e2b5c82a59a",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ClockSinkDomain_6.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/ClockSinkDomain_6.sv",
+      "original_sha256": "74f46bfc02f2bca20a4239750d273f8a518401393008d9aa3c5f3435fed3329e",
+      "staged_sha256": "74f46bfc02f2bca20a4239750d273f8a518401393008d9aa3c5f3435fed3329e",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue1_RegMapperInput_i9_m8_2.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/Queue1_RegMapperInput_i9_m8_2.sv",
+      "original_sha256": "fc7a81617a9a9d89dc349548b746b7c71ee25a7cb87f288e398896f01d901937",
+      "staged_sha256": "fc7a81617a9a9d89dc349548b746b7c71ee25a7cb87f288e398896f01d901937",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleA_a31d256s4k1z4u.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/Queue2_TLBundleA_a31d256s4k1z4u.sv",
+      "original_sha256": "b95d06dfc081d2ddc679cb5eccc2c8c109632b279a8b405c12dd1a5eb0617bd4",
+      "staged_sha256": "b95d06dfc081d2ddc679cb5eccc2c8c109632b279a8b405c12dd1a5eb0617bd4",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Queue2_TLBundleD_a31d256s4k1z4u.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/Queue2_TLBundleD_a31d256s4k1z4u.sv",
+      "original_sha256": "9b06b79ca3b96cc476e132f3a2f02bd15402f125d18f61b295d2306e485a06ed",
+      "staged_sha256": "9b06b79ca3b96cc476e132f3a2f02bd15402f125d18f61b295d2306e485a06ed",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/Repeater_TLBundleD_a31d2048s4k1z4u.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/Repeater_TLBundleD_a31d2048s4k1z4u.sv",
+      "original_sha256": "e5713c1c61761f9bb6a13859cfdd23d3840a7e3d3b7cb9080a5b38850bc567e7",
+      "staged_sha256": "e5713c1c61761f9bb6a13859cfdd23d3840a7e3d3b7cb9080a5b38850bc567e7",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLBuffer_a31d256s4k1z4u.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLBuffer_a31d256s4k1z4u.sv",
+      "original_sha256": "389e3a7cad7f7b80ade7d921057ea3ec4e422d13c25b7be896dfa270df85cfa8",
+      "staged_sha256": "389e3a7cad7f7b80ade7d921057ea3ec4e422d13c25b7be896dfa270df85cfa8",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_139.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLMonitor_139.sv",
+      "original_sha256": "e83d5e23f7226ef87d5ea658c20b029a7418fcf7bb75f0c83bd87812d81723a5",
+      "staged_sha256": "e83d5e23f7226ef87d5ea658c20b029a7418fcf7bb75f0c83bd87812d81723a5",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_140.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLMonitor_140.sv",
+      "original_sha256": "b47660ed014ee72883dc17d4ac771e3936821461157cefbba871b9579562e183",
+      "staged_sha256": "b47660ed014ee72883dc17d4ac771e3936821461157cefbba871b9579562e183",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_141.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLMonitor_141.sv",
+      "original_sha256": "0f13fa7a35bce4fe958db828eb8a1030e547cdfb57e3a91175cbe41c36c97a10",
+      "staged_sha256": "0f13fa7a35bce4fe958db828eb8a1030e547cdfb57e3a91175cbe41c36c97a10",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_142.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLMonitor_142.sv",
+      "original_sha256": "1e4d5442f40679285b663c93304f35578684843d2061c0befe62c0b70a310cf3",
+      "staged_sha256": "1e4d5442f40679285b663c93304f35578684843d2061c0befe62c0b70a310cf3",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLMonitor_143.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLMonitor_143.sv",
+      "original_sha256": "7f51a6dc114ef3a6029f0539f897741d0ad253cd8ab3ede1904626a06659f84b",
+      "staged_sha256": "7f51a6dc114ef3a6029f0539f897741d0ad253cd8ab3ede1904626a06659f84b",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/TLWidthWidget32_8.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/TLWidthWidget32_8.sv",
+      "original_sha256": "6fb93c55c0e3daf48429bbc543d9c167fa8e141917e23c9e344d17fe2bd60606",
+      "staged_sha256": "6fb93c55c0e3daf48429bbc543d9c167fa8e141917e23c9e344d17fe2bd60606",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/plusarg_reader.v",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/plusarg_reader.v",
+      "original_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "staged_sha256": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x16.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/ram_2x16.sv",
+      "original_sha256": "c1bb1b3f06a0ed5d9a4bd30b67dae6ba32379348109dfc82cf6c6250dd12d0de",
+      "staged_sha256": "c1bb1b3f06a0ed5d9a4bd30b67dae6ba32379348109dfc82cf6c6250dd12d0de",
+      "changes": []
+    },
+    {
+      "source": "gen-collateral/ram_2x334.sv",
+      "staged": "resnet-cgra4/autolink-ClockSinkDomain_6/src/ram_2x334.sv",
+      "original_sha256": "5b7c0733b9fa8f7df5b49b6cb978e0c5c089538870fa0d856eb25bc338cfb5c7",
+      "staged_sha256": "5b7c0733b9fa8f7df5b49b6cb978e0c5c089538870fa0d856eb25bc338cfb5c7",
+      "changes": []
+    }
+  ],
+  "simulation": "not_rerun_user_requested_synthesis_only"
+}
