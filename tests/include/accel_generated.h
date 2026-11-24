@@ -5,10 +5,12 @@
 #include "accel.h"
 
 #define ACCEL_ROUTED 1
-#define ACCEL_COUNT 3u
+#define ACCEL_COUNT 5u
 
-static const accel_t GEMMINI0 = {.id = 0u, .control = UINT64_C(0x60060000), .spm = UINT64_C(0x60000000), .spm_bytes = 131072u};
-static const accel_t GEMMINI1 = {.id = 1u, .control = UINT64_C(0x60061000), .spm = UINT64_C(0x60020000), .spm_bytes = 131072u};
-static const accel_t CGRA0 = {.id = 2u, .control = UINT64_C(0x60062000), .spm = UINT64_C(0x60040000), .spm_bytes = 131072u};
+static const accel_t GEMMINI0 = {.id = 0u, .control = UINT64_C(0x600a0000), .spm = UINT64_C(0x60000000), .spm_bytes = 131072u};
+static const accel_t GEMMINI1 = {.id = 1u, .control = UINT64_C(0x600a1000), .spm = UINT64_C(0x60020000), .spm_bytes = 131072u};
+static const accel_t CGRA0 = {.id = 2u, .control = UINT64_C(0x600a2000), .spm = UINT64_C(0x60040000), .spm_bytes = 131072u};
+static const accel_t ADD0 = {.id = 3u, .control = UINT64_C(0x600a3000), .spm = UINT64_C(0x60080000), .spm_bytes = 65536u};
+static const accel_t RELU0 = {.id = 4u, .control = UINT64_C(0x600a4000), .spm = UINT64_C(0x60090000), .spm_bytes = 65536u};
 
 #endif

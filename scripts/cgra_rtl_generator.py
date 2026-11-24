@@ -71,6 +71,8 @@ class SocConfig:
     mem_access_is_combinational: bool
     ctrl_count_per_iter: int | None
     ctrl_count_bits: int
+    context_switch: bool
+    global_reduce: bool
 
 
 def resolve_input_path(path: str | Path) -> Path:
@@ -155,6 +157,8 @@ def load_soc_config(path: str | Path) -> SocConfig:
         ),
         ctrl_count_per_iter=optional_int(execution, "ctrl_count_per_iter", soc_yaml),
         ctrl_count_bits=execution.get("ctrl_count_bits", clog2(MAX_CTRL_COUNT + 1)),
+        context_switch=optional_bool(execution, "context_switch", True, soc_yaml),
+        global_reduce=optional_bool(execution, "global_reduce", True, soc_yaml),
     )
     if config.num_fu_outports != INTEGRATED_CGRA_NUM_FU_OUTPORTS:
         raise ValueError(
@@ -257,6 +261,8 @@ def build_dut(arch_yaml: Path, soc_yaml: Path) -> IntegratedCgraWithDmaRTL:
         is_multi_cgra=False,
         cgra_id=0,
         ctrl_count_bits=soc_cfg.ctrl_count_bits,
+        has_context_switch=soc_cfg.context_switch,
+        has_global_reduce=soc_cfg.global_reduce,
     )
 
 

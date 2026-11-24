@@ -58,6 +58,7 @@ CAPABILITIES = {
     "cgra": {"source", "destination"},
     "aes": {"source", "destination"},
     "pool": {"source", "destination"},
+    "asic": {"source", "destination"},
 }
 STAGE_KEYS = {"name", "endpoint", "jobs", "output"}
 DEPENDENCY_KEYS = {
@@ -228,9 +229,9 @@ def load_buffers(values: Mapping[str, object], path: Path) -> dict[str, Buffer]:
 def load_output(
     fields: Mapping[str, object], buffers: Mapping[str, Buffer], kind: str, path: Path
 ) -> Output:
-    if kind == "cgra":
+    if kind in ("cgra", "asic"):
         raise ValueError(
-            f"{path}: CGRA outputs stay in local SPM; automatic writeback is unsupported"
+            f"{path}: {kind.upper()} outputs stay in local SPM; automatic writeback is unsupported"
         )
     if set(fields) != {"buffer"}:
         raise ValueError(f"{path}: output accepts only a buffer reference")
@@ -854,6 +855,8 @@ def validate_capacity(config: AutoLinkConfig, path: Path) -> None:
             raise ValueError(
                 f"{path}: streaming endpoint '{name}' requires one buffer slot"
             )
+        if instance.kind == "asic" and config.buffer_slots.get(name, 1) != 1:
+            raise ValueError(f"{path}: ASIC endpoint requires one buffer slot")
     for stage in config.stages:
         if stage.jobs <= 0:
             raise ValueError(f"{path}: '{stage.name}' job count must be positive")
@@ -970,6 +973,15 @@ def cgra_endpoint(config: AutoLinkConfig, name: str) -> str:
     )
 
 
+def asic_endpoint(config: AutoLinkConfig, name: str) -> str:
+    accel = config.instances[name]
+    return (
+        f'      AutoEndpointSpec(name = "{name}", buffer = '
+        f"{buffer_text(Memory(accel.base, accel.size))}, localBytes = {accel.size}, "
+        "bufferedInput = true, inputAlignment = 4, releaseOnCopy = true)"
+    )
+
+
 def aes_endpoint(config: AutoLinkConfig, name: str) -> str:
     copies = copied_dependencies(config)
     stages = stage_map(config)
@@ -1011,6 +1023,7 @@ ENDPOINT_TEXT = {
     "cgra": cgra_endpoint,
     "aes": aes_endpoint,
     "pool": pool_endpoint,
+    "asic": asic_endpoint,
 }
 
 

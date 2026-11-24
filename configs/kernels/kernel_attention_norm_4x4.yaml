@@ -21,7 +21,7 @@ runtime:
     - {symbol: arg3, kind: count, role: columns}
     - {symbol: arg4, kind: count, role: elements}
 execution:
-  ctrl_base: 40
+  ctrl_base: 30
   compiled_ii: 13
   loop_times: 26624
   expected_completes: 2

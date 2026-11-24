@@ -23,7 +23,7 @@ runtime:
     - {symbol: arg5, kind: count, role: row, row_stride: 1}
     - {symbol: arg6, kind: count, role: elements}
 execution:
-  ctrl_base: 16
+  ctrl_base: 12
   compiled_ii: 18
   loop_times: 36864
   expected_completes: 4

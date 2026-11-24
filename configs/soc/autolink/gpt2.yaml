@@ -21,6 +21,8 @@ memory:
 
 execution:
   ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
 
 communication:
   instances:

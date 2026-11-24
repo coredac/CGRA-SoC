@@ -55,6 +55,21 @@ class GcnTest(unittest.TestCase):
         if source[63] != 1 or projected[: data.OUTPUTS] != weight[63 * data.OUTPUTS :]:
             self.fail("Degree-63 one-hot feature must use the last valid input channel")
 
+    def test_dim64_padding(self):
+        graph = data.graphs(0)[0]
+        weight = data.weights(0)
+        original, _ = data.reference(graph, weight)
+        padded, report = data.reference(graph, weight, row_align=64)
+        if report["rows"] != 64:
+            self.fail("DIM64 projection needs a complete padded row block")
+        for name, width in (("x", data.INPUTS), ("expected_z", data.OUTPUTS)):
+            values = padded[name][1]
+            prefix = len(graph["neighbors"]) * width
+            if values[:prefix] != original[name][1] or any(values[prefix:]):
+                self.fail("Projection padding must retain valid rows and zero the tail")
+        if padded["expected_y"] != original["expected_y"]:
+            self.fail("Projection row padding must not change graph output")
+
     def check_reference(self, graph, weight, sign):
         tensors, report = data.reference(graph, weight, sign)
         source = tensors["x"][1]

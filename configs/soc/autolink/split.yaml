@@ -1,0 +1,72 @@
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 32768
+  data_mem_size_per_bank: 4096
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 1610612736
+    size_bytes: 131072
+  cgra_spm_window:
+    base_address: 1610874880
+    size_bytes: 131072
+  asic_spm:
+    base_address: 1611137024
+    size_bytes: 65536
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 64
+      command_capacity: 64
+      patch_capacity: 64
+    gemmini1:
+      type: gemmini
+      dim: 64
+      acc_kib: 64
+      command_capacity: 64
+      patch_capacity: 64
+    cgra0:
+      type: cgra
+      packet_capacity: 192
+    add0:
+      type: asic
+      function: add
+    relu0:
+      type: asic
+      function: relu
+  run_capacity: 32
+  capacity:
+    stages: 16
+    dependencies: 24
+    results: 512
+    jobs:
+      gemmini0: 32
+      gemmini1: 32
+      cgra0: 32
+      add0: 4
+      relu0: 4
+  stages:
+  - name: sum
+    endpoint: add0
+    jobs: 4
+  - name: activation
+    endpoint: relu0
+    jobs: 4
+  dependencies:
+  - source: input_ready
+    destination: sum
+  - source: sum
+    destination: activation

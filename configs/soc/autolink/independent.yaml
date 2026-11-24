@@ -1,0 +1,116 @@
+# Independent ASIC area and functional-validation configuration.
+# Each family owns its core, DMA, adapter and SPM; 128 KiB SPM and 32 descriptors total.
+interface:
+  num_tile_inports: 4
+  num_tile_outports: 4
+  num_fu_inports: 4
+  num_fu_outports: 2
+  data_nbits: 32
+  predicate_nbits: 1
+memory:
+  data_mem_size_global: 32768
+  data_mem_size_per_bank: 4096
+  num_banks_per_cgra: 8
+  num_registers_per_reg_bank: 8
+  mem_access_is_combinational: false
+  gemmini_external_spm:
+    base_address: 1610612736
+    size_bytes: 131072
+  cgra_spm_window:
+    base_address: 1610874880
+    size_bytes: 131072
+  asic_spm:
+    base_address: 1611137024
+    size_bytes: 131072
+execution:
+  ctrl_count_bits: 16
+  context_switch: false
+  global_reduce: false
+communication:
+  instances:
+    gemmini0:
+      type: gemmini
+      dim: 64
+      acc_kib: 64
+      command_capacity: 64
+      patch_capacity: 64
+    gemmini1:
+      type: gemmini
+      dim: 64
+      acc_kib: 64
+      command_capacity: 64
+      patch_capacity: 64
+    cgra0:
+      type: cgra
+      packet_capacity: 192
+    add0:
+      type: asic
+      function: add
+      size_bytes: 32768
+    relu0:
+      type: asic
+      function: relu
+      size_bytes: 32768
+    gcn0:
+      type: asic
+      function: gcn
+      size_bytes: 32768
+    norm0:
+      type: asic
+      function: norm
+      size_bytes: 8192
+    softmax0:
+      type: asic
+      function: softmax
+      size_bytes: 8192
+    gpt_vector0:
+      type: asic
+      function: gpt_vector
+      size_bytes: 16384
+  run_capacity: 32
+  capacity:
+    stages: 16
+    dependencies: 24
+    results: 512
+    jobs:
+      gemmini0: 32
+      gemmini1: 32
+      cgra0: 32
+      add0: 4
+      relu0: 4
+      gcn0: 2
+      norm0: 8
+      softmax0: 6
+      gpt_vector0: 8
+  stages:
+  - name: add
+    endpoint: add0
+    jobs: 4
+  - name: relu
+    endpoint: relu0
+    jobs: 4
+  - name: gcn
+    endpoint: gcn0
+    jobs: 2
+  - name: norm
+    endpoint: norm0
+    jobs: 8
+  - name: softmax
+    endpoint: softmax0
+    jobs: 6
+  - name: gpt_vector
+    endpoint: gpt_vector0
+    jobs: 8
+  dependencies:
+  - source: input_ready
+    destination: add
+  - source: input_ready
+    destination: relu
+  - source: input_ready
+    destination: gcn
+  - source: input_ready
+    destination: norm
+  - source: input_ready
+    destination: softmax
+  - source: input_ready
+    destination: gpt_vector

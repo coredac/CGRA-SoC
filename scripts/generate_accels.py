@@ -15,7 +15,11 @@ from generate_gemmini_ext_spm import DEFAULT_SOC, DEFAULT_SCALA, write
 SCALA_OUT = DEFAULT_SCALA.with_name("AccelGenerated.scala")
 HEADER_OUT = Path(__file__).resolve().parents[1] / "tests/include/accel_generated.h"
 PAGE_BYTES = 4096
-SPM_KEYS = {"gemmini": "gemmini_external_spm", "cgra": "cgra_spm_window"}
+SPM_KEYS = {
+    "gemmini": "gemmini_external_spm",
+    "cgra": "cgra_spm_window",
+    "asic": "asic_spm",
+}
 CONTROL_PAGES = {"cgra": 0, "gemmini": 1, "aes": 2}
 POOL_FIELDS = {
     "element_bits": "elementBits",
@@ -25,6 +29,7 @@ GEMMINI_FIELDS = {
     "command_capacity": "commandCapacity",
     "patch_capacity": "patchCapacity",
 }
+GEMMINI_ARRAY_FIELDS = {"dim": "dim", "acc_kib": "accKiB"}
 
 
 @dataclass(frozen=True)
@@ -46,7 +51,10 @@ class AccelLayout:
     page_count: int
     pools: Mapping[str, Mapping[str, int]]
     gemminis: Mapping[str, Mapping[str, int]]
+    gemmini_arrays: Mapping[str, Mapping[str, int]]
     cgra_packets: Mapping[str, int]
+    cgra_patches: Mapping[str, bool]
+    asic_functions: Mapping[str, str]
 
 
 def instance_layout(document: Mapping[str, object]) -> AccelLayout:
@@ -55,18 +63,22 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
     enabled = "instances" in communication
     names = dict.fromkeys(stage["endpoint"] for stage in communication["stages"])
     values = communication.get("instances", {name: {"type": name} for name in names})
-    counts = dict.fromkeys(SPM_KEYS, 0)
+    offsets = dict.fromkeys(SPM_KEYS, 0)
     instances = []
     for index, (name, value) in enumerate(values.items()):
         kind = value["type"]
-        if enabled and kind not in {"gemmini", "cgra", "pool"}:
+        if enabled and kind not in {"gemmini", "cgra", "pool", "asic"}:
             raise ValueError(f"instance '{name}' has unsupported type '{kind}'")
         base, size = 0, 0
         if kind in SPM_KEYS:
             spm = memory[SPM_KEYS[kind]]
-            size = spm["size_bytes"]
-            base = value.get("base_address", spm["base_address"] + counts[kind] * size)
-            counts[kind] += 1
+            size = (
+                value.get("size_bytes", spm["size_bytes"])
+                if kind == "asic"
+                else spm["size_bytes"]
+            )
+            base = value.get("base_address", spm["base_address"] + offsets[kind])
+            offsets[kind] += size
         instances.append(Accel(name, kind, index, base, size))
     ranges = (
         [(accel.base, accel.size) for accel in instances if accel.size]
@@ -74,6 +86,7 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
         else [
             (memory[key]["base_address"], memory[key]["size_bytes"])
             for key in SPM_KEYS.values()
+            if key in memory
         ]
     )
     end = max(base + size for base, size in ranges)
@@ -93,11 +106,39 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
         for name, value in values.items()
         if value["type"] == "gemmini"
     }
+    gemmini_arrays = {
+        name: {key: value[key] for key in GEMMINI_ARRAY_FIELDS if key in value}
+        for name, value in values.items()
+        if value["type"] == "gemmini"
+    }
     cgra_packets = {
         name: value.get("packet_capacity", 96)
         for name, value in values.items()
         if value["type"] == "cgra"
     }
+    cgra_patches = {
+        name: value.get("patch_support", True)
+        for name, value in values.items()
+        if value["type"] == "cgra"
+    }
+    asic_functions = {
+        name: value.get("function", "all")
+        for name, value in values.items()
+        if value["type"] == "asic"
+    }
+    for name, function in asic_functions.items():
+        if function not in {
+            "all",
+            "add",
+            "relu",
+            "gcn",
+            "norm",
+            "softmax",
+            "gpt_vector",
+        }:
+            raise ValueError(
+                f"instance '{name}' has unsupported ASIC function '{function}'"
+            )
     return AccelLayout(
         enabled,
         tuple(instances),
@@ -106,7 +147,10 @@ def instance_layout(document: Mapping[str, object]) -> AccelLayout:
         root_page + 1,
         pools,
         gemminis,
+        gemmini_arrays,
         cgra_packets,
+        cgra_patches,
+        asic_functions,
     )
 
 
@@ -127,14 +171,26 @@ def scala_text(layout: AccelLayout) -> str:
         f'    "{name}" -> GemminiCacheParams({", ".join(f"{GEMMINI_FIELDS[key]} = {value}" for key, value in params.items())})'
         for name, params in layout.gemminis.items()
     )
+    gemmini_arrays = ",\n".join(
+        f'    "{name}" -> GemminiArrayParams({", ".join(f"{GEMMINI_ARRAY_FIELDS[key]} = {value}" for key, value in params.items())})'
+        for name, params in layout.gemmini_arrays.items()
+    )
     cgra_packets = ",\n".join(
         f'    "{name}" -> {capacity}' for name, capacity in layout.cgra_packets.items()
+    )
+    cgra_patches = ",\n".join(
+        f'    "{name}" -> {str(enabled).lower()}'
+        for name, enabled in layout.cgra_patches.items()
+    )
+    asic_functions = ",\n".join(
+        f'    "{name}" -> "{function}"'
+        for name, function in layout.asic_functions.items()
     )
     return f"""package chipyard.socgen.generated
 
 import chipyard.socgen.link.AccelSpec
 import chipyard.socgen.pool.PoolParams
-import chipyard.socgen.gemmini.GemminiCacheParams
+import chipyard.socgen.gemmini.{{GemminiArrayParams, GemminiCacheParams}}
 
 // Generated by scripts/generate_accels.py. Do not edit.
 object AccelGenerated {{
@@ -148,8 +204,14 @@ object AccelGenerated {{
 {pools})
   val gemminis: Map[String, GemminiCacheParams] = Map(
 {gemminis})
+  val gemminiArrays: Map[String, GemminiArrayParams] = Map(
+{gemmini_arrays})
   val cgraPackets: Map[String, Int] = Map(
 {cgra_packets})
+  val cgraPatches: Map[String, Boolean] = Map(
+{cgra_patches})
+  val asicFunctions: Map[String, String] = Map(
+{asic_functions})
 }}
 """
 
@@ -188,6 +250,10 @@ def main() -> int:
     layout = load_layout(args.soc_yaml)
     write(args.scala_out, scala_text(layout), args.check)
     write(args.header_out, header_text(layout), args.check)
+    if any(accel.kind == "asic" for accel in layout.instances):
+        from asic.resources import stage
+
+        stage(args.check)
     return 0
 
 

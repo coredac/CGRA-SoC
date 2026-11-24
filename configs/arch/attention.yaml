@@ -5,7 +5,7 @@ multi_cgra_defaults:
 cgra_defaults:
   rows: 4
   columns: 4
-  configMemSize: 64
+  configMemSize: 48
 
 tile_defaults:
   num_registers: 8

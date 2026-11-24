@@ -4,40 +4,36 @@
 
 #include "auto_link_types.h"
 
-#define AUTO_LINK_GEMMINI0_BUFFER_SLOTS 2u
-#define AUTO_LINK_GEMMINI1_BUFFER_SLOTS 2u
-#define AUTO_LINK_CGRA0_BUFFER_SLOTS 2u
+#define AUTO_LINK_GEMMINI0_BUFFER_SLOTS 1u
+#define AUTO_LINK_GEMMINI1_BUFFER_SLOTS 1u
+#define AUTO_LINK_CGRA0_BUFFER_SLOTS 1u
+#define AUTO_LINK_ADD0_BUFFER_SLOTS 1u
+#define AUTO_LINK_RELU0_BUFFER_SLOTS 1u
 
-#define AUTO_LINK_STAGE_SCORES 0u
-#define AUTO_LINK_STAGE_SOFTMAX 1u
-#define AUTO_LINK_STAGE_VALUES 2u
+#define AUTO_LINK_STAGE_SUM 0u
+#define AUTO_LINK_STAGE_ACTIVATION 1u
 
-#define AUTO_LINK_JOB_SCORES 0u
-#define AUTO_LINK_JOB_SCORES_COUNT 1u
-#define AUTO_LINK_JOB_SOFTMAX 0u
-#define AUTO_LINK_JOB_SOFTMAX_COUNT 3u
-#define AUTO_LINK_JOB_VALUES 0u
-#define AUTO_LINK_JOB_VALUES_COUNT 1u
+#define AUTO_LINK_JOB_SUM 0u
+#define AUTO_LINK_JOB_SUM_COUNT 4u
+#define AUTO_LINK_JOB_ACTIVATION 0u
+#define AUTO_LINK_JOB_ACTIVATION_COUNT 4u
 
-#define AUTO_LINK_COPY_SCORES_SOFTMAX 1u
-#define AUTO_LINK_COPY_SOFTMAX_VALUES 2u
+
 
 
 #define AUTO_LINK_ADDRESS_COUNT 0u
 
 static const auto_link_stage_t AUTO_LINK_STAGES[] = {
-  {.endpoint = 0u, .job = 0u, .output = {.address = {.binding = -1}}},
-  {.endpoint = 2u, .job = 0u, .output = {.address = {.binding = -1}}},
-  {.endpoint = 1u, .job = 0u, .output = {.address = {.binding = -1}}}
+  {.endpoint = 3u, .job = 0u, .output = {.address = {.binding = -1}}},
+  {.endpoint = 4u, .job = 0u, .output = {.address = {.binding = -1}}}
 };
 static const auto_link_edge_t AUTO_LINK_EDGES[] = {
   {.source = 0u, .destination = 0u, .flags = 3u, .address = {.binding = -1}},
-  {.source = 0u, .destination = 1u, .flags = 5u, .bytes = 8192u, .expansion = 0u, .address = {.value = UINT64_C(0x60000000), .binding = -1}, .source_offset = 122880u, .destination_offset = 0u, .source_stride = 0u, .pixel_bytes = 0u},
-  {.source = 1u, .destination = 2u, .flags = 5u, .bytes = 2048u, .expansion = 0u, .address = {.value = UINT64_C(0x60040000), .binding = -1}, .source_offset = 0u, .destination_offset = 0u, .source_stride = 0u, .pixel_bytes = 0u}
+  {.source = 0u, .destination = 1u, .flags = 1u, .address = {.binding = -1}}
 };
 static const auto_link_graph_t AUTO_LINK_GRAPH = {
-  .stage_count = 3u, .edge_count = 3u,
-  .stage_capacity = 3u, .edge_capacity = 3u,
+  .stage_count = 2u, .edge_count = 2u,
+  .stage_capacity = 16u, .edge_capacity = 24u,
   .stages = AUTO_LINK_STAGES, .edges = AUTO_LINK_EDGES
 };
 

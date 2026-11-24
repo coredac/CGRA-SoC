@@ -162,7 +162,7 @@ def header(heads, length, fixtures):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--heads", type=int, choices=(2, 12), default=2)
-    parser.add_argument("--length", type=int, choices=(16, 64, 128), default=128)
+    parser.add_argument("--length", type=int, choices=(2, 16, 64, 128), default=128)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--runs", type=int, choices=(1, 2), default=2)
     parser.add_argument(

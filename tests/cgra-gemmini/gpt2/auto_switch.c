@@ -3,19 +3,21 @@
 #include "cgra_link.h"
 #include "generated/gelu_data.h"
 
-enum { COUNT = 32, MEAN = 0, ACTIVATION = 1, REQUANT = 2 };
+enum { COUNT = 32, MEAN = 0, ACTIVATION = 1, REQUANT = 2, SQRT = 3 };
 
-static int32_t input[3][COUNT] __attribute__((aligned(64)));
+static int32_t input[4][COUNT] __attribute__((aligned(64)));
 static int32_t output[COUNT] __attribute__((aligned(64)));
 
 static const cgra_link_symbol_t mean_args[] = {{.base = 0}, {.base = 512}, {.base = 128}, {.base = COUNT}};
 static const cgra_link_symbol_t activation_args[] = {{.base = 128}, {.base = 768}, {.base = COUNT}};
 static const cgra_link_symbol_t requant_args[] = {{.base = 256}, {.base = 1024}, {.base = 4}, {.base = COUNT}};
+static const cgra_link_symbol_t sqrt_args[] = {{.base = 384}, {.base = 1280}, {.base = COUNT}};
 
 static int configure(void) {
   int status = 0;
   accel_commands(CGRA0, {
-    status = cgra_job_full(MEAN, &BLOCK_LN_MEAN, mean_args, 0) || cgra_job_full(REQUANT, &BLOCK_REQUANT, requant_args, 0) || cgra_job_full(ACTIVATION, &BLOCK_ACTIVATION, activation_args, 0);
+    status = cgra_job_full(MEAN, &BLOCK_LN_MEAN, mean_args, 0) || cgra_job_full(REQUANT, &BLOCK_REQUANT, requant_args, 0) || cgra_job_full(SQRT, &BLOCK_LN_SQRT, sqrt_args, 0) ||
+             cgra_job_full(ACTIVATION, &BLOCK_ACTIVATION, activation_args, 0);
   });
   const auto_link_stage_t stage = {.endpoint = CGRA0.id, .output = {.address = {.binding = -1}}};
   const auto_link_edge_t edge = {.flags = 3, .address = {.binding = -1}};
@@ -36,7 +38,7 @@ static int native_check(int repeat) {
   return quantized[0] != -1 || quantized[1] != 0 || quantized[2] != 1 || quantized[3] != 2;
 }
 
-static int expected(unsigned job, unsigned index) {
+static int expected(unsigned job, unsigned index, unsigned run) {
   const int value = input[job][index];
   if (job == MEAN) {
     return value * 64 / 128 - 8192;
@@ -44,12 +46,15 @@ static int expected(unsigned job, unsigned index) {
   if (job == ACTIVATION) {
     return gelu_expected[value + 128];
   }
+  if (job == SQRT) {
+    return 64 + 16 * (index + run);
+  }
   const int rounded = value < 0 ? -((-value + 2) / 4) : (value + 2) / 4;
   return rounded < -128 ? -128 : rounded > 127 ? 127 : rounded;
 }
 
 static int run_job(unsigned job, unsigned run) {
-  static const unsigned addresses[] = {512, 768, 1024};
+  static const unsigned addresses[] = {512, 768, 1024, 1280};
   auto_link_job(0, job);
   auto_link_input_ready();
   while (*(volatile uint32_t *)(AUTO_LINK_BASE + AUTO_LINK_RUNNING)) {
@@ -69,7 +74,7 @@ static int run_job(unsigned job, unsigned run) {
     return 1;
   }
   for (unsigned index = 0; index < COUNT; ++index) {
-    const int value = expected(job, index);
+    const int value = expected(job, index, run);
     if (output[index] != value) {
       printf("Auto switch mismatch run=%u job=%u index=%u expected=%d actual=%d\n", run, job, index, value, output[index]);
       return 1;
@@ -86,14 +91,16 @@ int main(void) {
     printf("Auto switch: FAIL setup\n");
     return 1;
   }
-  static const unsigned jobs[] = {MEAN, ACTIVATION, MEAN, MEAN, REQUANT};
+  static const unsigned jobs[] = {MEAN, SQRT, SQRT, ACTIVATION, MEAN, MEAN, REQUANT, SQRT};
   for (unsigned run = 0; run < 2; ++run) {
     for (unsigned index = 0; index < COUNT; ++index) {
       input[MEAN][index] = 128 * (index + 1 + run);
       input[ACTIVATION][index] = (int)((index * 7 + run * 41) % 256) - 128;
       input[REQUANT][index] = (int)(index * 43 + run * 19) - 650;
+      const int root = 64 + 16 * (index + run);
+      input[SQRT][index] = (root * root - 4096) / 16;
     }
-    if (block_load(input[MEAN], 0, COUNT, 0) || block_load(input[ACTIVATION], 128, COUNT, 0) || block_load(input[REQUANT], 256, COUNT, 0)) {
+    if (block_load(input[MEAN], 0, COUNT, 0) || block_load(input[ACTIVATION], 128, COUNT, 0) || block_load(input[REQUANT], 256, COUNT, 0) || block_load(input[SQRT], 384, COUNT, 0)) {
       return 1;
     }
     for (unsigned step = 0; step < sizeof(jobs) / sizeof(jobs[0]); ++step) {

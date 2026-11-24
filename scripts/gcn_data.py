@@ -45,10 +45,10 @@ def weights(seed):
     return [rng.randrange(-8, 9) for _ in range(INPUTS * OUTPUTS)]
 
 
-def reference(graph, weight, sign=1):
+def reference(graph, weight, sign=1, row_align=16):
     neighbors = graph["neighbors"]
     nodes = len(neighbors)
-    rows = (nodes + 15) // 16 * 16
+    rows = (nodes + row_align - 1) // row_align * row_align
     degrees = [len(row) for row in neighbors]
     adjacency = [sorted(row | {index}) for index, row in enumerate(neighbors)]
     sizes = [len(row) for row in adjacency]
@@ -155,7 +155,10 @@ def header(weight, fixtures, alternates):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--star-nodes", type=int, choices=(20, 64), default=20)
+    parser.add_argument(
+        "--star-nodes", type=int, choices=range(1, INPUTS + 1), default=20
+    )
+    parser.add_argument("--row-align", type=int, choices=(16, 64), default=16)
     parser.add_argument(
         "--output", type=Path, default=ROOT / "tests/generated/gcn_data.h"
     )
@@ -163,10 +166,12 @@ def main():
     args = parser.parse_args()
     weight = weights(args.seed)
     fixtures = [
-        reference(graph, weight) for graph in graphs(args.seed, args.star_nodes)
+        reference(graph, weight, row_align=args.row_align)
+        for graph in graphs(args.seed, args.star_nodes)
     ]
     alternates = [
-        reference(graph, weight, -1) for graph in graphs(args.seed, args.star_nodes)
+        reference(graph, weight, -1, args.row_align)
+        for graph in graphs(args.seed, args.star_nodes)
     ]
     contents = "".join(header(weight, fixtures, alternates))
     report = {
@@ -175,6 +180,7 @@ def main():
         "seed": args.seed,
         "inputs": INPUTS,
         "outputs": OUTPUTS,
+        "row_align": args.row_align,
         "features": "one-hot original degree (before self-loops); zero-padded rows",
         "weights": "synthetic dense INT8 uniform integers [-8,8], no bias; not trained accuracy",
         "normalization": "D^-1/2 (A+I) D^-1/2, positive Q15 rounded nearest; one self-loop per node",
